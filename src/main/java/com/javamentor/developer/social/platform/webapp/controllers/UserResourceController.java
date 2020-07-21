@@ -46,8 +46,8 @@ public class UserResourceController {
     }
 
     @GetMapping("/getUserFriends")
-    public ResponseEntity<UserDto> getUserFriends(@PathVariable Long id) {
+    public ResponseEntity<List<UserDto>> getUserFriends(@PathVariable Long id) {
         List<UserDto> userFriends = userService.getUserFriendsById(id);
-        return ResponseEntity.ok(currentUser);
+        return ResponseEntity.ok(userFriends);
     }
 }
