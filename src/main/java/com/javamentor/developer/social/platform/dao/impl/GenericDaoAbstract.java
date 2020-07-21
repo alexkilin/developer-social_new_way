@@ -3,11 +3,15 @@ package com.javamentor.developer.social.platform.dao.impl;
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+@Service
 public abstract class GenericDaoAbstract<T, PK extends Serializable> implements GenericDao<T, PK> {
     private Class<T> clazz;
 
@@ -39,5 +43,15 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
     @Override
     public T getById(PK id) {
         return (T) entityManager.find(clazz, id);
+    }
+
+    @Override
+    public List<T> getAll() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<T> getUserFriendsById(PK id) {
+        return new ArrayList<>();
     }
 }
