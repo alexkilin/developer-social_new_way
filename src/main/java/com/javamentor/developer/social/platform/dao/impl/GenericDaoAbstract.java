@@ -1,8 +1,6 @@
 package com.javamentor.developer.social.platform.dao.impl;
 
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
-import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,8 +12,6 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
     @PersistenceContext
     private EntityManager entityManager;
 
-    Session session = entityManager.unwrap(Session.class);
-
     @Override
     public void create(T entity) {
         entityManager.persist(entity);
@@ -23,7 +19,7 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     public void update(T entity) {
-        session.update(entity);
+        entityManager.merge(entity);
     }
 
     @Override
@@ -39,5 +35,10 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
     @Override
     public T getById(PK id) {
         return (T) entityManager.find(clazz, id);
+    }
+
+    @Override
+    public boolean existById(PK id) {
+        return getById(id) != null;
     }
 }
