@@ -16,6 +16,13 @@ import java.sql.Blob;
 @Table(name = "audios")
 public class Audios {
 
+    public Audios(User user, String icon, String author, String name) {
+        media.setUser(user);
+        media.setUrl(icon);
+        this.author=author;
+        this.name=name;
+    }
+
     public Audios(User user, String icon) {
         media.setUser(user);
         media.setUrl(icon);
@@ -31,6 +38,12 @@ public class Audios {
 
     @Column(name = "icon")
     private String icon;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "author")
+    private String author;
 
     @PrePersist
     private void prePersistFunction() {

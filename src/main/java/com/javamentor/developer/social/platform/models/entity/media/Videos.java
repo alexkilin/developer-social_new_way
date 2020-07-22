@@ -16,6 +16,12 @@ import java.sql.Blob;
 @Table(name = "videos")
 public class Videos {
 
+    public Videos(User user, String icon, String name) {
+        media.setUser(user);
+        media.setUrl(icon);
+        this.name = name;
+    }
+
     public Videos(User user, String icon) {
         media.setUser(user);
         media.setUrl(icon);
@@ -28,6 +34,9 @@ public class Videos {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @MapsId
     private Media media = new Media(MediaType.VIDEO);
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "icon")
     private String icon;
