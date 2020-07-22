@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
-import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
+import com.javamentor.developer.social.platform.service.impl.UserControllerDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/user")
 public class UserResourceController {
 
-    private final GenericServiceAbstract userService;
+    private final UserControllerDtoService userService;
 
     @Autowired
-    public UserResourceController(GenericServiceAbstract userService) {
+    public UserResourceController(UserControllerDtoService userService) {
         this.userService = userService;
     }
 
