@@ -27,27 +27,27 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long user_id;
+    private long userId;
 
 
     @NotNull
-    private String first_name;
+    private String firstName;
 
     @NotNull
-    private String last_name;
+    private String lastName;
 
     @NotNull
-    private Date date_of_birth;
+    private Date dateOfBirth;
 
     @Column(name = "education")
     private String education;
 
     @Column
-    private String about_me;
+    private String aboutMe;
 
 
     @Column(name = "image")
-    private String avatarka;
+    private String avatar;
 
     @Column(name = "email")
     private String email;
@@ -59,12 +59,12 @@ public class User {
     @Column(name = "persist_date", nullable = false, updatable = false)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @CreationTimestamp
-    private LocalDateTime persist_date;
+    private LocalDateTime persistDate;
 
     @Column(name = "last_redaction_date", nullable = false)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @UpdateTimestamp
-    private LocalDateTime last_redaction_date;
+    private LocalDateTime lastRedactionDate;
 
 
     @Column(name = "is_enable", nullable = false)
@@ -75,7 +75,7 @@ public class User {
     private String city;
 
     @Column(name = "link_site")
-    private String link_site;
+    private String linkSite;
 
 
     @NotNull

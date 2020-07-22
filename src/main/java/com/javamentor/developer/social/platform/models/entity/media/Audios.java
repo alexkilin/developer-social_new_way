@@ -29,10 +29,6 @@ public class Audios {
     @MapsId
     private Media media = new Media(MediaType.AUDIO);
 
-    /*@ManyToOne
-    @JoinColumn(name = "media_id")
-    private Media media;*/
-
     @Column(name = "icon")
     private String icon;
 

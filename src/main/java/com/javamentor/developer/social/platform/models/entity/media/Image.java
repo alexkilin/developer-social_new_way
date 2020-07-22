@@ -28,10 +28,6 @@ public class Image {
     @MapsId
     private Media media = new Media(MediaType.IMAGE);
 
-   /* @ManyToOne
-    @JoinColumn(name = "media_id")
-    private Media media;*/
-
     @Column(name = "description")
     private String description;
 

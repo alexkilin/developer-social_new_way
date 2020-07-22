@@ -31,12 +31,12 @@ public class Chat {
     private LocalDateTime persistDate;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    private User user_sender_id;
+    private User userSenderId;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    private User user_receiver_id;
+    private User userReceiverId;
 
     @OneToMany(fetch = FetchType.LAZY, targetEntity = Message.class, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
-    private Set<Message> message_id;
+    private Set<Message> messageId;
 }

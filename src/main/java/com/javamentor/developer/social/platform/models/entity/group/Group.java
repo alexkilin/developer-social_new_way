@@ -40,13 +40,13 @@ public class Group {
     private LocalDateTime persistDate;
 
     @Column
-    private String link_site;
+    private String linkSite;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = GroupCategory.class, cascade = {CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = GroupCategory.class, cascade = {CascadeType.PERSIST})
     private GroupCategory groupCategory;
 
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = Post.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Post.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinTable(name = "group_wal", joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private Set<Post> posts;
