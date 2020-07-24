@@ -46,11 +46,6 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
     }
 
     @Override
-    public List<T> getAll() {
-        return new ArrayList<>();
-    }
-
-    @Override
     public List<T> getUserFriendsById(PK id) {
         return new ArrayList<>();
     }
