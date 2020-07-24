@@ -29,14 +29,4 @@ public class Chat {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @CreationTimestamp
     private LocalDateTime persistDate;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    private User userSenderId;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    private User userReceiverId;
-
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Message.class, cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "user_id")
-    private Set<Message> messageId;
 }

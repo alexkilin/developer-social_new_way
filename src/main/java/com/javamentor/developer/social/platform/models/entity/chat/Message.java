@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.models.entity.chat;
 
 import com.javamentor.developer.social.platform.models.entity.media.Media;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
@@ -44,4 +45,10 @@ public class Message {
     @JoinTable(name = "media_messages", joinColumns = @JoinColumn(name = "message_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id"))
     private Set<Media> media;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    private User userSender;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Chat.class, cascade = {CascadeType.PERSIST})
+    private Chat chat;
 }
