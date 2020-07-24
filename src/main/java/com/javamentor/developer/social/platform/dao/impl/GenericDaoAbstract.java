@@ -5,12 +5,21 @@ import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public abstract class GenericDaoAbstract<T, PK extends Serializable> implements GenericDao<T, PK> {
-    private Class<T> clazz;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private Class<T> clazz;
+
+    public GenericDaoAbstract() {
+        Type t = getClass().getGenericSuperclass();
+        ParameterizedType pt = (ParameterizedType) t;
+        clazz = (Class) pt.getActualTypeArguments()[0];
+    }
 
     @Override
     public void create(T entity) {
