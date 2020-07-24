@@ -1,22 +1,29 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
+import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.service.impl.UserControllerDtoService;
+import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/api/user", produces = "application/json")
+@Api(value = "UserApi", description = "CRUD-Операции с пользователем")
 public class UserResourceController {
 
     private final UserControllerDtoService userService;
+    private final UserConverter converter;
 
     @Autowired
-    public UserResourceController(UserControllerDtoService userService) {
+    public UserResourceController(UserControllerDtoService userService, UserConverter converter) {
         this.userService = userService;
+        this.converter = converter;
     }
 
     @ApiOperation(value = "Получение пользователя по id")
@@ -25,7 +32,7 @@ public class UserResourceController {
     })
     @GetMapping(value = "/getUserById/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getById(id));
+        return ResponseEntity.ok(converter.convertToDto(userService.getById(id)));
     }
 
     @ApiOperation(value = "Получение списка пользователей")
