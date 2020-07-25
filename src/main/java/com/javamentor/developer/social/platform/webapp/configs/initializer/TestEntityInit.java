@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 @ConditionalOnMissingClass({"org.springframework.boot.test.context.SpringBootTest"})
 public class TestEntityInit implements CommandLineRunner {
-
+    @Autowired
     private TestDataInitService testDataInitService;
 
-    @Autowired
-    public TestEntityInit(TestDataInitService testDataInitService) {
-        this.testDataInitService = testDataInitService;
-    }
+
+//    public TestEntityInit(TestDataInitService testDataInitService) {
+//        this.testDataInitService = testDataInitService;
+//    }
 
     @Override
     public void run(String... args) {
