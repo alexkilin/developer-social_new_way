@@ -91,81 +91,51 @@ public class TestDataInitService {
     private Message message5;
 
     private UserService userService;
-    private ActiveService activeService;
     private FollowerService followerService;
     private FriendService friendService;
-    private LanguageService languageService;
-    private RoleService roleService;
-    private StatusService statusService;
-    private PostService postService;
     private AlbumService albumService;
     private AudiosService audiosService;
     private ImageService imageService;
-    private MediaService mediaService;
     private VideosService videosService;
     private CommentLikeService commentLikeService;
-    private LikeService likeService;
     private MessageLikeService messageLikeService;
     private PostLikeService postLikeService;
-    private GroupCategoryService groupCategoryService;
     private GroupHasUserService groupHasUserService;
     private GroupService groupService;
-    private CommentService commentService;
     private MediaCommentService mediaCommentService;
     private PostCommentService postCommentService;
-    private ChatService chatService;
     private MessageService messageService;
 
     @Autowired
     public TestDataInitService(UserService userService,
-                               ActiveService activeService,
                                FollowerService followerService,
                                FriendService friendService,
-                               LanguageService languageService,
-                               RoleService roleService,
-                               StatusService statusService,
-                               PostService postService,
                                AlbumService albumService,
                                AudiosService audiosService,
                                ImageService imageService,
-                               MediaService mediaService,
                                VideosService videosService,
                                CommentLikeService commentLikeService,
-                               LikeService likeService,
                                MessageLikeService messageLikeService,
                                PostLikeService postLikeService,
-                               GroupCategoryService groupCategoryService,
                                GroupHasUserService groupHasUserService,
                                GroupService groupService,
-                               CommentService commentService,
                                MediaCommentService mediaCommentService,
                                PostCommentService postCommentService,
-                               ChatService chatService,
                                MessageService messageService) {
         this.userService = userService;
-        this.activeService = activeService;
         this.followerService = followerService;
         this.friendService = friendService;
-        this.languageService = languageService;
-        this.roleService = roleService;
-        this.statusService = statusService;
-        this.postService = postService;
         this.albumService = albumService;
         this.audiosService = audiosService;
         this.imageService = imageService;
-        this.mediaService = mediaService;
         this.videosService = videosService;
         this.commentLikeService = commentLikeService;
-        this.likeService = likeService;
         this.messageLikeService = messageLikeService;
         this.postLikeService = postLikeService;
-        this.groupCategoryService = groupCategoryService;
         this.groupHasUserService = groupHasUserService;
         this.groupService = groupService;
-        this.commentService = commentService;
         this.mediaCommentService = mediaCommentService;
         this.postCommentService = postCommentService;
-        this.chatService = chatService;
         this.messageService = messageService;
     }
 
@@ -545,33 +515,20 @@ public class TestDataInitService {
     }
 
     private void createFriendEntity(){
-        Friend friend1 = Friend.builder().user(user2).friend(user3).build();
-        Friend friend2 = Friend.builder().user(user2).friend(user4).build();
-        Friend friend3 = Friend.builder().user(user3).friend(user6).build();
-        Friend friend4 = Friend.builder().user(user4).friend(user7).build();
-        Friend friend5 = Friend.builder().user(user5).friend(user7).build();
-        Friend friend6 = Friend.builder().user(user6).friend(user7).build();
-
-        friendService.create(friend1);
-        friendService.create(friend2);
-        friendService.create(friend3);
-        friendService.create(friend4);
-        friendService.create(friend5);
-        friendService.create(friend6);
+        friendService.create(Friend.builder().user(user2).friend(user3).build());
+        friendService.create(Friend.builder().user(user2).friend(user4).build());
+        friendService.create(Friend.builder().user(user3).friend(user6).build());
+        friendService.create(Friend.builder().user(user4).friend(user7).build());
+        friendService.create(Friend.builder().user(user5).friend(user7).build());
+        friendService.create(Friend.builder().user(user6).friend(user7).build());
     }
 
     private void createFollowerEntity(){
-        Follower follower1 = Follower.builder().user(user2).follower(user5).build();
-        Follower follower2 = Follower.builder().user(user2).follower(user6).build();
-        Follower follower3 = Follower.builder().user(user8).follower(user2).build();
-        Follower follower4 = Follower.builder().user(user5).follower(user4).build();
-        Follower follower5 = Follower.builder().user(user6).follower(user5).build();
-
-        followerService.create(follower1);
-        followerService.create(follower2);
-        followerService.create(follower3);
-        followerService.create(follower4);
-        followerService.create(follower5);
+        followerService.create(Follower.builder().user(user2).follower(user5).build());
+        followerService.create(Follower.builder().user(user2).follower(user6).build());
+        followerService.create(Follower.builder().user(user8).follower(user2).build());
+        followerService.create(Follower.builder().user(user5).follower(user4).build());
+        followerService.create(Follower.builder().user(user6).follower(user5).build());
     }
 
     private void createPostEntity(){
@@ -655,33 +612,29 @@ public class TestDataInitService {
     }
 
     private void createGroupHasUserEntity(){
-        GroupHasUser groupHasUser1 = GroupHasUser.builder()
+        groupHasUserService.create(GroupHasUser.builder()
                 .group(group1)
                 .user(user3)
                 .persistDate(userLocalDate)
-                .build();
-        groupHasUserService.create(groupHasUser1);
+                .build());
 
-        GroupHasUser groupHasUser2 = GroupHasUser.builder()
+        groupHasUserService.create(GroupHasUser.builder()
                 .group(group1)
                 .user(user4)
                 .persistDate(userLocalDate)
-                .build();
-        groupHasUserService.create(groupHasUser2);
+                .build());
 
-        GroupHasUser groupHasUser3 = GroupHasUser.builder()
+        groupHasUserService.create(GroupHasUser.builder()
                 .group(group2)
                 .user(user7)
                 .persistDate(userLocalDate)
-                .build();
-        groupHasUserService.create(groupHasUser3);
+                .build());
 
-        GroupHasUser groupHasUser4 = GroupHasUser.builder()
+        groupHasUserService.create(GroupHasUser.builder()
                 .group(group3)
                 .user(user8)
                 .persistDate(userLocalDate)
-                .build();
-        groupHasUserService.create(groupHasUser4);
+                .build());
     }
 
     private void createPostCommentEntity(){
@@ -692,8 +645,10 @@ public class TestDataInitService {
                 .persistDate(userLocalDate)
                 .user(user2)
                 .build();
-        PostComment postComment = PostComment.builder().post(post1).comment(comment1).build();
-        postCommentService.create(postComment);
+        postCommentService.create(PostComment.builder()
+                                            .post(post1)
+                                            .comment(comment1)
+                                            .build());
 
         this.comment2 = Comment.builder()
                 .comment("Test comment 2")
@@ -702,8 +657,10 @@ public class TestDataInitService {
                 .persistDate(userLocalDate)
                 .user(user5)
                 .build();
-        PostComment postComment2 = PostComment.builder().post(post2).comment(comment2).build();
-        postCommentService.create(postComment2);
+        postCommentService.create(PostComment.builder()
+                                            .post(post2)
+                                            .comment(comment2)
+                                            .build());
 
         this.comment3 = Comment.builder()
                 .comment("Test comment 3")
@@ -712,8 +669,10 @@ public class TestDataInitService {
                 .persistDate(userLocalDate)
                 .user(user4)
                 .build();
-        PostComment postComment3 = PostComment.builder().post(post3).comment(comment3).build();
-        postCommentService.create(postComment3);
+        postCommentService.create(PostComment.builder()
+                                            .post(post3)
+                                            .comment(comment3)
+                                            .build());
     }
 
     private void createPostLikeEntity(){
@@ -721,14 +680,23 @@ public class TestDataInitService {
         Like like2 = Like.builder().likeType(LikeType.POST).user(user6).build();
         Like like3 = Like.builder().likeType(LikeType.POST).user(user2).build();
 
-        PostLike postLike1 = PostLike.builder().post(post1).like(like1).user(user4).build();
-        postLikeService.create(postLike1);
+        postLikeService.create(PostLike.builder()
+                                        .post(post1)
+                                        .like(like1)
+                                        .user(user4)
+                                        .build());
 
-        PostLike postLike2 = PostLike.builder().post(post1).like(like2).user(user6).build();
-        postLikeService.create(postLike2);
+        postLikeService.create(PostLike.builder()
+                                        .post(post1)
+                                        .like(like2)
+                                        .user(user6)
+                                        .build());
 
-        PostLike postLike3 = PostLike.builder().post(post3).like(like3).user(user2).build();
-        postLikeService.create(postLike3);
+        postLikeService.create(PostLike.builder()
+                                        .post(post3)
+                                        .like(like3)
+                                        .user(user2)
+                                        .build());
     }
 
     private void createCommentLikeEntity(){
@@ -736,52 +704,46 @@ public class TestDataInitService {
         Like like2 = Like.builder().likeType(LikeType.COMMENT).user(user5).build();
         Like like3 = Like.builder().likeType(LikeType.COMMENT).user(user8).build();
 
-        CommentLike commentLike1 = CommentLike.builder()
-                .like(like1)
-                .comment(comment1)
-                .user(user2)
-                .build();
-        commentLikeService.create(commentLike1);
+        commentLikeService.create(CommentLike.builder()
+                                            .like(like1)
+                                            .comment(comment1)
+                                            .user(user2)
+                                            .build());
 
-        CommentLike commentLike2 = CommentLike.builder()
-                .like(like2)
-                .comment(comment2)
-                .user(user5)
-                .build();
-        commentLikeService.create(commentLike2);
+        commentLikeService.create(CommentLike.builder()
+                                            .like(like2)
+                                            .comment(comment2)
+                                            .user(user5)
+                                            .build());
 
-        CommentLike commentLike3 = CommentLike.builder()
-                .like(like3)
-                .comment(comment1)
-                .user(user8)
-                .build();
-        commentLikeService.create(commentLike3);
+        commentLikeService.create(CommentLike.builder()
+                                            .like(like3)
+                                            .comment(comment1)
+                                            .user(user8)
+                                            .build());
     }
     private void createMessageLikeEntity(){
         Like like1 = Like.builder().likeType(LikeType.MESSAGE).user(user3).build();
         Like like2 = Like.builder().likeType(LikeType.MESSAGE).user(user7).build();
         Like like3 = Like.builder().likeType(LikeType.MESSAGE).user(user6).build();
 
-        MessageLike messageLike1 = MessageLike.builder()
-                .like(like1)
-                .message(message1)
-                .user(user3)
-                .build();
-        messageLikeService.create(messageLike1);
+        messageLikeService.create(MessageLike.builder()
+                                            .like(like1)
+                                            .message(message1)
+                                            .user(user3)
+                                            .build());
 
-        MessageLike messageLike2 = MessageLike.builder()
-                .like(like2)
-                .message(message4)
-                .user(user7)
-                .build();
-        messageLikeService.create(messageLike2);
+        messageLikeService.create(MessageLike.builder()
+                                            .like(like2)
+                                            .message(message4)
+                                            .user(user7)
+                                            .build());
 
-        MessageLike messageLike3 = MessageLike.builder()
-                .like(like3)
-                .message(message5)
-                .user(user6)
-                .build();
-        messageLikeService.create(messageLike3);
+        messageLikeService.create(MessageLike.builder()
+                                            .like(like3)
+                                            .message(message5)
+                                            .user(user6)
+                                            .build());
     }
 
     private void createMediaCommentEntity(){
@@ -792,8 +754,10 @@ public class TestDataInitService {
                 .persistDate(userLocalDate)
                 .user(user4)
                 .build();
-        MediaComment mediaComment1 = MediaComment.builder().comment(comment1).media(media1).build();
-        mediaCommentService.create(mediaComment1);
+        mediaCommentService.create(MediaComment.builder()
+                                                .comment(comment1)
+                                                .media(media1)
+                                                .build());
 
         Comment comment2 = Comment.builder()
                 .comment("Test comment Media 2")
@@ -802,8 +766,10 @@ public class TestDataInitService {
                 .persistDate(userLocalDate)
                 .user(user2)
                 .build();
-        MediaComment mediaComment2 = MediaComment.builder().comment(comment2).media(media1).build();
-        mediaCommentService.create(mediaComment2);
+        mediaCommentService.create(MediaComment.builder()
+                                                .comment(comment2)
+                                                .media(media1)
+                                                .build());
 
         Comment comment3 = Comment.builder()
                 .comment("Test comment Media 3")
@@ -812,8 +778,10 @@ public class TestDataInitService {
                 .persistDate(userLocalDate)
                 .user(user7)
                 .build();
-        MediaComment mediaComment3 = MediaComment.builder().comment(comment3).media(media1).build();
-        mediaCommentService.create(mediaComment3);
+        mediaCommentService.create(MediaComment.builder()
+                                                .comment(comment3)
+                                                .media(media1)
+                                                .build());
     }
 
     private void createAudiosEntity(){
