@@ -41,54 +41,38 @@ import java.util.Set;
 @Transactional
 public class TestDataInitService {
 
-    private final LocalDateTime userLocalDate = LocalDateTime.of(2014,11,11,17,45);
+    private final LocalDateTime userLocalDate = LocalDateTime.of(2014, 11, 11, 17, 45);
     private final LocalDateTime userLocalDateNow = LocalDateTime.now();
     private final Date dateDateClass = new Date(1212121212121L);
 
-    private User user1;
-    private User user2;
-    private User user3;
-    private User user4;
-    private User user5;
-    private User user6;
-    private User user7;
-    private User user8;
+    // You can change size of init data by variable "k"
+    private int k = 1;
+    private final int numOfUsers = 100 * k;
+    private final int numOfMedias = 100 * k;
+    private final int numOfChats = 20 * k;
+    private final int numOfMessages = 100 * k;
+    private final int numOfAlbums = 20 * k;
+    private final int numOfFriends = 500 * k;
+    private final int numOfFollowers = 500 * k;
+    private final int numOfPosts = 100 * k;
+    private final int numOfGroups = 20 * k;
+    private final int numOfPostComments = 100 * k;
+    private final int numOfPostLikes = 100 * k;
+    private final int numOfCommentLikes = 100 * k;
+    private final int numOfMessagesLikes = 100 * k;
+    private final int numOfMediaComments = 100 * k;
 
-    private Set<Media> mediaSet1 = new HashSet<>();
-    private Set<Media> mediaSet2 = new HashSet<>();
-    private Set<Media> mediaSet3 = new HashSet<>();
-    private Set<Media> mediaSet4 = new HashSet<>();
-    private Set<Media> mediaSet5 = new HashSet<>();
-
-    private Media media1;
-    private Media media2;
-    private Media media3;
-    private Media media4;
-    private Media media5;
-    private Media media6;
-
-    private Chat chat1;
-    private Chat chat2;
-    private Chat chat3;
-
-    private Post post1;
-    private Post post2;
-    private Post post3;
-    private Post post4;
-
-    private Group group1;
-    private Group group2;
-    private Group group3;
-
-    private Comment comment1;
-    private Comment comment2;
-    private Comment comment3;
-
-    private Message message1;
-    private Message message2;
-    private Message message3;
-    private Message message4;
-    private Message message5;
+    private User[] users = new User[numOfUsers];
+    private Media[] medias = new Media[numOfMedias];
+    private Chat[] chats = new Chat[numOfChats];
+    private Message[] messages = new Message[numOfMessages];
+    private Post[] posts = new Post[numOfPosts];
+    private Group[] groups = new Group[numOfGroups];
+    private Comment[] postComments = new Comment[numOfPostComments];
+    private Like[] postLikes = new Like[numOfPostLikes];
+    private Like[] commentLikes = new Like[numOfCommentLikes];
+    private Like[] messageLikes = new Like[numOfMessagesLikes];
+    private Comment[] mediaComments = new Comment[numOfMediaComments];
 
     private UserService userService;
     private FollowerService followerService;
@@ -139,7 +123,7 @@ public class TestDataInitService {
         this.messageService = messageService;
     }
 
-    public void createEntity(){
+    public void createEntity() {
         createUserEntity();
         createMediaEntity();
         createChatEntity();
@@ -161,11 +145,10 @@ public class TestDataInitService {
         createPostMessageUserEntity();
     }
 
-    private void createUserEntity(){
+    private void createUserEntity() {
         Active active = Active.builder()
                 .name("ACTIVE")
                 .build();
-
         Active disabled = Active.builder()
                 .name("DISABLED")
                 .build();
@@ -176,6 +159,7 @@ public class TestDataInitService {
         Language language2 = Language.builder()
                 .name("English")
                 .build();
+
         Set<Language> langSet = new HashSet<>();
         langSet.add(language);
         Set<Language> langSet2 = new HashSet<>();
@@ -197,653 +181,329 @@ public class TestDataInitService {
                 .name("busy")
                 .build();
 
-        this.user1 = User.builder()
-                .aboutMe("My description about life - Admin")
-                .active(active)
-                .avatar("www.myavatar.ru/9090")
-                .city("SPb")
-                .dateOfBirth(dateDateClass)
-                .education("MIT University")
-                .email("admin@admin.ru")
-                .firstName("Admin1")
-                .id_enable(true)
-                .languages(langSet)
-                .lastName("LastName")
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.mysite.ru")
-                .messages(null)
-                .password("rootpass")
-                .persistDate(userLocalDate)
-                .posts(null)
-                .role(roleAdmin)
-                .status(status)
-                .build();
-        userService.create(user1);
+        String name;
+        String emailName;
+        Active activityTest;
+        Set<Language> languageTestSet;
+        Role role;
+        Status statusTest;
 
-        this.user2 = User.builder()
-                .aboutMe("My description about life - User1")
-                .active(active)
-                .avatar("www.myavatar.ru/9090")
-                .city("SPb")
-                .dateOfBirth(dateDateClass)
-                .education("MIT University")
-                .email("user1@user.email")
-                .firstName("User1")
-                .id_enable(true)
-                .languages(langSet)
-                .lastName("LastName")
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.mysite.ru")
-                .messages(null)
-                .password("userpass1")
-                .persistDate(userLocalDate)
-                .posts(null)
-                .role(roleUser)
-                .status(status)
-                .build();
-        userService.create(user2);
-
-        this.user3 = User.builder()
-                .aboutMe("My description about life - User2")
-                .active(active)
-                .avatar("www.myavatar.ru/9090")
-                .city("SPb")
-                .dateOfBirth(dateDateClass)
-                .education("MIT University")
-                .email("user2@user.email")
-                .firstName("User2")
-                .id_enable(true)
-                .languages(langSet)
-                .lastName("LastName")
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.mysite.ru")
-                .messages(null)
-                .password("userpass2")
-                .persistDate(userLocalDate)
-                .posts(null)
-                .role(roleUser)
-                .status(status2)
-                .build();
-        userService.create(user3);
-
-        this.user4 = User.builder()
-                .aboutMe("My description about life - User3")
-                .active(disabled)
-                .avatar("www.myavatar.ru/9090")
-                .city("SPb")
-                .dateOfBirth(dateDateClass)
-                .education("MIT University")
-                .email("user3@user.email")
-                .firstName("User3")
-                .id_enable(true)
-                .languages(langSet2)
-                .lastName("LastName")
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.mysite.ru")
-                .messages(null)
-                .password("userpass3")
-                .persistDate(userLocalDate)
-                .posts(null)
-                .role(roleUser)
-                .status(status)
-                .build();
-        userService.create(user4);
-
-        this.user5 = User.builder()
-                .aboutMe("My description about life - User4")
-                .active(disabled)
-                .avatar("www.myavatar.ru/9090")
-                .city("SPb")
-                .dateOfBirth(dateDateClass)
-                .education("MIT University")
-                .email("user4@user.email")
-                .firstName("User4")
-                .id_enable(true)
-                .languages(langSet)
-                .lastName("LastName")
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.mysite.ru")
-                .messages(null)
-                .password("userpass4")
-                .persistDate(userLocalDate)
-                .posts(null)
-                .role(roleUser)
-                .status(status)
-                .build();
-        userService.create(user5);
-
-        this.user6 = User.builder()
-                .aboutMe("My description about life - User5")
-                .active(active)
-                .avatar("www.myavatar.ru/9090")
-                .city("SPb")
-                .dateOfBirth(dateDateClass)
-                .education("MIT University")
-                .email("user5@user.email")
-                .firstName("User5")
-                .id_enable(true)
-                .languages(langSet2)
-                .lastName("LastName")
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.mysite.ru")
-                .messages(null)
-                .password("userpass5")
-                .persistDate(userLocalDate)
-                .posts(null)
-                .role(roleUser)
-                .status(status)
-                .build();
-        userService.create(user6);
-
-        this.user7 = User.builder()
-                .aboutMe("My description about life - User6")
-                .active(disabled)
-                .avatar("www.myavatar.ru/9090")
-                .city("SPb")
-                .dateOfBirth(dateDateClass)
-                .education("MIT University")
-                .email("user6@user.email")
-                .firstName("User6")
-                .id_enable(true)
-                .languages(langSet)
-                .lastName("LastName")
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.mysite.ru")
-                .messages(null)
-                .password("userpass6")
-                .persistDate(userLocalDate)
-                .posts(null)
-                .role(roleUser)
-                .status(status2)
-                .build();
-        userService.create(user7);
-
-        this.user8 = User.builder()
-                .aboutMe("My description about life - User7")
-                .active(disabled)
-                .avatar("www.myavatar.ru/9090")
-                .city("SPb")
-                .dateOfBirth(dateDateClass)
-                .education("MIT University")
-                .email("user7@user.email")
-                .firstName("User7")
-                .id_enable(true)
-                .languages(langSet)
-                .lastName("LastName")
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.mysite.ru")
-                .messages(null)
-                .password("userpass7")
-                .persistDate(userLocalDate)
-                .posts(null)
-                .role(roleUser)
-                .status(status)
-                .build();
-        userService.create(user8);
+        for (int i = 0; i != numOfUsers; i++) {
+            if (i == 0) {
+                name = "Admin";
+                emailName = "admin";
+                activityTest = active;
+                languageTestSet = langSet;
+                role = roleAdmin;
+                statusTest = status;
+            } else if (i % 2 == 0) {
+                name = "User";
+                emailName = "user";
+                activityTest = active;
+                languageTestSet = langSet;
+                role = roleUser;
+                statusTest = status;
+            } else {
+                name = "User";
+                emailName = "user";
+                activityTest = disabled;
+                languageTestSet = langSet2;
+                role = roleUser;
+                statusTest = status2;
+            }
+            users[i] = User.builder()
+                    .aboutMe("My description about life - " + name + i)
+                    .active(activityTest)
+                    .avatar("www.myavatar" + i + ".ru/9090")
+                    .city("SPb")
+                    .dateOfBirth(dateDateClass)
+                    .education("MIT University")
+                    .email(emailName + i + "@user.ru")
+                    .firstName(name + i)
+                    .id_enable(true)
+                    .languages(languageTestSet)
+                    .lastName("LastNameUser" + i)
+                    .lastRedactionDate(userLocalDateNow)
+                    .linkSite("www.mysite.ru")
+                    .messages(null)
+                    .password("userpass" + i)
+                    .persistDate(userLocalDate)
+                    .posts(null)
+                    .role(role)
+                    .status(statusTest)
+                    .build();
+            userService.create(users[i]);
+        }
     }
 
-    private void createMediaEntity(){
-        this.media1 = Media.builder()
-                .mediaType(MediaType.AUDIO)
-                .persistDateTime(userLocalDateNow)
-                .url("www.mymedia.ru")
-                .user(this.user2)
-                .build();
-
-        this.media2 = Media.builder()
-                .mediaType(MediaType.VIDEO)
-                .persistDateTime(userLocalDateNow)
-                .url("www.mymediavideo.ru")
-                .user(this.user3)
-                .build();
-
-        this.media3 = Media.builder()
-                .mediaType(MediaType.IMAGE)
-                .persistDateTime(userLocalDateNow)
-                .url("www.mymediavideo.ru")
-                .user(this.user4)
-                .build();
-
-        this.media4 = Media.builder()
-                .mediaType(MediaType.IMAGE)
-                .persistDateTime(userLocalDateNow)
-                .url("www.mymediavideo.ru")
-                .user(this.user5)
-                .build();
-
-        this.media5 = Media.builder()
-                .mediaType(MediaType.IMAGE)
-                .persistDateTime(userLocalDateNow)
-                .url("www.mymediavideo.ru")
-                .user(this.user7)
-                .build();
-
-        this.media6 = Media.builder()
-                .mediaType(MediaType.AUDIO)
-                .persistDateTime(userLocalDateNow)
-                .url("www.mymediavideo.ru")
-                .user(this.user8)
-                .build();
-
-        this.mediaSet1.add(this.media1);
-        this.mediaSet1.add(this.media2);
-        this.mediaSet2.add(this.media3);
-        this.mediaSet3.add(this.media4);
-        this.mediaSet4.add(this.media5);
-        this.mediaSet5.add(this.media6);
+    private void createMediaEntity() {
+        MediaType mediaType;
+        String url;
+        for (int i = 0; i != numOfMedias; i++) {
+            if (i % 5 == 0) {
+                mediaType = MediaType.AUDIO;
+                url = "www.myaudio.ru";
+            } else if (i % 3 == 0) {
+                mediaType = MediaType.VIDEO;
+                url = "www.myvideo.ru";
+            } else {
+                mediaType = MediaType.IMAGE;
+                url = "www.myimage.ru";
+            }
+            medias[i] = Media.builder()
+                    .mediaType(mediaType)
+                    .persistDateTime(userLocalDateNow)
+                    .url(url)
+                    .user(users[i])
+                    .build();
+        }
     }
 
     private void createChatEntity() {
-        this.chat1 = Chat.builder().
-                persistDate(userLocalDate)
-                .title("The first init chat")
-                .build();
-
-        this.chat2 = Chat.builder().
-                persistDate(userLocalDate)
-                .title("The second init chat")
-                .build();
-
-        this.chat3 = Chat.builder().
-                persistDate(userLocalDate)
-                .title("The third init chat")
-                .build();
+        for (int i = 0; i != numOfChats; i++) {
+            chats[i] = Chat.builder().
+                    persistDate(userLocalDate)
+                    .title(i + " init chat")
+                    .build();
+        }
     }
 
     private void createMessageEntity() {
-        this.message1 = Message.builder()
-                .message("Test init message1")
-                .is_unread(true)
-                .chat(this.chat1)
-                .lastRedactionDate(userLocalDateNow)
-                .media(this.mediaSet1)
-                .userSender(this.user2)
-                .persistDate(userLocalDate)
-                .build();
-
-        this.message2 = Message.builder()
-                .message("Test init message2")
-                .is_unread(true)
-                .chat(this.chat1)
-                .lastRedactionDate(userLocalDateNow)
-                .media(this.mediaSet2)
-                .userSender(this.user3)
-                .persistDate(userLocalDate)
-                .build();
-
-        this.message3 = Message.builder()
-                .message("Test init message3")
-                .is_unread(true)
-                .chat(this.chat2)
-                .lastRedactionDate(userLocalDateNow)
-                .media(this.mediaSet4)
-                .userSender(this.user4)
-                .persistDate(userLocalDate)
-                .build();
-
-        this.message4 = Message.builder()
-                .message("Test init message4")
-                .is_unread(true)
-                .chat(this.chat2)
-                .lastRedactionDate(userLocalDateNow)
-                .media(this.mediaSet5)
-                .userSender(this.user6)
-                .persistDate(userLocalDate)
-                .build();
-
-        this.message5 = Message.builder()
-                .message("Test init message5")
-                .is_unread(true)
-                .chat(this.chat3)
-                .lastRedactionDate(userLocalDateNow)
-                .media(this.mediaSet3)
-                .userSender(this.user8)
-                .persistDate(userLocalDate)
-                .build();
-
-        messageService.create(message1);
-        messageService.create(message2);
-        messageService.create(message3);
-        messageService.create(message4);
-        messageService.create(message5);
+        int num = 0;
+        int startNum = numOfMessages / numOfChats;
+        for (int j = 0; j != numOfChats; j++) {
+            for (int i = num; i != startNum + num; i++) {
+                Set<Media> mediaSet = new HashSet<>();
+                mediaSet.add(medias[i]);
+                messages[i] = Message.builder()
+                        .message("Test init message" + i)
+                        .is_unread(true)
+                        .chat(chats[j])
+                        .lastRedactionDate(userLocalDateNow)
+                        .media(mediaSet)
+                        .userSender(users[i])
+                        .persistDate(userLocalDate)
+                        .build();
+                messageService.create(messages[i]);
+            }
+            num += startNum;
+        }
     }
 
-    private void createAlbumEntity(){
-        albumService.create(Album.builder().media(this.media1).build());
-        albumService.create(Album.builder().media(this.media2).build());
-        albumService.create(Album.builder().media(this.media3).build());
+    private void createAlbumEntity() {
+        int num = 0;
+        int startNum = numOfMedias / numOfAlbums;
+        for (int j = 0; j != numOfAlbums; j++) {
+            for (int i = num; i != num + startNum; i++) {
+                albumService.create(Album.builder().media(medias[i]).build());
+            }
+            num += startNum;
+        }
     }
 
-    private void createFriendEntity(){
-        friendService.create(Friend.builder().user(user2).friend(user3).build());
-        friendService.create(Friend.builder().user(user2).friend(user4).build());
-        friendService.create(Friend.builder().user(user3).friend(user6).build());
-        friendService.create(Friend.builder().user(user4).friend(user7).build());
-        friendService.create(Friend.builder().user(user5).friend(user7).build());
-        friendService.create(Friend.builder().user(user6).friend(user7).build());
+    private void createFriendEntity() {
+        for (int i = 0; i != numOfFriends; i++) {
+            friendService.create(Friend.builder()
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .friend(users[(int) (Math.random() * numOfUsers)])
+                    .build());
+        }
     }
 
-    private void createFollowerEntity(){
-        followerService.create(Follower.builder().user(user2).follower(user5).build());
-        followerService.create(Follower.builder().user(user2).follower(user6).build());
-        followerService.create(Follower.builder().user(user8).follower(user2).build());
-        followerService.create(Follower.builder().user(user5).follower(user4).build());
-        followerService.create(Follower.builder().user(user6).follower(user5).build());
+    private void createFollowerEntity() {
+        for (int i = 0; i != numOfFollowers; i++) {
+            followerService.create(Follower.builder()
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .follower(users[(int) (Math.random() * numOfUsers)])
+                    .build());
+        }
     }
 
-    private void createPostEntity(){
-        this.post1 = Post.builder()
-                .persistDate(userLocalDate)
-                .lastRedactionDate(userLocalDateNow)
-                .media(mediaSet4)
-                .text("There is the first text of this post")
-                .title("The first test post")
-                .user(user3)
-                .build();
-
-        this.post2 = Post.builder()
-                .persistDate(userLocalDate)
-                .lastRedactionDate(userLocalDateNow)
-                .media(mediaSet1)
-                .text("There is the second text of this post")
-                .title("The second test post")
-                .user(user4)
-                .build();
-
-        this.post3 = Post.builder()
-                .persistDate(userLocalDate)
-                .lastRedactionDate(userLocalDateNow)
-                .media(mediaSet5)
-                .text("There is the third text of this post")
-                .title("The third test post")
-                .user(user3)
-                .build();
-
-        this.post4 = Post.builder()
-                .persistDate(userLocalDate)
-                .lastRedactionDate(userLocalDateNow)
-                .media(mediaSet3)
-                .text("There is the fourth text of this post")
-                .title("The fourth test post")
-                .user(user6)
-                .build();
+    private void createPostEntity() {
+        for (int i = 0; i != numOfPosts; i++) {
+            Set<Media> mediaSet = new HashSet<>();
+            mediaSet.add(medias[i]);
+            posts[i] = Post.builder()
+                    .persistDate(userLocalDate)
+                    .lastRedactionDate(userLocalDateNow)
+                    .media(mediaSet)
+                    .text("There is the " + i + " text of this post")
+                    .title("The " + i + " test post")
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .build();
+        }
     }
 
-    private void createGroupEntity(){
+    private void createGroupEntity() {
         GroupCategory groupCategory1 = GroupCategory.builder().category("Programming").build();
         GroupCategory groupCategory2 = GroupCategory.builder().category("Flowers").build();
-        Set<Post> postSet1 = new HashSet<>();
-        Set<Post> postSet2 = new HashSet<>();
-        Set<Post> postSet3 = new HashSet<>();
-        postSet1.add(this.post1);
-        postSet1.add(this.post2);
-        postSet2.add(this.post3);
-        postSet3.add(this.post4);
-
-        this.group1 = Group.builder()
-                .groupCategory(groupCategory1)
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.groupsite.ru")
-                .name("JAVA IS")
-                .persistDate(userLocalDate)
-                .posts(postSet1)
-                .build();
-        groupService.create(group1);
-
-        this.group2 = Group.builder()
-                .groupCategory(groupCategory2)
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.groupsite.ru")
-                .name("FLOWER IS")
-                .persistDate(userLocalDate)
-                .posts(postSet2)
-                .build();
-        groupService.create(group2);
-
-        this.group3 = Group.builder()
-                .groupCategory(groupCategory2)
-                .lastRedactionDate(userLocalDateNow)
-                .linkSite("www.groupsite.ru")
-                .name("TEST GROUP")
-                .persistDate(userLocalDate)
-                .posts(postSet3)
-                .build();
-        groupService.create(group3);
+        GroupCategory groupCategory;
+        int num = 0;
+        int startNum = numOfPosts / numOfGroups;
+        for (int i = 0; i != numOfGroups; i++) {
+            if (i % 2 == 0) {
+                groupCategory = groupCategory1;
+            } else {
+                groupCategory = groupCategory2;
+            }
+            Set<Post> postSet = new HashSet<>();
+            for (int j = num; j != num + startNum; j++) {
+                postSet.add(posts[j]);
+            }
+            groups[i] = Group.builder()
+                    .groupCategory(groupCategory)
+                    .lastRedactionDate(userLocalDateNow)
+                    .linkSite("www.groupsite" + i + ".ru")
+                    .name("JAVA IS " + i)
+                    .persistDate(userLocalDate)
+                    .posts(postSet)
+                    .build();
+            groupService.create(groups[i]);
+            num += startNum;
+        }
     }
 
-    private void createGroupHasUserEntity(){
-        groupHasUserService.create(GroupHasUser.builder()
-                .group(group1)
-                .user(user3)
-                .persistDate(userLocalDate)
-                .build());
-
-        groupHasUserService.create(GroupHasUser.builder()
-                .group(group1)
-                .user(user4)
-                .persistDate(userLocalDate)
-                .build());
-
-        groupHasUserService.create(GroupHasUser.builder()
-                .group(group2)
-                .user(user7)
-                .persistDate(userLocalDate)
-                .build());
-
-        groupHasUserService.create(GroupHasUser.builder()
-                .group(group3)
-                .user(user8)
-                .persistDate(userLocalDate)
-                .build());
+    private void createGroupHasUserEntity() {
+        for (int i = 0; i != numOfUsers; i++) {
+            groupHasUserService.create(GroupHasUser.builder()
+                    .group(groups[(int) (Math.random() * numOfGroups/2)])
+                    .user(users[i])
+                    .persistDate(userLocalDate)
+                    .build());
+        }
     }
 
-    private void createPostCommentEntity(){
-        this.comment1 = Comment.builder()
-                .comment("Test comment 1")
-                .commentType(CommentType.MEDIA)
-                .lastRedactionDate(userLocalDate)
-                .persistDate(userLocalDate)
-                .user(user2)
-                .build();
-        postCommentService.create(PostComment.builder()
-                                            .post(post1)
-                                            .comment(comment1)
-                                            .build());
-
-        this.comment2 = Comment.builder()
-                .comment("Test comment 2")
-                .commentType(CommentType.MEDIA)
-                .lastRedactionDate(userLocalDate)
-                .persistDate(userLocalDate)
-                .user(user5)
-                .build();
-        postCommentService.create(PostComment.builder()
-                                            .post(post2)
-                                            .comment(comment2)
-                                            .build());
-
-        this.comment3 = Comment.builder()
-                .comment("Test comment 3")
-                .commentType(CommentType.MEDIA)
-                .lastRedactionDate(userLocalDate)
-                .persistDate(userLocalDate)
-                .user(user4)
-                .build();
-        postCommentService.create(PostComment.builder()
-                                            .post(post3)
-                                            .comment(comment3)
-                                            .build());
+    private void createPostCommentEntity() {
+        for (int i = 0; i != numOfPostComments; i++) {
+            postComments[i] = Comment.builder()
+                    .comment("Test comment POST " + i)
+                    .commentType(CommentType.POST)
+                    .lastRedactionDate(userLocalDate)
+                    .persistDate(userLocalDate)
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .build();
+            postCommentService.create(PostComment.builder()
+                    .post(posts[(int) (Math.random() * numOfPosts)])
+                    .comment(postComments[i])
+                    .build());
+        }
     }
 
-    private void createPostLikeEntity(){
-        Like like1 = Like.builder().likeType(LikeType.POST).user(user4).build();
-        Like like2 = Like.builder().likeType(LikeType.POST).user(user6).build();
-        Like like3 = Like.builder().likeType(LikeType.POST).user(user2).build();
-
-        postLikeService.create(PostLike.builder()
-                                        .post(post1)
-                                        .like(like1)
-                                        .user(user4)
-                                        .build());
-
-        postLikeService.create(PostLike.builder()
-                                        .post(post1)
-                                        .like(like2)
-                                        .user(user6)
-                                        .build());
-
-        postLikeService.create(PostLike.builder()
-                                        .post(post3)
-                                        .like(like3)
-                                        .user(user2)
-                                        .build());
+    private void createPostLikeEntity() {
+        for (int i = 0; i != numOfPostLikes; i++) {
+            postLikes[i] = Like.builder()
+                    .likeType(LikeType.POST)
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .build();
+            postLikeService.create(PostLike.builder()
+                    .post(posts[(int) (Math.random() * numOfPosts)])
+                    .like(postLikes[i])
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .build());
+        }
     }
 
-    private void createCommentLikeEntity(){
-        Like like1 = Like.builder().likeType(LikeType.COMMENT).user(user2).build();
-        Like like2 = Like.builder().likeType(LikeType.COMMENT).user(user5).build();
-        Like like3 = Like.builder().likeType(LikeType.COMMENT).user(user8).build();
-
-        commentLikeService.create(CommentLike.builder()
-                                            .like(like1)
-                                            .comment(comment1)
-                                            .user(user2)
-                                            .build());
-
-        commentLikeService.create(CommentLike.builder()
-                                            .like(like2)
-                                            .comment(comment2)
-                                            .user(user5)
-                                            .build());
-
-        commentLikeService.create(CommentLike.builder()
-                                            .like(like3)
-                                            .comment(comment1)
-                                            .user(user8)
-                                            .build());
-    }
-    private void createMessageLikeEntity(){
-        Like like1 = Like.builder().likeType(LikeType.MESSAGE).user(user3).build();
-        Like like2 = Like.builder().likeType(LikeType.MESSAGE).user(user7).build();
-        Like like3 = Like.builder().likeType(LikeType.MESSAGE).user(user6).build();
-
-        messageLikeService.create(MessageLike.builder()
-                                            .like(like1)
-                                            .message(message1)
-                                            .user(user3)
-                                            .build());
-
-        messageLikeService.create(MessageLike.builder()
-                                            .like(like2)
-                                            .message(message4)
-                                            .user(user7)
-                                            .build());
-
-        messageLikeService.create(MessageLike.builder()
-                                            .like(like3)
-                                            .message(message5)
-                                            .user(user6)
-                                            .build());
+    private void createCommentLikeEntity() {
+        for (int i = 0; i != numOfCommentLikes; i++) {
+            commentLikes[i] = Like.builder()
+                    .likeType(LikeType.COMMENT)
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .build();
+            commentLikeService.create(CommentLike.builder()
+                    .like(commentLikes[i])
+                    .comment(postComments[(int) (Math.random() * numOfPostComments)])
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .build());
+        }
     }
 
-    private void createMediaCommentEntity(){
-        Comment comment1 = Comment.builder()
-                .comment("Test comment Media 1")
-                .commentType(CommentType.MEDIA)
-                .lastRedactionDate(userLocalDate)
-                .persistDate(userLocalDate)
-                .user(user4)
-                .build();
-        mediaCommentService.create(MediaComment.builder()
-                                                .comment(comment1)
-                                                .media(media1)
-                                                .build());
-
-        Comment comment2 = Comment.builder()
-                .comment("Test comment Media 2")
-                .commentType(CommentType.MEDIA)
-                .lastRedactionDate(userLocalDate)
-                .persistDate(userLocalDate)
-                .user(user2)
-                .build();
-        mediaCommentService.create(MediaComment.builder()
-                                                .comment(comment2)
-                                                .media(media1)
-                                                .build());
-
-        Comment comment3 = Comment.builder()
-                .comment("Test comment Media 3")
-                .commentType(CommentType.MEDIA)
-                .lastRedactionDate(userLocalDate)
-                .persistDate(userLocalDate)
-                .user(user7)
-                .build();
-        mediaCommentService.create(MediaComment.builder()
-                                                .comment(comment3)
-                                                .media(media1)
-                                                .build());
+    private void createMessageLikeEntity() {
+        for (int i = 0; i != numOfMessagesLikes; i++) {
+            messageLikes[i] = Like.builder()
+                    .likeType(LikeType.MESSAGE)
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .build();
+            messageLikeService.create(MessageLike.builder()
+                    .like(messageLikes[i])
+                    .message(messages[(int) (Math.random() * numOfMessages)])
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .build());
+        }
     }
 
-    private void createAudiosEntity(){
-       audiosService.create(Audios.builder()
-                .author("Test Author1")
-                .icon("TestIcon1")
-                .name("AudioTestName1")
-                .media(media1)
-                .build());
-
-       audiosService.create(Audios.builder()
-                .author("Test Author2")
-                .icon("TestIcon2")
-                .name("AudioTestName2")
-                .media(media6)
-                .build());
+    private void createMediaCommentEntity() {
+        for (int i = 0; i != numOfMediaComments; i++) {
+            mediaComments[i] = Comment.builder()
+                    .comment("Test comment MEDIA " + i)
+                    .commentType(CommentType.MEDIA)
+                    .lastRedactionDate(userLocalDate)
+                    .persistDate(userLocalDate)
+                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .build();
+            mediaCommentService.create(MediaComment.builder()
+                    .comment(mediaComments[i])
+                    .media(medias[(int) (Math.random() * numOfMedias)])
+                    .build());
+        }
     }
 
-    private void createImageEntity(){
-        imageService.create(Image.builder()
-                .description("Image Media Teat File 1")
-                .media(media3)
-                .build());
-
-        imageService.create(Image.builder()
-                .description("Image Media Teat File 2")
-                .media(media4)
-                .build());
-
-        imageService.create(Image.builder()
-                .description("Image Media Teat File 3")
-                .media(media5)
-                .build());
+    private void createAudiosEntity() {
+        for (int i = 0; i != numOfMedias; i++) {
+            if (i % 5 == 0) {
+                audiosService.create(Audios.builder()
+                        .author("Test Author " + i)
+                        .icon("TestIcon" + i)
+                        .name("AudioTestName " + i)
+                        .media(medias[i])
+                        .build());
+            }
+        }
     }
 
-    private void createVideosEntity(){
-        videosService.create(Videos.builder()
-                .icon("New Test Icon")
-                .name("The first test media")
-                .media(media2)
-                .build());
+    private void createImageEntity() {
+        for (int i = 0; i != numOfMedias; i++) {
+            if (i % 5 == 0) {
+                continue;
+            } else if (i % 3 == 0) {
+                continue;
+            } else {
+                imageService.create(Image.builder()
+                        .description("Image Media Test File " + i)
+                        .media(medias[i])
+                        .build());
+            }
+        }
+    }
 
+    private void createVideosEntity() {
+        for (int i = 0; i != numOfMedias; i++) {
+            if (i % 5 == 0) {
+                continue;
+            } else if (i % 3 == 0) {
+                videosService.create(Videos.builder()
+                        .icon("New Test Icon video " + i)
+                        .name("Test video " + i)
+                        .media(medias[i])
+                        .build());
+            }
+        }
     }
 
     private void createPostMessageUserEntity() {
-        Set<Post> postSet = new HashSet<>();
-        postSet.add(post1);
-        postSet.add(post2);
-        Set<Message> messageSet = new HashSet<>();
-        messageSet.add(message1);
-        messageSet.add(message2);
-        user2.setPosts(postSet);
-        user2.setMessages(messageSet);
-        userService.update(user2);
-
-        Set<Post> postSet2 = new HashSet<>();
-        postSet2.add(post3);
-        Set<Message> messageSet2 = new HashSet<>();
-        messageSet2.add(message4);
-        messageSet2.add(message5);
-        user5.setPosts(postSet2);
-        user5.setMessages(messageSet2);
-        userService.update(user5);
+        int postNum = 0;
+        int messageNum = 0;
+        for (int i = 0; i != numOfUsers/2; i++) {
+            Set<Post> postSet = new HashSet<>();
+            postSet.add(posts[postNum]);
+            postSet.add(posts[postNum++]);
+            postNum++;
+            Set<Message> messageSet = new HashSet<>();
+            messageSet.add(messages[messageNum]);
+            messageSet.add(messages[messageNum++]);
+            messageNum++;
+            users[i].setPosts(postSet);
+            users[i].setMessages(messageSet);
+            userService.update(users[i]);
+        }
     }
 }
