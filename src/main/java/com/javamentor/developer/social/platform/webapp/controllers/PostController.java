@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
-import com.javamentor.developer.social.platform.models.dto.PostDTO;
+import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDTOService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<PostDTO> getPosts() {
+    public ResponseEntity<PostDto> getPosts() {
         return ResponseEntity.ok(postDTOService.getPosts());
     }
 }
