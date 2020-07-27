@@ -1,10 +1,8 @@
 package com.javamentor.developer.social.platform.models.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -12,7 +10,10 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+@EqualsAndHashCode
+@ToString
+@Builder
+public class UserDto implements Serializable {
 
     private Long userId;
 
@@ -45,11 +46,5 @@ public class UserDto {
     private Status status;
 
     private Active active;
-
-    private Set<Language> languages;
-
-    private Set<Message> messages;
-
-    private Set<Post> posts;
 
 }
