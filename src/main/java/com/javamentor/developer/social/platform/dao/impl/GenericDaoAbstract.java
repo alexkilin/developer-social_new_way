@@ -4,6 +4,7 @@ import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -48,6 +49,10 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     public boolean existById(PK id) {
-        return getById(id) != null;
+        Query query = entityManager.createQuery(
+                "SELECT " +
+                        "CASE WHEN b.id IS NULL THEN false ELSE true END " +
+                        "FROM " + clazz.getSimpleName() + " b WHERE b.id = :paramId").setParameter("paramId", id);
+        return (boolean) query.getSingleResult();
     }
 }

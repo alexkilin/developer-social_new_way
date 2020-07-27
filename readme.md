@@ -1,5 +1,9 @@
 # Документация JM Developer Social
 
+## Как настроить запуск
+
+- В проекте реализованно два профиля: **local** и **dev**. Для выбора профиля, добавьте в program arguments **--spring.profiles.active=local** или **--spring.profiles.active=dev** соответственно. 
+
 ## Сущности
 
 ### Users
