@@ -49,8 +49,10 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     public boolean existById(PK id) {
-        Query query = entityManager.createQuery("FROM " + clazz.getName() + " WHERE id = :paramId")
-                .setParameter("paramId", id);
-        return query.getSingleResult() != null;
+        Query query = entityManager.createQuery(
+                "SELECT " +
+                        "CASE WHEN b.id IS NULL THEN false ELSE true END " +
+                        "FROM " + clazz.getSimpleName() + " b WHERE b.id = :paramId").setParameter("paramId", id);
+        return (boolean) query.getSingleResult();
     }
 }
