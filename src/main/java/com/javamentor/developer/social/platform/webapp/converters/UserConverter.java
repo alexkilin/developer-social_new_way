@@ -23,10 +23,7 @@ public class UserConverter {
                 user.getLinkSite(),
                 user.getRole(),
                 user.getStatus(),
-                user.getActive(),
-                user.getLanguages(),
-                user.getMessages(),
-                user.getPosts());
+                user.getActive());
     }
 
     public final User convertToEntity(UserDto userDto) {

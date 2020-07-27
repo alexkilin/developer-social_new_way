@@ -16,7 +16,7 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
     private Class<T> clazz;
 
     @PersistenceContext
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
     Session session = entityManager.unwrap(Session.class);
 
@@ -45,8 +45,4 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
         return (T) entityManager.find(clazz, id);
     }
 
-    @Override
-    public List<T> getUserFriendsById(PK id) {
-        return new ArrayList<>();
-    }
 }

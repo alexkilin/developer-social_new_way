@@ -9,6 +9,4 @@ public interface GenericDao<T, PK extends Serializable> {
     T getById(PK id);
     void delete(T entity);
     void deleteById(PK id);
-    List<T> getAllUsers();
-    List<T> getUserFriendsById(PK id);
 }

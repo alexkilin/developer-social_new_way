@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.service.abstracts;
 
 import java.io.Serializable;
-import java.util.List;
 
 public interface GenericService<T, PK extends Serializable> {
     void create(T entity);
@@ -9,6 +8,4 @@ public interface GenericService<T, PK extends Serializable> {
     T getById(PK id);
     void delete(T entity);
     void deleteById(PK id);
-    List<T> getAllUsers();
-    List<T> getUserFriendsById(PK id);
 }
