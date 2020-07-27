@@ -10,7 +10,6 @@ import java.io.Serializable;
 public abstract class GenericServiceAbstract<T, PK extends Serializable> implements GenericService<T, PK> {
     private final GenericDao<T, PK> dao;
 
-    @Autowired
     public GenericServiceAbstract(GenericDao<T, PK> dao) {
         this.dao = dao;
     }
