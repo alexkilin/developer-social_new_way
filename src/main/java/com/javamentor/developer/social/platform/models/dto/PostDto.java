@@ -1,5 +1,5 @@
 package com.javamentor.developer.social.platform.models.dto;
-
+,
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import javax.validation.constraints.NotNull;

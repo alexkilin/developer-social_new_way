@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.dto.PostDto;
-import com.javamentor.developer.social.platform.service.abstracts.dto.PostDTOService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/posts")
 public class PostController {
-    private final PostDTOService postDTOService;
+    private final PostDtoService postDtoService;
 
     @Autowired
-    public PostController(PostDTOService postDTOService) {
-        this.postDTOService = postDTOService;
+    public PostController(PostDtoService postDTOService) {
+        this.postDtoService = postDTOService;
     }
 
     @GetMapping
     public ResponseEntity<PostDto> getPosts() {
-        return ResponseEntity.ok(postDTOService.getPosts());
+        return ResponseEntity.ok(postDtoService.getPosts());
     }
 }
