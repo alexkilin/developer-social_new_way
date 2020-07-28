@@ -49,7 +49,7 @@ public class PostComment {
     }
 
     private void checkConstraints() {
-        if (this.comment.getCommentType() != CommentType.MEDIA) {
+        if (this.comment.getCommentType() != CommentType.POST) {
             throw new ApiRequestException("У экземпляра Comment, связанного с Post, " +
                     "поле commentType должно принимать значение CommentType.Post");
         }
