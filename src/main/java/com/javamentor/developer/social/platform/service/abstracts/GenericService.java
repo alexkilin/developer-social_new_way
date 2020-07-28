@@ -2,7 +2,7 @@ package com.javamentor.developer.social.platform.service.abstracts;
 
 import java.io.Serializable;
 
-public interface GenericService<T, PK extends Serializable> {
+public interface GenericService<T, PK> {
     void create(T entity);
 
     void update(T entity);
