@@ -15,6 +15,6 @@ public class MediaPostDto {
     @ApiModelProperty(notes = "Вид медиаконтента")
     private String mediaType;
 
-    @ApiModelProperty(notes = "Содержание")
+    @ApiModelProperty(notes = "Ссылка на контент")
     private String content;
 }
