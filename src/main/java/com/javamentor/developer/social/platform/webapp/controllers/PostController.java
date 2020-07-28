@@ -20,6 +20,7 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<PostDto> getPosts() {
-        return ResponseEntity.ok(postDtoService.getPosts());
+      //  return ResponseEntity.ok(postDtoService.getPosts());
+        return null;
     }
 }

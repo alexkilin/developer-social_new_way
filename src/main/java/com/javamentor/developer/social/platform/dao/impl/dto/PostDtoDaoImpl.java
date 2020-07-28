@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+
 import org.hibernate.query.Query;;
 import org.hibernate.transform.ResultTransformer;
+
 import java.util.List;
 
 @Repository
@@ -52,6 +54,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     public List transformList(List list) {
                         return null;
                     }
-                })
+                });
+        return null;
     }
 }
