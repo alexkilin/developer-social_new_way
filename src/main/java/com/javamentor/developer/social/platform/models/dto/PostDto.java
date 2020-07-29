@@ -16,7 +16,7 @@ import java.util.List;
 public class PostDto {
 
     @ApiModelProperty(notes = "Автоматически генерируемыЙ ID новости. При создании не указывать, указывать при изменении")
-    private int id;
+    private Long id;
 
     @NotNull
     @ApiModelProperty(notes = "Заголовок новости, поле не должно быть пустым")
