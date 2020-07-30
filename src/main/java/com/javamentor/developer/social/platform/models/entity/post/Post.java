@@ -57,6 +57,6 @@ public class Post {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
-    private List<Tag> tags;
+    private Set<Tag> tags;
 
 }

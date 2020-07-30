@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
+import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -43,8 +44,13 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     "u.lastName, " +
                     "u.avatar, " +
                     "m.mediaType, " +
-                    "m.url " +
-                    "from Post p join p.user u join p.media m")
+                    "m.url, " +
+                    "t.id," +
+                    "t.text " +
+                    "from Post p " +
+                    "join p.user u " +
+                    "join p.media m " +
+                    "join p.tags t")
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override
@@ -61,12 +67,19 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                     .build();
                             List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
                             mediaPostDtoList.add(mediaPostDto);
+                            TagDto tagDto = TagDto.builder()
+                                    .id((Long) objects[11])
+                                    .text((String) objects[12])
+                                    .build();
+                            List<TagDto> tagDtoList = new ArrayList<>();
+                            tagDtoList.add(tagDto);
                             return PostDto.builder()
                                     .id((Long) objects[0])
                                     .title((String) objects[1])
                                     .text((String) objects[2])
                                     .userDto(userDto)
                                     .media(mediaPostDtoList)
+                                    .tags(tagDtoList)
                                     .persistDate((LocalDateTime) objects[3])
                                     .lastRedactionDate((LocalDateTime) objects[4])
                                     .build();

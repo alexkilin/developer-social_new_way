@@ -37,4 +37,7 @@ public class PostDto {
 
     @ApiModelProperty(notes = "Медиаконтент поста")
     private List<MediaPostDto> media;
+
+    @ApiModelProperty(notes = "Тэги новости")
+    private List<TagDto> tags;
 }
