@@ -2,8 +2,7 @@ package com.javamentor.developer.social.platform.models.entity.post;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -13,5 +12,9 @@ import javax.persistence.Table;
 @Builder
 @Table(name = "tags")
 public class Tag {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
 }
