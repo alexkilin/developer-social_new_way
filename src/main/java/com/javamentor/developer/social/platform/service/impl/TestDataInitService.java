@@ -454,6 +454,7 @@ public class TestDataInitService {
                         .author("Test Author " + i)
                         .icon("TestIcon" + i)
                         .name("AudioTestName " + i)
+                        .album("AlbumTestName "+i)
                         .media(medias[i])
                         .build());
             }

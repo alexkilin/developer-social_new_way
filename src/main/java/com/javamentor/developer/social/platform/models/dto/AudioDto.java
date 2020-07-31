@@ -32,8 +32,8 @@ public class AudioDto {
     @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "'text' Must not consist of spaces AudioDto.class")
     private String url;
 
-    @ApiModelProperty(notes = "Адрес иконки (превью) аудио объекта")  //тут не обязательно может быть обложка. Если ее нет, то должна быть установленна какаято стандартная.
-    private String icon;                                             // этим занимаются фронты или мы должны сделать если нал, то тогда такой то адрес АНАЛОГИЧНО С ИМЕНЕМ И АВТОРОМ Альбомом
+    @ApiModelProperty(notes = "Адрес иконки (превью) аудио объекта")
+    private String icon;
 
     @ApiModelProperty(notes = "Название аудио объекта")
     private String name;
@@ -41,8 +41,8 @@ public class AudioDto {
     @ApiModelProperty(notes = "Автор аудио объекта")
     private String author;
 
-    //@ApiModelProperty(notes = "Альбом аудио объекта") // судя по всему нужно добавлять еще эту строчку, ибо фронты по любому захотят получать альбом, к которому относится песня
-    //private String album;
+    @ApiModelProperty(notes = "Альбом аудио объекта")
+    private String album;
 
     @ApiModelProperty(notes = "Дата публикования медиа объекта, назначается автоматически при создании")
     private LocalDateTime persistDateTime;
