@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
+import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,12 @@ public class GroupDtoServiceImpl implements GroupDtoService {
     }
 
     @Override
-    public List<GroupInfoDto> getAllGroups() {
-        return groupDtoDao.getAllGroups();
+    public List<GroupInfoDto> getAllGroups(int page, int size) {
+        return groupDtoDao.getAllGroups(page, size);
+    }
+
+    @Override
+    public GroupDto getGroupById(Long id) {
+        return groupDtoDao.getGroupById(id);
     }
 }
