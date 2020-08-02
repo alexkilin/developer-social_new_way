@@ -24,4 +24,9 @@ public class PostDtoServiceImpl implements PostDtoService {
     public List<PostDto> getPosts() {
         return postDtoDao.getPosts();
     }
+
+    @Override
+    public List<PostDto> getPostsByTag(String text) {
+        return postDtoDao.getPostsByTag(text);
+    }
 }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PostDtoService {
     List<PostDto> getPosts();
+    List<PostDto> getPostsByTag(String text);
 }
