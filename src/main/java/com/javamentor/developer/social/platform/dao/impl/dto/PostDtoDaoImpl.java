@@ -50,7 +50,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     "from Post p " +
                     "join p.user u " +
                     "join p.media m " +
-                    "join p.tags t")
+                    "left join p.tags t")
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override

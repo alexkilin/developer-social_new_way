@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "user_tabs")
-public class userTabs {
+public class UserTabs {
     //Закладка
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

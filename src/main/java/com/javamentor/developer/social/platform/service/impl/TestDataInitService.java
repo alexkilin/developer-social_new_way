@@ -14,22 +14,22 @@ import com.javamentor.developer.social.platform.models.entity.media.*;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.post.Tag;
 import com.javamentor.developer.social.platform.models.entity.user.*;
-import com.javamentor.developer.social.platform.service.abstracts.model.chat.ChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.MessageService;
-import com.javamentor.developer.social.platform.service.abstracts.model.comment.CommentService;
 import com.javamentor.developer.social.platform.service.abstracts.model.comment.MediaCommentService;
 import com.javamentor.developer.social.platform.service.abstracts.model.comment.PostCommentService;
-import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupCategoryService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupHasUserService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.CommentLikeService;
-import com.javamentor.developer.social.platform.service.abstracts.model.like.LikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.MessageLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.PostLikeService;
-import com.javamentor.developer.social.platform.service.abstracts.model.media.*;
-import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
+import com.javamentor.developer.social.platform.service.abstracts.model.media.AlbumService;
+import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
+import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
+import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.TagService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.*;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.FollowerService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.FriendService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -133,6 +133,7 @@ public class TestDataInitService {
         createUserEntity();
         createMediaEntity();
         createChatEntity();
+        createTagEntity();
         createMessageEntity();
         createAlbumEntity();
         createFriendEntity();
@@ -149,7 +150,6 @@ public class TestDataInitService {
         createImageEntity();
         createVideosEntity();
         createPostMessageUserEntity();
-        createTagEntity();
     }
 
 
@@ -272,6 +272,8 @@ public class TestDataInitService {
             tags[i] = Tag.builder()
                     .text("This is " + i + " tag")
                     .build();
+
+            tagService.create(tags[i]);
         }
     }
 
@@ -338,11 +340,14 @@ public class TestDataInitService {
     private void createPostEntity() {
         for (int i = 0; i != numOfPosts; i++) {
             Set<Media> mediaSet = new HashSet<>();
+            Set<Tag> tagSet = new HashSet<>();
             mediaSet.add(medias[i]);
+            tagSet.add(tags[i]);
             posts[i] = Post.builder()
                     .persistDate(userLocalDate)
                     .lastRedactionDate(userLocalDateNow)
                     .media(mediaSet)
+                    .tags(tagSet)
                     .text("There is the " + i + " text of this post")
                     .title("The " + i + " test post")
                     .user(users[(int) (Math.random() * numOfUsers)])
