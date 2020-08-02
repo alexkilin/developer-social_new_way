@@ -26,8 +26,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAllAudios() {
-        List<AudioDto> audios = entityManager
+    public Optional<List<AudioDto>> getAllAudios() {
+        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -60,14 +60,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList();
-        return audios.isEmpty() ? Collections.emptyList() : audios;
+                .getResultList());
+        return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
-        List<AudioDto> audios = entityManager
+    public Optional<List<AudioDto>> getPartAudio(int currentPage, int itemsOnPage) {
+        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -102,14 +102,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList();
-        return audios.isEmpty() ? Collections.emptyList() : audios;
+                .getResultList());
+        return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAudioOfAuthor(String author) {
-        List<AudioDto> audios = entityManager
+    public Optional<List<AudioDto>> getAudioOfAuthor(String author) {
+        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -143,8 +143,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList();
-        return audios.isEmpty() ? Collections.emptyList() : audios;
+                .getResultList());
+        return audios;
     }
 
     @Override
@@ -193,8 +193,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAudioOfAlbum(String album) {
-        List<AudioDto> audios = entityManager
+    public Optional<List<AudioDto>> getAudioOfAlbum(String album) {
+        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -228,14 +228,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList();
-        return audios.isEmpty() ? Collections.emptyList() : audios;
+                .getResultList());
+        return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAudioOfUser(Long userId) {
-        List<AudioDto> audios = entityManager
+    public Optional<List<AudioDto>> getAudioOfUser(Long userId) {
+        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -269,14 +269,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList();
-        return audios.isEmpty() ? Collections.emptyList() : audios;
+                .getResultList());
+        return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage) {
-        List<AudioDto> audios = entityManager
+    public Optional<List<AudioDto>> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage) {
+        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -312,14 +312,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList();
-        return audios.isEmpty() ? Collections.emptyList() : audios;
+                .getResultList());
+        return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAuthorAudioOfUser(Long userId, String author) {
-        List<AudioDto> audios = entityManager
+    public Optional<List<AudioDto>> getAuthorAudioOfUser(Long userId, String author) {
+        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -354,14 +354,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList();
-        return audios.isEmpty() ? Collections.emptyList() : audios;
+                .getResultList());
+        return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAlbumAudioOfUser(Long userId, String album) {
-        List<AudioDto> audios = entityManager
+    public Optional<List<AudioDto>> getAlbumAudioOfUser(Long userId, String album) {
+        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -396,8 +396,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList();
-        return audios.isEmpty() ? Collections.emptyList() : audios;
+                .getResultList());
+        return audios;
     }
 
 

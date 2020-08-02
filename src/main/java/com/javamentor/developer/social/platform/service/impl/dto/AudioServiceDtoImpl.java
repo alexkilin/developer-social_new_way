@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -21,47 +22,47 @@ public class AudioServiceDtoImpl implements AudioServiceDto{
     }
 
     @Override
-    public List<AudioDto> getAllAudios() {
+    public Optional<List<AudioDto>> getAllAudios() {
         return audioDtoDao.getAllAudios();
     }
 
     @Override
-    public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
+    public Optional<List<AudioDto>> getPartAudio(int currentPage, int itemsOnPage) {
             return audioDtoDao.getPartAudio(currentPage, itemsOnPage);
     }
 
     @Override
-    public List<AudioDto> getAudioOfAuthor(String author) {
+    public Optional<List<AudioDto>> getAudioOfAuthor(String author) {
         return audioDtoDao.getAudioOfAuthor(author);
     }
 
     @Override
-    public AudioDto getAudioOfName(String name) {
-        return audioDtoDao.getAudioOfName(name).orElseThrow(() -> new IllegalArgumentException("Не корректные параметры"));
+    public Optional<AudioDto> getAudioOfName(String name) {
+        return audioDtoDao.getAudioOfName(name);
     }
 
     @Override
-    public List<AudioDto> getAudioOfAlbum(String album) {
+    public Optional<List<AudioDto>> getAudioOfAlbum(String album) {
         return audioDtoDao.getAudioOfAlbum(album);
     }
 
     @Override
-    public List<AudioDto> getAudioOfUser(Long userId) {
+    public Optional<List<AudioDto>> getAudioOfUser(Long userId) {
         return audioDtoDao.getAudioOfUser(userId);
     }
 
     @Override
-    public List<AudioDto> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage) {
+    public Optional<List<AudioDto>> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage) {
         return audioDtoDao.getPartAudioOfUser(userId,currentPage,itemsOnPage);
     }
 
     @Override
-    public List<AudioDto> getAuthorAudioOfUser(Long userId, String author) {
+    public Optional<List<AudioDto>> getAuthorAudioOfUser(Long userId, String author) {
         return audioDtoDao.getAuthorAudioOfUser(userId, author);
     }
 
     @Override
-    public List<AudioDto> getAlbumAudioOfUser(Long userId, String album) {
+    public Optional<List<AudioDto>> getAlbumAudioOfUser(Long userId, String album) {
         return audioDtoDao.getAlbumAudioOfUser(userId, album);
     }
 
