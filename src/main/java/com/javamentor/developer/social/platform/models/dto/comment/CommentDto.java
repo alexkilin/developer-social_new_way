@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.models.dto.comment;
 
-import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
-import com.javamentor.developer.social.platform.models.entity.user.User;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,15 +14,18 @@ import java.time.LocalDateTime;
 @Builder
 public class CommentDto {
 
+    @ApiModelProperty(notes = "Уникальный идентификационный номер комментария. Генерируется автоматически.")
     private Long id;
 
+    @ApiModelProperty(notes = "Текстовая информация в комментарии.")
     private String comment;
 
-    private CommentType commentType;
-
+    @ApiModelProperty(notes = "Время последней редакции комментария.")
     private LocalDateTime lastRedactionDate;
 
+    @ApiModelProperty(notes = "Время создания комментария.")
     private LocalDateTime persistDate;
 
-    private User user;
+    @ApiModelProperty(notes = "ФИО пользователя оставившего комментарий.")
+    private String userFio;
 }
