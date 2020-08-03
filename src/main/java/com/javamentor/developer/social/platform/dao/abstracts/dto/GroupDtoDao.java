@@ -4,9 +4,10 @@ import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupDtoDao {
     List<GroupInfoDto> getAllGroups(int page, int size);
 
-    GroupDto getGroupById(Long id);
+    Optional<GroupDto> getGroupById(Long id);
 }
