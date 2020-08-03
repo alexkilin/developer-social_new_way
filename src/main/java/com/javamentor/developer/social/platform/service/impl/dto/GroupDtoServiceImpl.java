@@ -25,6 +25,6 @@ public class GroupDtoServiceImpl implements GroupDtoService {
 
     @Override
     public GroupDto getGroupById(Long id) {
-        return groupDtoDao.getGroupById(id);
+        return groupDtoDao.getGroupById(id).orElseThrow(IllegalArgumentException::new);
     }
 }
