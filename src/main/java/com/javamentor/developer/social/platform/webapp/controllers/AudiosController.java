@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioServiceDto;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,13 +33,15 @@ public class AudiosController {
     private final AudioServiceDto audioServiceDto;
     private final AudiosService audiosService;
     private final AudioConverter audioConverter;
+    private final UserService userService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public AudiosController(AudioServiceDto audioServiceDto, AudiosService audiosService, AudioConverter audioConverter) {
+    public AudiosController(AudioServiceDto audioServiceDto, AudiosService audiosService, AudioConverter audioConverter, UserService userService) {
         this.audioServiceDto = audioServiceDto;
         this.audiosService = audiosService;
         this.audioConverter = audioConverter;
+        this.userService = userService;
     }
 
     @ApiOperation(value = "Получение всего аудио")
@@ -151,7 +154,8 @@ public class AudiosController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "аудио успешно добавленно")})
     @GetMapping(value = "/add")
-    public ResponseEntity<?> addAudio(@RequestBody @Valid @NonNull AudioDto audioDto, User user) {
+    public ResponseEntity<?> addAudio(@RequestBody @Valid @NonNull AudioDto audioDto, @NotNull Long userid) {
+        User user = userService.getById(userid);
         Audios audios = audioConverter.toAudio(audioDto, MediaType.AUDIO, user);
         audiosService.create(audios);
         logger.info("Добавление аудио в бд "+audioDto.getId());
