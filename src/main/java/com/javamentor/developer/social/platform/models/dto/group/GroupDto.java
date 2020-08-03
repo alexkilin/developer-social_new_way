@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,5 +41,5 @@ public class GroupDto {
 
     @NonNull
     @ApiModelProperty(notes = "Посты группы. Не должно быть пустым.")
-    private Set<PostDto> posts;
+    private List<PostDto> posts;
 }
