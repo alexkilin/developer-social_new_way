@@ -12,6 +12,7 @@ import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser
 import com.javamentor.developer.social.platform.models.entity.like.*;
 import com.javamentor.developer.social.platform.models.entity.media.*;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
+import com.javamentor.developer.social.platform.models.entity.post.Tag;
 import com.javamentor.developer.social.platform.models.entity.user.*;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.ChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.MessageService;
@@ -27,6 +28,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.like.Mes
 import com.javamentor.developer.social.platform.service.abstracts.model.like.PostLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.*;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.TagService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +63,7 @@ public class TestDataInitService {
     private final int numOfCommentLikes = 100 * k;
     private final int numOfMessagesLikes = 100 * k;
     private final int numOfMediaComments = 100 * k;
+    private final int numOfTags = 100 * k;
 
     private User[] users = new User[numOfUsers];
     private Media[] medias = new Media[numOfMedias];
@@ -73,6 +76,7 @@ public class TestDataInitService {
     private Like[] commentLikes = new Like[numOfCommentLikes];
     private Like[] messageLikes = new Like[numOfMessagesLikes];
     private Comment[] mediaComments = new Comment[numOfMediaComments];
+    private Tag[] tags = new Tag[numOfTags];
 
     private UserService userService;
     private FollowerService followerService;
@@ -89,6 +93,7 @@ public class TestDataInitService {
     private MediaCommentService mediaCommentService;
     private PostCommentService postCommentService;
     private MessageService messageService;
+    private TagService tagService;
 
     @Autowired
     public TestDataInitService(UserService userService,
@@ -105,7 +110,7 @@ public class TestDataInitService {
                                GroupService groupService,
                                MediaCommentService mediaCommentService,
                                PostCommentService postCommentService,
-                               MessageService messageService) {
+                               MessageService messageService, TagService tagService) {
         this.userService = userService;
         this.followerService = followerService;
         this.friendService = friendService;
@@ -121,6 +126,7 @@ public class TestDataInitService {
         this.mediaCommentService = mediaCommentService;
         this.postCommentService = postCommentService;
         this.messageService = messageService;
+        this.tagService = tagService;
     }
 
     public void createEntity() {
@@ -143,7 +149,9 @@ public class TestDataInitService {
         createImageEntity();
         createVideosEntity();
         createPostMessageUserEntity();
+        createTagEntity();
     }
+
 
     private void createUserEntity() {
         Active active = Active.builder()
@@ -259,6 +267,14 @@ public class TestDataInitService {
         }
     }
 
+    private void createTagEntity() {
+        for (int i = 0; i != numOfTags; i++) {
+            tags[i] = Tag.builder()
+                    .text("This is " + i + " tag")
+                    .build();
+        }
+    }
+
     private void createChatEntity() {
         for (int i = 0; i != numOfChats; i++) {
             chats[i] = Chat.builder().
@@ -334,6 +350,7 @@ public class TestDataInitService {
         }
     }
 
+
     private void createGroupEntity() {
         GroupCategory groupCategory1 = GroupCategory.builder().category("Programming").build();
         GroupCategory groupCategory2 = GroupCategory.builder().category("Flowers").build();
@@ -366,7 +383,7 @@ public class TestDataInitService {
     private void createGroupHasUserEntity() {
         for (int i = 0; i != numOfUsers; i++) {
             groupHasUserService.create(GroupHasUser.builder()
-                    .group(groups[(int) (Math.random() * numOfGroups/2)])
+                    .group(groups[(int) (Math.random() * numOfGroups / 2)])
                     .user(users[i])
                     .persistDate(userLocalDate)
                     .build());
@@ -492,7 +509,7 @@ public class TestDataInitService {
     private void createPostMessageUserEntity() {
         int postNum = 0;
         int messageNum = 0;
-        for (int i = 0; i != numOfUsers/2; i++) {
+        for (int i = 0; i != numOfUsers / 2; i++) {
             Set<Post> postSet = new HashSet<>();
             postSet.add(posts[postNum]);
             postSet.add(posts[postNum++]);
@@ -506,4 +523,6 @@ public class TestDataInitService {
             userService.update(users[i]);
         }
     }
+
+
 }

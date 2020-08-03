@@ -41,4 +41,7 @@ public class PostDto {
 
     @ApiModelProperty(notes = "Коментарии поста")
     private List<CommentDto> comments;
+
+    @ApiModelProperty(notes = "Тэги новости")
+    private List<TagDto> tags;
 }

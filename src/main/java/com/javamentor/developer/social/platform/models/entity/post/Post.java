@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,7 +31,6 @@ public class Post {
     @Column
     @NotNull
     private String title;
-
 
     @NotNull
     @Column
@@ -54,5 +54,9 @@ public class Post {
     @JoinTable(name = "post_media", joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id"))
     private Set<Media> media;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
+    private Set<Tag> tags;
 
 }
