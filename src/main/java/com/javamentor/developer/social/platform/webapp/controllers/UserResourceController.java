@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
+import com.javamentor.developer.social.platform.models.dto.FriendDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.UserFriendsService;
@@ -104,6 +105,6 @@ public class UserResourceController {
     @GetMapping("/getUserFriends")
     public ResponseEntity<List<FriendDto>> getUserFriends(@PathVariable Long id) {
         List<Friend> userFriends = userFriendsService.getUserFriendsById(id);
-        return ResponseEntity.ok(friendsConverter.convertToDto(userFriends));
+        return ResponseEntity.ok(friendsConverter.toDto(userFriends));
     }
 }
