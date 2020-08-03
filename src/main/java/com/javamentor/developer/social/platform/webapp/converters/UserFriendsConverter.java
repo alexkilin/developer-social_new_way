@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
+import com.javamentor.developer.social.platform.models.dto.FriendDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
