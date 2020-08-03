@@ -1,9 +1,8 @@
-package com.javamentor.developer.social.platform.service.abstracts.model;
+package com.javamentor.developer.social.platform.dao.abstracts.model;
 
 import java.util.List;
 
-public interface UserService{
-
+public interface UserDao {
     void persist(User user);
 
     void update(User user);
@@ -15,5 +14,4 @@ public interface UserService{
     List<User> getAll();
 
     void deleteById(Long id);
-
 }

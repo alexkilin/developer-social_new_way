@@ -1,13 +1,13 @@
 package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
-import com.javamentor.developer.social.platform.dao.impl.GenericDaoAbstract;
-import com.javamentor.developer.social.platform.dao.impl.model.ReadWriteDAOImpl;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserDtoDAOImpl extends ReadWriteDAOImpl<UserDto, Long> implements UserDtoDao {
+public class UserDtoDaoImpl implements UserDtoDao {
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     @Override
     public List<UserDto> getUserDtoList() {
