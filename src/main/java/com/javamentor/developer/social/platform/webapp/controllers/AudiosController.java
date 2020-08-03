@@ -1,20 +1,27 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
+import com.javamentor.developer.social.platform.models.entity.media.Audios;
+import com.javamentor.developer.social.platform.models.entity.media.MediaType;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioServiceDto;
+import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
+import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
 
 @Validated
 @RestController
@@ -23,10 +30,15 @@ import java.util.Optional;
 public class AudiosController {
 
     private final AudioServiceDto audioServiceDto;
+    private final AudiosService audiosService;
+    private final AudioConverter audioConverter;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public AudiosController(AudioServiceDto audioServiceDto) {
+    public AudiosController(AudioServiceDto audioServiceDto, AudiosService audiosService, AudioConverter audioConverter) {
         this.audioServiceDto = audioServiceDto;
+        this.audiosService = audiosService;
+        this.audioConverter = audioConverter;
     }
 
     @ApiOperation(value = "Получение всего аудио")
@@ -133,5 +145,16 @@ public class AudiosController {
         else {
             return ResponseEntity.ok().body("Неудачное добавление аудио "+audioId+" пользователю "+userId);
         }
+    }
+
+    @ApiOperation(value = "Добавление аудио")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "аудио успешно добавленно")})
+    @GetMapping(value = "/add")
+    public ResponseEntity<?> addAudio(@RequestBody @Valid @NonNull AudioDto audioDto, User user) {
+        Audios audios = audioConverter.toAudio(audioDto, MediaType.AUDIO, user);
+        audiosService.create(audios);
+        logger.info("Добавление аудио в бд "+audioDto.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(audioDto);
     }
 }
