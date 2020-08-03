@@ -5,7 +5,6 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.user.User;
-import org.hibernate.Transaction;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
 
@@ -26,8 +25,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<List<AudioDto>> getAllAudios() {
-        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
+    public List<AudioDto> getAllAudios() {
+        List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -60,14 +59,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList());
+                .getResultList();
         return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<List<AudioDto>> getPartAudio(int currentPage, int itemsOnPage) {
-        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
+    public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
+        List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -102,14 +101,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList());
+                .getResultList();
         return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<List<AudioDto>> getAudioOfAuthor(String author) {
-        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
+    public List<AudioDto> getAudioOfAuthor(String author) {
+        List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -143,7 +142,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList());
+                .getResultList();
         return audios;
     }
 
@@ -193,8 +192,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<List<AudioDto>> getAudioOfAlbum(String album) {
-        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
+    public List<AudioDto> getAudioOfAlbum(String album) {
+        List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -228,14 +227,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList());
+                .getResultList();
         return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<List<AudioDto>> getAudioOfUser(Long userId) {
-        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
+    public List<AudioDto> getAudioOfUser(Long userId) {
+        List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -269,14 +268,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList());
+                .getResultList();
         return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<List<AudioDto>> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage) {
-        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
+    public List<AudioDto> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage) {
+        List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -312,14 +311,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList());
+                .getResultList();
         return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<List<AudioDto>> getAuthorAudioOfUser(Long userId, String author) {
-        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
+    public List<AudioDto> getAuthorAudioOfUser(Long userId, String author) {
+        List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -354,14 +353,14 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList());
+                .getResultList();
         return audios;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<List<AudioDto>> getAlbumAudioOfUser(Long userId, String album) {
-        Optional<List<AudioDto>> audios = Optional.ofNullable(entityManager
+    public List<AudioDto> getAlbumAudioOfUser(Long userId, String album) {
+        List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -396,7 +395,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                             }
                         }
                 )
-                .getResultList());
+                .getResultList();
         return audios;
     }
 
