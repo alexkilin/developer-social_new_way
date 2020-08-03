@@ -41,10 +41,10 @@ public class UserDto implements Serializable {
 
     private String linkSite;
 
-    private Role role;
+    private RoleDto role;
 
-    private Status status;
+    private StatusDto status;
 
-    private Active active;
+    private ActiveDto active;
 
 }

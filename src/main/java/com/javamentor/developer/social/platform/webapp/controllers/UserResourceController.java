@@ -46,7 +46,7 @@ public class UserResourceController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пользователь получен")
     })
-    @GetMapping(value = "/getUserById/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         Optional<UserDto> optionalUserDto = userDtoService.getUserDtoById(id);
         if (optionalUserDto.isPresent()) {
@@ -61,8 +61,8 @@ public class UserResourceController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список пользователей получен")
     })
-    @GetMapping("/getAllUsers")
-    public ResponseEntity<List<UserDto>> getAllUsers() {
+    @GetMapping("/all")
+    public ResponseEntity<List<UserDto>> getAll() {
         return ResponseEntity.ok(userDtoService.getUserDtoList());
     }
 
@@ -70,8 +70,8 @@ public class UserResourceController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пользователь создан")
     })
-    @PostMapping("/createUser")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
+    @PostMapping("/create")
+    public ResponseEntity<UserDto> create(@RequestBody UserDto user) {
         userService.persist(converter.convertToEntity(user));
         logger.info(String.format("Пользователь с email: %s добавлен в базу данных", user.getEmail()));
         return ResponseEntity.ok(user);
@@ -81,7 +81,7 @@ public class UserResourceController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пользователь обновлен")
     })
-    @PutMapping("/updateUser")
+    @PutMapping("/update")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user) {
         userService.update(converter.convertToEntity(user));
         return ResponseEntity.ok(user);
@@ -91,7 +91,7 @@ public class UserResourceController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пользователь удален")
     })
-    @DeleteMapping("/deleteUserById/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
         userService.deleteById(id);
         return ResponseEntity.ok("Success");
