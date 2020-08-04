@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -46,9 +47,11 @@ public class Message {
             inverseJoinColumns = @JoinColumn(name = "media_id"))
     private Set<Media> media;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY,targetEntity = User.class,cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "user_id",nullable = false)
     private User userSender;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Chat.class, cascade = {CascadeType.PERSIST})
-    private Chat chat;
+    @ManyToMany(fetch = FetchType.LAZY,targetEntity = Chat.class,cascade = {CascadeType.PERSIST},mappedBy = "messages")
+    private Set<Chat> chat;
 }

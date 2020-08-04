@@ -4,6 +4,7 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ApiIgnore
 @Table(name = "chats")
 public class Chat {
 
@@ -29,4 +31,13 @@ public class Chat {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @CreationTimestamp
     private LocalDateTime persistDate;
+
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, cascade = {CascadeType.PERSIST},mappedBy = "chats")
+    private Set<User> users;
+
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST},targetEntity = Message.class)
+    @JoinTable(joinColumns = @JoinColumn(name = "chat_id"),
+            inverseJoinColumns = @JoinColumn(name = "message_id"))
+    private Set<Message> messages;
 }
