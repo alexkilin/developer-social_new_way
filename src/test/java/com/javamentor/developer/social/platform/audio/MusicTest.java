@@ -1,0 +1,187 @@
+package com.javamentor.developer.social.platform.audio;
+
+
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.javamentor.developer.social.platform.AbstractIntegrationTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+
+@DataSet(value = {
+        "datasets/audio/usersAudioTest/active.yml",
+        "datasets/audio/usersAudioTest/user.yml",
+        "datasets/audio/usersAudioTest/role.yml",
+        "datasets/audio/usersAudioTest/status.yml",
+        "datasets/audio/usersAudioTest/users_audios_collections.yml",
+        "datasets/audio/media.yml",
+        "datasets/audio/audio.yml"}, cleanBefore = true, cleanAfter = true)
+class MusicTest extends AbstractIntegrationTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+
+    @Test
+    public void getAllAudios() throws Exception {
+        this.mockMvc.perform(get("/api/audios/all"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(5));
+    }
+
+    @Test
+    public void getPartAudios() throws Exception {
+        this.mockMvc.perform(get("/api/audios/getPart?currentPage=1&itemsOnPage=2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath("$[0].id").value(2))
+                .andExpect(jsonPath("$[0].album").value("AlbumTestName 1"))
+                .andExpect(jsonPath("$[0].author").value("Test Author 1"))
+                .andExpect(jsonPath("$[0].icon").value("TestIcon0"))
+                .andExpect(jsonPath("$[0].name").value("AudioTestName 1"))
+                .andExpect(jsonPath("$[1].id").value(3))
+                .andExpect(jsonPath("$[1].album").value("AlbumTestName 2"))
+                .andExpect(jsonPath("$[1].author").value("Test Author 2"))
+                .andExpect(jsonPath("$[1].icon").value("TestIcon2"))
+                .andExpect(jsonPath("$[1].name").value("AudioTestName 2"))
+                .andExpect(jsonPath("$[2].id").value(4))
+                .andExpect(jsonPath("$[2].album").value("AlbumTestName 3"))
+                .andExpect(jsonPath("$[2].author").value("Test Author 3"))
+                .andExpect(jsonPath("$[2].icon").value("TestIcon3"))
+                .andExpect(jsonPath("$[2].name").value("AudioTestName 3"));
+    }
+
+    @Test
+    public void getAudioOfAuthor() throws Exception {
+        this.mockMvc.perform(get("/api/audios/author/{author}", "Test Author 2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(3))
+                .andExpect(jsonPath("$[0].album").value("AlbumTestName 2"))
+                .andExpect(jsonPath("$[0].author").value("Test Author 2"))
+                .andExpect(jsonPath("$[0].icon").value("TestIcon2"))
+                .andExpect(jsonPath("$[0].name").value("AudioTestName 2"))
+                .andExpect(jsonPath("$[1].id").value(5))
+                .andExpect(jsonPath("$[1].album").value("AlbumTestName 4"))
+                .andExpect(jsonPath("$[1].author").value("Test Author 2"))
+                .andExpect(jsonPath("$[1].icon").value("TestIcon2"))
+                .andExpect(jsonPath("$[1].name").value("AudioTestName 4"));
+    }
+
+    @Test
+    public void getAudioOfInvalidAuthor() throws Exception {
+        this.mockMvc.perform(get("/api/audios/author/{author}", "Test Author 999"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+
+    }
+
+    @Test
+    public void getAudioOfName() throws Exception {
+        this.mockMvc.perform(get("/api/audios/name/{name}", "AudioTestName 2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(3))
+                .andExpect(jsonPath("$.album").value("AlbumTestName 2"))
+                .andExpect(jsonPath("$.author").value("Test Author 2"))
+                .andExpect(jsonPath("$.icon").value("TestIcon2"))
+                .andExpect(jsonPath("$.name").value("AudioTestName 2"));
+    }
+
+    @Test
+    public void getAudioOfInvalidName() throws Exception {
+        this.mockMvc.perform(get("/api/audios/name/{name}", "AudioTestName 55555"))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andExpect(content().string("Invalid parameters"));
+    }
+
+    @Test
+    public void getAudioOfUser() throws Exception {
+        this.mockMvc.perform(get("/api/audios/user/{userId}", "1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].album").value("AlbumTestName 0"))
+                .andExpect(jsonPath("$[0].author").value("Test Author 0"))
+                .andExpect(jsonPath("$[0].icon").value("TestIcon0"))
+                .andExpect(jsonPath("$[0].name").value("AudioTestName 0"))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].album").value("AlbumTestName 1"))
+                .andExpect(jsonPath("$[1].author").value("Test Author 1"))
+                .andExpect(jsonPath("$[1].icon").value("TestIcon0"))
+                .andExpect(jsonPath("$[1].name").value("AudioTestName 1"));
+    }
+
+    @Test
+    public void getAudioOfInvalidUser() throws Exception {
+        this.mockMvc.perform(get("/api/audios/user/{userId}", "99"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+
+    @Test
+    public void PartAudioOfUser() throws Exception {
+        this.mockMvc.perform(get("/api/audios/PartAudioOfUser/2?currentPage=0&itemsOnPage=2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].album").value("AlbumTestName 0"))
+                .andExpect(jsonPath("$[0].author").value("Test Author 0"))
+                .andExpect(jsonPath("$[0].icon").value("TestIcon0"))
+                .andExpect(jsonPath("$[0].name").value("AudioTestName 0"))
+                .andExpect(jsonPath("$[1].id").value(3))
+                .andExpect(jsonPath("$[1].album").value("AlbumTestName 2"))
+                .andExpect(jsonPath("$[1].author").value("Test Author 2"))
+                .andExpect(jsonPath("$[1].icon").value("TestIcon2"))
+                .andExpect(jsonPath("$[1].name").value("AudioTestName 2"));
+    }
+
+    @Test
+    public void getAuthorAudioOfUser() throws Exception {
+        this.mockMvc.perform(get("/api/audios/AuthorAudioOfUser/2?author=Test Author 2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(3))
+                .andExpect(jsonPath("$[0].album").value("AlbumTestName 2"))
+                .andExpect(jsonPath("$[0].author").value("Test Author 2"))
+                .andExpect(jsonPath("$[0].icon").value("TestIcon2"))
+                .andExpect(jsonPath("$[0].name").value("AudioTestName 2"));
+    }
+
+    @Test
+    public void getAlbumAudioOfUser() throws Exception {
+        this.mockMvc.perform(get("/api/audios/AlbumAudioOfUser/2?album=AlbumTestName 3"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(4))
+                .andExpect(jsonPath("$[0].album").value("AlbumTestName 3"))
+                .andExpect(jsonPath("$[0].author").value("Test Author 3"))
+                .andExpect(jsonPath("$[0].icon").value("TestIcon3"))
+                .andExpect(jsonPath("$[0].name").value("AudioTestName 3"));
+    }
+
+    @Test
+    public void addAudioInCollectionsOfUser() throws Exception {
+        this.mockMvc.perform(get("/api/audios/addToUser?audioId=5&userId=1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+}
