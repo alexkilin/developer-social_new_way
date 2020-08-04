@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.models.dto.group;
 
 import com.javamentor.developer.social.platform.models.dto.PostDto;
+import com.javamentor.developer.social.platform.models.dto.UserDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -37,7 +38,14 @@ public class GroupDto {
 
     @NonNull
     @ApiModelProperty(notes = "Категория группы. Не должно быть пустым.")
-    private GroupCategoryDto groupCategory;
+    private String groupCategory;
+
+    @NonNull
+    @ApiModelProperty(notes = "ФИО пользователя, владельца группы. Не должно быть пустым.")
+    private String ownerFio;
+
+    @ApiModelProperty(notes = "Описание группы.")
+    private String description;
 
     @NonNull
     @ApiModelProperty(notes = "Посты группы. Не должно быть пустым.")
