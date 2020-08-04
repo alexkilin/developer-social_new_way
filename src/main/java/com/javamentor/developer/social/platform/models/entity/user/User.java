@@ -69,7 +69,7 @@ public class User {
 
     @Column(name = "is_enable", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    private Boolean id_enable = true;
+    private Boolean isEnable = true;
 
     @Column(name = "city")
     private String city;
