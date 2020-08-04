@@ -4,7 +4,6 @@ import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
-import com.javamentor.developer.social.platform.models.dto.group.GroupCategoryDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import org.hibernate.query.Query;
@@ -14,7 +13,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class GroupDtoDaoImpl implements GroupDtoDao {
@@ -75,8 +76,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                     "FROM Group g " +
                         "LEFT JOIN GroupCategory gc ON g.groupCategory.id = gc.id " +
                         "LEFT JOIN g.posts p " +
-                        "LEFT JOIN PostComment pc on p.id = pc.post.id " +
-                        "LEFT JOIN Comment c on pc.comment.id = c.id " +
+                        "LEFT JOIN PostComment pc ON p.id = pc.post.id " +
+                        "LEFT JOIN Comment c ON pc.comment.id = c.id " +
                         "LEFT JOIN p.media m " +
                     "WHERE g.id = :paramId")
                 .setParameter("paramId", id);
@@ -88,10 +89,13 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "g.persistDate, " +
                         "g.linkSite, " +
                         "g.lastRedactionDate, " +
-                        "gc.id, " +
-                        "gc.category " +
+                        "gc.category, " +
+                        "u.firstName, " +
+                        "u.lastName, " +
+                        "g.description " +
                     "FROM Group g " +
                         "JOIN g.groupCategory gc " +
+                        "JOIN g.user u " +
                     "WHERE g.id = :paramId")
                 .setParameter("paramId", id);
 
@@ -139,12 +143,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
 
             @Override
             public Object transformTuple(Object[] objects, String[] strings) {
-                GroupCategoryDto groupCategoryDto = GroupCategoryDto.builder()
-                        .category((String) objects[6])
-                        .id((Long) objects[5])
-                        .build();
-
-                Set<PostDto> postDtoSet = new HashSet<>();
+                String userOwnerFio =  objects[7] + " " + objects[6];
 
                 return GroupDto.builder()
                         .id((Long) objects[0])
@@ -152,8 +151,10 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .persistDate((LocalDateTime) objects[2])
                         .linkSite((String) objects[3])
                         .lastRedactionDate((LocalDateTime) objects[4])
-                        .groupCategory(groupCategoryDto)
+                        .groupCategory((String) objects[5])
                         .posts(postDtoList)
+                        .ownerFio(userOwnerFio)
+                        .description((String) objects[8])
                         .build();
             }
 
