@@ -228,7 +228,7 @@ public class TestDataInitService {
                     .education("MIT University")
                     .email(emailName + i + "@user.ru")
                     .firstName(name + i)
-                    .id_enable(true)
+                    .isEnable(true)
                     .languages(languageTestSet)
                     .lastName("LastNameUser" + i)
                     .lastRedactionDate(userLocalDateNow)
@@ -374,6 +374,8 @@ public class TestDataInitService {
                     .name("JAVA IS " + i)
                     .persistDate(userLocalDate)
                     .posts(postSet)
+                    .description("This is a description of the group #" + i)
+                    .user(users[(int) (Math.random() * numOfUsers)])
                     .build();
             groupService.create(groups[i]);
             num += startNum;
