@@ -32,6 +32,7 @@ public class Media {
     private User user;
 
     @Column
+    @NotNull
     private String url;
 
     @Enumerated
@@ -42,4 +43,8 @@ public class Media {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @CreationTimestamp
     private LocalDateTime persistDateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "album_id")
+    private Album album;
 }
