@@ -26,8 +26,19 @@ public class PostDto {
     @ApiModelProperty(notes = "Текст новсти, поле не должно быть пустым")
     private String text;
 
-    @ApiModelProperty(notes = "Пользователь, добавивший пост")
-    private UserDto userDto;
+//    @ApiModelProperty(notes = "Пользователь, добавивший пост")
+//    private UserDto userDto;
+    @ApiModelProperty(notes = "Айди пользователя, добавившего пост")
+    private Long userId;
+
+    @ApiModelProperty(notes = "Имя пользователя")
+    private String firstName;
+
+    @ApiModelProperty(notes = "Фамилия пользователя")
+    private String lastName;
+
+    @ApiModelProperty(notes = "Ссылка на аватарку пользователя")
+    private String avatar;
 
     @ApiModelProperty(notes = "Дата последнего изменения")
     private LocalDateTime lastRedactionDate;

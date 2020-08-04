@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.models.entity.media;
 
 
-import com.javamentor.developer.social.platform.models.entity.media.Media;
 import lombok.*;
 
 import javax.persistence.*;

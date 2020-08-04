@@ -54,15 +54,10 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     .setResultTransformer(new ResultTransformer() {
                         @Override
                         public Object transformTuple(Object[] objects, String[] strings) {
-                            UserDto userDto = UserDto.builder()
-                                    .userId((Long) objects[5])
-                                    .firstName((String) objects[6])
-                                    .lastName((String) objects[7])
-                                    .avatar((String) objects[8])
-                                    .build();
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
+                                    .userId((Long) objects[5])
                                     .mediaType(objects[9].toString())
-                                    .content((String) objects[10])
+                                    .url((String) objects[10])
                                     .build();
                             List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
                             mediaPostDtoList.add(mediaPostDto);
@@ -76,7 +71,10 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                     .id((Long) objects[0])
                                     .title((String) objects[1])
                                     .text((String) objects[2])
-                                    .userDto(userDto)
+                                    .userId((Long) objects[5])
+                                    .firstName((String) objects[6])
+                                    .lastName((String) objects[7])
+                                    .avatar((String) objects[8])
                                     .media(mediaPostDtoList)
                                     .tags(tagDtoList)
                                     .persistDate((LocalDateTime) objects[3])
@@ -134,15 +132,10 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     .setResultTransformer(new ResultTransformer() {
                         @Override
                         public Object transformTuple(Object[] objects, String[] strings) {
-                            UserDto userDto = UserDto.builder()
-                                    .userId((Long) objects[5])
-                                    .firstName((String) objects[6])
-                                    .lastName((String) objects[7])
-                                    .avatar((String) objects[8])
-                                    .build();
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
+                                    .userId((Long) objects[5])
                                     .mediaType(objects[9].toString())
-                                    .content((String) objects[10])
+                                    .url((String) objects[10])
                                     .build();
                             List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
                             mediaPostDtoList.add(mediaPostDto);
@@ -156,7 +149,10 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                     .id((Long) objects[0])
                                     .title((String) objects[1])
                                     .text((String) objects[2])
-                                    .userDto(userDto)
+                                    .userId((Long) objects[5])
+                                    .firstName((String) objects[6])
+                                    .lastName((String) objects[7])
+                                    .avatar((String) objects[8])
                                     .media(mediaPostDtoList)
                                     .tags(tagDtoList)
                                     .persistDate((LocalDateTime) objects[3])

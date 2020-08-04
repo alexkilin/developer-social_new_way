@@ -3,6 +3,8 @@ package com.javamentor.developer.social.platform.models.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -12,9 +14,15 @@ import lombok.*;
 @Builder
 public class MediaPostDto {
 
+    @ApiModelProperty(notes = "Айди пользователя, загрузившего медиа")
+    @NotNull
+    private Long userId;
+
     @ApiModelProperty(notes = "Вид медиаконтента")
+    @NotNull
     private String mediaType;
 
     @ApiModelProperty(notes = "Ссылка на контент")
-    private String content;
+    @NotNull
+    private String url;
 }
