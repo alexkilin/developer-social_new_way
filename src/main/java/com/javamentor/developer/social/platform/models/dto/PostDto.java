@@ -36,6 +36,9 @@ public class PostDto {
     @ApiModelProperty(notes = "Дата добавления поста")
     private LocalDateTime persistDate;
 
+    @ApiModelProperty(notes = "Кол-во комментариев в посте")
+    private Long countComments;
+
     @ApiModelProperty(notes = "Медиаконтент поста")
     private List<MediaPostDto> media;
 
