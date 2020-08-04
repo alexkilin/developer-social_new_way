@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.models.entity.group;
 
 import com.javamentor.developer.social.platform.models.entity.post.Post;
-import com.javamentor.developer.social.platform.models.entity.user.Role;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,7 +8,6 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -42,6 +40,8 @@ public class Group {
     @Column
     private String linkSite;
 
+    @Column
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = GroupCategory.class, cascade = {CascadeType.PERSIST})
     private GroupCategory groupCategory;
@@ -50,4 +50,8 @@ public class Group {
     @JoinTable(name = "group_wal", joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private Set<Post> posts;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id")
+    private User owner;
 }
