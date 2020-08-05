@@ -5,8 +5,8 @@ import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.UserFriendsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.UserService;
-import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
-import com.javamentor.developer.social.platform.webapp.converters.UserFriendsConverter;
+import com.javamentor.developer.social.platform.webapp.converters.UserFriendsMapper;
+import com.javamentor.developer.social.platform.webapp.converters.UserMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -28,19 +28,20 @@ public class UserResourceController {
     private final UserDtoService userDtoService;
     private final UserService userService;
     private final UserFriendsService userFriendsService;
-    private final UserConverter converter;
-    private final UserFriendsConverter friendsConverter;
+    private final UserMapper userMapper;
+    private final UserFriendsMapper friendsMapper;
 
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserResourceController(UserDtoService userDtoService, UserService userService, UserConverter converter, UserFriendsService userFriendsService, UserFriendsConverter friendsConverter) {
+    public UserResourceController(UserDtoService userDtoService, UserService userService, UserFriendsService userFriendsService,
+                                  UserMapper userMapper, UserFriendsMapper friendsMapper) {
         this.userDtoService = userDtoService;
         this.userService = userService;
-        this.converter = converter;
+        this.userMapper = userMapper;
+        this.friendsMapper = friendsMapper;
         this.userFriendsService = userFriendsService;
-        this.friendsConverter = friendsConverter;
     }
 
     @ApiOperation(value = "Получение пользователя по id")
@@ -73,7 +74,7 @@ public class UserResourceController {
     })
     @PostMapping("/create")
     public ResponseEntity<UserDto> create(@RequestBody UserDto user) {
-        userService.persist(converter.convertToEntity(user));
+        userService.create(userMapper.INSTANCE.toEntity(user));
         logger.info(String.format("Пользователь с email: %s добавлен в базу данных", user.getEmail()));
         return ResponseEntity.ok(user);
     }
@@ -84,7 +85,7 @@ public class UserResourceController {
     })
     @PutMapping("/update")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user) {
-        userService.update(converter.convertToEntity(user));
+        userService.update(userMapper.INSTANCE.toEntity(user));
         return ResponseEntity.ok(user);
     }
 
@@ -105,6 +106,6 @@ public class UserResourceController {
     @GetMapping("/getUserFriends")
     public ResponseEntity<List<FriendDto>> getUserFriends(@PathVariable Long id) {
         List<Friend> userFriends = userFriendsService.getUserFriendsById(id);
-        return ResponseEntity.ok(friendsConverter.toDto(userFriends));
+        return ResponseEntity.ok(friendsMapper.INSTANCE.toDto(userFriends));
     }
 }

@@ -1,17 +1,10 @@
 package com.javamentor.developer.social.platform.dao.abstracts.model;
 
+import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
+
 import java.util.List;
 
-public interface UserDao {
-    void persist(User user);
-
-    void update(User user);
-
-    void delete(User user);
-
-    boolean existsById(Long id);
+public interface UserDao extends GenericDao<User, Long> {
 
     List<User> getAll();
-
-    void deleteById(Long id);
 }

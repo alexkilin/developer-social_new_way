@@ -1,19 +1,10 @@
 package com.javamentor.developer.social.platform.service.abstracts.model;
 
+import com.javamentor.developer.social.platform.service.abstracts.GenericService;
 import java.util.List;
 
-public interface UserService{
-
-    void persist(User user);
-
-    void update(User user);
-
-    void delete(User user);
-
-    boolean existsById(Long id);
+public interface UserService extends GenericService<User, Long> {
 
     List<User> getAll();
-
-    void deleteById(Long id);
 
 }
