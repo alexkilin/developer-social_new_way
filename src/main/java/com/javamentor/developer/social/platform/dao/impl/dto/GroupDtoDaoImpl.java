@@ -1,11 +1,9 @@
 package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
-import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
-import com.javamentor.developer.social.platform.models.dto.PostDto;
-import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
+import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,30 +55,6 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
     @Override
     @SuppressWarnings("unchecked")
     public Optional<GroupDto> getGroupById(Long id) {
-        Query queryForPosts = (Query) entityManager.createQuery(
-                "SELECT " +
-                        "p.id, " +
-                        "p.lastRedactionDate, " +
-                        "p.persistDate, " +
-                        "p.title, " +
-                        "p.text, " +
-                        "c.id, " +
-                        "c.persistDate, " +
-                        "c.lastRedactionDate, " +
-                        "c.comment, " +
-                        "(SELECT u.lastName FROM User u WHERE c.user.userId = u.userId), " +
-                        "(SELECT u.firstName FROM User u WHERE c.user.userId = u.userId), " +
-                        "m.mediaType, " +
-                        "m.url " +
-                    "FROM Group g " +
-                        "LEFT JOIN GroupCategory gc ON g.groupCategory.id = gc.id " +
-                        "LEFT JOIN g.posts p " +
-                        "LEFT JOIN PostComment pc ON p.id = pc.post.id " +
-                        "LEFT JOIN Comment c ON pc.comment.id = c.id " +
-                        "LEFT JOIN p.media m " +
-                    "WHERE g.id = :paramId")
-                .setParameter("paramId", id);
-
         Query queryForGroup = (Query) entityManager.createQuery(
                 "SELECT " +
                         "g.id, " +
@@ -95,49 +68,9 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "g.description " +
                     "FROM Group g " +
                         "JOIN g.groupCategory gc " +
-                        "JOIN g.user u " +
+                        "JOIN g.owner u " +
                     "WHERE g.id = :paramId")
                 .setParameter("paramId", id);
-
-        List<PostDto> postDtoList = (List<PostDto>) queryForPosts.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
-
-            @Override
-            public Object transformTuple(Object[] objects, String[] strings) {
-                MediaPostDto mediaPostDto = MediaPostDto.builder()
-                        .mediaType(objects[11].toString())
-                        .content((String) objects[12])
-                        .build();
-                List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
-                mediaPostDtoList.add(mediaPostDto);
-
-                String userCommentFio = objects[9] + " " + objects[10];
-
-                CommentDto commentDto = CommentDto.builder()
-                        .comment((String) objects[8])
-                        .id((Long) objects[5])
-                        .lastRedactionDate((LocalDateTime) objects[7])
-                        .persistDate((LocalDateTime) objects[6])
-                        .userFio(userCommentFio)
-                        .build();
-                List<CommentDto> commentDtoList = new ArrayList<>();
-                commentDtoList.add(commentDto);
-
-                return PostDto.builder()
-                        .id((Long) objects[0])
-                        .lastRedactionDate((LocalDateTime) objects[1])
-                        .media(mediaPostDtoList)
-                        .persistDate((LocalDateTime) objects[2])
-                        .text((String) objects[4])
-                        .title((String) objects[3])
-                        .comments(commentDtoList)
-                        .build();
-            }
-
-            @Override
-            public List transformList(List list) {
-                return list;
-            }
-        }).getResultList();
 
         GroupDto groupDto = (GroupDto) queryForGroup.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
@@ -152,7 +85,6 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .linkSite((String) objects[3])
                         .lastRedactionDate((LocalDateTime) objects[4])
                         .groupCategory((String) objects[5])
-                        .posts(postDtoList)
                         .ownerFio(userOwnerFio)
                         .description((String) objects[8])
                         .build();
@@ -165,5 +97,45 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
         }).getSingleResult();
 
         return Optional.ofNullable(groupDto);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<GroupWallDto> getPostsByGroupId(Long id, int page, int size) {
+        Query queryPostsForGroup = (Query) entityManager.createQuery(
+                "SELECT " +
+                        "p.id, " +
+                        "p.lastRedactionDate, " +
+                        "p.persistDate, " +
+                        "p.title, " +
+                        "p.text, " +
+                        "(SELECT COUNT(pc) FROM PostComment pc WHERE p.id = pc.post.id), " +
+                        "(SELECT COUNT(pl) FROM PostLike pl WHERE p.id = pl.post.id) " +
+                     "FROM Group g " +
+                        "LEFT JOIN g.posts p " +
+                    "WHERE g.id = :paramId")
+                .setParameter("paramId", id)
+                .setFirstResult((page - 1) * size)
+                .setMaxResults(size);
+        return queryPostsForGroup.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
+
+            @Override
+            public Object transformTuple(Object[] objects, String[] strings) {
+                return GroupWallDto.builder()
+                        .countComments((Long) objects[5])
+                        .id((Long) objects[0])
+                        .lastRedactionDate((LocalDateTime) objects[1])
+                        .persistDate((LocalDateTime) objects[2])
+                        .text((String) objects[4])
+                        .title((String) objects[3])
+                        .countLikes((Long) objects[6])
+                        .build();
+            }
+
+            @Override
+            public List transformList(List list) {
+                return list;
+            }
+        }).getResultList();
     }
 }
