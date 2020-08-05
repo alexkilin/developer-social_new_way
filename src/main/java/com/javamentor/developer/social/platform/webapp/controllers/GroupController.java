@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
+import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,10 @@ public class GroupController {
     @GetMapping("/{id}")
     public ResponseEntity<GroupDto> showGroup(@PathVariable Long id) {
         return new ResponseEntity<>(groupDtoService.getGroupById(id), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/posts", params = {"page", "size"})
+    public ResponseEntity<List<GroupWallDto>> showGroupWall(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("size") int size) {
+        return new ResponseEntity<>(groupDtoService.getPostsByGroupId(id, page, size), HttpStatus.OK);
     }
 }
