@@ -375,7 +375,7 @@ public class TestDataInitService {
                     .persistDate(userLocalDate)
                     .posts(postSet)
                     .description("This is a description of the group #" + i)
-                    .user(users[(int) (Math.random() * numOfUsers)])
+                    .owner(users[(int) (Math.random() * numOfUsers)])
                     .build();
             groupService.create(groups[i]);
             num += startNum;
