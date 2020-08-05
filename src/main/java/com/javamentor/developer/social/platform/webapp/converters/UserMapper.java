@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
 import com.javamentor.developer.social.platform.models.dto.UserDto;
-import com.javamentor.developer.social.platform.models.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
