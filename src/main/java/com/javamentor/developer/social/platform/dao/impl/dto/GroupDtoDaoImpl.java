@@ -110,8 +110,9 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "p.title, " +
                         "p.text, " +
                         "(SELECT COUNT(pc) FROM PostComment pc WHERE p.id = pc.post.id), " +
-                        "(SELECT COUNT(pl) FROM PostLike pl WHERE p.id = pl.post.id) " +
-                     "FROM Group g " +
+                        "(SELECT COUNT(pl) FROM PostLike pl WHERE p.id = pl.post.id), " +
+                        "(SELECT COUNT(bm) FROM User u LEFT JOIN u.posts bm WHERE bm.id = p.id) " +
+                    "FROM Group g " +
                         "LEFT JOIN g.posts p " +
                     "WHERE g.id = :paramId")
                 .setParameter("paramId", id)
@@ -129,6 +130,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .text((String) objects[4])
                         .title((String) objects[3])
                         .countLikes((Long) objects[6])
+                        .countBookmarks((Long) objects[7])
                         .build();
             }
 
