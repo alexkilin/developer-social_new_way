@@ -13,6 +13,7 @@ import com.javamentor.developer.social.platform.models.entity.like.*;
 import com.javamentor.developer.social.platform.models.entity.media.*;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.post.Tag;
+import com.javamentor.developer.social.platform.models.entity.post.UserTabs;
 import com.javamentor.developer.social.platform.models.entity.user.*;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.MessageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.comment.MediaCommentService;
@@ -27,6 +28,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.media.Au
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.TagService;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.FollowerService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.FriendService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
@@ -48,7 +50,7 @@ public class TestDataInitService {
     private final Date dateDateClass = new Date(1212121212121L);
 
     // You can change size of init data by variable "k"
-    private int k = 1;
+    private final int k = 1;
     private final int numOfUsers = 100 * k;
     private final int numOfMedias = 100 * k;
     private final int numOfChats = 20 * k;
@@ -65,35 +67,36 @@ public class TestDataInitService {
     private final int numOfMediaComments = 100 * k;
     private final int numOfTags = 100 * k;
 
-    private User[] users = new User[numOfUsers];
-    private Media[] medias = new Media[numOfMedias];
-    private Chat[] chats = new Chat[numOfChats];
-    private Message[] messages = new Message[numOfMessages];
-    private Post[] posts = new Post[numOfPosts];
-    private Group[] groups = new Group[numOfGroups];
-    private Comment[] postComments = new Comment[numOfPostComments];
-    private Like[] postLikes = new Like[numOfPostLikes];
-    private Like[] commentLikes = new Like[numOfCommentLikes];
-    private Like[] messageLikes = new Like[numOfMessagesLikes];
-    private Comment[] mediaComments = new Comment[numOfMediaComments];
-    private Tag[] tags = new Tag[numOfTags];
+    private final User[] users = new User[numOfUsers];
+    private final Media[] medias = new Media[numOfMedias];
+    private final Chat[] chats = new Chat[numOfChats];
+    private final Message[] messages = new Message[numOfMessages];
+    private final Post[] posts = new Post[numOfPosts];
+    private final Group[] groups = new Group[numOfGroups];
+    private final Comment[] postComments = new Comment[numOfPostComments];
+    private final Like[] postLikes = new Like[numOfPostLikes];
+    private final Like[] commentLikes = new Like[numOfCommentLikes];
+    private final Like[] messageLikes = new Like[numOfMessagesLikes];
+    private final Comment[] mediaComments = new Comment[numOfMediaComments];
+    private final Tag[] tags = new Tag[numOfTags];
 
-    private UserService userService;
-    private FollowerService followerService;
-    private FriendService friendService;
-    private AlbumService albumService;
-    private AudiosService audiosService;
-    private ImageService imageService;
-    private VideosService videosService;
-    private CommentLikeService commentLikeService;
-    private MessageLikeService messageLikeService;
-    private PostLikeService postLikeService;
-    private GroupHasUserService groupHasUserService;
-    private GroupService groupService;
-    private MediaCommentService mediaCommentService;
-    private PostCommentService postCommentService;
-    private MessageService messageService;
-    private TagService tagService;
+    private final UserService userService;
+    private final FollowerService followerService;
+    private final FriendService friendService;
+    private final AlbumService albumService;
+    private final AudiosService audiosService;
+    private final ImageService imageService;
+    private final VideosService videosService;
+    private final CommentLikeService commentLikeService;
+    private final MessageLikeService messageLikeService;
+    private final PostLikeService postLikeService;
+    private final GroupHasUserService groupHasUserService;
+    private final GroupService groupService;
+    private final MediaCommentService mediaCommentService;
+    private final PostCommentService postCommentService;
+    private final MessageService messageService;
+    private final TagService tagService;
+    private final UserTabsService userTabsService;
 
     @Autowired
     public TestDataInitService(UserService userService,
@@ -110,7 +113,7 @@ public class TestDataInitService {
                                GroupService groupService,
                                MediaCommentService mediaCommentService,
                                PostCommentService postCommentService,
-                               MessageService messageService, TagService tagService) {
+                               MessageService messageService, TagService tagService, UserTabsService userTabsService) {
         this.userService = userService;
         this.followerService = followerService;
         this.friendService = friendService;
@@ -127,6 +130,7 @@ public class TestDataInitService {
         this.postCommentService = postCommentService;
         this.messageService = messageService;
         this.tagService = tagService;
+        this.userTabsService = userTabsService;
     }
 
     public void createEntity() {
@@ -150,7 +154,10 @@ public class TestDataInitService {
         createImageEntity();
         createVideosEntity();
         createPostMessageUserEntity();
+        createUserTabsEntity();
     }
+
+
 
 
     private void createUserEntity() {
@@ -529,5 +536,17 @@ public class TestDataInitService {
         }
     }
 
+    private void createUserTabsEntity() {
+        for (int i = 0; i < 100; i++) {
+            UserTabs userTab = UserTabs.builder()
+                    .user(users[i])
+                    .post(posts[i])
+                    .persistDate(posts[i].getPersistDate())
+                    .build();
+            userTabsService.create(userTab);
+        }
+
+
+    }
 
 }

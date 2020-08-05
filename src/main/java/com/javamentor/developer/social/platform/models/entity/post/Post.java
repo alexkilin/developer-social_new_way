@@ -48,7 +48,7 @@ public class Post {
     @CreationTimestamp
     private LocalDateTime persistDate;
 
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Media.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Media.class, cascade = CascadeType.PERSIST)
     @JoinTable(name = "post_media", joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id"))
     private Set<Media> media;

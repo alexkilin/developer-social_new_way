@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implements PostService {
 
+
     @Autowired
     public PostServiceImpl(PostDAO dao) {
         super(dao);
     }
-
 
 }

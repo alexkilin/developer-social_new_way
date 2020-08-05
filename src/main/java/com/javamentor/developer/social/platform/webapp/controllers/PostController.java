@@ -100,9 +100,7 @@ public class PostController {
     public ResponseEntity<?> deletePost(@PathVariable @NotNull Long id) {
         if (postService.existById(id)) {
 
-            Post post = postService.getById(id);
 
-            postService.delete(post);
 
             return ResponseEntity.ok().body(String.format("Deleted Post with ID %d, is successful", id));
         }
