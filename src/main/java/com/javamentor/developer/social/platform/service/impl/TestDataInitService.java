@@ -16,6 +16,7 @@ import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser
 import com.javamentor.developer.social.platform.models.entity.like.*;
 import com.javamentor.developer.social.platform.models.entity.media.*;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
+import com.javamentor.developer.social.platform.models.entity.post.Tag;
 import com.javamentor.developer.social.platform.models.entity.post.UserTabs;
 import com.javamentor.developer.social.platform.models.entity.user.*;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
@@ -31,6 +32,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.like.Com
 import com.javamentor.developer.social.platform.service.abstracts.model.like.MessageLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.PostLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.*;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.TagService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,8 @@ public class TestDataInitService {
     private final int numOfCommentLikes = 100 * k;
     private final int numOfMessagesLikes = 100 * k;
     private final int numOfMediaComments = 100 * k;
+    private final int numOfTags = 100 * k;
+
 
     private User[] users = new User[numOfUsers];
     private Media[] medias = new Media[numOfMedias];
@@ -79,6 +83,7 @@ public class TestDataInitService {
     private Like[] messageLikes = new Like[numOfMessagesLikes];
     private Comment[] mediaComments = new Comment[numOfMediaComments];
     private Album[] album = new Album[numOfAlbums];
+    private Tag[] tags = new Tag[numOfTags];
 
     private UserService userService;
     private FollowerService followerService;
@@ -99,6 +104,7 @@ public class TestDataInitService {
     private AlbumImageService albumImageService;
     private AlbumVideoService albumVideoService;
     private final UserTabsService userTabsService;
+    private final TagService tagService;
 
     @Autowired
     public TestDataInitService(UserService userService,
@@ -115,7 +121,7 @@ public class TestDataInitService {
                                GroupService groupService,
                                MediaCommentService mediaCommentService,
                                PostCommentService postCommentService,
-                               MessageService messageService, AlbumAudioService albumAudioService, AlbumImageService albumImageService, AlbumVideoService albumVideoService, UserTabsService userTabsService) {
+                               MessageService messageService, AlbumAudioService albumAudioService, AlbumImageService albumImageService, AlbumVideoService albumVideoService, UserTabsService userTabsService, TagService tagService) {
         this.userService = userService;
         this.followerService = followerService;
         this.friendService = friendService;
@@ -135,11 +141,13 @@ public class TestDataInitService {
         this.albumImageService = albumImageService;
         this.albumVideoService = albumVideoService;
         this.userTabsService = userTabsService;
+        this.tagService = tagService;
     }
 
     public void createEntity() {
         createUserEntity();
         createMediaEntity();
+        createTagEntity();
         createChatEntity();
         createMessageEntity();
         createAlbumEntity();
@@ -277,6 +285,17 @@ public class TestDataInitService {
         }
     }
 
+    private void createTagEntity() {
+        for (int i = 0; i != numOfTags; i++) {
+            tags[i] = Tag.builder()
+                    .text("This is " + i + " tag")
+                    .build();
+
+            tagService.create(tags[i]);
+        }
+    }
+
+
     private void createChatEntity() {
         for (int i = 0; i != numOfChats; i++) {
             chats[i] = Chat.builder().
@@ -387,17 +406,21 @@ public class TestDataInitService {
     private void createPostEntity() {
         for (int i = 0; i != numOfPosts; i++) {
             Set<Media> mediaSet = new HashSet<>();
+            Set<Tag> tagSet = new HashSet<>();
             mediaSet.add(medias[i]);
+            tagSet.add(tags[i]);
             posts[i] = Post.builder()
                     .persistDate(userLocalDate)
                     .lastRedactionDate(userLocalDateNow)
                     .media(mediaSet)
+                    .tags(tagSet)
                     .text("There is the " + i + " text of this post")
                     .title("The " + i + " test post")
                     .user(users[(int) (Math.random() * numOfUsers)])
                     .build();
         }
     }
+
 
     private void createGroupEntity() {
         GroupCategory groupCategory1 = GroupCategory.builder().category("Programming").build();

@@ -112,9 +112,6 @@ public class PostController {
         else {
             return ResponseEntity.badRequest().body(String.format("Can't find Post with ID %d", id));
         }
-
-
     }
-
 
 }
