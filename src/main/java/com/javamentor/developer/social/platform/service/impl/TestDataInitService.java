@@ -16,6 +16,7 @@ import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser
 import com.javamentor.developer.social.platform.models.entity.like.*;
 import com.javamentor.developer.social.platform.models.entity.media.*;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
+import com.javamentor.developer.social.platform.models.entity.post.UserTabs;
 import com.javamentor.developer.social.platform.models.entity.user.*;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
@@ -30,6 +31,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.like.Com
 import com.javamentor.developer.social.platform.service.abstracts.model.like.MessageLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.PostLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.*;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -96,6 +98,7 @@ public class TestDataInitService {
     private AlbumAudioService albumAudiosService;
     private AlbumImageService albumImageService;
     private AlbumVideoService albumVideoService;
+    private final UserTabsService userTabsService;
 
     @Autowired
     public TestDataInitService(UserService userService,
@@ -112,7 +115,7 @@ public class TestDataInitService {
                                GroupService groupService,
                                MediaCommentService mediaCommentService,
                                PostCommentService postCommentService,
-                               MessageService messageService, AlbumAudioService albumAudioService, AlbumImageService albumImageService, AlbumVideoService albumVideoService) {
+                               MessageService messageService, AlbumAudioService albumAudioService, AlbumImageService albumImageService, AlbumVideoService albumVideoService, UserTabsService userTabsService) {
         this.userService = userService;
         this.followerService = followerService;
         this.friendService = friendService;
@@ -131,6 +134,7 @@ public class TestDataInitService {
         this.albumAudiosService = albumAudioService;
         this.albumImageService = albumImageService;
         this.albumVideoService = albumVideoService;
+        this.userTabsService = userTabsService;
     }
 
     public void createEntity() {
@@ -156,6 +160,7 @@ public class TestDataInitService {
         createAlbumAudiosEntity();
         createAlbumImageEntity();
         createAlbumVideoEntity();
+        createUserTabsEntity();
     }
 
     private void createUserEntity() {
@@ -567,4 +572,18 @@ public class TestDataInitService {
             userService.update(users[i]);
         }
     }
+
+    private void createUserTabsEntity() {
+        for (int i = 0; i < 100; i++) {
+            UserTabs userTab = UserTabs.builder()
+                    .user(users[i])
+                    .post(posts[i])
+                    .persistDate(posts[i].getPersistDate())
+                    .build();
+            userTabsService.create(userTab);
+        }
+
+
+    }
+
 }
