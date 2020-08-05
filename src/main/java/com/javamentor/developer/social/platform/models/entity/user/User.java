@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.models.entity.user;
 
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
+import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -107,4 +108,9 @@ public class User {
     @JoinTable(name = "bookMarks", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private Set<Post> posts;
+
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "audio_id"))
+    private Set<Audios> audios;
 }

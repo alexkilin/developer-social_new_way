@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Blob;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -44,6 +45,14 @@ public class Audios {
 
     @Column(name = "author")
     private String author;
+
+    @Column(name = "album")
+    private String album;
+
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "audio_id"))
+    private Set<Audios> audios;
 
     @PrePersist
     private void prePersistFunction() {

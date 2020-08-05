@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.models.entity.media;
 
 
+import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,6 +33,7 @@ public class Media {
     private User user;
 
     @Column
+    @NotNull
     private String url;
 
     @Enumerated
@@ -42,4 +44,8 @@ public class Media {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @CreationTimestamp
     private LocalDateTime persistDateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "album_id")
+    private Album album;
 }
