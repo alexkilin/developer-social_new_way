@@ -1,12 +1,9 @@
 package com.javamentor.developer.social.platform.models.dto.group;
 
-import com.javamentor.developer.social.platform.models.dto.PostDto;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,8 +43,4 @@ public class GroupDto {
 
     @ApiModelProperty(notes = "Описание группы.")
     private String description;
-
-    @NonNull
-    @ApiModelProperty(notes = "Посты группы. Не должно быть пустым.")
-    private List<PostDto> posts;
 }
