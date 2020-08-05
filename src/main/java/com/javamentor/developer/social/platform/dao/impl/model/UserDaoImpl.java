@@ -16,7 +16,7 @@ public class UserDaoImpl implements UserDao {
     protected EntityManager entityManager;
 
     @Transactional
-    public void persist(User user) {
+    public void create(User user) {
         entityManager.persist(user);
     }
 
@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao {
         entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
     }
 
-    public boolean existsById(Long id) {
+    public User getById(Long id) {
         return entityManager.find(User.class, id) != null;
     }
 

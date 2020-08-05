@@ -13,7 +13,7 @@ public class FriendDto {
 
     Long id;
 
-    Long user_id;
+    Long userId;
 
-    Long friend_id;
+    Long friendId;
 }
