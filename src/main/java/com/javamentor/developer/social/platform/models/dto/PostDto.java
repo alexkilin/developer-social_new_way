@@ -1,8 +1,8 @@
 package com.javamentor.developer.social.platform.models.dto;
 
-import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,14 +36,8 @@ public class PostDto {
     @ApiModelProperty(notes = "Дата добавления поста")
     private LocalDateTime persistDate;
 
-    @ApiModelProperty(notes = "Кол-во комментариев в посте")
-    private Long countComments;
-
     @ApiModelProperty(notes = "Медиаконтент поста")
     private List<MediaPostDto> media;
-
-    @ApiModelProperty(notes = "Коментарии поста")
-    private List<CommentDto> comments;
 
     @ApiModelProperty(notes = "Тэги новости")
     private List<TagDto> tags;
