@@ -8,6 +8,7 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.PostConverter;
 import io.swagger.annotations.ApiOperation;
@@ -30,14 +31,16 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
     private final MediaService mediaService;
+    private final UserTabsService userTabsService;
 
     @Autowired
-    public PostController(PostDtoService postDtoService, PostConverter postConverter, PostService postService, UserService userService, MediaService mediaService) {
+    public PostController(PostDtoService postDtoService, PostConverter postConverter, PostService postService, UserService userService, MediaService mediaService, UserTabsService userTabsService) {
         this.postDtoService = postDtoService;
         this.postConverter = postConverter;
         this.postService = postService;
         this.userService = userService;
         this.mediaService = mediaService;
+        this.userTabsService = userTabsService;
     }
 
 
@@ -100,7 +103,9 @@ public class PostController {
     public ResponseEntity<?> deletePost(@PathVariable @NotNull Long id) {
         if (postService.existById(id)) {
 
+            Post post = postService.getById(id);
 
+            userTabsService.deletePost(post);
 
             return ResponseEntity.ok().body(String.format("Deleted Post with ID %d, is successful", id));
         }
