@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.webapp.controllers;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class PostController {
        return ResponseEntity.ok(postDtoService.getPosts());
     }
 
+    @ApiOperation(value = "Получение всех коментов поста по id поста")
     @GetMapping("/{id}/comments")
     public ResponseEntity<List<CommentDto>> showPostComments(@PathVariable Long id) {
         return new ResponseEntity<>(postDtoService.getCommentsByPostId(id), HttpStatus.OK);
