@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.model;
 
 import com.javamentor.developer.social.platform.dao.abstracts.model.UserFriendsDao;
+import com.javamentor.developer.social.platform.models.entity.user.Friend;
 import com.javamentor.developer.social.platform.service.abstracts.model.UserFriendsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

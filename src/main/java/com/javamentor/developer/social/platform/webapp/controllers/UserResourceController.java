@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.entity.user.Friend;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.UserFriendsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.UserService;
@@ -73,10 +74,10 @@ public class UserResourceController {
             @ApiResponse(code = 200, message = "Пользователь создан")
     })
     @PostMapping("/create")
-    public ResponseEntity<UserDto> create(@RequestBody UserDto user) {
-        userService.create(userMapper.INSTANCE.toEntity(user));
-        logger.info(String.format("Пользователь с email: %s добавлен в базу данных", user.getEmail()));
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserDto> create(@RequestBody UserDto userDto) {
+        userService.create(userMapper.toEntity(userDto));
+        logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
+        return ResponseEntity.ok(userDto);
     }
 
     @ApiOperation(value = "Обновление пользователя")
@@ -85,7 +86,7 @@ public class UserResourceController {
     })
     @PutMapping("/update")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user) {
-        userService.update(userMapper.INSTANCE.toEntity(user));
+        userService.update(userMapper.toEntity(user));
         return ResponseEntity.ok(user);
     }
 
@@ -106,6 +107,6 @@ public class UserResourceController {
     @GetMapping("/getUserFriends")
     public ResponseEntity<List<FriendDto>> getUserFriends(@PathVariable Long id) {
         List<Friend> userFriends = userFriendsService.getUserFriendsById(id);
-        return ResponseEntity.ok(friendsMapper.INSTANCE.toDto(userFriends));
+        return ResponseEntity.ok(friendsMapper.toDto(userFriends));
     }
 }

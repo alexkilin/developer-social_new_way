@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.dao.impl.model;
 
 
 import com.javamentor.developer.social.platform.dao.abstracts.model.UserDao;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +26,14 @@ public class UserDaoImpl implements UserDao {
         entityManager.merge(user);
     }
 
+    @Override
+    public User getById(Long id) {
+        return null;
+    }
+
     @Transactional
     public void delete(User user) {
         entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
-    }
-
-    public User getById(Long id) {
-        return entityManager.find(User.class, id) != null;
     }
 
     @SuppressWarnings("unchecked")
@@ -41,5 +43,10 @@ public class UserDaoImpl implements UserDao {
 
     public void deleteById(Long id) {
         entityManager.createQuery("delete from User u where u.userId = " + id);
+    }
+
+    @Override
+    public boolean existById(Long id) {
+        return entityManager.find(User.class, id) != null;
     }
 }

@@ -1,15 +1,14 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
+import com.javamentor.developer.social.platform.models.entity.user.Friend;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserFriendsMapper {
 
-    UserFriendsMapper INSTANCE = Mappers.getMapper(UserFriendsMapper.class);
+    List<FriendDto> toDto(List<Friend> friend);
 
     FriendDto toDto(Friend friend);
-
-    Friend toEntity(FriendDto friendDto);
 }

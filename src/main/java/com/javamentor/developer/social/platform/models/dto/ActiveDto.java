@@ -11,5 +11,7 @@ import lombok.*;
 @Builder
 public class ActiveDto {
 
+    private Long id;
+
     private String name;
 }

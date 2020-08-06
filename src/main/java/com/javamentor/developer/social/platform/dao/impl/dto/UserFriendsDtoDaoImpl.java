@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserFriendsDtoDao;
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 
@@ -31,8 +32,8 @@ public class UserFriendsDtoDaoImpl implements UserFriendsDtoDao {
                         public Object transformTuple(Object[] objects, String[] strings) {
                             return FriendDto.builder()
                                     .id(((Number) objects[0]).longValue())
-                                    .user_id((User) objects[1].getId())
-                                    .friend_id((User) objects[2].getId())
+                                    .userId(((User) objects[1]).getUserId())
+                                    .friendId(((User) objects[2]).getUserId())
                                     .build();
                         }
 
