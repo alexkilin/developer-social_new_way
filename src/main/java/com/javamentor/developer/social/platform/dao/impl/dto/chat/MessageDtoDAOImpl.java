@@ -1,7 +1,10 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.chat;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.chat.MessageDtoDAO;
-import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
+import com.javamentor.developer.social.platform.models.dto.MediaDto;
+import com.javamentor.developer.social.platform.models.dto.chat.MessageChatDto;
+import com.javamentor.developer.social.platform.models.entity.chat.Message;
+import com.javamentor.developer.social.platform.models.entity.media.Media;
 import org.hibernate.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
@@ -9,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -20,39 +24,33 @@ public class MessageDtoDAOImpl implements MessageDtoDAO {
 
     @Override
     @Transactional
-    public List<MessageDto> getAllMessageDtoByChatId(Long chatId) {
-        return (List<MessageDto>) em.createQuery("select  message from Chat chat join chat.messages message  where chat.id=:id")
+    public List<MessageChatDto> getAllMessageDtoByChatId(Long chatId) {
+        return (List<MessageChatDto>) em.createQuery("select  message from Chat chat join chat.messages message  where chat.id=:id")
                 .setParameter("id", chatId)
                 .unwrap(Query.class)
                 .setResultTransformer(new MessageDtoResultTransformer())
                 .getResultList();
     }
+
     private static class MessageDtoResultTransformer implements ResultTransformer {
         @Override
         public Object transformTuple(Object[] objects, String[] strings) {
-            MessageDto messageDto = null;
-            for (Object j: objects) {
-                Message message = (Message) j;
-                User user = message.getUserSender();
-                UserDto userDto = UserDto.builder()
-                        .userId(user.getUserId())
-                        .firstName(user.getFirstName())
-                        .avatar(user.getAvatar())
-                        .aboutMe(user.getAboutMe())
-                        .email(user.getEmail())
-                        .city(user.getCity())
-                        .lastName(user.getLastName())
-                        .persistDate(user.getPersistDate())
-                        .dateOfBirth(user.getDateOfBirth())
-                        .lastRedactionDate(user.getLastRedactionDate())
-                        .linkSite(user.getLinkSite())
-                        .education(user.getEducation())
-                        .id_enable(user.getId_enable())
+            Message message = null;
+            MessageChatDto messageDto = null;
+            List<MediaDto> mediaDtoList = new ArrayList<>();
+            for (Object o : objects) {
+                message = (Message) o;
+                messageDto = MessageChatDto.builder()
+                        .userSenderImage(message.getUserSender().getAvatar())
+                        .persistDate(message.getPersistDate())
+                        .lastRedactionDate(message.getLastRedactionDate())
                         .build();
-                messageDto = MessageDto.builder()
-                        .message(message.getMessage())
-                        .userSender(userDto)
-                        .build();
+                for (Media media : message.getMedia()) {
+                    mediaDtoList.add(MediaDto.builder()
+                            .mediaType(media.getMediaType().name())
+                            .build());
+                }
+                messageDto.setMediaDto(mediaDtoList);
             }
             return messageDto;
         }

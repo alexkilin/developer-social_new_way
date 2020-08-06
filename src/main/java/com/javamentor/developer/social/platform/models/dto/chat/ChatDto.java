@@ -12,6 +12,6 @@ import java.time.LocalDateTime;
 @ToString
 public class ChatDto {
     private String title;
-    private LocalDateTime persistDate;
-    private List<UserDto> users;
+    private String image;
+    private String lastMessage;
 }

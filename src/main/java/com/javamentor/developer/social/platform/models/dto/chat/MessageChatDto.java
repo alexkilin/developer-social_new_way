@@ -1,16 +1,17 @@
 package com.javamentor.developer.social.platform.models.dto.chat;
 
+import com.javamentor.developer.social.platform.models.dto.MediaDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MessageDto {
-    private String message;
+public class MessageChatDto {
 
     private Boolean is_unread=true;
 
@@ -18,8 +19,8 @@ public class MessageDto {
 
     private LocalDateTime persistDate;
 
-    private Set<MediaDto> media;
+    private List<MediaDto> mediaDto;
 
-    private UserDto userSender;
+    private String userSenderImage;
 
 }

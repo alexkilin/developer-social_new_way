@@ -27,6 +27,9 @@ public class Chat {
     @Column
     private String title;
 
+    @Column
+    private String image;
+
     @Column(name = "persist_date", nullable = false)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @CreationTimestamp
