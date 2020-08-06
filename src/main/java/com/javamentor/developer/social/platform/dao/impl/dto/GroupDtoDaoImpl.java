@@ -140,4 +140,37 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
             }
         }).getResultList();
     }
+
+    @Override
+    public Optional<GroupInfoDto> getGroupByName(String name) {
+        Query queryGroupByName = (Query) entityManager.createQuery(
+                "SELECT " +
+                        "g.id, " +
+                        "g.name, " +
+                        "g.groupCategory.category, " +
+                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id) " +
+                    "FROM Group g " +
+                    "WHERE g.name = :paramName")
+                .setParameter("paramName", name);
+
+        GroupInfoDto groupInfoDto = (GroupInfoDto) queryGroupByName.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
+
+            @Override
+            public Object transformTuple(Object[] objects, String[] strings) {
+                return GroupInfoDto.builder()
+                        .id((Long) objects[0])
+                        .name((String) objects[1])
+                        .groupCategory((String) objects[2])
+                        .subscribers((Long) objects[3])
+                        .build();
+            }
+
+            @Override
+            public List transformList(List list) {
+                return list;
+            }
+        }).getSingleResult();
+
+        return Optional.ofNullable(groupInfoDto);
+    }
 }

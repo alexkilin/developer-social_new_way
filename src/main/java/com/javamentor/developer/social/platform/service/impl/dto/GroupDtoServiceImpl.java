@@ -43,4 +43,9 @@ public class GroupDtoServiceImpl implements GroupDtoService {
         }
         return groupWallDtoList;
     }
+
+    @Override
+    public GroupInfoDto getGroupByName(String name) {
+        return groupDtoDao.getGroupByName(name).orElseThrow(IllegalArgumentException::new);
+    }
 }
