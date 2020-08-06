@@ -1,8 +1,8 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.chat;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.chat.MessageDtoDAO;
-import com.javamentor.developer.social.platform.models.dto.MediaDto;
-import com.javamentor.developer.social.platform.models.dto.chat.MessageChatDto;
+import com.javamentor.developer.social.platform.models.dto.chat.MediaDto;
+import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import org.hibernate.Query;
@@ -19,13 +19,13 @@ import java.util.List;
 public class MessageDtoDAOImpl implements MessageDtoDAO {
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
 
     @Override
     @Transactional
-    public List<MessageChatDto> getAllMessageDtoByChatId(Long chatId) {
-        return (List<MessageChatDto>) em.createQuery("select  message from Chat chat join chat.messages message  where chat.id=:id")
+    public List<MessageDto> getAllMessageDtoByChatId(Long chatId) {
+        return (List<MessageDto>) em.createQuery("select  message from Chat chat join chat.messages message  where chat.id=:id")
                 .setParameter("id", chatId)
                 .unwrap(Query.class)
                 .setResultTransformer(new MessageDtoResultTransformer())
@@ -36,18 +36,20 @@ public class MessageDtoDAOImpl implements MessageDtoDAO {
         @Override
         public Object transformTuple(Object[] objects, String[] strings) {
             Message message = null;
-            MessageChatDto messageDto = null;
+            MessageDto messageDto = null;
             List<MediaDto> mediaDtoList = new ArrayList<>();
             for (Object o : objects) {
                 message = (Message) o;
-                messageDto = MessageChatDto.builder()
+                messageDto = MessageDto.builder()
                         .userSenderImage(message.getUserSender().getAvatar())
                         .persistDate(message.getPersistDate())
                         .lastRedactionDate(message.getLastRedactionDate())
+                        .message(((Message) o).getMessage())
+                        .active(message.getUserSender().getActive().getName())
                         .build();
                 for (Media media : message.getMedia()) {
                     mediaDtoList.add(MediaDto.builder()
-                            .mediaType(media.getMediaType().name())
+                            .url(media.getMediaType().name())
                             .build());
                 }
                 messageDto.setMediaDto(mediaDtoList);

@@ -35,11 +35,12 @@ public class ChatDtoDAOImpl implements ChatDtoDAO {
         public Object transformTuple(Object[] objects, String[] strings) {
             Chat chat = null;
             ChatDto chatDto = null;
-            for (Object o: objects){
+            for (Object o : objects) {
                 chat = (Chat) o;
                 chatDto = ChatDto.builder()
                         .title(chat.getTitle())
-                        .image(chat.getImage())
+                        .image(chat.getUserReceiver().getAvatar())
+                        .active(chat.getUserReceiver().getActive().getName())
                         .build();
                 Message max = chat.getMessages().stream().max(Comparator.comparing(Message::getPersistDate)).get();
                 chatDto.setLastMessage(max.getMessage());

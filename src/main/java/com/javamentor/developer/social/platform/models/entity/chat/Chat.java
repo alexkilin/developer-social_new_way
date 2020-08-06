@@ -14,9 +14,9 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @ApiIgnore
+@NoArgsConstructor
 @Table(name = "chats")
 public class Chat {
 
@@ -27,8 +27,9 @@ public class Chat {
     @Column
     private String title;
 
-    @Column
-    private String image;
+
+    @ManyToOne(fetch = FetchType.LAZY,targetEntity = User.class)
+    private User userReceiver;
 
     @Column(name = "persist_date", nullable = false)
     @Type(type = "org.hibernate.type.LocalDateTimeType")

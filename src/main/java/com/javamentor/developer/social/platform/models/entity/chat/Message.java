@@ -16,8 +16,8 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @Table(name = "messages")
 public class Message {
 
