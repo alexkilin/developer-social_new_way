@@ -34,8 +34,15 @@ public class GroupController {
         return new ResponseEntity<>(groupDtoService.getGroupById(id), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Получение всех постов группы по id группы")
     @GetMapping(value = "/{id}/posts", params = {"page", "size"})
     public ResponseEntity<List<GroupWallDto>> showGroupWall(@PathVariable Long id, @RequestParam("page") int page, @RequestParam("size") int size) {
         return new ResponseEntity<>(groupDtoService.getPostsByGroupId(id, page, size), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Получение группы по наименованию группы")
+    @GetMapping(value = "/name", params = "name")
+    public ResponseEntity<GroupInfoDto> findGroupByName(@RequestParam("name") String name) {
+        return new ResponseEntity<>(groupDtoService.getGroupByName(name), HttpStatus.OK);
     }
 }
