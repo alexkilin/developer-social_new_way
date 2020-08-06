@@ -13,7 +13,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/**").permitAll();
+        http
+                .authorizeRequests().antMatchers("/**").permitAll()
+                .and()
+                .csrf().disable();
     }
 
     @Override
