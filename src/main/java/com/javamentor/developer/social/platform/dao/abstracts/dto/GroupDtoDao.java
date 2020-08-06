@@ -13,4 +13,6 @@ public interface GroupDtoDao {
     Optional<GroupDto> getGroupById(Long id);
 
     List<GroupWallDto> getPostsByGroupId(Long id, int page, int size);
+
+    Optional<GroupInfoDto> getGroupByName(String name);
 }
