@@ -1,26 +1,23 @@
 package com.javamentor.developer.social.platform.dao.impl;
 
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
+import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
+@Service
 public abstract class GenericDaoAbstract<T, PK extends Serializable> implements GenericDao<T, PK> {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private Class<T> clazz;
 
-    public GenericDaoAbstract() {
-        Type t = getClass().getGenericSuperclass();
-        ParameterizedType pt = (ParameterizedType) t;
-        clazz = (Class) pt.getActualTypeArguments()[0];
-    }
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    Session session = entityManager.unwrap(Session.class);
 
     @Override
     public void create(T entity) {
@@ -29,7 +26,7 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     public void update(T entity) {
-        entityManager.merge(entity);
+        session.update(entity);
     }
 
     @Override
@@ -55,4 +52,5 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
                         "FROM " + clazz.getSimpleName() + " b WHERE b.id = :paramId").setParameter("paramId", id);
         return (boolean) query.getSingleResult();
     }
+
 }

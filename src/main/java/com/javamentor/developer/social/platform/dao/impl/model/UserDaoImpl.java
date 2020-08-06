@@ -26,14 +26,13 @@ public class UserDaoImpl implements UserDao {
         entityManager.merge(user);
     }
 
-    @Override
-    public User getById(Long id) {
-        return null;
-    }
-
     @Transactional
     public void delete(User user) {
         entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
+    }
+
+    public User getById(Long id) {
+        return entityManager.find(User.class, id) != null;
     }
 
     @SuppressWarnings("unchecked")

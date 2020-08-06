@@ -11,7 +11,6 @@ import lombok.*;
 @Builder
 public class StatusDto {
 
-    private Long id;
-
     private String name;
+
 }
