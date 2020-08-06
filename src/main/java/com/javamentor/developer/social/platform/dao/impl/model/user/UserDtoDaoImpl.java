@@ -1,10 +1,10 @@
-package com.javamentor.developer.social.platform.dao.impl.dto;
+package com.javamentor.developer.social.platform.dao.impl.model.user;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
-import com.javamentor.developer.social.platform.models.dto.ActiveDto;
-import com.javamentor.developer.social.platform.models.dto.RoleDto;
-import com.javamentor.developer.social.platform.models.dto.StatusDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.entity.user.Role;
+import com.javamentor.developer.social.platform.models.entity.user.Status;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
@@ -15,9 +15,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public class UserDtoDaoImpl implements UserDtoDao {
+class UserDtoDaoImpl implements UserDtoDao {
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -61,9 +62,8 @@ public class UserDtoDaoImpl implements UserDtoDao {
                                     .persistDate((LocalDateTime) objects[9])
                                     .lastRedactionDate((LocalDateTime) objects[10])
                                     .city((String) objects[11])
-                                    .role((RoleDto) objects[12])
-                                    .status((StatusDto) objects[13])
-                                    .active((ActiveDto) objects[14])
+                                    .roleName(((Role) objects[12]).getName())
+                                    .statusName(((Status) objects[13]).getName())
                                     .build();
                         }
 
@@ -82,9 +82,9 @@ public class UserDtoDaoImpl implements UserDtoDao {
     }
 
     @Override
-    public UserDto getUserDtoById(Long id) {
+    public Optional<UserDto> getUserDtoById(Long id) {
 
-        return (UserDto) entityManager.createQuery("SELECT " +
+        return Optional.of((UserDto) entityManager.createQuery("SELECT " +
                 "u.userId, " +
                 "u.firstName, " +
                 "u.lastName, " +
@@ -118,9 +118,8 @@ public class UserDtoDaoImpl implements UserDtoDao {
                                 .persistDate((LocalDateTime) objects[9])
                                 .lastRedactionDate((LocalDateTime) objects[10])
                                 .city((String) objects[11])
-                                .role((RoleDto) objects[12])
-                                .status((StatusDto) objects[13])
-                                .active((ActiveDto) objects[14])
+                                .roleName(((Role) objects[12]).getName())
+                                .statusName(((Status) objects[13]).getName())
                                 .build();
                     }
 
@@ -129,8 +128,7 @@ public class UserDtoDaoImpl implements UserDtoDao {
                         return list;
                     }
                 })
-                .getSingleResult();
+                .getSingleResult());
     }
 
 }
-

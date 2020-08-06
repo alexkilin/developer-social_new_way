@@ -5,6 +5,20 @@ import com.javamentor.developer.social.platform.dao.impl.GenericDaoAbstract;
 import com.javamentor.developer.social.platform.models.entity.user.Role;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 @Repository
 public class RoleDAOImpl extends GenericDaoAbstract<Role, Long> implements RoleDAO {
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    @Override
+    public Role getByName(String name) {
+        return (Role) entityManager.createQuery(
+                "FROM Role r" +
+                        "WHERE r.name = :paramName").setParameter("paramName", name)
+                .getSingleResult();
+    }
 }
