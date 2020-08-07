@@ -24,9 +24,17 @@ public abstract class UserConverter {
     protected StatusService statusService;
 
     @Autowired
-    public UserConverter(PasswordEncoder passwordEncoder, RoleService roleService, StatusService statusService) {
+    protected void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Autowired
+    protected void setRoleService(RoleService roleService) {
         this.roleService = roleService;
+    }
+
+    @Autowired
+    protected void setStatusService(StatusService statusService) {
         this.statusService = statusService;
     }
 

@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -17,7 +16,7 @@ import java.util.Date;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class UserDto implements Serializable {
+public class UserDto {
 
     @ApiModelProperty(notes = "Автоматически генерируемый ID пользователя. Не указывать при создании, " +
             "обязательно указывать при изменении учетной записи", position = 1)
@@ -82,8 +81,8 @@ public class UserDto implements Serializable {
 
     @ApiModelProperty(notes = "Автоматически назначается при создании всем пользователям, явно указывать не нужно",
             example = "не указывать", hidden = true)
-    @Null(groups = OnCreate.class, message = " 'role' автоматически назначается при создании всем пользователям, " +
-            "явно указывать не нужно")
+//    @Null(message = " 'role' автоматически назначается при создании всем пользователям, " +
+//            "явно указывать не нужно")
     private String roleName;
 
     @ApiModelProperty(notes = "Статус пользователе",
