@@ -20,4 +20,14 @@ public abstract class AudioConverter {
     @Mapping(source = "mediaType", target = "media.mediaType")
     @Mapping(source = "user", target = "media.user")
     public abstract Audios toAudio(AudioDto audioDto, MediaType mediaType, User user);
+
+    @Mapping(source = "audios.id", target = "id")
+    @Mapping(source = "audios.media.url", target = "url")
+    @Mapping(source = "audios.icon", target = "icon")
+    @Mapping(source = "audios.name", target = "name")
+    @Mapping(source = "audios.author", target = "author")
+    @Mapping(source = "audios.album", target = "album")
+    @Mapping(source = "audios.media.persistDateTime", target = "persistDateTime")
+    public abstract AudioDto toDTO(Audios audios);
+
 }

@@ -9,18 +9,23 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @DataSet(value = {
-        "datasets/audio/usersAudioTest/active.yml",
-        "datasets/audio/usersAudioTest/user.yml",
-        "datasets/audio/usersAudioTest/role.yml",
-        "datasets/audio/usersAudioTest/status.yml",
-        "datasets/audio/usersAudioTest/users_audios_collections.yml",
-        "datasets/audio/media.yml",
-        "datasets/audio/audio.yml"}, cleanBefore = true, cleanAfter = true)
+        "datasets/audio/usersAudioTest/Active.yml",
+        "datasets/audio/usersAudioTest/User.yml",
+        "datasets/audio/usersAudioTest/Role.yml",
+        "datasets/audio/usersAudioTest/Status.yml",
+        "datasets/audio/usersAudioTest/UsersAudiosCollections.yml",
+        "datasets/audio/Media.yml",
+        "datasets/audio/albumAudioTest/AudioAlbum.yml",
+        "datasets/audio/albumAudioTest/Album.yml",
+        "datasets/audio/albumAudioTest/UserHasAlbum.yml",
+        "datasets/audio/albumAudioTest/AlbumHasAudio.yml",
+        "datasets/audio/Audio.yml"}, cleanBefore = true, cleanAfter = true)
 class MusicTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -40,7 +45,7 @@ class MusicTest extends AbstractIntegrationTest {
         this.mockMvc.perform(get("/api/audios/getPart?currentPage=1&itemsOnPage=2"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].id").value(2))
                 .andExpect(jsonPath("$[0].album").value("AlbumTestName 1"))
                 .andExpect(jsonPath("$[0].author").value("Test Author 1"))
@@ -50,12 +55,7 @@ class MusicTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$[1].album").value("AlbumTestName 2"))
                 .andExpect(jsonPath("$[1].author").value("Test Author 2"))
                 .andExpect(jsonPath("$[1].icon").value("TestIcon2"))
-                .andExpect(jsonPath("$[1].name").value("AudioTestName 2"))
-                .andExpect(jsonPath("$[2].id").value(4))
-                .andExpect(jsonPath("$[2].album").value("AlbumTestName 3"))
-                .andExpect(jsonPath("$[2].author").value("Test Author 3"))
-                .andExpect(jsonPath("$[2].icon").value("TestIcon3"))
-                .andExpect(jsonPath("$[2].name").value("AudioTestName 3"));
+                .andExpect(jsonPath("$[1].name").value("AudioTestName 2"));
     }
 
     @Test
@@ -180,8 +180,39 @@ class MusicTest extends AbstractIntegrationTest {
 
     @Test
     public void addAudioInCollectionsOfUser() throws Exception {
-        this.mockMvc.perform(get("/api/audios/addToUser?audioId=5&userId=1"))
+        this.mockMvc.perform(post("/api/audios/addToUser?audioId=5&userId=1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void addInAlbums() throws Exception {
+        this.mockMvc.perform(post("/api/audios/addInAlbums?albumId=1&audioId=1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void createAlbum() throws Exception {
+        this.mockMvc.perform(post("/api/audios/createAlbum?nameOfAlbum=album&icon=icon&userId=1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getFromAlbumOfUser() throws Exception {
+        this.mockMvc.perform(get("/api/audios/getFromAlbumOfUser?albumId=1"))
+                .andDo(print())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getAllAlbums() throws Exception {
+        this.mockMvc.perform(get("/api/audios/getAllAlbumsFromUser?userId=1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(3));
+    }
+
 }

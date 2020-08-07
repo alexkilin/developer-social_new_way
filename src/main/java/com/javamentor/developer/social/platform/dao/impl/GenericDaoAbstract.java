@@ -1,6 +1,8 @@
 package com.javamentor.developer.social.platform.dao.impl;
 
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
+import com.javamentor.developer.social.platform.models.dto.AudioDto;
+import com.javamentor.developer.social.platform.models.entity.media.Audios;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -8,6 +10,7 @@ import javax.persistence.Query;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 
 public abstract class GenericDaoAbstract<T, PK extends Serializable> implements GenericDao<T, PK> {
 
@@ -20,6 +23,18 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
         Type t = getClass().getGenericSuperclass();
         ParameterizedType pt = (ParameterizedType) t;
         clazz = (Class) pt.getActualTypeArguments()[0];
+    }
+
+    @Override
+    public List<T> getPartAudio(int currentPage, int itemsOnPage) {
+        return entityManager.createQuery("SELECT a FROM " + clazz.getSimpleName() + " as a").setFirstResult(currentPage)
+                .setMaxResults(itemsOnPage).getResultList();
+    }
+
+
+    @Override
+    public List<T> getAll() {
+        return entityManager.createQuery("SELECT a FROM " + clazz.getSimpleName() + " as a").getResultList();
     }
 
     @Override
