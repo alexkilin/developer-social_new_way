@@ -1,8 +1,6 @@
 package com.javamentor.developer.social.platform.dao.impl;
 
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
-import com.javamentor.developer.social.platform.models.entity.media.Audios;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

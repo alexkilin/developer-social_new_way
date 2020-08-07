@@ -200,7 +200,7 @@ public class AudiosController {
 
     @ApiOperation(value = "Получение всего аудио альбома пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "аудио из альбома пользователя успешно полученно")})
+            @ApiResponse(code = 200, message = "аудио из альбома пользователя успешно получено")})
     @GetMapping(value = "/getFromAlbumOfUser")
     public ResponseEntity<?> getFromAlbumOfUser(@RequestParam  @NotNull Long albumId) {
         logger.info(String.format("Все аудио из альбома с id:%s отправлено", albumId));
