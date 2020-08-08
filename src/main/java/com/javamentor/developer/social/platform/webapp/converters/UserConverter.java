@@ -52,7 +52,7 @@ public abstract class UserConverter {
     public abstract User toEntity(UserDto userDto);
 
     @Named("roleSetter")
-    private Role roleSetter(String role) {
+    protected Role roleSetter(String role) {
         try {
             if (role == null) {
                 role = "USER";
