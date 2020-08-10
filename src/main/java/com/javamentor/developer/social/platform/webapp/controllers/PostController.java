@@ -52,7 +52,8 @@ public class PostController {
     })
 
     public ResponseEntity<List<PostDto>> getPosts() {
-       return ResponseEntity.ok(postDtoService.getPosts());
+      return ResponseEntity.ok(postDtoService.getPosts());
+     //   return ResponseEntity.ok().body(postService..stream().map(audioConverter::toDTO).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение поста по тэгу")

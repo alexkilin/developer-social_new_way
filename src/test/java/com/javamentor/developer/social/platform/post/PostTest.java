@@ -25,9 +25,9 @@ public class PostTest extends AbstractIntegrationTest {
 
     @Test
     public void getAllPosts() throws Exception {
-        this.mockMvc.perform(get("api/posts"))
+        this.mockMvc.perform(get("/api/posts"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length").value(5));
+                .andExpect(jsonPath("$.length()").value(5));
     }
 }
