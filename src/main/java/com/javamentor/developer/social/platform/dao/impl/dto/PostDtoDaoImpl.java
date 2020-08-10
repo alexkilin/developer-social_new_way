@@ -8,6 +8,7 @@ import com.javamentor.developer.social.platform.models.dto.UserDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -48,7 +49,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     "t.text " +
                     "from Post p " +
                     "join p.user u " +
-                    "join p.media m " +
+                    "left join p.media m " +
                     "left join p.tags t")
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
@@ -56,7 +57,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         public Object transformTuple(Object[] objects, String[] strings) {
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
                                     .userId((Long) objects[5])
-                                    .mediaType(objects[9].toString())
+                                    .mediaType(objects[9] == null ? "null" : objects[9].toString())
                                     .url((String) objects[10])
                                     .build();
                             List<MediaPostDto> mediaPostDtoList = new ArrayList<>();

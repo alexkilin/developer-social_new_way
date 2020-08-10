@@ -50,10 +50,8 @@ public class PostController {
             @ApiResponse(code = 200, message = "Посты получены"),
             @ApiResponse(code = 400, message = "Посты не могут быть получены")
     })
-
     public ResponseEntity<List<PostDto>> getPosts() {
       return ResponseEntity.ok(postDtoService.getPosts());
-     //   return ResponseEntity.ok().body(postService..stream().map(audioConverter::toDTO).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение поста по тэгу")
