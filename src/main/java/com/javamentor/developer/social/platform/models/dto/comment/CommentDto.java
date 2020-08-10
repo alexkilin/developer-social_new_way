@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.models.dto.comment;
 
+import com.javamentor.developer.social.platform.models.dto.UserDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -27,5 +28,5 @@ public class CommentDto {
     private LocalDateTime persistDate;
 
     @ApiModelProperty(notes = "ФИО пользователя оставившего комментарий.")
-    private String userFio;
+    private UserDto userDto;
 }
