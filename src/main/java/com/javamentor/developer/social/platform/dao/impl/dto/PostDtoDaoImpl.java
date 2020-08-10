@@ -110,12 +110,13 @@ public class PostDtoDaoImpl implements PostDtoDao {
     public List<CommentDto> getCommentsByPostId(Long id) {
         Query queryCommentsForPost = (Query) entityManager.createQuery(
                 "SELECT " +
-                        "c.id, " +//0
-                        "c.persistDate, " +//1
-                        "c.lastRedactionDate, " +//2
+                        "c.id, " +
+                        "c.persistDate, " +
+                        "c.lastRedactionDate, " +
                         "c.comment, " +//3
-                        "(SELECT u.lastName FROM User u WHERE c.user.userId = u.userId), " +//4
-                        "(SELECT u.firstName FROM User u WHERE c.user.userId = u.userId) " +//5
+                        "(SELECT u.lastName FROM User u WHERE c.user.userId = u.userId), " +
+                        "(SELECT u.firstName FROM User u WHERE c.user.userId = u.userId), " +
+                        "(SELECT u.userId FROM User u WHERE c.user.userId = u.userId)" +
                     "FROM Post p " +
                         "LEFT JOIN PostComment pc on p.id = pc.post.id " +
                         "LEFT JOIN Comment c on pc.comment.id = c.id " +
@@ -125,9 +126,13 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
             @Override
             public Object transformTuple(Object[] objects, String[] strings) {
-                String userCommentFio = objects[4] + " " + objects[5];
+                UserDto userDto = UserDto.builder()
+                        .userId((Long) objects[6])
+                        .firstName((String) objects[5])
+                        .lastName((String) objects[4])
+                        .build();
                 return CommentDto.builder()
-                        .userFio(userCommentFio)
+                        .userDto(userDto)
                         .persistDate((LocalDateTime) objects[1])
                         .lastRedactionDate((LocalDateTime) objects[2])
                         .id((Long) objects[0])
