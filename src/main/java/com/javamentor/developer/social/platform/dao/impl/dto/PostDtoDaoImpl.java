@@ -135,14 +135,14 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         public Object transformTuple(Object[] objects, String[] strings) {
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
                                     .userId((Long) objects[5])
-                                    .mediaType(objects[9].toString())
+                                    .mediaType(objects[9] == null ? "null" : objects[9].toString())
                                     .url((String) objects[10])
                                     .build();
                             List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
                             mediaPostDtoList.add(mediaPostDto);
                             TagDto tagDto = TagDto.builder()
-                                    .id((Long) objects[11])
-                                    .text((String) objects[12])
+                                    .id(objects[11] == null ? 0 : (Long) objects[11])
+                                    .text(objects[12] == null ? "null" : (String) objects[12])
                                     .build();
                             List<TagDto> tagDtoList = new ArrayList<>();
                             tagDtoList.add(tagDto);

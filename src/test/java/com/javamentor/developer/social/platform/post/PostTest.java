@@ -16,7 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/post/usersPostsTest/status.yml",
         "datasets/post/usersPostsTest/user.yml",
         "datasets/post/usersPostsTest/user_tabs.yml",
-        "datasets/post/posts.yml"
+        "datasets/post/posts.yml",
+        "datasets/post/tags.yml",
+        "datasets/post/post_tags.yml"
 }, cleanBefore = true, cleanAfter = true)
 public class PostTest extends AbstractIntegrationTest {
 
@@ -29,5 +31,13 @@ public class PostTest extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(5));
+    }
+
+    @Test
+    public void getPostByTag() throws Exception {
+        this.mockMvc.perform(get("/api/posts/{text}", "Tag"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
     }
 }
