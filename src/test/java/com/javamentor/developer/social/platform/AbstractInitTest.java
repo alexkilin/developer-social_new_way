@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = PlatformApplication.class)
-@TestPropertySource("/resources/config/application-test.properties")
+@TestPropertySource("/config/application-test.properties")
 @DBUnit(caseSensitiveTableNames = true, allowEmptyFields = true, schema = "socialplatform_test")
 @DBRider
 @ExtendWith(SpringExtension.class)
