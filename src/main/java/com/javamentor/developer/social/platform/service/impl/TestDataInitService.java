@@ -1,5 +1,9 @@
 package com.javamentor.developer.social.platform.service.impl;
 
+import com.javamentor.developer.social.platform.models.entity.album.Album;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
 import com.javamentor.developer.social.platform.models.entity.chat.Chat;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import com.javamentor.developer.social.platform.models.entity.comment.Comment;
@@ -12,21 +16,24 @@ import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser
 import com.javamentor.developer.social.platform.models.entity.like.*;
 import com.javamentor.developer.social.platform.models.entity.media.*;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
+import com.javamentor.developer.social.platform.models.entity.post.Tag;
+import com.javamentor.developer.social.platform.models.entity.post.UserTabs;
 import com.javamentor.developer.social.platform.models.entity.user.*;
-import com.javamentor.developer.social.platform.service.abstracts.model.chat.ChatService;
+import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
+import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
+import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
+import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumVideoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.MessageService;
-import com.javamentor.developer.social.platform.service.abstracts.model.comment.CommentService;
 import com.javamentor.developer.social.platform.service.abstracts.model.comment.MediaCommentService;
 import com.javamentor.developer.social.platform.service.abstracts.model.comment.PostCommentService;
-import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupCategoryService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupHasUserService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.CommentLikeService;
-import com.javamentor.developer.social.platform.service.abstracts.model.like.LikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.MessageLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.PostLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.*;
-import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.TagService;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +58,7 @@ public class TestDataInitService {
     private final int numOfMedias = 100 * k;
     private final int numOfChats = 20 * k;
     private final int numOfMessages = 100 * k;
-    private final int numOfAlbums = 20 * k;
+    private final int numOfAlbums = 100 * k;
     private final int numOfFriends = 500 * k;
     private final int numOfFollowers = 500 * k;
     private final int numOfPosts = 100 * k;
@@ -61,6 +68,8 @@ public class TestDataInitService {
     private final int numOfCommentLikes = 100 * k;
     private final int numOfMessagesLikes = 100 * k;
     private final int numOfMediaComments = 100 * k;
+    private final int numOfTags = 100 * k;
+
 
     private User[] users = new User[numOfUsers];
     private Media[] medias = new Media[numOfMedias];
@@ -73,6 +82,8 @@ public class TestDataInitService {
     private Like[] commentLikes = new Like[numOfCommentLikes];
     private Like[] messageLikes = new Like[numOfMessagesLikes];
     private Comment[] mediaComments = new Comment[numOfMediaComments];
+    private Album[] album = new Album[numOfAlbums];
+    private Tag[] tags = new Tag[numOfTags];
 
     private UserService userService;
     private FollowerService followerService;
@@ -89,6 +100,11 @@ public class TestDataInitService {
     private MediaCommentService mediaCommentService;
     private PostCommentService postCommentService;
     private MessageService messageService;
+    private AlbumAudioService albumAudiosService;
+    private AlbumImageService albumImageService;
+    private AlbumVideoService albumVideoService;
+    private final UserTabsService userTabsService;
+    private final TagService tagService;
 
     @Autowired
     public TestDataInitService(UserService userService,
@@ -105,7 +121,7 @@ public class TestDataInitService {
                                GroupService groupService,
                                MediaCommentService mediaCommentService,
                                PostCommentService postCommentService,
-                               MessageService messageService) {
+                               MessageService messageService, AlbumAudioService albumAudioService, AlbumImageService albumImageService, AlbumVideoService albumVideoService, UserTabsService userTabsService, TagService tagService) {
         this.userService = userService;
         this.followerService = followerService;
         this.friendService = friendService;
@@ -121,11 +137,17 @@ public class TestDataInitService {
         this.mediaCommentService = mediaCommentService;
         this.postCommentService = postCommentService;
         this.messageService = messageService;
+        this.albumAudiosService = albumAudioService;
+        this.albumImageService = albumImageService;
+        this.albumVideoService = albumVideoService;
+        this.userTabsService = userTabsService;
+        this.tagService = tagService;
     }
 
     public void createEntity() {
         createUserEntity();
         createMediaEntity();
+        createTagEntity();
         createChatEntity();
         createMessageEntity();
         createAlbumEntity();
@@ -143,6 +165,10 @@ public class TestDataInitService {
         createImageEntity();
         createVideosEntity();
         createPostMessageUserEntity();
+        createAlbumAudiosEntity();
+        createAlbumImageEntity();
+        createAlbumVideoEntity();
+        createUserTabsEntity();
     }
 
     private void createUserEntity() {
@@ -259,6 +285,17 @@ public class TestDataInitService {
         }
     }
 
+    private void createTagEntity() {
+        for (int i = 0; i != numOfTags; i++) {
+            tags[i] = Tag.builder()
+                    .text("This is " + i + " tag")
+                    .build();
+
+            tagService.create(tags[i]);
+        }
+    }
+
+
     private void createChatEntity() {
         for (int i = 0; i != numOfChats; i++) {
             chats[i] = Chat.builder().
@@ -291,15 +328,62 @@ public class TestDataInitService {
     }
 
     private void createAlbumEntity() {
-        int num = 0;
-        int startNum = numOfMedias / numOfAlbums;
-        for (int j = 0; j != numOfAlbums; j++) {
-            for (int i = num; i != num + startNum; i++) {
-                albumService.create(Album.builder().media(medias[i]).build());
+        MediaType mediaType;
+        String name;
+        for (int i = 0; i != numOfAlbums; i++) {
+            if (i % 5 == 0) {
+                mediaType = MediaType.AUDIO;
+                name = "audioAlbum";
+            } else if (i % 3 == 0) {
+                mediaType = MediaType.VIDEO;
+                name = "videoAlbum";
+            } else {
+                mediaType = MediaType.IMAGE;
+                name = "imageAlbum";
             }
-            num += startNum;
+            album[i] = Album.builder()
+                    .mediaType(mediaType)
+                    .name(name)
+                    .build();
         }
     }
+
+    private void createAlbumAudiosEntity() {
+        for (int i = 0; i != numOfAlbums; i++) {
+            if (i % 5 == 0) {
+                albumAudiosService.create(AlbumAudios.builder()
+                        .album(album[i])
+                        .build());
+            }
+        }
+    }
+
+    private void createAlbumImageEntity() {
+        for (int i = 0; i != numOfAlbums; i++) {
+            if (i % 5 == 0) {
+                continue;
+            } else if (i % 3 == 0) {
+                continue;
+            } else {
+                albumImageService.create(AlbumImage.builder()
+                        .album(album[i])
+                        .build());
+            }
+        }
+    }
+
+    private void createAlbumVideoEntity() {
+        for (int i = 0; i != numOfAlbums; i++) {
+            if (i % 5 == 0) {
+                continue;
+            } else if (i % 3 == 0) {
+                albumVideoService.create(AlbumVideo.builder()
+                        .album(album[i])
+                        .build());
+            }
+        }
+    }
+
 
     private void createFriendEntity() {
         for (int i = 0; i != numOfFriends; i++) {
@@ -322,17 +406,21 @@ public class TestDataInitService {
     private void createPostEntity() {
         for (int i = 0; i != numOfPosts; i++) {
             Set<Media> mediaSet = new HashSet<>();
+            Set<Tag> tagSet = new HashSet<>();
             mediaSet.add(medias[i]);
+            tagSet.add(tags[i]);
             posts[i] = Post.builder()
                     .persistDate(userLocalDate)
                     .lastRedactionDate(userLocalDateNow)
                     .media(mediaSet)
+                    .tags(tagSet)
                     .text("There is the " + i + " text of this post")
                     .title("The " + i + " test post")
                     .user(users[(int) (Math.random() * numOfUsers)])
                     .build();
         }
     }
+
 
     private void createGroupEntity() {
         GroupCategory groupCategory1 = GroupCategory.builder().category("Programming").build();
@@ -366,7 +454,7 @@ public class TestDataInitService {
     private void createGroupHasUserEntity() {
         for (int i = 0; i != numOfUsers; i++) {
             groupHasUserService.create(GroupHasUser.builder()
-                    .group(groups[(int) (Math.random() * numOfGroups/2)])
+                    .group(groups[(int) (Math.random() * numOfGroups / 2)])
                     .user(users[i])
                     .persistDate(userLocalDate)
                     .build());
@@ -451,6 +539,7 @@ public class TestDataInitService {
                         .author("Test Author " + i)
                         .icon("TestIcon" + i)
                         .name("AudioTestName " + i)
+                        .album("AlbumTestName " + i)
                         .media(medias[i])
                         .build());
             }
@@ -489,7 +578,7 @@ public class TestDataInitService {
     private void createPostMessageUserEntity() {
         int postNum = 0;
         int messageNum = 0;
-        for (int i = 0; i != numOfUsers/2; i++) {
+        for (int i = 0; i != numOfUsers / 2; i++) {
             Set<Post> postSet = new HashSet<>();
             postSet.add(posts[postNum]);
             postSet.add(posts[postNum++]);
@@ -503,4 +592,18 @@ public class TestDataInitService {
             userService.update(users[i]);
         }
     }
+
+    private void createUserTabsEntity() {
+        for (int i = 0; i < 100; i++) {
+            UserTabs userTab = UserTabs.builder()
+                    .user(users[i])
+                    .post(posts[i])
+                    .persistDate(posts[i].getPersistDate())
+                    .build();
+            userTabsService.create(userTab);
+        }
+
+
+    }
+
 }
