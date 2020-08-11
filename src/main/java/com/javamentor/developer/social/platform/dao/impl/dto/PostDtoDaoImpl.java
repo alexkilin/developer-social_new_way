@@ -124,10 +124,11 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     "m.url, " +
                     "t.id," +
                     "t.text " +
-                    "from Post p " +
-                    "join p.user u " +
-                    "join p.media m " +
-                    "left join p.tags t where t.text = :text")
+                    "from Post as p " +
+                    "join p.user as u " +
+                    "join p.media as m " +
+                    "left join p.tags as t " +
+                    "where t.text = :text")
                     .setParameter("text", text)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
@@ -173,6 +174,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                 }
                             }
                             return new ArrayList<>(result.values());
+//                            return list;
                         }
                     })
                     .getResultList();
