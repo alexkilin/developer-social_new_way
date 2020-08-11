@@ -33,10 +33,6 @@ public class PostLike {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @PrePersist
     private void prePersistFunction() {
         checkConstraints();
