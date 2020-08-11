@@ -5,7 +5,10 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
+import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import org.hibernate.transform.ResultTransformer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,94 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @PersistenceContext
     protected EntityManager entityManager;
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<AudioDto> getAllAudios() {
-        List<AudioDto> audios = entityManager
-                .createQuery("SELECT " +
-                        "c.id, " +
-                        "c.icon, " +
-                        "c.name, " +
-                        "c.author, " +
-                        "c.media.url, " +
-                        "c.media.persistDateTime, " +
-                        "c.album " +
-                        "FROM Audios as c")
-                .unwrap(Query.class)
-                .setResultTransformer(
-                        new ResultTransformer() {
-                            @Override
-                            public Object transformTuple(
-                                    Object[] objects, String[] strings) {
-                                return AudioDto.builder()
-                                        .id(((Number) objects[0]).longValue())
-                                        .icon((String) objects[1])
-                                        .name((String) objects[2])
-                                        .author((String) objects[3])
-                                        .url((String) objects[4])
-                                        .persistDateTime((LocalDateTime) objects[5])
-                                        .album((String) objects[6])
-                                        .build();
-                            }
-
-                            @Override
-                            public List transformList(List list) {
-                                return list;
-                            }
-                        }
-                )
-                .getResultList();
-        return audios;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
-        List<AudioDto> audios = entityManager
-                .createQuery("SELECT " +
-                        "c.id, " +
-                        "c.icon, " +
-                        "c.name, " +
-                        "c.author, " +
-                        "c.media.url, " +
-                        "c.media.persistDateTime, " +
-                        "c.album " +
-                        "FROM Audios as c")
-                .setFirstResult(currentPage)
-                .setMaxResults(currentPage + itemsOnPage)
-                .unwrap(Query.class)
-                .setResultTransformer(
-                        new ResultTransformer() {
-                            @Override
-                            public Object transformTuple(
-                                    Object[] objects, String[] strings) {
-                                return AudioDto.builder()
-                                        .id(((Number) objects[0]).longValue())
-                                        .icon((String) objects[1])
-                                        .name((String) objects[2])
-                                        .author((String) objects[3])
-                                        .url((String) objects[4])
-                                        .persistDateTime((LocalDateTime) objects[5])
-                                        .album((String) objects[6])
-                                        .build();
-                            }
-
-                            @Override
-                            public List transformList(List list) {
-                                return list;
-                            }
-                        }
-                )
-                .getResultList();
-        return audios;
-    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -410,6 +332,46 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
         entityManager.merge(user);
         entityManager.flush();
         return true;
-
     }
+
+    @Override
+    public List<AudioDto> getAudioFromAlbomOfUser(Long albumId) {
+        List<AudioDto> audios = entityManager
+                .createQuery("SELECT " +
+                        "c.id, " +
+                        "c.icon, " +
+                        "c.name, " +
+                        "c.author, " +
+                        "c.media.url, " +
+                        "c.media.persistDateTime, " +
+                        "c.album " +
+                        "FROM AlbumAudios u join u.audios as c where u.album.id =:albumId")
+                .setParameter("albumId", albumId)
+                .unwrap(Query.class)
+                .setResultTransformer(
+                        new ResultTransformer() {
+                            @Override
+                            public Object transformTuple(
+                                    Object[] objects, String[] strings) {
+                                return AudioDto.builder()
+                                        .id(((Number) objects[0]).longValue())
+                                        .icon((String) objects[1])
+                                        .name((String) objects[2])
+                                        .author((String) objects[3])
+                                        .url((String) objects[4])
+                                        .persistDateTime((LocalDateTime) objects[5])
+                                        .album((String) objects[6])
+                                        .build();
+                            }
+
+                            @Override
+                            public List transformList(List list) {
+                                return list;
+                            }
+                        }
+                )
+                .getResultList();
+        return audios;
+    }
+
 }

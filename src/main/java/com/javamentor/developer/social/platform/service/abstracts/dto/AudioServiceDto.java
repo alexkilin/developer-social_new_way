@@ -7,8 +7,6 @@ import java.util.Optional;
 
 public interface AudioServiceDto {
 
-    List<AudioDto> getAllAudios();
-    List<AudioDto> getPartAudio(int currentPage, int itemsOnPage);
     List<AudioDto> getAudioOfAuthor(String author);
     AudioDto getAudioOfName(String name);
 
@@ -23,4 +21,6 @@ public interface AudioServiceDto {
     List<AudioDto> getAlbumAudioOfUser(Long userId, String album);
 
     boolean addAudioInCollectionsOfUser(Long userId, Long audioId);
+
+    List<AudioDto> getAudioFromAlbomOfUser(Long albumId);
 }
