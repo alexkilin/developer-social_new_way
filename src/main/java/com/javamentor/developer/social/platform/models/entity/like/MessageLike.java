@@ -32,10 +32,6 @@ public class MessageLike {
     @JoinColumn(name = "message_id")
     private Message message;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @PrePersist
     private void prePersistFunction() {
         checkConstraints();

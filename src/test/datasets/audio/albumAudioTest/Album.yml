@@ -1,0 +1,29 @@
+albums:
+  - icon: "icon 1"
+    update_date: "2020-08-07 23:35:34.817330"
+    media_type: 1
+    name: "audioAlbum"
+    persist_date: "2020-08-07 23:35:34.817330"
+    user_owner_id_user_id: 1
+
+  - icon: "icon 2"
+    update_date: "2020-08-07 23:35:34.817330"
+    media_type: 1
+    name: "audioAlbum"
+    persist_date: "2020-08-07 23:35:34.817330"
+    user_owner_id_user_id: 1
+
+
+  - icon: "icon 3"
+    update_date: "2020-08-07 23:35:34.817330"
+    media_type: 1
+    name: "audioAlbum"
+    persist_date: "2020-08-07 23:35:34.817330"
+    user_owner_id_user_id: 1
+
+  - icon: "icon 4"
+    update_date: "2020-08-07 23:35:34.817330"
+    media_type: 1
+    name: "audioAlbum"
+    persist_date: "2020-08-07 23:35:34.817330"
+    user_owner_id_user_id: 2

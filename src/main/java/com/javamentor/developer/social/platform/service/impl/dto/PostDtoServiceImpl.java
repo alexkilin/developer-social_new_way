@@ -26,6 +26,11 @@ public class PostDtoServiceImpl implements PostDtoService {
     }
 
     @Override
+    public List<PostDto> getPostsByTag(String text) {
+        return postDtoDao.getPostsByTag(text);
+    }
+
+    @Override
     public List<CommentDto> getCommentsByPostId(Long id) {
         return postDtoDao.getCommentsByPostId(id);
     }

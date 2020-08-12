@@ -32,10 +32,6 @@ public class CommentLike {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @PrePersist
     private void prePersistFunction() {
         checkConstraints();

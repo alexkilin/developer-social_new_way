@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.models.entity.post;
 
 
-import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -50,7 +48,7 @@ public class Post {
     @CreationTimestamp
     private LocalDateTime persistDate;
 
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Media.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Media.class, cascade = CascadeType.PERSIST)
     @JoinTable(name = "post_media", joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id"))
     private Set<Media> media;

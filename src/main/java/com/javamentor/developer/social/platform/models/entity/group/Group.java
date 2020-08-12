@@ -46,7 +46,7 @@ public class Group {
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = GroupCategory.class, cascade = {CascadeType.PERSIST})
     private GroupCategory groupCategory;
 
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Post.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Post.class, cascade = CascadeType.PERSIST)
     @JoinTable(name = "group_wal", joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private Set<Post> posts;
