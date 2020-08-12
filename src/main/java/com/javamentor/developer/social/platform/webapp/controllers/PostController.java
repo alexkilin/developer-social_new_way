@@ -22,6 +22,7 @@ import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/posts")
@@ -51,7 +52,7 @@ public class PostController {
             @ApiResponse(code = 400, message = "Посты не могут быть получены")
     })
     public ResponseEntity<List<PostDto>> getPosts() {
-      return ResponseEntity.ok(postDtoService.getPosts());
+      return ResponseEntity.ok(postService.getAll().stream().map(postConverter::toDto).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение поста по тэгу")
