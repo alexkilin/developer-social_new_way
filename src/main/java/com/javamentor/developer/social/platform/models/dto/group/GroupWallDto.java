@@ -45,6 +45,9 @@ public class GroupWallDto {
     @ApiModelProperty(notes = "Кол-во добавлений в закладки поста")
     private Long countBookmarks;
 
+    @ApiModelProperty(notes = "Кол-во репостов данного поста")
+    private Long countReposts;
+
     @ApiModelProperty(notes = "Медиаконтент поста")
     private List<MediaPostDto> media;
 
