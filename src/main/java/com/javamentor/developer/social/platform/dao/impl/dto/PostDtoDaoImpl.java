@@ -240,7 +240,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
             @Override
             public Object transformTuple(Object[] objects, String[] strings) {
                 return MediaPostDto.builder()
-                        .content((String) objects[1])
+                        .url((String) objects[1])
                         .mediaType(objects[0].toString())
                         .build();
             }
