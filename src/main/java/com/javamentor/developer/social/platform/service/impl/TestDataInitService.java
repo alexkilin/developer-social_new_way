@@ -486,7 +486,6 @@ public class TestDataInitService {
             postLikeService.create(PostLike.builder()
                     .post(posts[(int) (Math.random() * numOfPosts)])
                     .like(postLikes[i])
-                    .user(users[(int) (Math.random() * numOfUsers)])
                     .build());
         }
     }
@@ -500,7 +499,6 @@ public class TestDataInitService {
             commentLikeService.create(CommentLike.builder()
                     .like(commentLikes[i])
                     .comment(postComments[(int) (Math.random() * numOfPostComments)])
-                    .user(users[(int) (Math.random() * numOfUsers)])
                     .build());
         }
     }
@@ -514,7 +512,6 @@ public class TestDataInitService {
             messageLikeService.create(MessageLike.builder()
                     .like(messageLikes[i])
                     .message(messages[(int) (Math.random() * numOfMessages)])
-                    .user(users[(int) (Math.random() * numOfUsers)])
                     .build());
         }
     }
