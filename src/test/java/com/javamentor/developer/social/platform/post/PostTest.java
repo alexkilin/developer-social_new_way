@@ -50,4 +50,20 @@ public class PostTest extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(0));
     }
+
+    @Test
+    public void getPostByUserId() throws Exception {
+        this.mockMvc.perform(get("/api/posts/user/{id}", "1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
+    }
+
+    @Test
+    public void getPostByInvalidUserId() throws Exception {
+        this.mockMvc.perform(get("/api/posts/user/{id}", "100"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
 }
