@@ -42,4 +42,12 @@ public class PostTest extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1));
     }
+
+    @Test
+    public void getPostByInvalidTag() throws Exception {
+        this.mockMvc.perform(get("/api/posts/{text}", "TagTag"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
 }
