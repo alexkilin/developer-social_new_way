@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataSet(value = {"testdata/chat.yml"}, cleanBefore = true, cleanAfter = true)
+@DataSet(value = {"testdata/chat.yml.yml"}, cleanBefore = true, cleanAfter = true)
 class TestControllerTest extends AbstractInitTest {
 
     @Autowired

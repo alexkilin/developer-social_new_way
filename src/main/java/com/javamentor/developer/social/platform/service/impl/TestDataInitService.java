@@ -300,7 +300,7 @@ public class TestDataInitService {
         for (int i = 0; i != numOfChats; i++) {
             chats[i] = Chat.builder().
                     persistDate(userLocalDate)
-                    .title(i + " init chat")
+                    .title(i + " init chat.yml")
                     .build();
         }
     }

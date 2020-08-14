@@ -21,13 +21,13 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @MessageMapping("/chat.sendMessage")
+    @MessageMapping("/chat.yml.sendMessage")
     @SendTo("/topic/public")
     public Message sendMessage(@Payload Message message) {
         return message;
     }
 
-    @MessageMapping("/chat.addUser")
+    @MessageMapping("/chat.yml.addUser")
     @SendTo("/topic/public")
     public Message addUser(@Payload Message message,
                                SimpMessageHeaderAccessor headerAccessor) {
