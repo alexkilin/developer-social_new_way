@@ -8,6 +8,7 @@ import com.javamentor.developer.social.platform.models.dto.UserDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -28,7 +29,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<PostDto> getPosts() {
+    public List<PostDto> getPostsByTag(String text) {
         List<PostDto> postDtoList = new ArrayList<>();
 
         try {
@@ -46,24 +47,26 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     "m.url, " +
                     "t.id," +
                     "t.text " +
-                    "from Post p " +
-                    "join p.user u " +
-                    "join p.media m " +
-                    "left join p.tags t")
+                    "from Post as p " +
+                    "join p.user as u " +
+                    "join p.media as m " +
+                    "left join p.tags as t " +
+                    "where t.text = :text")
+                    .setParameter("text", text)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override
                         public Object transformTuple(Object[] objects, String[] strings) {
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
                                     .userId((Long) objects[5])
-                                    .mediaType(objects[9].toString())
+                                    .mediaType(objects[9] == null ? "null" : objects[9].toString())
                                     .url((String) objects[10])
                                     .build();
                             List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
                             mediaPostDtoList.add(mediaPostDto);
                             TagDto tagDto = TagDto.builder()
-                                    .id((Long) objects[11])
-                                    .text((String) objects[12])
+                                    .id(objects[11] == null ? 0 : (Long) objects[11])
+                                    .text(objects[12] == null ? "null" : (String) objects[12])
                                     .build();
                             List<TagDto> tagDtoList = new ArrayList<>();
                             tagDtoList.add(tagDto);
@@ -103,9 +106,8 @@ public class PostDtoDaoImpl implements PostDtoDao {
         return postDtoList;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<PostDto> getPostsByTag(String text) {
+    public List<PostDto> getPostsByUserId(Long id) {
         List<PostDto> postDtoList = new ArrayList<>();
 
         try {
@@ -123,25 +125,26 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     "m.url, " +
                     "t.id," +
                     "t.text " +
-                    "from Post p " +
-                    "join p.user u " +
-                    "join p.media m " +
-                    "left join p.tags t where t.text = :text")
-                    .setParameter("text", text)
+                    "from Post as p " +
+                    "join p.user as u " +
+                    "join p.media as m " +
+                    "left join p.tags as t " +
+                    "where u.userId = :userId")
+                    .setParameter("userId", id)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override
                         public Object transformTuple(Object[] objects, String[] strings) {
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
                                     .userId((Long) objects[5])
-                                    .mediaType(objects[9].toString())
+                                    .mediaType(objects[9] == null ? "null" : objects[9].toString())
                                     .url((String) objects[10])
                                     .build();
                             List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
                             mediaPostDtoList.add(mediaPostDto);
                             TagDto tagDto = TagDto.builder()
-                                    .id((Long) objects[11])
-                                    .text((String) objects[12])
+                                    .id(objects[11] == null ? 0 : (Long) objects[11])
+                                    .text(objects[12] == null ? "null" : (String) objects[12])
                                     .build();
                             List<TagDto> tagDtoList = new ArrayList<>();
                             tagDtoList.add(tagDto);
