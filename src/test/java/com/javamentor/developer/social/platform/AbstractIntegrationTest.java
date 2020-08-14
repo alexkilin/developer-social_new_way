@@ -1,6 +1,6 @@
-package com.javamentor.developer.social.platform;/*  Наследовать все интеграционные тесты от этого класса.
- *  Загружает SpringContext один раз, перед началом тестов,а не в каждом тестовом классе.
- *  При необходимости можно переопределять конфиг контекста в любом из тестовых классов.
+package com.javamentor.developer.social.platform;/*  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
+ *  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ SpringContext пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ,пїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
+ *  пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @PropertySource(encoding = "UTF-8", value = "/config/application-error-message.properties")
 @AutoConfigureMockMvc
 @DBRider
-@DBUnit(caseSensitiveTableNames = true, allowEmptyFields = true, schema = "test")
+@DBUnit(caseSensitiveTableNames = true, allowEmptyFields = true, schema = "public")
 public abstract class AbstractIntegrationTest {
 
 
