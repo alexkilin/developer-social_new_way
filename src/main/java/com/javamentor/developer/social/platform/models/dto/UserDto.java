@@ -81,11 +81,11 @@ public class UserDto {
 
     @ApiModelProperty(notes = "Автоматически назначается при создании всем пользователям, явно указывать не нужно",
             example = "не указывать", hidden = true)
-//    @Null(message = " 'role' автоматически назначается при создании всем пользователям, " +
-//            "явно указывать не нужно")
+    @Null(message = " 'role' автоматически назначается при создании всем пользователям, " +
+            "явно указывать не нужно")
     private String roleName;
 
-    @ApiModelProperty(notes = "Статус пользователе",
+    @ApiModelProperty(notes = "Статус пользователя, придуманный пользователем",
             example = "- На моем компе все работает.\n" +
                       "— Отправим клиенту твой комп.", position = 12)
     private String statusName;
