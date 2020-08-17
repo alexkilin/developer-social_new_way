@@ -344,6 +344,7 @@ public class TestDataInitService {
             album[i] = Album.builder()
                     .mediaType(mediaType)
                     .name(name)
+                    .userOwnerId(users[i])
                     .build();
         }
     }
