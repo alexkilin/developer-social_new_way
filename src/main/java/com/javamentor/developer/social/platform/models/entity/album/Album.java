@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +38,9 @@ public class Album {
     private String name;
 
     private String icon;
+
+    @ManyToOne
+    private User userOwnerId;
 
     @Enumerated
     @NotNull

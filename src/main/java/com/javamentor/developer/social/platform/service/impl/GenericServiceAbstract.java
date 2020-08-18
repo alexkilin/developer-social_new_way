@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.List;
 
 public abstract class GenericServiceAbstract<T, PK extends Serializable> implements GenericService<T, PK> {
     private final GenericDao<T, PK> dao;
@@ -19,6 +20,18 @@ public abstract class GenericServiceAbstract<T, PK extends Serializable> impleme
     @Override
     public void create(T entity) {
         dao.create(entity);
+    }
+
+    @Transactional
+    @Override
+    public List<T> getPart(int currentPage, int itemsOnPage) {
+        return dao.getPartAudio(currentPage, itemsOnPage);
+    }
+
+    @Override
+    @Transactional
+    public List<T> getAll(){
+      return dao.getAll();
     }
 
     @Transactional

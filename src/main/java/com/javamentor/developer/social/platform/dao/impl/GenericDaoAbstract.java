@@ -1,23 +1,39 @@
 package com.javamentor.developer.social.platform.dao.impl;
 
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
-import org.hibernate.Session;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
 
-@Service
 public abstract class GenericDaoAbstract<T, PK extends Serializable> implements GenericDao<T, PK> {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private Class<T> clazz;
 
-    @PersistenceContext
-    protected EntityManager entityManager;
+    public GenericDaoAbstract() {
+        Type t = getClass().getGenericSuperclass();
+        ParameterizedType pt = (ParameterizedType) t;
+        clazz = (Class) pt.getActualTypeArguments()[0];
+    }
 
-    Session session = entityManager.unwrap(Session.class);
+    @Override
+    public List<T> getPartAudio(int currentPage, int itemsOnPage) {
+        return entityManager.createQuery("SELECT a FROM " + clazz.getSimpleName() + " as a").setFirstResult(currentPage)
+                .setMaxResults(itemsOnPage).getResultList();
+    }
+
+
+    @Override
+    public List<T> getAll() {
+        return entityManager.createQuery("SELECT a FROM " + clazz.getSimpleName() + " as a").getResultList();
+    }
 
     @Override
     public void create(T entity) {
@@ -26,7 +42,7 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     public void update(T entity) {
-        session.update(entity);
+        entityManager.merge(entity);
     }
 
     @Override
@@ -52,5 +68,4 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
                         "FROM " + clazz.getSimpleName() + " b WHERE b.id = :paramId").setParameter("paramId", id);
         return (boolean) query.getSingleResult();
     }
-
 }

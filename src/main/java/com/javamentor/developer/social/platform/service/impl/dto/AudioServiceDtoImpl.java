@@ -22,23 +22,13 @@ public class AudioServiceDtoImpl implements AudioServiceDto{
     }
 
     @Override
-    public List<AudioDto> getAllAudios() {
-        return audioDtoDao.getAllAudios();
-    }
-
-    @Override
-    public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
-            return audioDtoDao.getPartAudio(currentPage, itemsOnPage);
-    }
-
-    @Override
     public List<AudioDto> getAudioOfAuthor(String author) {
         return audioDtoDao.getAudioOfAuthor(author);
     }
 
     @Override
     public AudioDto getAudioOfName(String name) {
-        return audioDtoDao.getAudioOfName(name).orElseThrow(() -> new IllegalArgumentException("Не корректные параметры"));
+        return audioDtoDao.getAudioOfName(name).orElseThrow(() -> new IllegalArgumentException("Invalid parameters"));
     }
 
     @Override
@@ -69,5 +59,10 @@ public class AudioServiceDtoImpl implements AudioServiceDto{
     @Override
     public boolean addAudioInCollectionsOfUser(Long userId, Long audioId) {
         return audioDtoDao.addAudioInCollectionsOfUser(userId, audioId);
+    }
+
+    @Override
+    public List<AudioDto> getAudioFromAlbomOfUser(Long albumId) {
+        return audioDtoDao.getAudioFromAlbomOfUser(albumId);
     }
 }

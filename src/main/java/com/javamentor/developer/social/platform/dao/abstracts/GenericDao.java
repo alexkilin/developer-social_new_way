@@ -1,5 +1,7 @@
 package com.javamentor.developer.social.platform.dao.abstracts;
 
+import com.javamentor.developer.social.platform.models.dto.AudioDto;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,4 +17,8 @@ public interface GenericDao<T, PK extends Serializable> {
     void deleteById(PK id);
 
     boolean existById(PK id);
+
+    List<T> getAll();
+
+    List<T> getPartAudio(int currentPage, int itemsOnPage);
 }
