@@ -17,7 +17,13 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
     @Override
     @Transactional
-    public List<MessageDto> getAllMessageDtoByChatId(Long chatId) {
-        return dao.getAllMessageDtoByChatId(chatId);
+    public List<MessageDto> getAllMessageDtoFromGroupChatByChatId(Long chatId) {
+        return dao.getAllMessageDtoFromGroupChatByChatId(chatId);
+    }
+
+    @Override
+    @Transactional
+    public List<MessageDto> getAllMessageDtoFromSingleChatByChatId(Long chatId) {
+        return dao.getAllMessageDtoFromSingleChatByChatId(chatId);
     }
 }

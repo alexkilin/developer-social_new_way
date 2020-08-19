@@ -1,8 +1,9 @@
 package com.javamentor.developer.social.platform.models.entity.user;
 
-import com.javamentor.developer.social.platform.models.entity.chat.Chat;
+import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
+import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
-import com.javamentor.developer.social.platform.models.entity.group.Group;
+import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import lombok.*;
@@ -111,9 +112,13 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "audio_id"))
     private Set<Audios> audios;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Chat.class, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = GroupChat.class, cascade = {CascadeType.PERSIST})
     @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id"))
-    private Set<Chat> chats;
+            inverseJoinColumns = @JoinColumn(name = "group_chat_id"))
+    private Set<GroupChat> groupChats;
 
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = SingleChat.class, cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "user_single_chat", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "chat_id"))
+    private Set<SingleChat> singleChat;
 }

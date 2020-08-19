@@ -17,8 +17,8 @@ import java.util.Set;
 @Builder
 @ApiIgnore
 @NoArgsConstructor
-@Table(name = "chats")
-public class Chat {
+@Table(name = "group_chats")
+public class GroupChat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,20 +27,18 @@ public class Chat {
     @Column
     private String title;
 
-
-    @ManyToOne(fetch = FetchType.LAZY,targetEntity = User.class)
-    private User userReceiver;
+    @Column
+    private String image;
 
     @Column(name = "persist_date", nullable = false)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @CreationTimestamp
     private LocalDateTime persistDate;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, cascade = {CascadeType.PERSIST},mappedBy = "chats")
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, cascade = {CascadeType.PERSIST})
     private Set<User> users;
 
-
-    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST},targetEntity = Message.class)
+    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST},targetEntity = Message.class)
     @JoinTable(joinColumns = @JoinColumn(name = "chat_id"),
             inverseJoinColumns = @JoinColumn(name = "message_id"))
     private Set<Message> messages;

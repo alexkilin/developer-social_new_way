@@ -12,7 +12,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public class ChatDto {
-    @ApiModelProperty(notes = "Название чата.")
+    @ApiModelProperty(notes = "Id чата.")
+    private Long id;
+    @ApiModelProperty(notes = "Тип чата.")
+    private String type;
+    @ApiModelProperty(notes = "Название чата - groupChats или singleChats.")
     private String title;
     @ApiModelProperty(notes = "Фотография чата.")
     private String image;

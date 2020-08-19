@@ -5,7 +5,7 @@ import com.javamentor.developer.social.platform.models.dto.chat.MediaDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,35 +24,78 @@ public class MessageDtoDAOImpl implements MessageDtoDAO {
 
     @Override
     @Transactional
-    public List<MessageDto> getAllMessageDtoByChatId(Long chatId) {
-        return (List<MessageDto>) em.createQuery("select  message from Chat chat join chat.messages message  where chat.id=:id")
-                .setParameter("id", chatId)
+    public List<MessageDto> getAllMessageDtoFromGroupChatByChatId(Long chatId) {
+        return em.createQuery("select gr.messages from GroupChat gr  where gr.id=:chatId")
+                .setParameter("chatId", chatId)
                 .unwrap(Query.class)
-                .setResultTransformer(new MessageDtoResultTransformer())
+                .setResultTransformer(new GroupMessageChatResultTransformer())
+                .getResultList();
+
+    }
+
+    @Override
+    @Transactional
+    public List<MessageDto> getAllMessageDtoFromSingleChatByChatId(Long chatId) {
+        return em.createQuery("select sc.messages from SingleChat sc where sc.id=:chatId")
+                .setParameter("chatId", chatId)
+                .unwrap(Query.class)
+                .setResultTransformer(new SingleMessageChatResultTransformer())
                 .getResultList();
     }
 
-    private static class MessageDtoResultTransformer implements ResultTransformer {
+    private static class GroupMessageChatResultTransformer implements ResultTransformer{
         @Override
         public Object transformTuple(Object[] objects, String[] strings) {
-            Message message = null;
             MessageDto messageDto = null;
-            List<MediaDto> mediaDtoList = new ArrayList<>();
-            for (Object o : objects) {
-                message = (Message) o;
+            for(Object o: objects){
+                Message message = (Message) o;
                 messageDto = MessageDto.builder()
-                        .userSenderImage(message.getUserSender().getAvatar())
-                        .persistDate(message.getPersistDate())
                         .lastRedactionDate(message.getLastRedactionDate())
-                        .message(((Message) o).getMessage())
-                        .active(message.getUserSender().getActive().getName())
+                        .persistDate(message.getPersistDate())
+                        .userSenderImage(message.getUserSender().getAvatar())
+                        .message(message.getMessage())
+                        .mediaDto(new ArrayList<>())
                         .build();
-                for (Media media : message.getMedia()) {
-                    mediaDtoList.add(MediaDto.builder()
-                            .url(media.getMediaType().name())
+                for (Media media: message.getMedia()){
+                    messageDto.getMediaDto().add(new MediaDto().builder()
+                            .persistDateTime(media.getPersistDateTime())
+                            .url(media.getUrl())
+                            .id(media.getId())
+                            .mediaType(media.getMediaType().name())
                             .build());
                 }
-                messageDto.setMediaDto(mediaDtoList);
+
+            }
+            return messageDto;        }
+
+        @Override
+        public List transformList(List list) {
+            return list;
+        }
+    }
+    private static class SingleMessageChatResultTransformer implements ResultTransformer{
+        @Override
+        public Object transformTuple(Object[] objects, String[] strings) {
+            MessageDto messageDto = null;
+            for(Object o: objects){
+                Message message = (Message) o;
+                messageDto = MessageDto.builder()
+                        .lastRedactionDate(message.getLastRedactionDate())
+                        .persistDate(message.getPersistDate())
+                        .userSenderImage(message.getUserSender().getAvatar())
+                        .message(message.getMessage())
+                        .active(message.getUserSender().getActive().getName())
+                        .mediaDto(new ArrayList<>())
+                        .build();
+                for (Media media: message.getMedia()){
+                    messageDto.getMediaDto().add(new MediaDto().builder()
+                            .persistDateTime(media.getPersistDateTime())
+                            .url(media.getUrl())
+                            .id(media.getId())
+                            .mediaType(media.getMediaType().name())
+                            .build());
+                }
+
             }
             return messageDto;
         }
@@ -62,5 +105,4 @@ public class MessageDtoDAOImpl implements MessageDtoDAO {
             return list;
         }
     }
-
 }

@@ -42,7 +42,7 @@ public class Message {
     @CreationTimestamp
     private LocalDateTime persistDate;
 
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Media.class, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Media.class, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "media_messages", joinColumns = @JoinColumn(name = "message_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id"))
     private Set<Media> media;
@@ -52,6 +52,4 @@ public class Message {
     @JoinColumn(name = "user_id",nullable = false)
     private User userSender;
 
-    @ManyToMany(fetch = FetchType.LAZY,targetEntity = Chat.class,cascade = {CascadeType.PERSIST},mappedBy = "messages")
-    private Set<Chat> chat;
 }
