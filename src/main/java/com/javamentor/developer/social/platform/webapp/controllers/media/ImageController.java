@@ -1,36 +1,44 @@
 package com.javamentor.developer.social.platform.webapp.controllers.media;
 
+import com.javamentor.developer.social.platform.models.dto.ImageDTO;
 import com.javamentor.developer.social.platform.models.entity.media.Image;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
+import com.javamentor.developer.social.platform.webapp.converters.ImageConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/api/image")
+@RequestMapping(value = "/api/image/")
 @Api(value = "ImageApi")
 public class ImageController {
 
-    private final ImageService service;
-
+    private final ImageService   service;
+    private final ImageConverter converter;
 
     @Autowired
-    public ImageController(ImageService service) {
+    public ImageController(ImageService service, @Qualifier("imageConverterImpl") ImageConverter converter) {
         this.service = service;
+        this.converter = converter;
     }
 
     @ApiOperation(value = "Все фото пользователя по id")
     @RequestMapping("all")
-    public ResponseEntity<List<Image>> all(@RequestParam Long id) {
-        return new ResponseEntity<>(service.getAllByUserId(id), HttpStatus.OK);
+    public ResponseEntity<List<ImageDTO>> all(@RequestParam Long id) {
+        List<Image> lstImg = service.getAllByUserId(id);
+        List<ImageDTO> lstDTO = new ArrayList<>();
+        lstImg.forEach(img -> lstDTO.add(converter.getDTO(img)));
+        return new ResponseEntity<>(lstDTO, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Удалить по id")

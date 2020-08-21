@@ -18,7 +18,7 @@ public class ImageDTO {
 
     private String description;
 
-    private String album;
-
     private LocalDateTime persistDateTime;
+
+
 }

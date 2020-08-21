@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -21,17 +21,19 @@ public class ImageDAOImpl extends GenericDaoAbstract<Image, Long> implements Ima
 
     @Override
     public List<Image> getAllByUserId(Long id) {
-        Query q = manager.createQuery("SELECT " +
-                "img.id, " +
-                "img.description " +
+        TypedQuery<Image> q = manager.createQuery("SELECT " +
+                "img " +
                 "FROM Image as img " +
+                "JOIN img.media " +
                 "WHERE img.id = " +
                 "(SELECT m.id " +
                 "FROM Media as m " +
                 "WHERE m.mediaType = 0 " +
-                "AND m.user.userId = :id)")
+                "AND m.user.userId = :id)", Image.class)
                 .setParameter("id", id);
+
         List<Image> lst = q.getResultList();
+        lst.forEach(i -> System.out.println(i.getId()));
         return lst;
     }
 }

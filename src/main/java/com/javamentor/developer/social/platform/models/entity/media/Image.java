@@ -5,7 +5,6 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Blob;
 
 @Entity
 @Getter
@@ -16,10 +15,6 @@ import java.sql.Blob;
 @Table(name = "images")
 public class Image {
 
-    public Image(User user, String icon) {
-        media.setUser(user);
-        media.setUrl(icon);
-    }
 
     @Id
     private Long id;
@@ -30,6 +25,11 @@ public class Image {
 
     @Column(name = "description")
     private String description;
+
+    public Image(User user, String icon) {
+        media.setUser(user);
+        media.setUrl(icon);
+    }
 
     @PrePersist
     private void prePersistFunction() {
@@ -48,3 +48,4 @@ public class Image {
         }
     }
 }
+
