@@ -31,6 +31,11 @@ public class Image {
         media.setUrl(icon);
     }
 
+    public Image(Media media, String description) {
+        this.media = media;
+        this.description = description;
+    }
+
     @PrePersist
     private void prePersistFunction() {
         checkConstraints();

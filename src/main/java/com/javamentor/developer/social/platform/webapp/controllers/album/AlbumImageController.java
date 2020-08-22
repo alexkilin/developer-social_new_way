@@ -41,8 +41,8 @@ public class AlbumImageController {
         service.deleteById(id);
     }
 
-/*    @GetMapping("create")
-    public void create(@RequestParam AlbumImageDTO DTO){
-        converter
-    }*/
+    @GetMapping("create")
+    public void create(@RequestParam AlbumImageDTO DTO) {
+
+    }
 }

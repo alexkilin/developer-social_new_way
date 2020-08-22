@@ -48,4 +48,11 @@ public class Media {
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
+
+    public Media(User user, @NotNull String url, LocalDateTime persistDateTime, Album album) {
+        this.user = user;
+        this.url = url;
+        this.persistDateTime = persistDateTime;
+        this.album = album;
+    }
 }

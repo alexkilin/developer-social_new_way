@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,7 @@ public class ImageController {
     }
 
     @ApiOperation(value = "Все фото пользователя по id")
-    @RequestMapping("all")
+    @GetMapping("all")
     public ResponseEntity<List<ImageDTO>> all(@RequestParam Long id) {
         List<Image> lstImg = service.getAllByUserId(id);
         List<ImageDTO> lstDTO = new ArrayList<>();
@@ -42,14 +43,17 @@ public class ImageController {
     }
 
     @ApiOperation(value = "Удалить по id")
-    @RequestMapping("del")
+    @GetMapping("del")
     public void del(@RequestParam Long id) {
         service.deleteById(id);
     }
 
     @ApiOperation(value = "Добавить")
-    @RequestMapping("create")
-    public void create(@RequestParam Image image) {
-        service.create(image);
+    @GetMapping("create")
+    public void create(@RequestParam ImageDTO DTO, @RequestParam Long userId,
+                       @RequestParam String url, @RequestParam Long albumId) {
+
+        service.create(converter.getImage(DTO, userId, url, albumId));
+
     }
 }
