@@ -49,10 +49,11 @@ public class Media {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    public Media(User user, @NotNull String url, LocalDateTime persistDateTime, Album album) {
+    public Media(User user, @NotNull String url, MediaType type, LocalDateTime persistDateTime, Album album) {
         this.user = user;
         this.url = url;
         this.persistDateTime = persistDateTime;
+        this.mediaType = type;
         this.album = album;
     }
 }
