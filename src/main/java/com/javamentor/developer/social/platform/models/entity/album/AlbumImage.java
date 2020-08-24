@@ -45,4 +45,8 @@ public class AlbumImage {
                     "поле MediaType должно принимать значение MediaType.IMAGE");
         }
     }
+
+    public AlbumImage(Album album) {
+        this.album = album;
+    }
 }

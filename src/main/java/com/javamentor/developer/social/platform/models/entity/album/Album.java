@@ -56,5 +56,14 @@ public class Album {
     @UpdateTimestamp
     private LocalDateTime lastRedactionDate;
 
+    public Album(@NonNull String name, String icon, User userOwnerId, @NotNull MediaType mediaType, LocalDateTime persistDate, LocalDateTime lastRedactionDate) {
+        this.name = name;
+        this.icon = icon;
+        this.userOwnerId = userOwnerId;
+        this.mediaType = mediaType;
+        this.persistDate = persistDate;
+        this.lastRedactionDate = lastRedactionDate;
+    }
+
 
 }

@@ -1,17 +1,18 @@
 package com.javamentor.developer.social.platform.webapp.controllers.album;
 
 import com.javamentor.developer.social.platform.models.dto.AlbumImageDTO;
+import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
+import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumImageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +21,14 @@ import java.util.List;
 public class AlbumImageController {
     private final AlbumImageService   service;
     private final AlbumImageConverter converter;
+    private final UserService         userService;
 
 
     @Autowired
-    public AlbumImageController(AlbumImageService service, AlbumImageConverter converter) {
+    public AlbumImageController(AlbumImageService service, AlbumImageConverter converter, UserService userService) {
         this.service = service;
         this.converter = converter;
+        this.userService = userService;
     }
 
     @GetMapping("all")
@@ -41,8 +44,12 @@ public class AlbumImageController {
         service.deleteById(id);
     }
 
-    @GetMapping("create")
-    public void create(@RequestParam AlbumImageDTO DTO) {
+    @PostMapping("create")
+    public void create(@RequestParam String name, @RequestParam String iconUrl, @RequestParam Long userId) {
+
+        Album album = new Album(name, iconUrl, userService.getById(userId), MediaType.IMAGE,
+                LocalDateTime.now(), LocalDateTime.now());
+        service.create(new AlbumImage(album));
 
     }
 }
