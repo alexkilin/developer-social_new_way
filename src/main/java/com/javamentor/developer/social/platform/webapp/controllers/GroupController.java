@@ -4,6 +4,7 @@ import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/groups")
+@Api(value = "GroupsApi", description = "Операции по получению групп")
 public class GroupController {
     private final GroupDtoService groupDtoService;
 

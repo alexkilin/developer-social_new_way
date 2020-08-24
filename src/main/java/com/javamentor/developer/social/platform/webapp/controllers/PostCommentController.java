@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.comment.
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.PostCommentConverter;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/postsComments")
+@Api(value = "PostsCommentsApi", description = "Операции над комментариями в постах")
 public class PostCommentController {
     public final PostService postService;
     public final PostCommentConverter postCommentConverter;
