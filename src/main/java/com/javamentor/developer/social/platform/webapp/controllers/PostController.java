@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
+import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,7 @@ import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/posts")
@@ -50,9 +53,8 @@ public class PostController {
             @ApiResponse(code = 200, message = "Посты получены"),
             @ApiResponse(code = 400, message = "Посты не могут быть получены")
     })
-
     public ResponseEntity<List<PostDto>> getPosts() {
-       return ResponseEntity.ok(postDtoService.getPosts());
+        return ResponseEntity.ok(postService.getAll().stream().map(postConverter::toDto).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение поста по тэгу")
@@ -65,13 +67,23 @@ public class PostController {
         return ResponseEntity.ok(postDtoService.getPostsByTag(text));
     }
 
+    @ApiOperation(value = "Получение списка новостей пользователя по его ID")
+    @GetMapping("/user/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Посты получены"),
+            @ApiResponse(code = 400, message = "Посты не могут быть получены")
+    })
+    public ResponseEntity<List<PostDto>> getPostsByUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(postDtoService.getPostsByUserId(id));
+    }
+
     @ApiOperation(value = "Добавление поста")
     @PostMapping("/add")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты добавлен"),
             @ApiResponse(code = 400, message = "Посты не может быть добавлен")
     })
-    public ResponseEntity<?> addPost(@RequestBody PostDto postDto){
+    public ResponseEntity<?> addPost(@RequestBody PostDto postDto) {
         List<MediaPostDto> mediaPostDtoList = postDto.getMedia();
         Set<Media> mediaSet = new HashSet<>();
 
@@ -108,10 +120,15 @@ public class PostController {
             userTabsService.deletePost(post);
 
             return ResponseEntity.ok().body(String.format("Deleted Post with ID %d, is successful", id));
-        }
-        else {
+        } else {
             return ResponseEntity.badRequest().body(String.format("Can't find Post with ID %d", id));
         }
     }
 
+
+    @ApiOperation(value = "Получение всех коментов поста по id поста")
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<List<CommentDto>> showPostComments(@PathVariable Long id) {
+        return new ResponseEntity<>(postDtoService.getCommentsByPostId(id), HttpStatus.OK);
+    }
 }

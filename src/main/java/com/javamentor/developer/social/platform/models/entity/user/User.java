@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.models.entity.user;
 
-import com.javamentor.developer.social.platform.models.entity.chat.Message;
-import com.javamentor.developer.social.platform.models.entity.group.Group;
+import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
+import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import lombok.*;
@@ -70,7 +70,7 @@ public class User {
 
     @Column(name = "is_enable", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    private Boolean id_enable = true;
+    private Boolean isEnable = true;
 
     @Column(name = "city")
     private String city;
@@ -99,10 +99,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "language_id"))
     private Set<Language> languages;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Message.class, cascade = {CascadeType.PERSIST})
-    @JoinTable(name = "stared_messages", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "message_id"))
-    private Set<Message> messages;
 
     @OneToMany(fetch = FetchType.LAZY, targetEntity = Post.class, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "bookMarks", joinColumns = @JoinColumn(name = "user_id"),
@@ -113,4 +109,9 @@ public class User {
     @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "audio_id"))
     private Set<Audios> audios;
+
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = GroupChat.class, cascade = {CascadeType.PERSIST})
+    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_chat_id"))
+    private Set<GroupChat> groupChats;
 }

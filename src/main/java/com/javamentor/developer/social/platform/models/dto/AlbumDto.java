@@ -24,7 +24,7 @@ public class AlbumDto {
 
     @ApiModelProperty(notes = "Название альбома")
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "'url' Must not be null when creating and updating AudioAlbum.class")
-    String name;
+    private String name;
 
     @ApiModelProperty(notes = "Адрес иконки (превью) альбома")
     private String icon;
