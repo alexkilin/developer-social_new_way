@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.models.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;

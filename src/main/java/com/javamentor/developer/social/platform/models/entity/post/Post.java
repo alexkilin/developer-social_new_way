@@ -57,4 +57,7 @@ public class Post {
     @JoinTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
     private Set<Tag> tags;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "reposts", joinColumns = @JoinColumn(name = "post_id"))
+    private Set<User> repostPerson;
 }
