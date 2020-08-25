@@ -24,15 +24,15 @@ public class ChatControllers {
         this.messageDto = messageDtoService;
     }
 
-    @GetMapping("/api/user/{userId}/chats")
-    @ApiOperation(value = "Список чатов по Id юзера.")
+    @GetMapping("/api/user/chats")
+    @ApiOperation(value = "Список чатов юзера.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK",responseContainer = "List",response = ChatDto.class),
             @ApiResponse(code =404, message = "404 error"),
 
     })
-    public ResponseEntity<List<ChatDto>> getChatsDto(@PathVariable Long userId){
-        return ResponseEntity.ok(chatDto.getAllChatDtoByUserId(userId));
+    public ResponseEntity<List<ChatDto>> getChatsDto(){
+        return ResponseEntity.ok(chatDto.getAllChatDtoByUserId(60L));
     }
 
     @GetMapping("/api/user/groupChats/{chatId}/messages")
