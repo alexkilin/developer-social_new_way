@@ -21,13 +21,13 @@ public class PostDtoServiceImpl implements PostDtoService {
     }
 
     @Override
-    public List<PostDto> getPosts() {
-        return postDtoDao.getPosts();
+    public List<PostDto> getPostsByTag(String text) {
+        return postDtoDao.getPostsByTag(text);
     }
 
     @Override
-    public List<PostDto> getPostsByTag(String text) {
-        return postDtoDao.getPostsByTag(text);
+    public List<PostDto> getPostsByUserId(Long id) {
+        return postDtoDao.getPostsByUserId(id);
     }
 
     @Override
