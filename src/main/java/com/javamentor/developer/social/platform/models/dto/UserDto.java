@@ -85,7 +85,7 @@ public class UserDto {
             "явно указывать не нужно")
     private String roleName;
 
-    @ApiModelProperty(notes = "Статус пользователе",
+    @ApiModelProperty(notes = "Статус пользователя, придуманный пользователем",
             example = "- На моем компе все работает.\n" +
                       "— Отправим клиенту твой комп.", position = 12)
     private String statusName;
