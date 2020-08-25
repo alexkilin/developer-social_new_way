@@ -1,0 +1,21 @@
+albums:
+  - icon: "icon1"
+    update_date: "2020-08-07 23:35:34.817330"
+    media_type: 0
+    name: "imgAlbum"
+    persist_date: "2020-08-07 23:35:34.817330"
+    user_owner_id_user_id: 1
+
+  - icon: "icon2"
+    update_date: "2020-08-07 23:35:34.817330"
+    media_type: 0
+    name: "imgAlbum"
+    persist_date: "2020-08-07 23:35:34.817330"
+    user_owner_id_user_id: 2
+
+  - icon: "icon3"
+    update_date: "2020-08-07 23:35:34.817330"
+    media_type: 0
+    name: "imgAlbum"
+    persist_date: "2020-08-07 23:35:34.817330"
+    user_owner_id_user_id: 3

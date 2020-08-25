@@ -28,13 +28,3 @@ media:
     persist_date: "2020-08-04 16:47:23.940175"
     media_type: 0
     user_id: 1
-
-  - url: "www.myImage2.ru"
-    persist_date: "2020-08-04 16:47:23.940175"
-    media_type: 0
-    user_id: 2
-
-  - url: "www.myImage3.ru"
-    persist_date: "2020-08-04 16:47:23.940175"
-    media_type: 0
-    user_id: 3

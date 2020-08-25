@@ -1,18 +1,13 @@
 package com.javamentor.developer.social.platform.webapp.converters;
-
-import com.javamentor.developer.social.platform.dao.impl.model.album.AlbumDAOImpl;
-import com.javamentor.developer.social.platform.dao.impl.model.user.UserDAOImpl;
 import com.javamentor.developer.social.platform.models.dto.ImageDTO;
 import com.javamentor.developer.social.platform.models.entity.media.Image;
-import com.javamentor.developer.social.platform.models.entity.media.Media;
-import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 
-@Component
-public abstract class ImageConverter {
+
+@Mapper(componentModel = "spring")
+public class ImageConverter {
 
 
 
