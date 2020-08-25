@@ -12,8 +12,6 @@ public interface PostDtoService {
     List<PostDto> getPostsByTag(String text);
 
     List<CommentDto> getCommentsByPostId(Long id);
-
-    List<PostDto> getPostsByTag(String text);
     
     List<PostDto> getPostsByUserId(Long id);
 }

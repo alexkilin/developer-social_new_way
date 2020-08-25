@@ -12,8 +12,7 @@ import java.util.List;
 @Service
 public class PostDtoServiceImpl implements PostDtoService {
 
-    final
-    PostDtoDao postDtoDao;
+    private final PostDtoDao postDtoDao;
 
     @Autowired
     public PostDtoServiceImpl(PostDtoDao postDtoDao) {
@@ -33,5 +32,10 @@ public class PostDtoServiceImpl implements PostDtoService {
     @Override
     public List<CommentDto> getCommentsByPostId(Long id) {
         return postDtoDao.getCommentsByPostId(id);
+    }
+
+    @Override
+    public List<PostDto> getPosts() {
+        return null;
     }
 }

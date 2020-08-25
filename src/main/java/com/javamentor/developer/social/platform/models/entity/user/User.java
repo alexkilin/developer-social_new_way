@@ -2,8 +2,6 @@ package com.javamentor.developer.social.platform.models.entity.user;
 
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
-import com.javamentor.developer.social.platform.models.entity.chat.Message;
-import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import lombok.*;
@@ -116,9 +114,4 @@ public class User {
     @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_chat_id"))
     private Set<GroupChat> groupChats;
-
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = SingleChat.class, cascade = {CascadeType.PERSIST})
-    @JoinTable(name = "user_single_chat", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id"))
-    private Set<SingleChat> singleChat;
 }

@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
-import com.javamentor.developer.social.platform.service.abstracts.model.chat.ChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,13 +11,11 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class ChatController {
-    MessageService messageService;
-    ChatService chatService;
+    private MessageService messageService;
 
     @Autowired
-    public ChatController(MessageService messageService, ChatService chatService) {
+    public ChatController(MessageService messageService) {
         this.messageService = messageService;
-        this.chatService = chatService;
     }
 
     @MessageMapping("/chat.sendMessage")
