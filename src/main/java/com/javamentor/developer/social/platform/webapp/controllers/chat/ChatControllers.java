@@ -24,33 +24,34 @@ public class ChatControllers {
         this.messageDto = messageDtoService;
     }
 
-
     @GetMapping("/api/user/{userId}/chats")
-    @ApiOperation(value = "Список чатов по Id юзера.", response = ChatDto.class)
+    @ApiOperation(value = "Список чатов по Id юзера.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code =404, message = "404 error")
+            @ApiResponse(code = 200, message = "OK",responseContainer = "List",response = ChatDto.class),
+            @ApiResponse(code =404, message = "404 error"),
+
     })
     public ResponseEntity<List<ChatDto>> getChatsDto(@PathVariable Long userId){
         return ResponseEntity.ok(chatDto.getAllChatDtoByUserId(userId));
     }
 
     @GetMapping("/api/user/groupChats/{chatId}/messages")
-    @ApiOperation(value = "Список сообщений группового чата по Id чата.", response = MessageDto.class)
+    @ApiOperation(value = "Список сообщений группового чата по Id чата.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 200, message = "OK",responseContainer = "List", response = MessageDto.class),
             @ApiResponse(code =404, message = "404 error")
     })
     public ResponseEntity<List<MessageDto>> getAllMessageDtoByGroupChatId(@PathVariable Long chatId){
         return ResponseEntity.ok(messageDto.getAllMessageDtoFromGroupChatByChatId(chatId));
     }
     @GetMapping("/api/user/singleChats/{chatId}/messages")
-    @ApiOperation(value = "Список сообщений одиночного чата по Id чата.", response = MessageDto.class)
+    @ApiOperation(value = "Список сообщений одиночного чата по Id чата.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 200, message = "OK",responseContainer = "List", response = MessageDto.class),
             @ApiResponse(code =404, message = "404 error")
     })
     public ResponseEntity<List<MessageDto>> getAllMessageDtoBySingleChatId(@PathVariable Long chatId){
         return ResponseEntity.ok(messageDto.getAllMessageDtoFromSingleChatByChatId(chatId));
     }
+
 }

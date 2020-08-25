@@ -24,11 +24,11 @@ public class SingleChat {
     private Long id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST},targetEntity = User.class,fetch = FetchType.LAZY)
-    //@JoinColumn(name = "user_one_id")
+    @JoinColumn(name = "user_one_id")
     private User userOne;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST}, targetEntity = User.class)
-   // @JoinColumn(name = "user_two_id")
+    @JoinColumn(name = "user_two_id")
     private User userTwo;
 
     @Column(name = "persist_date", nullable = false)
