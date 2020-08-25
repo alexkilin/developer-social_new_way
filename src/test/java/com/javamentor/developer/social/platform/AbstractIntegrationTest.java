@@ -1,8 +1,4 @@
-package com.javamentor.developer.social.platform;/*  Ќаследовать все интеграционные тесты от этого класса.
- *  «агружает SpringContext один раз, перед началом тестов,а не в каждом тестовом классе.
- *  ѕри необходимости можно переопредел€ть конфиг контекста в любом из тестовых классов.
- */
-
+package com.javamentor.developer.social.platform;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
