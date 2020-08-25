@@ -117,7 +117,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "group_chat_id"))
     private Set<GroupChat> groupChats;
 
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = SingleChat.class, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = SingleChat.class, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "user_single_chat", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "chat_id"))
     private Set<SingleChat> singleChat;
