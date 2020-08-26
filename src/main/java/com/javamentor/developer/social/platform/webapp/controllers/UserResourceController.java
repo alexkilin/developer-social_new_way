@@ -11,10 +11,10 @@ import com.javamentor.developer.social.platform.service.abstracts.model.user.Use
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import com.javamentor.developer.social.platform.webapp.converters.UserFriendsConverter;
 import io.swagger.annotations.*;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/user", produces = "application/json")
 @Api(value = "UserApi", description = "CRUD-Операции с пользователем")
-public class UserController {
+public class UserResourceController {
 
     private final UserDtoService userDtoService;
     private final UserService userService;
@@ -39,7 +39,7 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserController(UserDtoService userDtoService, UserService userService, UserFriendsService userFriendsService,
+    public UserResourceController(UserDtoService userDtoService, UserService userService, UserFriendsService userFriendsService,
                                   UserConverter userConverter, UserFriendsConverter friendsConverter) {
         this.userDtoService = userDtoService;
         this.userService = userService;
@@ -62,7 +62,7 @@ public class UserController {
             return ResponseEntity.ok(userDto);
         }
         logger.info(String.format("Пользователь с указанным ID: %d не найден!", id));
-        return ResponseEntity.status(400).body("");
+        return ResponseEntity.status(400).body(null);
     }
 
     @ApiOperation(value = "Получение списка пользователей")
@@ -101,7 +101,7 @@ public class UserController {
             return ResponseEntity.ok(userConverter.toDto(user));
         }
         logger.info(String.format("Пользователь с ID: %d не существует", userDto.getUserId()));
-        return ResponseEntity.status(400).body("");
+        return ResponseEntity.status(400).body(null);
     }
 
     @ApiOperation(value = "Удаление пользователя по id")
