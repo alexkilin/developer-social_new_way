@@ -18,7 +18,7 @@ public class ChatController {
         this.messageService = messageService;
     }
 
-    @MessageMapping("/chat.yml.sendMessage")
+    @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public Message sendMessage(@Payload Message message) {
         return message;
