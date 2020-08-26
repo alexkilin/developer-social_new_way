@@ -37,17 +37,20 @@ public class PostCommentController {
             @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
     })
     @PostMapping("/{postId}/comment")
-    public ResponseEntity<Void> addCommentToPost(@RequestBody CommentDto commentDto,
+    public ResponseEntity<String> addCommentToPost(@RequestBody CommentDto commentDto,
                                                  @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
         if (!userService.existById(commentDto.getUserDto().getUserId())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            String msg = String.format("Пользователь с id: %d не найден", commentDto.getUserDto().getUserId());
+            return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
         }
         if (!postService.existById(postId)) {
-             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            String msg = String.format("Пост с id: %d не найден", postId);
+            return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
         }
         PostComment postComment = postCommentConverter.toPostCommentEntity(commentDto, postId);
         postComment.getComment().setCommentType(CommentType.POST);
         postCommentService.create(postComment);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        String msg = String.format("Пользователь с id: %d добавил комментарий в пост с id: %s", commentDto.getUserDto().getUserId(), postId);
+        return new ResponseEntity<>(msg, HttpStatus.CREATED);
     }
 }

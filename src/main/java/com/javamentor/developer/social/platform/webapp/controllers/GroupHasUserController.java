@@ -37,18 +37,21 @@ public class GroupHasUserController {
             @ApiResponse(code = 404, message = "Пользователь или группа не найдены")
     })
     @PostMapping(value = "/add", params = {"groupId", "userId"})
-    public ResponseEntity<Void> UserJoinGroup(@ApiParam(value = "Идентификатор группы", example = "1") @RequestParam("groupId") @NonNull Long groupId,
+    public ResponseEntity<String> UserJoinGroup(@ApiParam(value = "Идентификатор группы", example = "1") @RequestParam("groupId") @NonNull Long groupId,
                                               @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
         if (groupHasUserService.verificationUserInGroup(groupId,userId)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            String msg = String.format("Пользователь с id: %d уже есть в группе с id: %s", userId, groupId);
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
         if (userService.existById(userId) & groupService.existById(groupId)) {
             User user = userService.getById(userId);
             Group group = groupService.getById(groupId);
             groupHasUserService.setUserIntoGroup(user, group);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            String msg = String.format("Пользователь с id: %d добавлен в группу с id: %s", userId, groupId);
+            return new ResponseEntity<>(msg, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
+            return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
         }
     }
 }
