@@ -1,5 +1,6 @@
 users:
-  - about_me: "My description about life - Admin0"
+  - user_id: 1
+    about_me: "My description about life - Admin0"
     image: "www.myavatar0.ru/9090"
     city: "SPb"
     date_of_birth: "2008-05-30 15:20:12.121000"
@@ -16,7 +17,8 @@ users:
     role_id: 1
     status_id: 1
 
-  - about_me: "My description about life - Admin1"
+  - user_id: 2
+    about_me: "My description about life - Admin1"
     image: "www.myavatar1.ru/9090"
     city: "SPb"
     date_of_birth: "2008-05-30 15:20:12.121000"
@@ -33,7 +35,8 @@ users:
     role_id: 1
     status_id: 1
 
-  - about_me: "My description about life - Admin2"
+  - user_id: 3
+    about_me: "My description about life - Admin2"
     image: "www.myavatar2.ru/9090"
     city: "SPb"
     date_of_birth: "2008-05-30 15:20:12.121000"
@@ -50,7 +53,8 @@ users:
     role_id: 1
     status_id: 1
 
-  - about_me: "My description about life - Admin3"
+  - user_id: 4
+    about_me: "My description about life - Admin3"
     image: "www.myavatar3.ru/9090"
     city: "SPb"
     date_of_birth: "2008-05-30 15:20:12.121000"
@@ -67,7 +71,8 @@ users:
     role_id: 1
     status_id: 1
 
-  - about_me: "My description about life - Admin4"
+  - user_id: 5
+    about_me: "My description about life - Admin4"
     image: "www.myavatar0.ru/9090"
     city: "SPb"
     date_of_birth: "2008-05-30 15:20:12.121000"
@@ -83,4 +88,3 @@ users:
     active_id: 1
     role_id: 1
     status_id: 1
-

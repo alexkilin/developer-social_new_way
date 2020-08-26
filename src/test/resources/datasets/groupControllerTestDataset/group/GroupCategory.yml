@@ -1,4 +1,6 @@
 group_category:
-  - category: "Programming"
+  - id: 1
+    category: "Programming"
 
-  - category: "Flowers"
+  - id: 2
+    category: "Flowers"
