@@ -15,25 +15,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DataSet(value = {
-        "datasets/group/Group.yml",
-        "datasets/audio/usersAudioTest/User.yml",
-        "datasets/group/GroupCategory.yml",
-        "datasets/audio/usersAudioTest/Active.yml",
-        "datasets/audio/usersAudioTest/Role.yml",
-        "datasets/audio/usersAudioTest/Status.yml",
-        "datasets/group/GroupHasUser.yml",
-        "datasets/post/media.yml",
-        "datasets/post/post_media.yml",
-        "datasets/post/post_tags.yml",
-        "datasets/post/posts.yml",
-        "datasets/post/tags.yml",
-        "datasets/group/GroupWal.yml",
-        "datasets/comment/Comment.yml",
-        "datasets/comment/PostComment.yml"
+        "datasets/postCommentControllerTestDataset/comment/Comment.yml",
+        "datasets/postCommentControllerTestDataset/comment/PostComment.yml",
+        "datasets/postCommentControllerTestDataset/post/media.yml",
+        "datasets/postCommentControllerTestDataset/post/post_media.yml",
+        "datasets/postCommentControllerTestDataset/post/post_tags.yml",
+        "datasets/postCommentControllerTestDataset/post/posts.yml",
+        "datasets/postCommentControllerTestDataset/post/tags.yml",
+        "datasets/postCommentControllerTestDataset/user/Active.yml",
+        "datasets/postCommentControllerTestDataset/user/Role.yml",
+        "datasets/postCommentControllerTestDataset/user/Status.yml",
+        "datasets/postCommentControllerTestDataset/user/User.yml"
 },
-        cleanBefore = true,
-        cleanAfter = true
-)
+        cleanBefore = true)
 class PostCommentControllerTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -52,6 +46,6 @@ class PostCommentControllerTest extends AbstractIntegrationTest {
         .contentType(MediaType.APPLICATION_JSON)
         .content(commentDtoJson))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 }
