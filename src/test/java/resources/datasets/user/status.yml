@@ -1,0 +1,5 @@
+status:
+  - id: 1
+    name: "Online"
+  - id: 2
+    name: "Offline"

@@ -10,10 +10,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.user.Use
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import com.javamentor.developer.social.platform.webapp.converters.UserFriendsConverter;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +28,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/user", produces = "application/json")
 @Api(value = "UserApi", description = "CRUD-Операции с пользователем")
-public class UserResourceController {
+public class UserController {
 
     private final UserDtoService userDtoService;
     private final UserService userService;
@@ -41,7 +39,7 @@ public class UserResourceController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserResourceController(UserDtoService userDtoService, UserService userService, UserFriendsService userFriendsService,
+    public UserController(UserDtoService userDtoService, UserService userService, UserFriendsService userFriendsService,
                                   UserConverter userConverter, UserFriendsConverter friendsConverter) {
         this.userDtoService = userDtoService;
         this.userService = userService;
@@ -52,22 +50,24 @@ public class UserResourceController {
 
     @ApiOperation(value = "Получение пользователя по id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь получен")
+            @ApiResponse(code = 200, message = "Пользователь получен"),
+            @ApiResponse(code = 400, message = "Пользователь не найден", response = Null.class)
     })
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserDto> getUserById(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
         Optional<UserDto> optionalUserDto = userDtoService.getUserDtoById(id);
         if (optionalUserDto.isPresent()) {
             UserDto userDto = optionalUserDto.get();
+            logger.info(String.format("Пользователь с ID: %d получен!", id));
             return ResponseEntity.ok(userDto);
         }
         logger.info(String.format("Пользователь с указанным ID: %d не найден!", id));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist", id));
+        return ResponseEntity.status(400).body("");
     }
 
     @ApiOperation(value = "Получение списка пользователей")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Список пользователей получен")
+            @ApiResponse(code = 200, message = "Список пользователей получен", responseContainer = "List", response = UserDto.class)
     })
     @GetMapping("/all")
     public ResponseEntity<List<UserDto>> getAll() {
@@ -77,10 +77,10 @@ public class UserResourceController {
 
     @ApiOperation(value = "Создание пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь создан")
+            @ApiResponse(code = 200, message = "Пользователь создан", response = UserDto.class)
     })
     @PostMapping("/create")
-    public ResponseEntity<UserDto> create(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NonNull UserDto userDto) {
         userService.create(userConverter.toEntity(userDto));
         logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
         return ResponseEntity.ok(userDto);
@@ -88,11 +88,12 @@ public class UserResourceController {
 
     @ApiOperation(value = "Обновление пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь обновлен")
+            @ApiResponse(code = 200, message = "Пользователь обновлен", response = UserDto.class),
+            @ApiResponse(code = 400, message = "Пользователь не обновлен из-за несоответствия id", response = Null.class)
     })
     @PutMapping("/update")
     @Validated(OnUpdate.class)
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserDto userDto) {
         User user = userConverter.toEntity(userDto);
         if (userService.existById(userDto.getUserId())) {
             userService.update(user);
@@ -100,28 +101,41 @@ public class UserResourceController {
             return ResponseEntity.ok(userConverter.toDto(user));
         }
         logger.info(String.format("Пользователь с ID: %d не существует", userDto.getUserId()));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist", userDto.getUserId()));
+        return ResponseEntity.status(400).body("");
     }
 
     @ApiOperation(value = "Удаление пользователя по id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь удален")
+            @ApiResponse(code = 200, message = "Пользователь удален", response = String.class),
+            @ApiResponse(code = 400, message = "Пользователь не удален из-за несоответствия id", response = String.class)
     })
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
-        userService.deleteById(id);
-        logger.info(String.format("Пользователь с ID: %d удалён успешно ", id));
-        return ResponseEntity.ok("Success");
+    public ResponseEntity<String> deleteUserById(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
+        if (userService.existById(id)) {
+            userService.deleteById(id);
+            logger.info(String.format("Пользователь с ID: %d удалён успешно ", id));
+            return ResponseEntity.ok("Success");
+        } else {
+            logger.info(String.format("Пользователь с ID: %d не удалён", id));
+            return ResponseEntity.status(400).body("User with such ID not found!");
+        }
     }
 
     @ApiOperation(value = "Получение списка друзей пользователя по id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Список друзей пользователя получен")
+            @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = FriendDto.class),
+            @ApiResponse(code = 400, message = "Пользователя с таким id не существует", response = Null.class)
     })
     @GetMapping("/getUserFriends")
-    public ResponseEntity<List<FriendDto>> getUserFriends(@PathVariable Long id) {
-        List<Friend> userFriends = userFriendsService.getUserFriendsById(id);
-        logger.info(String.format("Получен список друзей пользователя"));
-        return ResponseEntity.ok(friendsConverter.toDto(userFriends));
+    public ResponseEntity<List<FriendDto>> getUserFriends(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
+        if (userService.existById(id)) {
+            List<Friend> userFriends = userFriendsService.getUserFriendsById(id);
+            logger.info(String.format("Получен список друзей пользователя"));
+            return ResponseEntity.ok(friendsConverter.toDto(userFriends));
+        } else {
+            logger.info(String.format("Пользователя с таким id не существует, список друзей пользователя не получен"));
+            return ResponseEntity.status(400).body(null);
+        }
     }
 }
+

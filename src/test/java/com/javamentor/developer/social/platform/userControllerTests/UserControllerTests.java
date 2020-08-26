@@ -12,6 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @DataSet(value = {
+        "datasets/user/active.yml",
+        "datasets/user/role.yml",
+        "datasets/user/status.yml",
         "datasets/user/userFriends.yml",
         "datasets/user/user.yml"
 }, cleanBefore = true, cleanAfter = true)
