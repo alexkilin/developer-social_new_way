@@ -1,0 +1,137 @@
+package com.javamentor.developer.social.platform.userControllerTests;
+
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.javamentor.developer.social.platform.AbstractIntegrationTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+
+@DataSet(value = {
+        "datasets/user/userFriends.yml",
+        "datasets/user/user.yml"
+}, cleanBefore = true, cleanAfter = true)
+public class UserControllerTests extends AbstractIntegrationTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void findUserById() throws Exception {
+        mockMvc.perform(get("/api/user/{id}", 4L))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(4))
+                .andExpect(jsonPath("$.first_name").value("Admin3"))
+                .andExpect(jsonPath("$.email").value("admin0@user.ru"))
+                .andExpect(jsonPath("$.role_id").value(1))
+                .andExpect(jsonPath("$.about_me").value("My description about life - Admin3"))
+                .andExpect(jsonPath("$.city").value("SPB"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void findUserInvalidId() throws Exception {
+        this.mockMvc.perform(get("/api/user/{id}", 115L))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("User with ID: 115 does not exist."));
+    }
+
+    @Test
+    void findUserInvalidIdPathVariable() throws Exception {
+        this.mockMvc.perform(get("/api/user/{id}", "abc"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("ID can be only a number!"));
+    }
+
+    @Test
+    void findAllUsers() throws Exception {
+        mockMvc.perform(get("/api/user/all"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(5));
+    }
+
+    @Test
+    void createUser() throws Exception {
+        mockMvc.perform(post("/api/user/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"first_name\": \"Админ\"," +
+                        "\"last_name\": \"LastName\"," +
+                        "\"date_of_birth\": \"1994-05-30 15:20:12.121000\"," +
+                        "\"about_me\": \"Some information\"," +
+                        "\"education\": \"PTU\"," +
+                        "\"status_id\": \"1\"," +
+                        "\"active_id\": \"1\"," +
+                        "\"image\": \"www.myavatar0.ru/9090\"," +
+                        "\"email\": \"admin@admin.ru\"," +
+                        "\"password\": \"adminpass\"," +
+                        "\"persist_date\": \"2020-01-01 10:00:00\"," +
+                        "\"last_redaction_date\": \"2020-02-02 20:00:00\"," +
+                        "\"is_enable\": \"1\"," +
+                        "\"role_id\": \"1\"," +
+                        "\"city\": \"Msc\"," +
+                        "\"link_site\": \"mysite.ru\"" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.first_name").value("Админ"))
+                .andExpect(jsonPath("$.email").value("admin@admin.ru"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void updateUser() throws Exception {
+        this.mockMvc.perform(put("/api/user/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"id\": 5," +
+                        "\"first_name\": \"Update\"," +
+                        "\"email\": \"Update@email.com\"," +
+                        "\"password\": \"Qwerty123\"" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("5"))
+                .andExpect(jsonPath("$.first_name").value("Update"))
+                .andExpect(jsonPath("$.email").value("Update@email.com"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void deleteUserWrongId() throws Exception {
+        mockMvc.perform(delete("/api/user/delete/555")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void deleteUserOK() throws Exception {
+        mockMvc.perform(delete("/api/user/delete/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void findUserFriends() throws Exception {
+        mockMvc.perform(get("/api/user/getFriends/1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(4));
+    }
+}
+
