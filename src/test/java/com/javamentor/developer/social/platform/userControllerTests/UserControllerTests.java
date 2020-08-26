@@ -29,12 +29,12 @@ public class UserControllerTests extends AbstractIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(4))
-                .andExpect(jsonPath("$.first_name").value("Admin3"))
+                .andExpect(jsonPath("$.userId").value(4))
+                .andExpect(jsonPath("$.firstName").value("Admin3"))
                 .andExpect(jsonPath("$.email").value("admin0@user.ru"))
-                .andExpect(jsonPath("$.role_id").value(1))
-                .andExpect(jsonPath("$.about_me").value("My description about life - Admin3"))
-                .andExpect(jsonPath("$.city").value("SPB"))
+                .andExpect(jsonPath("$.roleName").value("User"))
+                .andExpect(jsonPath("$.aboutMe").value("My description about life - Admin3"))
+                .andExpect(jsonPath("$.city").value("SPb"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
@@ -69,26 +69,26 @@ public class UserControllerTests extends AbstractIntegrationTest {
         mockMvc.perform(post("/api/user/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
-                        "\"first_name\": \"Админ\"," +
-                        "\"last_name\": \"LastName\"," +
-                        "\"date_of_birth\": \"1994-05-30 15:20:12.121000\"," +
-                        "\"about_me\": \"Some information\"," +
+                        "\"firstName\": \"Админ\"," +
+                        "\"lastName\": \"LastName\"," +
+                        "\"dateOfBirth\": \"1994-05-30 15:20:12.121000\"," +
+                        "\"aboutMe\": \"Some information\"," +
                         "\"education\": \"PTU\"," +
-                        "\"status_id\": \"1\"," +
-                        "\"active_id\": \"1\"," +
+                        "\"statusId\": \"1\"," +
+                        "\"activeId\": \"1\"," +
                         "\"image\": \"www.myavatar0.ru/9090\"," +
                         "\"email\": \"admin@admin.ru\"," +
                         "\"password\": \"adminpass\"," +
-                        "\"persist_date\": \"2020-01-01 10:00:00\"," +
-                        "\"last_redaction_date\": \"2020-02-02 20:00:00\"," +
-                        "\"is_enable\": \"1\"," +
-                        "\"role_id\": \"1\"," +
+                        "\"persistDate\": \"2020-01-01 10:00:00\"," +
+                        "\"lastRedactionDate\": \"2020-02-02 20:00:00\"," +
+                        "\"isEnable\": \"1\"," +
+                        "\"roleId\": \"1\"," +
                         "\"city\": \"Msc\"," +
-                        "\"link_site\": \"mysite.ru\"" +
+                        "\"linkSite\": \"mysite.ru\"" +
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.first_name").value("Админ"))
+                .andExpect(jsonPath("$.firstName").value("Админ"))
                 .andExpect(jsonPath("$.email").value("admin@admin.ru"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
@@ -98,15 +98,15 @@ public class UserControllerTests extends AbstractIntegrationTest {
         this.mockMvc.perform(put("/api/user/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
-                        "\"id\": 5," +
-                        "\"first_name\": \"Update\"," +
+                        "\"userId\": 5," +
+                        "\"firstName\": \"Update\"," +
                         "\"email\": \"Update@email.com\"," +
                         "\"password\": \"Qwerty123\"" +
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("5"))
-                .andExpect(jsonPath("$.first_name").value("Update"))
+                .andExpect(jsonPath("$.userId").value("5"))
+                .andExpect(jsonPath("$.firstName").value("Update"))
                 .andExpect(jsonPath("$.email").value("Update@email.com"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }

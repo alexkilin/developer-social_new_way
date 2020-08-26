@@ -62,7 +62,7 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .persistDate((LocalDateTime) objects[9])
                                     .lastRedactionDate((LocalDateTime) objects[10])
                                     .city((String) objects[11])
-                                    .roleName(((Role) objects[12]).getName())
+                                    .roleName(((String) objects[12]))
                                     .statusName(((Status) objects[13]).getName())
                                     .build();
                         }
