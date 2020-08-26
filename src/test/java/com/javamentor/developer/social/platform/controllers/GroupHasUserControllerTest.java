@@ -11,22 +11,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DataSet(value = {
-        "datasets/group/Group.yml",
-        "datasets/audio/usersAudioTest/User.yml",
-        "datasets/group/GroupCategory.yml",
-        "datasets/audio/usersAudioTest/Active.yml",
-        "datasets/audio/usersAudioTest/Role.yml",
-        "datasets/audio/usersAudioTest/Status.yml",
-        "datasets/group/GroupHasUser.yml",
-        "datasets/post/media.yml",
-        "datasets/post/post_media.yml",
-        "datasets/post/post_tags.yml",
-        "datasets/post/posts.yml",
-        "datasets/post/tags.yml",
-        "datasets/group/GroupWal.yml"
+        "datasets/groupHasUserControllerTestDataset/group/Group.yml",
+        "datasets/groupHasUserControllerTestDataset/group/GroupCategory.yml",
+        "datasets/groupHasUserControllerTestDataset/group/GroupHasUser.yml",
+        "datasets/groupHasUserControllerTestDataset/user/Active.yml",
+        "datasets/groupHasUserControllerTestDataset/user/Role.yml",
+        "datasets/groupHasUserControllerTestDataset/user/Status.yml",
+        "datasets/groupHasUserControllerTestDataset/user/User.yml"
 },
-        cleanBefore = true,
-        cleanAfter = true)
+        cleanBefore = true)
 class GroupHasUserControllerTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -36,6 +29,6 @@ class GroupHasUserControllerTest extends AbstractIntegrationTest {
     void userJoinGroup() throws Exception {
         this.mockMvc.perform(post("/api/groupsHasUsers/add?groupId=5&userId=1"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 }
