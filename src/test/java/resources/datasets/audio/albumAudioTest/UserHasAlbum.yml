@@ -1,0 +1,12 @@
+user_has_album:
+  - persist_date: "2020-08-07 23:35:34.817330"
+    album_id: 1
+    user_user_id: 1
+
+  - persist_date: "2020-08-07 23:35:34.817330"
+    album_id: 2
+    user_user_id: 1
+
+  - persist_date: "2020-08-07 23:35:34.817330"
+    album_id: 3
+    user_user_id: 1
