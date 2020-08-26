@@ -13,16 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DataSet(value = {
         "image/Role.yml",
-        "image/Album.yml",
         "image/Status.yml",
-        "image/User.yml",
-        "image/Media.yml",
-        "image/Image.yml",
-        "image/Album.yml",
-        "image/AlbumImage.yml",
-        }, cleanBefore = true)
+        "image/Active.yml",
+        "image/User.yml"
+}, cleanBefore = true)
 
 public class ImageTest extends AbstractIntegrationTest {
+
     @Autowired
     private MockMvc mockMvc;
 
