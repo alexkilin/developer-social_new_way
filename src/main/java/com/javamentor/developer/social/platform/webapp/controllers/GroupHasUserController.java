@@ -5,8 +5,8 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupHasUserService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +31,14 @@ public class GroupHasUserController {
     }
 
     @ApiOperation(value = "Вступление в группу пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Пользователь вступил в группу"),
+            @ApiResponse(code = 400, message = "Пользователь уже есть в данной группе"),
+            @ApiResponse(code = 404, message = "Пользователь или группа не найдены")
+    })
     @PostMapping(value = "/add", params = {"groupId", "userId"})
-    public ResponseEntity<Void> UserJoinGroup(@RequestParam("groupId") Long groupId, @RequestParam("userId") Long userId) {
+    public ResponseEntity<Void> UserJoinGroup(@ApiParam(value = "Идентификатор группы", example = "1") @RequestParam("groupId") @NonNull Long groupId,
+                                              @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
         if (groupHasUserService.verificationUserInGroup(groupId,userId)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -40,9 +46,9 @@ public class GroupHasUserController {
             User user = userService.getById(userId);
             Group group = groupService.getById(groupId);
             groupHasUserService.setUserIntoGroup(user, group);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

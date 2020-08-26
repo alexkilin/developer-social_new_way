@@ -7,8 +7,8 @@ import com.javamentor.developer.social.platform.service.abstracts.model.comment.
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.PostCommentConverter;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +32,13 @@ public class PostCommentController {
     }
 
     @ApiOperation(value = "Добавление комментария к посту")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Комментарий добавлен"),
+            @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
+    })
     @PostMapping("/{postId}/comment")
-    public ResponseEntity<Void> addCommentToPost(@RequestBody CommentDto commentDto, @PathVariable Long postId) {
+    public ResponseEntity<Void> addCommentToPost(@RequestBody CommentDto commentDto,
+                                                 @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
         if (!userService.existById(commentDto.getUserDto().getUserId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -43,6 +48,6 @@ public class PostCommentController {
         PostComment postComment = postCommentConverter.toPostCommentEntity(commentDto, postId);
         postComment.getComment().setCommentType(CommentType.POST);
         postCommentService.create(postComment);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
