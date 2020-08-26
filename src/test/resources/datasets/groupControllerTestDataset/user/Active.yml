@@ -1,0 +1,5 @@
+active:
+  - name: "ACTIVE"
+#    id: 1
+  - name: "DISABLED"
+#    id: 2
