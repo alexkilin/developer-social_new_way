@@ -4,7 +4,6 @@ import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
-import com.javamentor.developer.social.platform.models.entity.chat.Chat;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
@@ -73,7 +72,6 @@ public class TestDataInitService {
 
     private User[] users = new User[numOfUsers];
     private Media[] medias = new Media[numOfMedias];
-    private Chat[] chats = new Chat[numOfChats];
     private Message[] messages = new Message[numOfMessages];
     private Post[] posts = new Post[numOfPosts];
     private Group[] groups = new Group[numOfGroups];
@@ -148,7 +146,6 @@ public class TestDataInitService {
         createUserEntity();
         createMediaEntity();
         createTagEntity();
-        createChatEntity();
         createMessageEntity();
         createAlbumEntity();
         createFriendEntity();
@@ -251,7 +248,6 @@ public class TestDataInitService {
                     .lastName("LastNameUser" + i)
                     .lastRedactionDate(userLocalDateNow)
                     .linkSite("www.mysite.ru")
-                    .messages(null)
                     .password("userpass" + i)
                     .persistDate(userLocalDate)
                     .posts(null)
@@ -296,15 +292,6 @@ public class TestDataInitService {
     }
 
 
-    private void createChatEntity() {
-        for (int i = 0; i != numOfChats; i++) {
-            chats[i] = Chat.builder().
-                    persistDate(userLocalDate)
-                    .title(i + " init chat.yml")
-                    .build();
-        }
-    }
-
     private void createMessageEntity() {
         int num = 0;
         int startNum = numOfMessages / numOfChats;
@@ -315,7 +302,6 @@ public class TestDataInitService {
                 messages[i] = Message.builder()
                         .message("Test init message" + i)
                         .is_unread(true)
-                        .chat(chats[j])
                         .lastRedactionDate(userLocalDateNow)
                         .media(mediaSet)
                         .userSender(users[i])
@@ -590,7 +576,6 @@ public class TestDataInitService {
             messageSet.add(messages[messageNum++]);
             messageNum++;
             users[i].setPosts(postSet);
-            users[i].setMessages(messageSet);
             userService.update(users[i]);
         }
     }

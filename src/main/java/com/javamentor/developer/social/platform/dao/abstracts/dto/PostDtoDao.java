@@ -8,7 +8,6 @@ import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import java.util.List;
 
 public interface PostDtoDao {
-    List<PostDto> getPosts();
     List<PostDto> getPostsByTag(String text);
 
     List<CommentDto> getCommentsByPostId(Long id);
@@ -16,4 +15,6 @@ public interface PostDtoDao {
     List<MediaPostDto> getMediasByPostId(Long id);
 
     List<TagDto> getTagsByPostId(Long id);
+
+    List<PostDto> getPostsByUserId(Long id);
 }

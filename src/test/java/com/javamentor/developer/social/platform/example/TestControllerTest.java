@@ -1,20 +1,16 @@
 package com.javamentor.developer.social.platform.example;
 
 import com.github.database.rider.core.api.dataset.DataSet;
-import com.javamentor.developer.social.platform.AbstractInitTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 
-@DataSet(value = {"testdata/chat.yml.yml"}, cleanBefore = true, cleanAfter = true)
-class TestControllerTest extends AbstractInitTest {
+@DataSet(value = {"testdata/chat.yml"}, cleanBefore = true, cleanAfter = true)
+class TestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

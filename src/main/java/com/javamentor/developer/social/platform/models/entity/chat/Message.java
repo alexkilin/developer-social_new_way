@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -15,8 +16,8 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @Table(name = "messages")
 public class Message {
 
@@ -41,14 +42,14 @@ public class Message {
     @CreationTimestamp
     private LocalDateTime persistDate;
 
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Media.class, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Media.class, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "media_messages", joinColumns = @JoinColumn(name = "message_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id"))
     private Set<Media> media;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY,targetEntity = User.class,cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "user_id",nullable = false)
     private User userSender;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Chat.class, cascade = {CascadeType.PERSIST})
-    private Chat chat;
 }

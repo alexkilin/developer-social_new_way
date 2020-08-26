@@ -1,8 +1,4 @@
-package com.javamentor.developer.social.platform;/*  ����������� ��� �������������� ����� �� ����� ������.
- *  ��������� SpringContext ���� ���, ����� ������� ������,� �� � ������ �������� ������.
- *  ��� ������������� ����� �������������� ������ ��������� � ����� �� �������� �������.
- */
-
+package com.javamentor.developer.social.platform;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

@@ -10,8 +10,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class StatusServiceImpl extends GenericServiceAbstract<Status, Long> implements StatusService {
 
+    private final StatusDAO statusDAO;
+
     @Autowired
     public StatusServiceImpl(StatusDAO dao) {
         super(dao);
+        statusDAO = dao;
+    }
+
+    @Override
+    public Status getByStatusName(String name) {
+        return statusDAO.getByName(name);
     }
 }

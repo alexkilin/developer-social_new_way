@@ -10,8 +10,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleServiceImpl extends GenericServiceAbstract<Role, Long> implements RoleService {
 
+    private final RoleDAO roleDAO;
+
     @Autowired
     public RoleServiceImpl(RoleDAO dao) {
         super(dao);
+        roleDAO = dao;
+    }
+
+    @Override
+    public Role getByRoleName(String name) {
+        return roleDAO.getByName(name);
     }
 }
