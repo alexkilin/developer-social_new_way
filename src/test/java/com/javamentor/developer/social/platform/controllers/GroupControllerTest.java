@@ -25,14 +25,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "resources/datasets/groupControllerTestDataset/post/posts.yml",
         "resources/datasets/groupControllerTestDataset/post/tags.yml",
         "resources/datasets/groupControllerTestDataset/group/GroupWal.yml"
-})
+},
+        cleanBefore = true)
 class GroupControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    @DataSet()
     void getAllGroups() throws Exception {
         this.mockMvc.perform(get("/api/groups/all?page=1&size=3"))
                 .andDo(print())
@@ -41,9 +41,6 @@ class GroupControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @DataSet(value = {
-            "resources/datasets/groupControllerTestDataset/user/Active.yml"
-    })
     void showGroup() throws Exception {
         this.mockMvc.perform(get("/api/groups/{id}", "1"))
                 .andDo(print())
@@ -59,9 +56,6 @@ class GroupControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @DataSet(value = {
-            "resources/datasets/groupControllerTestDataset/user/Active.yml"
-    })
     void showGroupWall() throws Exception {
         this.mockMvc.perform(get("/api/groups/{id}/posts?page=1&size=2", "1"))
                 .andDo(print())
@@ -70,7 +64,6 @@ class GroupControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @DataSet()
     void findGroupByName() throws Exception {
         this.mockMvc.perform(get("/api/groups/name?name=JAVA IS 0"))
                 .andDo(print())
