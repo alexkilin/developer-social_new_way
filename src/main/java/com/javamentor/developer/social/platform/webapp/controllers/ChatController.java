@@ -24,7 +24,7 @@ public class ChatController {
         return message;
     }
 
-    @MessageMapping("/chat.addUser")
+    @MessageMapping("/chat.yml.addUser")
     @SendTo("/topic/public")
     public Message addUser(@Payload Message message,
                                SimpMessageHeaderAccessor headerAccessor) {
