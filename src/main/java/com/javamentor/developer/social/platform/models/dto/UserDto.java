@@ -65,14 +65,6 @@ public class UserDto {
     @Size(groups = OnCreate.class, min = 8, message = "Поле password должен быть не мение 8 символов.")
     private String password;
 
-    @ApiModelProperty(notes = "Дата создания учетной записи пользователя, "
-            + "явно указывать не нужно, назначается автоматически при создании", example = "не указывать", hidden = true)
-    private LocalDateTime persistDate;
-
-    @ApiModelProperty(notes = "Дата изменения учетной записи пользователя, явно указывать не нужно, " +
-            "назначается автоматически при внесении изменений", example = "не указывать", hidden = true)
-    private LocalDateTime lastRedactionDate;
-
     @ApiModelProperty(notes = "Город пользователя", example = "Moscow", position = 11)
     private String city;
 

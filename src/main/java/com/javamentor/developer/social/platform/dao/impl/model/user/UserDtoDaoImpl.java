@@ -38,12 +38,9 @@ class UserDtoDaoImpl implements UserDtoDao {
                     "u.avatar, " +
                     "u.email, " +
                     "u.password, " +
-                    "u.persistDate, " +
-                    "u.lastRedactionDate, " +
                     "u.city, " +
                     "u.role.name, " +
                     "u.status, " +
-                    "u.active " +
                     "FROM User u")
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
@@ -59,11 +56,9 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .avatar((String) objects[6])
                                     .email((String) objects[7])
                                     .password((String) objects[8])
-                                    .persistDate((LocalDateTime) objects[9])
-                                    .lastRedactionDate((LocalDateTime) objects[10])
-                                    .city((String) objects[11])
-                                    .roleName(((String) objects[12]))
-                                    .statusName(((Status) objects[13]).getName())
+                                    .city((String) objects[9])
+                                    .roleName(((String) objects[10]))
+                                    .statusName(((Status) objects[11]).getName())
                                     .build();
                         }
 
