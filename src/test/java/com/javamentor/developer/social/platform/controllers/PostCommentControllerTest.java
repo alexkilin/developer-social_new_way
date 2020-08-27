@@ -15,17 +15,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DataSet(value = {
-        "datasets/postCommentControllerTestDataset/comment/Comment.yml",
-        "datasets/postCommentControllerTestDataset/comment/PostComment.yml",
-        "datasets/postCommentControllerTestDataset/post/media.yml",
-        "datasets/postCommentControllerTestDataset/post/post_media.yml",
-        "datasets/postCommentControllerTestDataset/post/post_tags.yml",
-        "datasets/postCommentControllerTestDataset/post/posts.yml",
-        "datasets/postCommentControllerTestDataset/post/tags.yml",
-        "datasets/postCommentControllerTestDataset/user/Active.yml",
-        "datasets/postCommentControllerTestDataset/user/Role.yml",
-        "datasets/postCommentControllerTestDataset/user/Status.yml",
-        "datasets/postCommentControllerTestDataset/user/User.yml"
+        "datasets/postcommentset/comment/Comment.yml",
+        "datasets/postcommentset/comment/PostComment.yml",
+        "datasets/postcommentset/post/media.yml",
+        "datasets/postcommentset/post/post_media.yml",
+        "datasets/postcommentset/post/post_tags.yml",
+        "datasets/postcommentset/post/posts.yml",
+        "datasets/postcommentset/post/tags.yml",
+        "datasets/postcommentset/user/Active.yml",
+        "datasets/postcommentset/user/Role.yml",
+        "datasets/postcommentset/user/Status.yml",
+        "datasets/postcommentset/user/User.yml"
 },
         cleanBefore = true)
 class PostCommentControllerTest extends AbstractIntegrationTest {

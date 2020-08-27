@@ -12,19 +12,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DataSet(value = {
-        "resources/datasets/groupControllerTestDataset/group/Group.yml",
-        "resources/datasets/groupControllerTestDataset/user/User.yml",
-        "resources/datasets/groupControllerTestDataset/group/GroupCategory.yml",
-        "resources/datasets/groupControllerTestDataset/user/Active.yml",
-        "resources/datasets/groupControllerTestDataset/user/Role.yml",
-        "resources/datasets/groupControllerTestDataset/user/Status.yml",
-        "resources/datasets/groupControllerTestDataset/group/GroupHasUser.yml",
-        "resources/datasets/groupControllerTestDataset/post/media.yml",
-        "resources/datasets/groupControllerTestDataset/post/post_media.yml",
-        "resources/datasets/groupControllerTestDataset/post/post_tags.yml",
-        "resources/datasets/groupControllerTestDataset/post/posts.yml",
-        "resources/datasets/groupControllerTestDataset/post/tags.yml",
-        "resources/datasets/groupControllerTestDataset/group/GroupWal.yml"
+        "datasets/groupset/group/Group.yml",
+        "datasets/groupset/user/User.yml",
+        "datasets/groupset/group/GroupCategory.yml",
+        "datasets/groupset/user/Active.yml",
+        "datasets/groupset/user/Role.yml",
+        "datasets/groupset/user/Status.yml",
+        "datasets/groupset/group/GroupHasUser.yml",
+        "datasets/groupset/post/media.yml",
+        "datasets/groupset/post/post_media.yml",
+        "datasets/groupset/post/post_tags.yml",
+        "datasets/groupset/post/posts.yml",
+        "datasets/groupset/post/tags.yml",
+        "datasets/groupset/group/GroupWal.yml"
 },
         cleanBefore = true)
 class GroupControllerTest extends AbstractIntegrationTest {

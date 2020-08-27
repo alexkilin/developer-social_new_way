@@ -11,13 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DataSet(value = {
-        "datasets/groupHasUserControllerTestDataset/group/Group.yml",
-        "datasets/groupHasUserControllerTestDataset/group/GroupCategory.yml",
-        "datasets/groupHasUserControllerTestDataset/group/GroupHasUser.yml",
-        "datasets/groupHasUserControllerTestDataset/user/Active.yml",
-        "datasets/groupHasUserControllerTestDataset/user/Role.yml",
-        "datasets/groupHasUserControllerTestDataset/user/Status.yml",
-        "datasets/groupHasUserControllerTestDataset/user/User.yml"
+        "datasets/grouphasuserset/group/Group.yml",
+        "datasets/grouphasuserset/group/GroupCategory.yml",
+        "datasets/grouphasuserset/group/GroupHasUser.yml",
+        "datasets/grouphasuserset/user/Active.yml",
+        "datasets/grouphasuserset/user/Role.yml",
+        "datasets/grouphasuserset/user/Status.yml",
+        "datasets/grouphasuserset/user/User.yml"
 },
         cleanBefore = true)
 class GroupHasUserControllerTest extends AbstractIntegrationTest {
