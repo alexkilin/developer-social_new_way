@@ -12,20 +12,24 @@ import java.util.List;
 
 @Repository
 public class ImageDAOImpl extends GenericDaoAbstract<Image, Long> implements ImageDAO {
+
     private final EntityManager manager;
 
     @Autowired
     public ImageDAOImpl(EntityManager manager) {
+
         this.manager = manager;
+
     }
 
     @Override
     public List<Image> getAllByUserId(Long id) {
-        TypedQuery<Image> q = manager.createQuery("SELECT " +
-                "img " +
+
+        TypedQuery<Image> q = manager.createQuery(
+                "SELECT img " +
                 "FROM Image as img " +
                 "JOIN img.media " +
-                "WHERE img.id = " +
+                "WHERE img.id IN" +
                 "(SELECT m.id " +
                 "FROM Media as m " +
                 "WHERE m.mediaType = 0 " +
@@ -33,7 +37,8 @@ public class ImageDAOImpl extends GenericDaoAbstract<Image, Long> implements Ima
                 .setParameter("id", id);
 
         List<Image> lst = q.getResultList();
-        lst.forEach(i -> System.out.println(i.getId()));
+
         return lst;
+
     }
 }

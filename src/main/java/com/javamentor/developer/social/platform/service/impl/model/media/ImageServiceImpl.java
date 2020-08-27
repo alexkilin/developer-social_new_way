@@ -11,15 +11,19 @@ import java.util.List;
 
 @Service
 public class ImageServiceImpl extends GenericServiceAbstract<Image, Long> implements ImageService {
+
     private final ImageDAO DAO;
 
     @Autowired
-    public ImageServiceImpl(ImageDAO dao, ImageDAO dao1) {
+    public ImageServiceImpl(ImageDAO dao) {
+
         super(dao);
-        DAO = dao1;
+        DAO = dao;
+
     }
 
-    public List<Image> getAllByUserId(Long id){
+    public List<Image> getAllByUserId(Long id) {
+
         return DAO.getAllByUserId(id);
 
     }

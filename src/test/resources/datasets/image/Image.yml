@@ -1,2 +1,18 @@
-image:
-  -
+images:
+  - description: "img1"
+    media_id: "1"
+
+  - description: "img2"
+    media_id: "2"
+
+  - description: "img3"
+    media_id: "3"
+
+  - description: "img4"
+    media_id: "4"
+
+  - description: "img5"
+    media_id: "5"
+
+  - description: "img6"
+    media_id: "6"

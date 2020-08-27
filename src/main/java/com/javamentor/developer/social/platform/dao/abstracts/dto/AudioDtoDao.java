@@ -12,7 +12,6 @@ public interface AudioDtoDao {
 
     Optional<AudioDto> getAudioOfName(String name);
 
-
     Audios getAudioOfId(Long id);
 
     List<AudioDto> getAudioOfAlbum(String album);
