@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
+import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
@@ -12,9 +13,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.post.Pos
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.PostConverter;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/posts")
+@RequestMapping(value = "api/posts", produces = "application/json")
+@Api(value = "PostApi", description = "Операции с постами пользователя (получение, добавление, удаление)")
 public class PostController {
     private final PostDtoService postDtoService;
     private final PostConverter postConverter;
@@ -48,42 +48,35 @@ public class PostController {
 
 
     @ApiOperation(value = "Получение списка всех постов")
-    @GetMapping
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены"),
-            @ApiResponse(code = 400, message = "Посты не могут быть получены")
-    })
-    public ResponseEntity<List<PostDto>> getPosts() {
+            @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PostDto.class)})
+    @GetMapping
+        public ResponseEntity<List<PostDto>> getPosts() {
         return ResponseEntity.ok(postService.getAll().stream().map(postConverter::toDto).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение поста по тэгу")
-    @GetMapping("/{text}")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены"),
-            @ApiResponse(code = 400, message = "Посты не могут быть получены")
-    })
-    public ResponseEntity<List<PostDto>> getPostsByTag(@PathVariable String text) {
+            @ApiResponse(code = 200, message = "Посты получены",response = PostDto.class, responseContainer = "List")})
+    @GetMapping("/{text}")
+    public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag")@PathVariable String text) {
         return ResponseEntity.ok(postDtoService.getPostsByTag(text));
     }
 
-    @ApiOperation(value = "Получение списка новостей пользователя по его ID")
-    @GetMapping("/user/{id}")
+    @ApiOperation(value = "Получение списка постов пользователя по его ID")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены"),
-            @ApiResponse(code = 400, message = "Посты не могут быть получены")
-    })
-    public ResponseEntity<List<PostDto>> getPostsByUserId(@PathVariable Long id) {
+            @ApiResponse(code = 200, message = "Посты получены",response = PostDto.class, responseContainer = "List")})
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<PostDto>> getPostsByUserId(@ApiParam(value = "ID пользователя", example = "20")@PathVariable Long id) {
         return ResponseEntity.ok(postDtoService.getPostsByUserId(id));
     }
 
     @ApiOperation(value = "Добавление поста")
-    @PostMapping("/add")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты добавлен"),
-            @ApiResponse(code = 400, message = "Посты не может быть добавлен")
+            @ApiResponse(code = 200, message = "Пост добавлен", response = String.class)
     })
-    public ResponseEntity<?> addPost(@RequestBody PostDto postDto) {
+    @PostMapping("/add")
+    public ResponseEntity<?> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody PostDto postDto) {
         List<MediaPostDto> mediaPostDtoList = postDto.getMedia();
         Set<Media> mediaSet = new HashSet<>();
 
@@ -106,13 +99,13 @@ public class PostController {
         return ResponseEntity.ok().body(post.getText());
     }
 
-    @ApiOperation(value = "Удаление поста (параметр ID обязателен)")
-    @DeleteMapping(path = "/{id}")
+    @ApiOperation(value = "Удаление поста")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пост удалён"),
-            @ApiResponse(code = 400, message = "Пост не может быть удалён")
+            @ApiResponse(code = 200, message = "Пост удалён", response = String.class),
+            @ApiResponse(code = 400, message = "Пост не может быть удалён", response = String.class)
     })
-    public ResponseEntity<?> deletePost(@PathVariable @NotNull Long id) {
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deletePost(@ApiParam(value = "ID пользователя", example = "20") @PathVariable @NotNull Long id) {
         if (postService.existById(id)) {
 
             Post post = postService.getById(id);
@@ -125,10 +118,12 @@ public class PostController {
         }
     }
 
-
     @ApiOperation(value = "Получение всех коментов поста по id поста")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Комментарии получены",  responseContainer = "List",
+                    response = PostDto.class)})
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<CommentDto>> showPostComments(@PathVariable Long id) {
+    public ResponseEntity<List<CommentDto>> showPostComments(@ApiParam(value = "ID пользователя", example = "20") @PathVariable Long id) {
         return new ResponseEntity<>(postDtoService.getCommentsByPostId(id), HttpStatus.OK);
     }
 }
