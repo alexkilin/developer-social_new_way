@@ -13,7 +13,7 @@
 - если в директории test папка resources не установлена в качестве источника ресурсов, зайти в Project Structure Modules
 и поставить отметку на папке.
 
-  ![](src\main\resources\static\images\mark the resource folder.jpg) 
+  ![](src\main\resources\static\images\Test resources mark.jpg) 
   
   
 - для корректной работы MapStruct назначить Maven выполнение операции clean перед каждым запуском приложения. Для чего
@@ -24,7 +24,8 @@ Build.
 
 ![](src\main\resources\static\images\clean goal.jpg)
 
-- добавить зависимость для lombok в POM-файл.
+- установите плагин Lombok. Перейдите File → Settings → Plugins. В открывшемся окне плагинов введите «Lombok» в строке
+ поиска а нажмите кнопку «Install».
 
 
 ## Сущности
