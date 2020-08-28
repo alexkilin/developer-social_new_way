@@ -1,3 +1,6 @@
 status:
-  - name: "free"
-  - name: "busy"
+  - id: 1
+    name: "free"
+
+  - id: 2
+    name: "busy"
