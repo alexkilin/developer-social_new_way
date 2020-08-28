@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumServiceDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioServiceDto;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 @Validated
 @RestController
 @RequestMapping(value = "/api/audios", produces = "application/json")
+@SuppressWarnings("deprecation")
 @Api(value = "AudiosApi", description = "Операции с всеми аудиозаписями(получение, сортировка, добавление)")
 public class AudiosController {
 
@@ -192,9 +195,13 @@ public class AudiosController {
     //Возвращать AlbumDto
     @ApiOperation(value = "Создание альбома пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "аудио в альбом успешно добавлено", response = String.class)})
+            @ApiResponse(code = 200, message = "Аудио в альбом успешно добавлено", response = AlbumDto.class),
+            @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)})
     @PostMapping(value = "/createAlbum")
-    public ResponseEntity<?> createAlbum(@ApiParam(value = "объекто создоваймого альбома")@RequestBody @Valid @NonNull AlbumDto albumDto) {
+    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект создаваемого альбома")@RequestBody @Validated(OnCreate.class) AlbumDto albumDto, Errors errors) {
+        if(errors.hasErrors()) {
+            return ResponseEntity.badRequest().body("Неверные параметры");
+        }
         logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
         albumServiceDto.createAlbum(albumDto.getName(), albumDto.getIcon(), 60L);
         return ResponseEntity.ok().body(String.format("Альбом с именем  %s создан", albumDto.getName()));
