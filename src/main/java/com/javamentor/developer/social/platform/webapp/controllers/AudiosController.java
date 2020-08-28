@@ -189,6 +189,7 @@ public class AudiosController {
         return ResponseEntity.ok().body(String.format("Аудио с id  %s добавлено в альбом с id %s", audioId, albumId));
     }
 
+    //Возвращать AlbumDto
     @ApiOperation(value = "Создание альбома пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "аудио в альбом успешно добавлено", response = String.class)})
