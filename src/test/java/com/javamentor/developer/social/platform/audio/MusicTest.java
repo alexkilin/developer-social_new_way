@@ -131,7 +131,7 @@ class MusicTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void PartAudioOfUser() throws Exception {
+    public void getPartAudioOfUser() throws Exception {
         this.mockMvc.perform(get("/api/audios/PartAudioOfUser?currentPage=0&itemsOnPage=2"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -201,10 +201,42 @@ class MusicTest extends AbstractIntegrationTest {
                 .build();
 
         this.mockMvc.perform(post("/api/audios/createAlbum")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(albumTest)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").isNumber())
+                .andExpect(jsonPath("name").value("albumAudio"))
+                .andExpect(jsonPath("icon").value("iconTest"));
+    }
+
+    @Test
+    @DataSet(value = {
+            "datasets/audio/usersAudioTest/Active.yml",
+            "datasets/audio/usersAudioTest/User.yml",
+            "datasets/audio/usersAudioTest/Role.yml",
+            "datasets/audio/usersAudioTest/Status.yml"}, cleanBefore = true, cleanAfter = true)
+    public void createAlbumWithIncorrectName() throws Exception {
+        AlbumDto albumTest = AlbumDto.builder()
+                .name("")
+                .icon("iconTest")
+                .build();
+
+        this.mockMvc.perform(post("/api/audios/createAlbum")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(gson.toJson(albumTest)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
+
+        albumTest = AlbumDto.builder()
+                .icon("iconTest")
+                .build();
+
+        this.mockMvc.perform(post("/api/audios/createAlbum")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(albumTest)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test

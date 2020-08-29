@@ -10,4 +10,6 @@ public interface AlbumServiceDto {
     List<AlbumDto> getAlbumOfUser(Long id);
 
     void createAlbum(String name, String icon,  Long userId);
+
+    AlbumDto createAlbum(AlbumDto albumDto, Long userOwnerId);
 }

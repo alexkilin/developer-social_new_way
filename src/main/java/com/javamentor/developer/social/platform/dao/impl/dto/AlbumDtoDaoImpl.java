@@ -6,9 +6,11 @@ import com.javamentor.developer.social.platform.models.dto.AlbumDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.album.UserHasAlbum;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -31,12 +33,14 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
     private final AlbumAudioService albumAudioService;
     private final AlbumService albumService;
     private final UserService userService;
+    private final AlbumConverter albumConverter;
 
     @Autowired
-    public AlbumDtoDaoImpl(AlbumAudioService albumAudioService, AlbumService albumService, UserService userService) {
+    public AlbumDtoDaoImpl(AlbumAudioService albumAudioService, AlbumService albumService, UserService userService, AlbumConverter albumConverter) {
         this.albumAudioService = albumAudioService;
         this.albumService = albumService;
         this.userService = userService;
+        this.albumConverter = albumConverter;
     }
 
     @Override
@@ -86,5 +90,16 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
         entityManager.persist(userHasAlbum);
     }
 
+    @Override
+    @Transactional
+    public AlbumDto createAlbum(AlbumDto albumDto, User userOwnerId) {
+        AlbumAudios albumAudios = albumConverter.toAlbumAudios(albumDto, userOwnerId);
+        entityManager.persist(albumAudios);
+        entityManager.persist(UserHasAlbum.builder()
+                .user(userOwnerId)
+                .album(albumAudios.getAlbum())
+                .build());
+        return albumConverter.toAlbumDto(albumAudios);
+    }
 
 }
