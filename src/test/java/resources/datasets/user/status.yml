@@ -3,3 +3,5 @@ status:
     name: "Online"
   - id: 2
     name: "Offline"
+  - id: 3
+    name: "Learning java"

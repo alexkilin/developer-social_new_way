@@ -68,7 +68,7 @@ public class User {
     private LocalDateTime lastRedactionDate;
 
 
-    @Column(name = "is_enable", nullable = false)
+    @Column(name = "is_enable", nullable = true)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean isEnable = true;
 

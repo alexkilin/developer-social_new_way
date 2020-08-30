@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.dao.impl;
 
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -62,10 +63,19 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     public boolean existById(PK id) {
-        Query query = entityManager.createQuery(
-                "SELECT " +
-                        "CASE WHEN b.id IS NULL THEN false ELSE true END " +
-                        "FROM " + clazz.getSimpleName() + " b WHERE b.id = :paramId").setParameter("paramId", id);
-        return (boolean) query.getSingleResult();
+
+        if (clazz.getSimpleName().equals(User.class.getSimpleName())) {
+            return (boolean) entityManager.createNativeQuery(
+                    "select exists (select * from users u where u.user_id = :parameter)")
+                    .setParameter("parameter", id)
+                    .getSingleResult();
+        } else {
+            Query query = entityManager.createQuery(
+                    "SELECT " +
+                            "CASE WHEN b.id IS NULL THEN false ELSE true END " +
+                            "FROM " + clazz.getSimpleName() + " b WHERE b.id = :paramId").setParameter("paramId", id);
+            return (boolean) query.getSingleResult();
+        }
+
     }
 }

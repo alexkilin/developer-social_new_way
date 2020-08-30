@@ -82,4 +82,6 @@ public class UserDto {
                       "— Отправим клиенту твой комп.", position = 12)
     private String statusName;
 
+    private String activeName;
+
 }

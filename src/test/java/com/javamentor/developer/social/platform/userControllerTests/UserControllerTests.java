@@ -24,6 +24,32 @@ public class UserControllerTests extends AbstractIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
+    void createUser() throws Exception {
+        mockMvc.perform(post("/api/user/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"firstName\": \"Админ\"," +
+                        "\"lastName\": \"LastName\"," +
+                        "\"dateOfBirth\": \"1994-05-30\"," +
+                        "\"aboutMe\": \"Some information\"," +
+                        "\"avatar\": \"myImage\"," +
+                        "\"education\": \"PTU\"," +
+                        "\"statusName\": \"Online\"," +
+                        "\"activeName\": \"Yes\"," +
+                        "\"email\": \"admin@admin.ru\"," +
+                        "\"password\": \"adminpass\"," +
+                        "\"roleName\": \"User\"," +
+                        "\"city\": \"Msc\"," +
+                        "\"linkSite\": \"mysite.ru\"" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("Админ"))
+                .andExpect(jsonPath("$.email").value("admin@admin.ru"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
     void findUserById() throws Exception {
         mockMvc.perform(get("/api/user/{id}", 4L))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -48,14 +74,6 @@ public class UserControllerTests extends AbstractIntegrationTest {
     }
 
     @Test
-    void findUserInvalidIdPathVariable() throws Exception {
-        this.mockMvc.perform(get("/api/user/{id}", "abc"))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("ID can be only a number!"));
-    }
-
-    @Test
     void findAllUsers() throws Exception {
         mockMvc.perform(get("/api/user/all"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -65,43 +83,24 @@ public class UserControllerTests extends AbstractIntegrationTest {
     }
 
     @Test
-    void createUser() throws Exception {
-        mockMvc.perform(post("/api/user/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{" +
-                        "\"firstName\": \"Админ\"," +
-                        "\"lastName\": \"LastName\"," +
-                        "\"dateOfBirth\": \"1994-05-30 15:20:12.121000\"," +
-                        "\"aboutMe\": \"Some information\"," +
-                        "\"education\": \"PTU\"," +
-                        "\"statusId\": \"1\"," +
-                        "\"activeId\": \"1\"," +
-                        "\"image\": \"www.myavatar0.ru/9090\"," +
-                        "\"email\": \"admin@admin.ru\"," +
-                        "\"password\": \"adminpass\"," +
-                        "\"persistDate\": \"2020-01-01 10:00:00\"," +
-                        "\"lastRedactionDate\": \"2020-02-02 20:00:00\"," +
-                        "\"isEnable\": \"1\"," +
-                        "\"roleId\": \"1\"," +
-                        "\"city\": \"Msc\"," +
-                        "\"linkSite\": \"mysite.ru\"" +
-                        "}"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value("Админ"))
-                .andExpect(jsonPath("$.email").value("admin@admin.ru"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
-
-    @Test
     void updateUser() throws Exception {
         this.mockMvc.perform(put("/api/user/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
-                        "\"userId\": 5," +
+                        "\"userId\": \"5\"," +
                         "\"firstName\": \"Update\"," +
                         "\"email\": \"Update@email.com\"," +
-                        "\"password\": \"Qwerty123\"" +
+                        "\"password\": \"Qwerty123\"," +
+                        "\"lastName\": \"LastName\"," +
+                        "\"dateOfBirth\": \"1994-05-30\"," +
+                        "\"aboutMe\": \"Some new information\"," +
+                        "\"education\": \"PTU\"," +
+                        "\"statusName\": \"Learning java\"," +
+                        "\"activeName\": \"Yes\"," +
+                        "\"avatar\": \"www.newAvatar.ru/9090\"," +
+                        "\"roleName\": \"User\"," +
+                        "\"city\": \"Msc\"," +
+                        "\"linkSite\": \"myNewSite.ru\"" +
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -112,29 +111,31 @@ public class UserControllerTests extends AbstractIntegrationTest {
     }
 
     @Test
-    public void deleteUserWrongId() throws Exception {
-        mockMvc.perform(delete("/api/user/delete/555")
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
-
-    @Test
-    public void deleteUserOK() throws Exception {
-        mockMvc.perform(delete("/api/user/delete/1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
     void findUserFriends() throws Exception {
-        mockMvc.perform(get("/api/user/getFriends/1"))
+        mockMvc.perform(get("/api/user/getFriends/2"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(4));
     }
+
+    @Test
+    public void deleteUserInvalidId() throws Exception {
+        mockMvc.perform(delete("/api/user/delete/555")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("User with ID: 555 does not exist."));
+    }
+
+//    @Test
+//    public void deleteUserOK() throws Exception {
+//        mockMvc.perform(delete("/api/user/delete/2")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().string("Пользователь с ID: 2 удалён успешно."));
+//    }
+
 }
 
