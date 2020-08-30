@@ -45,34 +45,13 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
 
     @Override
     public List<AlbumDto> getAlbumOfUser(Long id) {
-        List<AlbumDto> albums = entityManager
-                .createQuery("SELECT " +
-                        "c.album.id, " +
-                        "c.album.name, " +
-                        "c.album.icon " +
-                        "FROM UserHasAlbum as c WHERE c.user.userId = :id")
+        return entityManager.createQuery(
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AlbumDto(c.album.id, c.album.name, c.album.icon)" +
+                        "FROM UserHasAlbum " +
+                        "AS c " +
+                        "WHERE c.user.userId = :id", AlbumDto.class)
                 .setParameter("id", id)
-                .unwrap(Query.class)
-                .setResultTransformer(
-                        new ResultTransformer() {
-                            @Override
-                            public Object transformTuple(
-                                    Object[] objects, String[] strings) {
-                                return AlbumDto.builder()
-                                        .id(((Number) objects[0]).longValue())
-                                        .name((String) objects[1])
-                                        .name((String) objects[2])
-                                        .build();
-                            }
-
-                            @Override
-                            public List transformList(List list) {
-                                return list;
-                            }
-                        }
-                )
                 .getResultList();
-        return albums;
     }
 
     @Override
