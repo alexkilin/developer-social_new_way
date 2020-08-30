@@ -1,5 +1,5 @@
 active:
   - id: 1
-    name: "Yes"
+    name: "Online"
   - id: 2
-    name: "No"
+    name: "Offline"

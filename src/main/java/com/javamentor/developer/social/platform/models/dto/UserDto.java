@@ -82,6 +82,8 @@ public class UserDto {
                       "— Отправим клиенту твой комп.", position = 12)
     private String statusName;
 
+    @ApiModelProperty(notes = "Показатель активности на сайте",
+            example = "Online/offline", position = 13)
     private String activeName;
 
 }

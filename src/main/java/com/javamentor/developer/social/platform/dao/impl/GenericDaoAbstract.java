@@ -64,7 +64,7 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
     @Override
     public boolean existById(PK id) {
 
-        if (clazz.getSimpleName().equals(User.class.getSimpleName())) {
+        if (clazz.getSimpleName().equals("User")) {
             return (boolean) entityManager.createNativeQuery(
                     "select exists (select * from users u where u.user_id = :parameter)")
                     .setParameter("parameter", id)

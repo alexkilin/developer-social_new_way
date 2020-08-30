@@ -34,8 +34,8 @@ public class UserControllerTests extends AbstractIntegrationTest {
                         "\"aboutMe\": \"Some information\"," +
                         "\"avatar\": \"myImage\"," +
                         "\"education\": \"PTU\"," +
-                        "\"statusName\": \"Online\"," +
-                        "\"activeName\": \"Yes\"," +
+                        "\"statusName\": \"Learning java\"," +
+                        "\"activeName\": \"Online\"," +
                         "\"email\": \"admin@admin.ru\"," +
                         "\"password\": \"adminpass\"," +
                         "\"roleName\": \"User\"," +
@@ -95,8 +95,8 @@ public class UserControllerTests extends AbstractIntegrationTest {
                         "\"dateOfBirth\": \"1994-05-30\"," +
                         "\"aboutMe\": \"Some new information\"," +
                         "\"education\": \"PTU\"," +
-                        "\"statusName\": \"Learning java\"," +
-                        "\"activeName\": \"Yes\"," +
+                        "\"statusName\": \"Pureness and perfection\"," +
+                        "\"activeName\": \"Online\"," +
                         "\"avatar\": \"www.newAvatar.ru/9090\"," +
                         "\"roleName\": \"User\"," +
                         "\"city\": \"Msc\"," +
