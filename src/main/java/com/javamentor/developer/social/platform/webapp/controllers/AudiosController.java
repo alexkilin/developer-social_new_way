@@ -196,11 +196,9 @@ public class AudiosController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио в альбом успешно добавлено", response = AlbumDto.class),
             @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)})
+    @Validated(OnCreate.class)
     @PostMapping(value = "/createAlbum")
-    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект создаваемого альбома")@RequestBody @NotNull @Validated(OnCreate.class) AlbumDto albumDto, Errors errors) {
-        if(errors.hasErrors()) {
-            return ResponseEntity.badRequest().body("Неверные параметры");
-        }
+    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект создаваемого альбома")@RequestBody @NotNull @Valid AlbumDto albumDto) {
         AlbumDto albumDtoResponse = albumServiceDto.createAlbum(albumDto, 60L);
         logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
         return ResponseEntity.ok().body(albumDtoResponse);

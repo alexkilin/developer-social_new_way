@@ -5,7 +5,7 @@ import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
@@ -24,8 +24,8 @@ public class AlbumDto {
     private Long id;
 
     @ApiModelProperty(notes = "Название альбома")
-    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "'url' Must not be null when creating and updating AudioAlbum.class")
-    @NotEmpty(groups = {OnCreate.class, OnUpdate.class}, message = "'url' Must not be empty when creating and updating AudioAlbum.class")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "'name' Must not be null when creating and updating AudioAlbum.class")
+    @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "'name' Must not be empty when creating and updating AudioAlbum.class")
     private String name;
 
     @ApiModelProperty(notes = "Адрес иконки (превью) альбома")
