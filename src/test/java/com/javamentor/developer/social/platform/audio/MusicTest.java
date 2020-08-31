@@ -16,18 +16,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@DataSet(value = {
-        "datasets/audio/usersAudioTest/Active.yml",
-        "datasets/audio/usersAudioTest/User.yml",
-        "datasets/audio/usersAudioTest/Role.yml",
-        "datasets/audio/usersAudioTest/Status.yml",
-        "datasets/audio/usersAudioTest/UsersAudiosCollections.yml",
-        "datasets/audio/Media.yml",
-        "datasets/audio/albumAudioTest/AudioAlbum.yml",
-        "datasets/audio/albumAudioTest/Album.yml",
-        "datasets/audio/albumAudioTest/UserHasAlbum.yml",
-        "datasets/audio/albumAudioTest/AlbumHasAudio.yml",
-        "datasets/audio/Audio.yml"}, cleanBefore = true, cleanAfter = true)
+//@DataSet(value = {
+//        "datasets/audio/usersAudioTest/Active.yml",
+//        "datasets/audio/usersAudioTest/User.yml",
+//        "datasets/audio/usersAudioTest/Role.yml",
+//        "datasets/audio/usersAudioTest/Status.yml",
+//        "datasets/audio/usersAudioTest/UsersAudiosCollections.yml",
+//        "datasets/audio/Media.yml",
+//        "datasets/audio/albumAudioTest/AudioAlbum.yml",
+//        "datasets/audio/albumAudioTest/Album.yml",
+//        "datasets/audio/albumAudioTest/UserHasAlbum.yml",
+//        "datasets/audio/albumAudioTest/AlbumHasAudio.yml",
+//        "datasets/audio/Audio.yml"}, cleanBefore = true, cleanAfter = true)
 class MusicTest extends AbstractIntegrationTest {
 
     @Autowired

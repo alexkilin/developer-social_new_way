@@ -1,8 +1,32 @@
 # Документация JM Developer Social
 
 ## Как настроить запуск
+- Скачайте и установите PostgreSQL 11 или 12 версии.
+- Создайте базу данных и схему в ней, настройте доступ к БД в IntellijIdea (название БД, схемы, пользователя и пароль
+ см. application-local.properties).
+- В проекте реализованно два профиля: **local** и **dev**. Для выбора профиля, добавьте в program arguments
+ (Run->Edit Configurations)**--spring.profiles.active=local** или **--spring.profiles.active=dev** соответственно.
+ 
+  ![](src/main/resources/static/images/program_param.jpg)
+  
+  
+- если в директории test папка resources не установлена в качестве источника ресурсов, зайти в Project Structure Modules
+и поставить отметку на папке.
 
-- В проекте реализованно два профиля: **local** и **dev**. Для выбора профиля, добавьте в program arguments **--spring.profiles.active=local** или **--spring.profiles.active=dev** соответственно. 
+  ![](src/main/resources/static/images/test_resources_mark.jpg) 
+  
+  
+- для корректной работы MapStruct назначить Maven выполнение операции clean перед каждым запуском приложения. Для чего
+перейти к настройкам конфигурации запуска приложения (Run->Edit Configurations) и в поле Before launch
+(выполнить прокрутку до самого низа окна) добавить задачу Maven clean. Простым перетаскиванием установить ее перед 
+Build.
+
+
+![](src/main/resources/static/images/clean_goal.jpg)
+
+- установите плагин Lombok. Перейдите File → Settings → Plugins. В открывшемся окне плагинов введите «Lombok» в строке
+ поиска а нажмите кнопку «Install».
+
 
 ## Сущности
 
