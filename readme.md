@@ -2,8 +2,8 @@
 
 ## Как настроить запуск
 - Скачайте и установите PostgreSQL 11 или 12 версии.
-- Создайте базу данных и схему в ней, настройте доступ к БД в IntellijIdea (**название БД, схемы, пользователя и пароль
- см. application-local.properties**).
+- Создайте базу данных и схему в ней, настройте доступ к БД в IntellijIdea (название БД, схемы, пользователя и пароль
+ см. application-local.properties).
 - В проекте реализованно два профиля: **local** и **dev**. Для выбора профиля, добавьте в program arguments
  (Run->Edit Configurations)**--spring.profiles.active=local** или **--spring.profiles.active=dev** соответственно.
  
@@ -24,7 +24,7 @@ Build.
 
 ![](src/main/resources/static/images/clean_goal.jpg)
 
-- установите плагин Lombok. Перейдите File->Settings->Plugins. В открывшемся окне плагинов введите «Lombok» в строке
+- установите плагин Lombok. Перейдите File → Settings → Plugins. В открывшемся окне плагинов введите «Lombok» в строке
  поиска а нажмите кнопку «Install».
 
 
