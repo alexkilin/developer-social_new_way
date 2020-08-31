@@ -54,31 +54,4 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
                 .getResultList();
     }
 
-    @Override
-    @Transactional
-    public void createAlbum(String name, String icon, Long userId) {
-        albumAudioService.create(new AlbumAudios(name, icon, userService.getById(userId)));
-        UserHasAlbum userHasAlbum = new UserHasAlbum();
-        Album album = entityManager.createQuery("SELECT a from Album as a WHERE a.userOwnerId.userId = :userId and a.name = :name", Album.class)
-                .setParameter("userId",userId )
-                .setParameter("name", name)
-                .getSingleResult();
-        System.out.println(album.toString());
-        userHasAlbum.setAlbum(album);
-        userHasAlbum.setUser(userService.getById(userId));
-        entityManager.persist(userHasAlbum);
-    }
-
-    @Override
-    @Transactional
-    public AlbumDto createAlbum(AlbumDto albumDto, User userOwnerId) {
-        AlbumAudios albumAudios = albumConverter.toAlbumAudios(albumDto, userOwnerId);
-        entityManager.persist(albumAudios);
-        entityManager.persist(UserHasAlbum.builder()
-                .user(userOwnerId)
-                .album(albumAudios.getAlbum())
-                .build());
-        return albumConverter.toAlbumDto(albumAudios);
-    }
-
 }

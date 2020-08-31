@@ -9,7 +9,4 @@ public interface AlbumDtoDao {
 
     List<AlbumDto> getAlbumOfUser(Long id);
 
-    void createAlbum(String name, String icon, Long userId);
-
-    AlbumDto createAlbum(AlbumDto albumDto, User userOwnerId);
 }

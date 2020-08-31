@@ -2,22 +2,21 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
-import com.javamentor.developer.social.platform.service.abstracts.dto.AudioServiceDto;
+import com.javamentor.developer.social.platform.service.abstracts.dto.AudioDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
-public class AudioServiceDtoImpl implements AudioServiceDto{
+public class AudioDtoServiceImpl implements AudioDtoService {
 
     private final AudioDtoDao audioDtoDao;
 
     @Autowired
-    public AudioServiceDtoImpl(AudioDtoDao audioDtoDao) {
+    public AudioDtoServiceImpl(AudioDtoDao audioDtoDao) {
         this.audioDtoDao = audioDtoDao;
     }
 
