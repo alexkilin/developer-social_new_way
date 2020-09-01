@@ -2,14 +2,16 @@ package com.javamentor.developer.social.platform.webapp.controllers.chat;
 
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
-import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +27,15 @@ public class ChatControllers {
     private final ChatDtoService chatDto;
     private final MessageDtoService messageDto;
     private final UserService userService;
+    private final SingleChatService chatService;
 
-    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService, UserService userService) {
+    @Autowired
+    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService,
+                           UserService userService, SingleChatService chatService) {
         this.userService = userService;
         this.chatDto = chatDtoService;
         this.messageDto = messageDtoService;
+        this.chatService = chatService;
     }
 
     @GetMapping("/api/user/chats")
@@ -72,18 +78,14 @@ public class ChatControllers {
     public ResponseEntity<?> deleteUserFromSingleChat(
             @PathVariable("chatId") Long chatId,
             @PathVariable("userId") Long userId) {
-        List<ChatDto> userChatDto = chatDto.getAllChatDtoByUserId(userId);
-        if (userChatDto == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        SingleChat singleChat = chatService.getById(chatId);
+        if (singleChat == null) {
+            return new ResponseEntity<>("chat not found", HttpStatus.BAD_REQUEST);
         }
-        if (userChatDto.stream().anyMatch(x -> x.getId().equals(chatId))) {
-            User user = userService.getById(userId);
-            user.getSingleChat().removeIf(singleChat -> singleChat.getId().equals(chatId));
-            userService.update(user);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!SingleChat.deleteUserFromSingleChat(singleChat, userService, userId)){
+            return new ResponseEntity<>("user has not found chat", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("done delete chat from user", HttpStatus.OK);
     }
 
 }

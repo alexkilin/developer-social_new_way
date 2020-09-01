@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.models.entity.chat;
 
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
@@ -23,7 +24,7 @@ public class SingleChat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST},targetEntity = User.class,fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST}, targetEntity = User.class)
     @JoinColumn(name = "user_one_id")
     private User userOne;
 
@@ -40,4 +41,17 @@ public class SingleChat {
     @JoinTable(joinColumns = @JoinColumn(name = "chat_id"),
     inverseJoinColumns = @JoinColumn(name = "message_id"))
     private Set<Message> messages;
+
+    public static boolean deleteUserFromSingleChat(SingleChat singleChat, UserService userService, Long userId){
+        if (singleChat.getUserOne().getUserId().equals(userId)){
+            singleChat.getUserOne().getSingleChat().removeIf(chat -> chat.getId().equals(singleChat.getId()));
+            userService.update(singleChat.getUserOne());
+            return true;
+        } else if (singleChat.getUserTwo().getUserId().equals(userId)){
+            singleChat.getUserTwo().getSingleChat().removeIf(chat -> chat.getId().equals(singleChat.getId()));
+            userService.update(singleChat.getUserTwo());
+            return true;
+        }
+        return false;
+    }
 }
