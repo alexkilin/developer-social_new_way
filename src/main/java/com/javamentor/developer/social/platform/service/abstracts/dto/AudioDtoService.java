@@ -5,7 +5,7 @@ import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import java.util.List;
 import java.util.Optional;
 
-public interface AudioServiceDto {
+public interface AudioDtoService {
 
     List<AudioDto> getAudioOfAuthor(String author);
     AudioDto getAudioOfName(String name);

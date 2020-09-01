@@ -1,3 +1,6 @@
 active:
-  - name: "ACTIVE"
-  - name: "DISABLED"
+  - id: 1
+    name: "ACTIVE"
+
+  - id: 2
+    name: "DISABLED"
