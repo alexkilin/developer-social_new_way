@@ -5,10 +5,12 @@ import com.javamentor.developer.social.platform.models.entity.user.Friend;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
+@Service
 public abstract class UserFriendsConverter {
 
     @Mappings({

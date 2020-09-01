@@ -17,8 +17,8 @@ public class RoleDAOImpl extends GenericDaoAbstract<Role, Long> implements RoleD
     @Override
     public Role getByName(String name) {
         return (Role) entityManager.createQuery(
-                "FROM Role r" +
-                        "WHERE r.name = :paramName").setParameter("paramName", name)
+                               "FROM Role r " +
+                               "WHERE r.name = :paramName").setParameter("paramName", name)
                 .getSingleResult();
     }
 }
