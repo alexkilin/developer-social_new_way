@@ -39,14 +39,13 @@ public class GroupController {
     @ApiOperation(value = "Получение информации об одной группе")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Информация о группе получена", response = GroupDto.class),
-            @ApiResponse(code = 400, message = "Группа с данным id не найдена", response = String.class)
+            @ApiResponse(code = 404, message = "Группа с данным id не найдена", response = String.class)
     })
     @GetMapping("/{id}")
     public ResponseEntity<?> showGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long id) {
         Optional<GroupDto> groupDtoOptional = groupDtoService.getGroupById(id);
         if(!groupDtoOptional.isPresent()) {
-            return ResponseEntity.badRequest()
-                    .body(String.format("Group with id %s not found", id));
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(groupDtoOptional.get());
     }
@@ -61,18 +60,17 @@ public class GroupController {
                                                             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
         return ResponseEntity.ok().body(groupDtoService.getPostsByGroupId(id, page, size));
     }
-    
+
     @ApiOperation(value = "Получение группы по наименованию группы")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Группа найдена", response = GroupInfoDto.class),
-            @ApiResponse(code = 400, message = "Группа не найдена", response = String.class)
+            @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
     })
     @GetMapping(value = "/name", params = "name")
     public ResponseEntity<?> findGroupByName(@ApiParam(value = "Наименование группы", example = "JAVA IS 1") @RequestParam("name") String name) {
         Optional<GroupInfoDto> groupInfoDto = groupDtoService.getGroupByName(name);
         if(!groupInfoDto.isPresent()) {
-            return ResponseEntity.badRequest()
-                    .body(String.format("Group with name %s not found", name));
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(groupInfoDto.get());
     }

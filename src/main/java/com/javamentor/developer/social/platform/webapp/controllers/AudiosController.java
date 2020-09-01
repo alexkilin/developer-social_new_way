@@ -172,7 +172,7 @@ public class AudiosController {
     @ApiOperation(value = "Получение всех альбомов пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Альбомы успешно получены", response = AlbumDto.class,responseContainer = "List"),
-            @ApiResponse(code = 400, message = "Альбомы не найдены")
+            @ApiResponse(code = 404, message = "Альбомы не найдены")
     })
     @GetMapping(value = "/getAllAlbumsFromUser")
     public ResponseEntity<List<AlbumDto>> getAllAlbums() {
