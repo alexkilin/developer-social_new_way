@@ -22,5 +22,5 @@ public interface AudioDtoService {
 
     boolean addAudioInCollectionsOfUser(Long userId, Long audioId);
 
-    List<AudioDto> getAudioFromAlbomOfUser(Long albumId);
+    List<AudioDto> getAudioFromAlbumOfUser(Long albumId);
 }

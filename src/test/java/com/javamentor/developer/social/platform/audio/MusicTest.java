@@ -33,8 +33,7 @@ class MusicTest extends AbstractIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private Gson gson = new Gson();
-
+    private final Gson gson = new Gson();
 
     @Test
     public void getAllAudios() throws Exception {
@@ -216,6 +215,35 @@ class MusicTest extends AbstractIntegrationTest {
             "datasets/audio/usersAudioTest/User.yml",
             "datasets/audio/usersAudioTest/Role.yml",
             "datasets/audio/usersAudioTest/Status.yml"}, cleanBefore = true, cleanAfter = true)
+    public void createAlbumsWithSameName() throws Exception {
+        AlbumDto albumTest = AlbumDto.builder()
+                .name("albumAudio")
+                .icon("iconTest")
+                .build();
+
+        this.mockMvc.perform(post("/api/audios/createAlbum")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(albumTest)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").isNumber())
+                .andExpect(jsonPath("name").value("albumAudio"))
+                .andExpect(jsonPath("icon").value("iconTest"));
+
+        this.mockMvc.perform(post("/api/audios/createAlbum")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(albumTest)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Audio album with name '" + albumTest.getName() + "' already exists"));
+    }
+
+    @Test
+    @DataSet(value = {
+            "datasets/audio/usersAudioTest/Active.yml",
+            "datasets/audio/usersAudioTest/User.yml",
+            "datasets/audio/usersAudioTest/Role.yml",
+            "datasets/audio/usersAudioTest/Status.yml"}, cleanBefore = true, cleanAfter = true)
     public void createAlbumWithIncorrectName() throws Exception {
         AlbumDto albumTest = AlbumDto.builder()
                 .name("")
@@ -226,7 +254,9 @@ class MusicTest extends AbstractIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(gson.toJson(albumTest)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .string("'name' Must not be empty when creating and updating AudioAlbum.class"));
 
         albumTest = AlbumDto.builder()
                 .icon("iconTest")
@@ -236,7 +266,9 @@ class MusicTest extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumTest)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .string("'name' Must not be null when creating and updating AudioAlbum.class"));
     }
 
     @Test
@@ -249,7 +281,7 @@ class MusicTest extends AbstractIntegrationTest {
 
     @Test
     public void getAllAlbums() throws Exception {
-        this.mockMvc.perform(get("/api/audios/getAllAlbumsFromUser?userId=1"))
+        this.mockMvc.perform(get("/api/audios/getAllAlbumsFromUser"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3));

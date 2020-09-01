@@ -335,7 +335,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
     }
 
     @Override
-    public List<AudioDto> getAudioFromAlbomOfUser(Long albumId) {
+    public List<AudioDto> getAudioFromAlbumOfUser(Long albumId) {
         List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +

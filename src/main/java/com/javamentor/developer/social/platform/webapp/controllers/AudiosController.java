@@ -144,6 +144,7 @@ public class AudiosController {
         return ResponseEntity.ok().body(audioDtoService.getAlbumAudioOfUser(60L, album));
     }
 
+    //TODO переделать метод
     @ApiOperation(value = "Добавление аудио в избранное пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено")})
@@ -207,8 +208,8 @@ public class AudiosController {
             return ResponseEntity.badRequest()
                     .body(String.format("Audio album with name '%s' already exists", albumDto.getName()));
         }
-        AlbumAudios albumAudios = albumAudioService
-                .createAlbumAudiosWithOwner(albumConverter.toAlbumAudios(albumDto, userService.getById(60L)));
+        AlbumAudios albumAudios = albumAudioService.createAlbumAudiosWithOwner(
+                albumConverter.toAlbumAudios(albumDto, userService.getById(60L)));
         logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
         return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumAudios));
     }
@@ -219,7 +220,7 @@ public class AudiosController {
     @GetMapping(value = "/getFromAlbumOfUser")
     public ResponseEntity<?> getFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "Blur:The Best of")@RequestParam @NotNull Long albumId) {
         logger.info(String.format("Все аудио из альбома с id:%s отправлено", albumId));
-        return ResponseEntity.ok().body(audioDtoService.getAudioFromAlbomOfUser(albumId));
+        return ResponseEntity.ok().body(audioDtoService.getAudioFromAlbumOfUser(albumId));
     }
 
 }
