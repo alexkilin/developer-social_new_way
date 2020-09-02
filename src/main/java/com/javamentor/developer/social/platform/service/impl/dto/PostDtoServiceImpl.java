@@ -36,6 +36,6 @@ public class PostDtoServiceImpl implements PostDtoService {
 
     @Override
     public List<PostDto> getPosts() {
-        return null;
+        return postDtoDao.getAllPosts();
     }
 }

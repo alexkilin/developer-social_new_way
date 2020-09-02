@@ -52,7 +52,7 @@ public class PostController {
             @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PostDto.class)})
     @GetMapping
         public ResponseEntity<List<PostDto>> getPosts() {
-        return ResponseEntity.ok(postService.getAll().stream().map(postConverter::toDto).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(postDtoService.getPosts());
     }
 
     @ApiOperation(value = "Получение поста по тэгу")
