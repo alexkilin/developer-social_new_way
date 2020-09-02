@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/groups")
@@ -26,41 +27,51 @@ public class GroupController {
 
     @ApiOperation(value = "Получение информации обо всех группах")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Инфа обо всех группах получена", responseContainer = "List", response = GroupInfoDto.class)
+            @ApiResponse(code = 200, message = "Инфа обо всех группах получена", responseContainer = "List", response = GroupInfoDto.class),
+            @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)
     })
     @GetMapping(value = "/all", params = {"page", "size"})
     public ResponseEntity<List<GroupInfoDto>> getAllGroups(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("page") int page,
                                                            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
-        return new ResponseEntity<>(groupDtoService.getAllGroups(page, size), HttpStatus.OK);
+        return ResponseEntity.ok().body(groupDtoService.getAllGroups(page, size));
     }
 
     @ApiOperation(value = "Получение информации об одной группе")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Инфа о группе получена", response = GroupDto.class)
+            @ApiResponse(code = 200, message = "Информация о группе получена", response = GroupDto.class),
+            @ApiResponse(code = 404, message = "Группа с данным id не найдена", response = String.class)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<GroupDto> showGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long id) {
-        return new ResponseEntity<>(groupDtoService.getGroupById(id), HttpStatus.OK);
+    public ResponseEntity<?> showGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long id) {
+        Optional<GroupDto> groupDtoOptional = groupDtoService.getGroupById(id);
+        if(!groupDtoOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(groupDtoOptional.get());
     }
 
     @ApiOperation(value = "Получение всех постов группы по id группы")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты для группы получены", responseContainer = "List", response = GroupWallDto.class)
+            @ApiResponse(code = 200, message = "Посты группы получены", responseContainer = "List", response = GroupWallDto.class)
     })
     @GetMapping(value = "/{id}/posts", params = {"page", "size"})
     public ResponseEntity<List<GroupWallDto>> showGroupWall(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long id,
                                                             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("page") int page,
                                                             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
-        return new ResponseEntity<>(groupDtoService.getPostsByGroupId(id, page, size), HttpStatus.OK);
+        return ResponseEntity.ok().body(groupDtoService.getPostsByGroupId(id, page, size));
     }
 
     @ApiOperation(value = "Получение группы по наименованию группы")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Группа найдена", response = GroupInfoDto.class),
-            @ApiResponse(code = 400, message = "Группа не найдена")
+            @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
     })
     @GetMapping(value = "/name", params = "name")
-    public ResponseEntity<GroupInfoDto> findGroupByName(@ApiParam(value = "Наименование группы", example = "JAVA IS 1") @RequestParam("name") String name) {
-        return new ResponseEntity<>(groupDtoService.getGroupByName(name), HttpStatus.OK);
+    public ResponseEntity<?> findGroupByName(@ApiParam(value = "Наименование группы", example = "JAVA IS 1") @RequestParam("name") String name) {
+        Optional<GroupInfoDto> groupInfoDto = groupDtoService.getGroupByName(name);
+        if(!groupInfoDto.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(groupInfoDto.get());
     }
 }
