@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.models.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
@@ -40,6 +41,7 @@ public class User {
     private String lastName;
 
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private Date dateOfBirth;
 
     @Column(name = "education")
