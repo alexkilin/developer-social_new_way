@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto.chat;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.chat.ChatDtoDAO;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
+import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -54,6 +55,21 @@ public class ChatDtoDAOImpl implements ChatDtoDAO {
                 .setResultTransformer(new GroupChatDtoResultTransformer())
                 .getResultList());
         return chatDtoList;
+    }
+
+    @Override
+    public ChatDto getChatDtoByGroupChatId(Long chatId) {
+        ChatDto chatDto = (ChatDto) em.createQuery("select " +
+                "(select max(me) from gc.messages me), " +
+                "gc.image," +
+                "gc.title," +
+                "gc.id " +
+                "from GroupChat gc where gc.id=:id")
+                .setParameter("id", chatId)
+                .unwrap(Query.class)
+                .setResultTransformer(new GroupChatDtoResultTransformer())
+                .getSingleResult();
+        return chatDto;
     }
 
     private static class ChatDtoResultTransformer implements ResultTransformer {
