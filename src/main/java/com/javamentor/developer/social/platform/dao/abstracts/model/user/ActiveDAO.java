@@ -5,4 +5,5 @@ import com.javamentor.developer.social.platform.models.entity.user.Active;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 
 public interface ActiveDAO extends GenericDao<Active, Long> {
+    Active getByActiveName(String active);
 }

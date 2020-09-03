@@ -1,111 +1,88 @@
 package com.javamentor.developer.social.platform.webapp.controllers.chat;
-
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
+import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
-import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
+import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Validated
 @RestController
+@RequestMapping("api/user")
 @Api(value = "ApiAllChatsUser", description = "Получение всех чатов пользователя,и получение всех сообщений чата.")
 public class ChatControllers {
-    private final ChatDtoService chatDto;
-    private final MessageDtoService messageDto;
-    private final UserService userService;
-    private final SingleChatService chatService;
+    private final ChatDtoService chatDtoService;
+    private final MessageDtoService messageDtoService;
+    private final GroupChatService groupChatService;
+    private final SingleChatService singleChatService;
 
-    @Autowired
-    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService,
-                           UserService userService, SingleChatService chatService) {
-        this.userService = userService;
-        this.chatDto = chatDtoService;
-        this.messageDto = messageDtoService;
-        this.chatService = chatService;
+    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService, GroupChatService groupChatService, SingleChatService singleChatService) {
+        this.chatDtoService = chatDtoService;
+        this.messageDtoService = messageDtoService;
+        this.groupChatService = groupChatService;
+        this.singleChatService = singleChatService;
     }
 
-    @GetMapping("/api/user/chats")
+    @GetMapping("/chats")
     @ApiOperation(value = "Список чатов юзера.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = ChatDto.class),
-            @ApiResponse(code = 404, message = "404 error"),
-
+            @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = ChatDto.class)
     })
-    public ResponseEntity<List<ChatDto>> getChatsDto() {
-        return ResponseEntity.ok(chatDto.getAllChatDtoByUserId(60L));
+    public ResponseEntity<List<ChatDto>> getChatsDto(){
+        return ResponseEntity.ok(chatDtoService.getAllChatDtoByUserId(60L));
     }
 
-    @GetMapping("/api/user/groupChats/{chatId}/messages")
+    @GetMapping("/groupChats/{chatId}/messages")
     @ApiOperation(value = "Список сообщений группового чата по Id чата.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = MessageDto.class),
-            @ApiResponse(code = 404, message = "404 error")
+            @ApiResponse(code = 404, message = "Чат с данным Id не существует", response = String.class)
     })
-    public ResponseEntity<List<MessageDto>> getAllMessageDtoByGroupChatId(@PathVariable Long chatId) {
-        return ResponseEntity.ok(messageDto.getAllMessageDtoFromGroupChatByChatId(chatId));
+    public ResponseEntity<?> getAllMessageDtoByGroupChatId(@ApiParam(value = "Id группового чата")@PathVariable Long chatId){
+        if(!groupChatService.existById(chatId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Чат с id %s не найден.", chatId));
+        }
+        return ResponseEntity.ok(messageDtoService.getAllMessageDtoFromGroupChatByChatId(chatId));
     }
 
-    @GetMapping("/api/user/singleChats/{chatId}/messages")
+    @GetMapping("/singleChats/{chatId}/messages")
     @ApiOperation(value = "Список сообщений одиночного чата по Id чата.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = MessageDto.class),
-            @ApiResponse(code = 404, message = "404 error")
+            @ApiResponse(code = 404, message = "Чат с данным Id не существует", response = String.class)
     })
-    public ResponseEntity<List<MessageDto>> getAllMessageDtoBySingleChatId(@PathVariable Long chatId) {
-        return ResponseEntity.ok(messageDto.getAllMessageDtoFromSingleChatByChatId(chatId));
+    public ResponseEntity<?> getAllMessageDtoBySingleChatId(@ApiParam(value = "Id чата")@PathVariable Long chatId){
+        if(!singleChatService.existById(chatId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Чат с id %s не найден.", chatId));
+        }
+        return ResponseEntity.ok(messageDtoService.getAllMessageDtoFromSingleChatByChatId(chatId));
     }
 
-    @PostMapping("api/chat/{chatId}/user/{userId}/delete")
-    @ApiOperation(value = "Удаление пользователя из single chat.")
+    @PutMapping("/chat/group/edit/title")
+    @ApiOperation(value = "Изменение title группового чата.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "200 OK"),
-            @ApiResponse(code = 400, message = "400 Bad Request")
+            @ApiResponse(code = 200, message = "OK", response = MessageDto.class),
+            @ApiResponse(code = 404, message = "Чат с данным Id не существует", response = String.class)
     })
-    public ResponseEntity<?> deleteUserFromSingleChat(
-            @PathVariable("chatId") Long chatId,
-            @PathVariable("userId") Long userId) {
-        SingleChat singleChat = chatService.getById(chatId);
-        if (singleChat == null) {
-            return ResponseEntity.ok("chat not found");
+    public ResponseEntity<?> editGroupChatTitle(@ApiParam(value = "Объект чата")@RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto){
+        Long chatId = chatEditTitleDto.getId();
+        if(!groupChatService.existById(chatId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Чат с id %s не найден.", chatId));
         }
-        if (!SingleChat.deleteUserFromSingleChat(singleChat, userService, userId)){
-            return new ResponseEntity<>("user has not found chat", HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>("done delete chat from user", HttpStatus.OK);
+        GroupChat groupChat = groupChatService.getById(chatId);
+        groupChat.setTitle(chatEditTitleDto.getTitle());
+        groupChatService.update(groupChat);
+     return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
     }
-
-    /*@PostMapping("api/chat/{chatId}/user/{userId}/delete")
-    @ApiOperation(value = "Удаление пользователя из single chat.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "200 OK"),
-            @ApiResponse(code = 400, message = "400 Bad Request")
-    })
-    public ResponseEntity<?> deleteUserFromSingleChat(
-            @PathVariable("chatId") Long chatId,
-            @PathVariable("userId") Long userId) {
-        SingleChat singleChat = chatService.getById(chatId);
-        if (singleChat == null) {
-            return new ResponseEntity<>("chat not found", HttpStatus.BAD_REQUEST);
-        }
-        if (!SingleChat.deleteUserFromSingleChat(singleChat, userId)){
-            return new ResponseEntity<>("user has not found chat", HttpStatus.BAD_REQUEST);
-        }
-        chatService.update(singleChat);
-        return new ResponseEntity<>("done delete chat from user", HttpStatus.OK);
-    }*/
-
 }

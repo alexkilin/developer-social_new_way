@@ -16,12 +16,11 @@ public class UserFriendsDaoImpl extends GenericDaoAbstract<Friend, Long> impleme
     private EntityManager entityManager;
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Friend> getUserFriendsById(Long id) {
-        return entityManager.createQuery("select * " +
-                "from friends f " +
-                "join users u " +
-                "on f.user_id = u.id" +
-                "where u.id = " + id)
+        return entityManager.createQuery("select f.id, f.user, f.friend " +
+                "from Friend f " +
+                "where f.user.userId = " + id)
                 .getResultList();
     }
 }

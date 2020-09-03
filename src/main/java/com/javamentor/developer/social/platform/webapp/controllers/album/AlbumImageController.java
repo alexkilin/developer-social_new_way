@@ -42,24 +42,33 @@ public class AlbumImageController {
 
     }
 
-
-
-/*    @ApiOperation(value = "Удалить фотоальбом по id")
-    @GetMapping("/delete")
-    public void deleteAlbum(@RequestParam Long id) {
-
-        albumService.deleteById(albumImageService.getById(id).getAlbum().getId());
-        albumImageService.deleteById(id);
-
-    }*/
-
-    /*@ApiOperation(value = "Добавить фотоальбом")
-    @PostMapping("/create")
-    public void createAlbum(@RequestBody AlbumDto DTO, @RequestParam Long userId) {
-
-        Album album = new Album(DTO.getName(), DTO.getIcon(), userService.getById(userId), MediaType.IMAGE,
-                LocalDateTime.now(), LocalDateTime.now());
-        albumImageService.create(new AlbumImage(album));
-
-    }*/
+//    @ApiOperation(value = "Все фотоальбомы пользователя по id")
+//    @GetMapping("/all")
+//    public ResponseEntity<List<AlbumImageDTO>> allAlbum(@RequestParam Long id) {
+//
+//        List<AlbumImage> lst = albumImageService.getAllByUserId(id);
+//        List<AlbumImageDTO> lstDTO = new ArrayList<>();
+//        lst.forEach(alb -> lstDTO.add(converter.getDTO(alb)));
+//        return new ResponseEntity<>(lstDTO, HttpStatus.OK);
+//
+//    }
+//
+///*    @ApiOperation(value = "Удалить фотоальбом по id")
+//    @GetMapping("/delete")
+//    public void deleteAlbum(@RequestParam Long id) {
+//
+//        albumService.deleteById(albumImageService.getById(id).getAlbum().getId());
+//        albumImageService.deleteById(id);
+//
+//    }*/
+//
+//    @ApiOperation(value = "Добавить фотоальбом")
+//    @PostMapping("/create")
+//    public void createAlbum(@RequestBody AlbumDto DTO, @RequestParam Long userId) {
+//
+//        Album album = new Album(DTO.getName(), DTO.getIcon(), userService.getById(userId), MediaType.IMAGE,
+//                LocalDateTime.now(), LocalDateTime.now());
+//        albumImageService.create(new AlbumImage(album));
+//
+//    }
 }

@@ -72,18 +72,18 @@ public class ImageController {
 
     }*/
 
-    /*@ApiOperation(value = "Добавить фото")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Фото добавлено")})
-    @PostMapping("/create")
-    public void createImage(@RequestParam Long userId, @RequestParam String url,
-                            @RequestParam Long albumId, @RequestParam String description) {
-
-        Media media = new Media(userService.getById(userId), url, MediaType.IMAGE,
-                LocalDateTime.now(), albumService.getById(albumId));
-        imageService.create(new Image(media, description));
-
-    }*/
+//    @ApiOperation(value = "Добавить фото")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "Фото добавлено")})
+//    @PostMapping("/create")
+//    public void createImage(@RequestParam Long userId, @RequestParam String url,
+//                            @RequestParam Long albumId, @RequestParam String description) {
+//
+//        Media media = new Media(userService.getById(userId), url, MediaType.IMAGE,
+//                LocalDateTime.now(), albumService.getById(albumId));
+//        imageService.create(new Image(media, description));
+//
+//    }
 
 
 }

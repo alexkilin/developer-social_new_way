@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GroupDtoServiceImpl implements GroupDtoService {
@@ -29,8 +30,8 @@ public class GroupDtoServiceImpl implements GroupDtoService {
     }
 
     @Override
-    public GroupDto getGroupById(Long id) {
-        return groupDtoDao.getGroupById(id).orElseThrow(IllegalArgumentException::new);
+    public Optional<GroupDto> getGroupById(Long id) {
+        return groupDtoDao.getGroupById(id);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class GroupDtoServiceImpl implements GroupDtoService {
     }
 
     @Override
-    public GroupInfoDto getGroupByName(String name) {
-        return groupDtoDao.getGroupByName(name).orElseThrow(IllegalArgumentException::new);
+    public Optional<GroupInfoDto> getGroupByName(String name) {
+        return groupDtoDao.getGroupByName(name);
     }
 }

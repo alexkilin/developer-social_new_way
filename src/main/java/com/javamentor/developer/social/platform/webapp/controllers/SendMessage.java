@@ -10,11 +10,11 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ChatController {
+public class SendMessage {
     private MessageService messageService;
 
     @Autowired
-    public ChatController(MessageService messageService) {
+    public SendMessage(MessageService messageService) {
         this.messageService = messageService;
     }
 

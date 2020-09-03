@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ChatDtoService {
     List<ChatDto> getAllChatDtoByUserId(Long userId);
+
+    ChatDto getChatDtoByGroupChatId(Long chatId);
 }
