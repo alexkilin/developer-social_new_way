@@ -45,7 +45,7 @@ public class GroupController {
     public ResponseEntity<?> showGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long id) {
         Optional<GroupDto> groupDtoOptional = groupDtoService.getGroupById(id);
         if(!groupDtoOptional.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Группа с id %s не найдена", id));
         }
         return ResponseEntity.ok().body(groupDtoOptional.get());
     }
@@ -70,7 +70,7 @@ public class GroupController {
     public ResponseEntity<?> findGroupByName(@ApiParam(value = "Наименование группы", example = "JAVA IS 1") @RequestParam("name") String name) {
         Optional<GroupInfoDto> groupInfoDto = groupDtoService.getGroupByName(name);
         if(!groupInfoDto.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Группа с именем %s не найдена", name));
         }
         return ResponseEntity.ok().body(groupInfoDto.get());
     }

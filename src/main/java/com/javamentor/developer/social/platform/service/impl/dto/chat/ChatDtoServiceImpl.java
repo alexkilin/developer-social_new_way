@@ -20,4 +20,11 @@ public class ChatDtoServiceImpl implements ChatDtoService {
     public List<ChatDto> getAllChatDtoByUserId(Long userId) {
         return dao.getAllChatDtoByUserId(userId);
     }
+
+    @Override
+    public ChatDto getChatDtoByGroupChatId(Long chatId) {
+        return dao.getChatDtoByGroupChatId(chatId);
+    }
+
+
 }
