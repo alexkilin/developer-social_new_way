@@ -42,14 +42,20 @@ public class SingleChat {
     inverseJoinColumns = @JoinColumn(name = "message_id"))
     private Set<Message> messages;
 
+    /*@ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "user_single_chat", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "chat_id"))
+    private Set<User> users;*/
+
     public static boolean deleteUserFromSingleChat(SingleChat singleChat, UserService userService, Long userId){
         if (singleChat.getUserOne().getUserId().equals(userId)){
-            singleChat.getUserOne().getSingleChat().removeIf(chat -> chat.getId().equals(singleChat.getId()));
             userService.update(singleChat.getUserOne());
+            /*singleChat.setUserOne(null);*/
             return true;
         } else if (singleChat.getUserTwo().getUserId().equals(userId)){
-            singleChat.getUserTwo().getSingleChat().removeIf(chat -> chat.getId().equals(singleChat.getId()));
+
             userService.update(singleChat.getUserTwo());
+           /* singleChat.setUserTwo(null);*/
             return true;
         }
         return false;

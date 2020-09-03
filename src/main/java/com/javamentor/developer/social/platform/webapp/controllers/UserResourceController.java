@@ -30,7 +30,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/user", produces = "application/json")
 @Api(value = "UserApi", description = "CRUD-Операции с пользователем")
-public class UserResourceController {
+public class    UserResourceController {
 
     private final UserDtoService userDtoService;
     private final UserService userService;

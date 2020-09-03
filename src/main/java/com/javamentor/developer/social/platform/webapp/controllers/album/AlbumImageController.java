@@ -42,16 +42,7 @@ public class AlbumImageController {
 
     }
 
-    @ApiOperation(value = "Все фотоальбомы пользователя по id")
-    @GetMapping("/all")
-    public ResponseEntity<List<AlbumImageDTO>> allAlbum(@RequestParam Long id) {
 
-        List<AlbumImage> lst = albumImageService.getAllByUserId(id);
-        List<AlbumImageDTO> lstDTO = new ArrayList<>();
-        lst.forEach(alb -> lstDTO.add(converter.getDTO(alb)));
-        return new ResponseEntity<>(lstDTO, HttpStatus.OK);
-
-    }
 
 /*    @ApiOperation(value = "Удалить фотоальбом по id")
     @GetMapping("/delete")
@@ -62,7 +53,7 @@ public class AlbumImageController {
 
     }*/
 
-    @ApiOperation(value = "Добавить фотоальбом")
+    /*@ApiOperation(value = "Добавить фотоальбом")
     @PostMapping("/create")
     public void createAlbum(@RequestBody AlbumDto DTO, @RequestParam Long userId) {
 
@@ -70,5 +61,5 @@ public class AlbumImageController {
                 LocalDateTime.now(), LocalDateTime.now());
         albumImageService.create(new AlbumImage(album));
 
-    }
+    }*/
 }

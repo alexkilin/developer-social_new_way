@@ -80,12 +80,32 @@ public class ChatControllers {
             @PathVariable("userId") Long userId) {
         SingleChat singleChat = chatService.getById(chatId);
         if (singleChat == null) {
-            return new ResponseEntity<>("chat not found", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.ok("chat not found");
         }
         if (!SingleChat.deleteUserFromSingleChat(singleChat, userService, userId)){
             return new ResponseEntity<>("user has not found chat", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("done delete chat from user", HttpStatus.OK);
     }
+
+    /*@PostMapping("api/chat/{chatId}/user/{userId}/delete")
+    @ApiOperation(value = "Удаление пользователя из single chat.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "200 OK"),
+            @ApiResponse(code = 400, message = "400 Bad Request")
+    })
+    public ResponseEntity<?> deleteUserFromSingleChat(
+            @PathVariable("chatId") Long chatId,
+            @PathVariable("userId") Long userId) {
+        SingleChat singleChat = chatService.getById(chatId);
+        if (singleChat == null) {
+            return new ResponseEntity<>("chat not found", HttpStatus.BAD_REQUEST);
+        }
+        if (!SingleChat.deleteUserFromSingleChat(singleChat, userId)){
+            return new ResponseEntity<>("user has not found chat", HttpStatus.BAD_REQUEST);
+        }
+        chatService.update(singleChat);
+        return new ResponseEntity<>("done delete chat from user", HttpStatus.OK);
+    }*/
 
 }

@@ -72,7 +72,7 @@ public class ImageController {
 
     }*/
 
-    @ApiOperation(value = "Добавить фото")
+    /*@ApiOperation(value = "Добавить фото")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Фото добавлено")})
     @PostMapping("/create")
@@ -83,7 +83,7 @@ public class ImageController {
                 LocalDateTime.now(), albumService.getById(albumId));
         imageService.create(new Image(media, description));
 
-    }
+    }*/
 
 
 }
