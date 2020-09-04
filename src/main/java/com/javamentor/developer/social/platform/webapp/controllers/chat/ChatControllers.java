@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,16 +67,19 @@ public class ChatControllers {
     public ResponseEntity<List<MessageDto>> getAllMessageDtoBySingleChatId(@PathVariable Long chatId){
         return ResponseEntity.ok(messageDto.getAllMessageDtoFromSingleChatByChatId(chatId));
     }
-    @PostMapping("api/user/chat/group/create")
+    @PostMapping(value = "/chat/group/create" ,params = {"chatUserId","securityUserId"})
     @ApiOperation(value = "Создание группового чата")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = ChatDto.class),
             @ApiResponse(code = 404, message = "404 error")
     })
-    public ResponseEntity<ChatDto> createGroupChat(@RequestBody ChatDto chatDto, Long userId) {
-
-        GroupChat groupChat = mapper.chatToGroupChat(chatDto);
-        groupChat.setUsers(Collections.singleton(userService.getById(userId)));
+    public ResponseEntity<ChatDto> createGroupChat( Long chatUserId, Long securityUserId) {
+         List<ChatDto> chatDtoList = chatDto.getAllChatDtoByUserId(chatUserId);
+         if(chatDtoList.isEmpty()){
+             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+         }
+        GroupChat groupChat = mapper.chatToGroupChat(chatDtoList.get(0));
+        groupChat.setUsers(Collections.singleton(userService.getById(securityUserId)));
         groupChatService.create(groupChat);
         ChatDto outputChatDto = mapper.groupChatToChatDto(groupChat);
         return ResponseEntity.ok(outputChatDto);
