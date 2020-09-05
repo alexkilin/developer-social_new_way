@@ -92,4 +92,12 @@ class ChatTest extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    public void testDeleteUserFromChat() throws Exception {
+        this.mockMvc.perform(post("/api/chat/1/user/1/delete"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
 }
