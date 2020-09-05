@@ -33,4 +33,16 @@ public class SingleChatServiceImpl extends GenericServiceAbstract<SingleChat,Lon
         }
         return false;
     }
+
+    @Override
+    public boolean deleteUserFromSingleChat(SingleChat singleChat, Long userId) {
+        if (singleChat.getUserOne().getUserId().equals(userId)){
+            singleChat.setUserOne(null);
+            return true;
+        } else if (singleChat.getUserTwo().getUserId().equals(userId)){
+            singleChat.setUserTwo(null);
+            return true;
+        }
+        return false;
+    }
 }

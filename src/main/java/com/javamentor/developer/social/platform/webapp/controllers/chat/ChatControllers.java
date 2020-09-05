@@ -3,6 +3,7 @@ import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
+import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
@@ -85,4 +86,25 @@ public class ChatControllers {
         groupChatService.update(groupChat);
      return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
     }
+
+    @PostMapping("api/chat/{chatId}/user/{userId}/delete")
+    @ApiOperation(value = "Удаление пользователя из single chat.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "200 OK"),
+            @ApiResponse(code = 400, message = "400 Bad Request")
+    })
+    public ResponseEntity<?> deleteUserFromSingleChat(
+            @PathVariable("chatId") Long chatId,
+            @PathVariable("userId") Long userId) {
+        SingleChat singleChat = singleChatService.getById(chatId);
+        if (singleChat == null) {
+            return new ResponseEntity<>("chat not found", HttpStatus.BAD_REQUEST);
+        }
+        if (!singleChatService.deleteUserFromSingleChat(singleChat, userId)){
+            return new ResponseEntity<>("user has not found chat", HttpStatus.BAD_REQUEST);
+        }
+        singleChatService.update(singleChat);
+        return new ResponseEntity<>("done delete chat from user", HttpStatus.OK);
+    }
+
 }

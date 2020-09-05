@@ -39,7 +39,10 @@ public class ChatDtoDAOImpl implements ChatDtoDAO {
                 "single.userTwo.avatar," +
                 "single.userTwo.active.name, " +
                 "single.id " +
-                "from User user join user.singleChat single where user.userId=:id")
+                "from SingleChat single " +
+                    "JOIN User u1 ON u1.userId = single.userOne.userId " +
+                    "JOIN User u2 ON u2.userId = single.userTwo.userId " +
+                        "WHERE u1.userId=:id OR u2.userId =:id")
                 .setParameter("id", userId)
                 .unwrap(Query.class)
                 .setResultTransformer(new ChatDtoResultTransformer())
