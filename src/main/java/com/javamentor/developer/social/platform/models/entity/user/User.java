@@ -5,12 +5,14 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
+import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 
@@ -41,7 +43,6 @@ public class User {
     private String lastName;
 
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private Date dateOfBirth;
 
     @Column(name = "education")
@@ -88,7 +89,7 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Status.class, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
@@ -108,6 +109,14 @@ public class User {
     @JoinTable(name = "bookMarks", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private Set<Post> posts;
+
+   /* @JoinTable(name = "comments", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id"))
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = Comment.class, cascade = {CascadeType.ALL})
+    private Set<Comment> comments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Follower> followers;*/
 
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),

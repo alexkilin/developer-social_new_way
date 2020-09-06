@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
+import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
