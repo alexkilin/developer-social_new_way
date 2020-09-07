@@ -19,7 +19,7 @@ import java.util.Date;
 public class UserDto {
 
     @ApiModelProperty(notes = "Автоматически генерируемый ID пользователя. Не указывать при создании, " +
-            "обязательно указывать при изменении учетной записи", position = 1, hidden = true)
+            "обязательно указывать при изменении учетной записи", position = 1)
     @Null(groups = OnCreate.class, message = "Поле id должно принимать null значение при создании")
     @NotNull(groups = OnUpdate.class, message = "Поле id не должно принимать null значение при обновлении")
     private Long userId;
