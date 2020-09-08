@@ -4,10 +4,12 @@ import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +29,16 @@ public class ChatControllers {
     private final MessageDtoService messageDtoService;
     private final GroupChatService groupChatService;
     private final SingleChatService singleChatService;
+    private final UserService userService;
 
-    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService, GroupChatService groupChatService, SingleChatService singleChatService) {
+    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService,
+                           GroupChatService groupChatService, SingleChatService singleChatService,
+                           UserService userService) {
         this.chatDtoService = chatDtoService;
         this.messageDtoService = messageDtoService;
         this.groupChatService = groupChatService;
         this.singleChatService = singleChatService;
+        this.userService = userService;
     }
 
     @GetMapping("/chats")
@@ -85,6 +91,28 @@ public class ChatControllers {
         groupChat.setTitle(chatEditTitleDto.getTitle());
         groupChatService.update(groupChat);
      return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
+    }
+
+    @PostMapping("/{chatId}/user/{userId}/delete")
+    @ApiOperation(value = "Удаление пользователя из single chat.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "200 OK"),
+            @ApiResponse(code = 400, message = "400 Bad Request")
+    })
+    public ResponseEntity<?> deleteUserFromSingleChat(
+            @PathVariable("chatId") Long chatId,
+            @PathVariable("userId") Long userId) {
+        SingleChat singleChat = singleChatService.getById(chatId);
+        User user = userService.getById(userId);
+        if (singleChat == null) {
+            return ResponseEntity.badRequest().body("chat not found");
+        } else if (user == null) {
+            return ResponseEntity.badRequest().body("user not found");
+        }
+        if (!singleChatService.deleteUserFromSingleChat(singleChat, userId)){
+            return ResponseEntity.badRequest().body("user has not found chat");
+        }
+        return ResponseEntity.ok("done delete chat from user");
     }
 
 }

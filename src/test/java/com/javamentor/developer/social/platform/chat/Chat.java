@@ -24,7 +24,7 @@ public class Chat extends AbstractIntegrationTest {
     }, cleanBefore = true) /*, cleanAfter = true*/
     @Test
     public void testDeleteUserFromChat() throws Exception {
-        this.mockMvc.perform(post("/api/chat/1/user/1/delete"))
+        this.mockMvc.perform(post("/api/user/1/user/1/delete"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
