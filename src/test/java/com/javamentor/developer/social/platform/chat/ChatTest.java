@@ -92,4 +92,5 @@ class ChatTest extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
 }
