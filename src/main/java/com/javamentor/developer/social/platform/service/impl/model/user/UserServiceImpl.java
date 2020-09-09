@@ -20,10 +20,13 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
         this.userDAO = userDAO;
     }
 
-
     @Override
     public List<User> getAll() {
         return userDAO.getAll();
+    }
+
+    public User getById(Long id) {
+        return userDAO.getById(id);
     }
 
 }

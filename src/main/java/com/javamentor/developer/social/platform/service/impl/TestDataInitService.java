@@ -625,9 +625,6 @@ public class TestDataInitService {
 
             HashSet<SingleChat> chatSet = new HashSet<>();
             chatSet.add(singleChat);
-
-            users[(numOfUsers / 2) + i].setSingleChat(chatSet);
-            userService.update(users[(numOfUsers / 2) + i]);
         }
     }
 
