@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
@@ -23,7 +22,6 @@ import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/posts", produces = "application/json")
@@ -52,7 +50,7 @@ public class PostController {
             @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PostDto.class)})
     @GetMapping
         public ResponseEntity<List<PostDto>> getPosts() {
-        return ResponseEntity.ok().body(postDtoService.getPosts());
+        return ResponseEntity.ok().body(postDtoService.getAllPosts());
     }
 
     @ApiOperation(value = "Получение поста по тэгу")

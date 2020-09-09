@@ -62,5 +62,5 @@ public class PostDto {
     private Long commentAmount;
 
     @ApiModelProperty(notes = "Количество репостов")
-    private Integer shareAmount;
+    private Long shareAmount;
 }
