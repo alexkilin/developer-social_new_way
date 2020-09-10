@@ -42,4 +42,6 @@ public class SingleChat {
     inverseJoinColumns = @JoinColumn(name = "message_id"))
     private Set<Message> messages;
 
+    private String image;
+
 }

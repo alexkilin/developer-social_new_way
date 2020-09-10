@@ -1,8 +1,10 @@
 package com.javamentor.developer.social.platform.models.entity.user;
 
 import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,5 +21,10 @@ public class Role  {
 
     @Column
     private String name;
+
+    @Transient
+    @JsonIgnore
+    @OneToMany(mappedBy = "role")
+    private Set<User> users;
 
 }

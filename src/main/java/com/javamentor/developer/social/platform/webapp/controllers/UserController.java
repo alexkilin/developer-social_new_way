@@ -1,8 +1,10 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
+import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.FriendsDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
@@ -19,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,7 +81,8 @@ public class UserController {
             @ApiResponse(code = 200, message = "Пользователь создан", response = UserDto.class)
     })
     @PostMapping("/create")
-    public ResponseEntity<UserDto> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NonNull UserDto userDto) {
+    @Validated(OnCreate.class)
+    public ResponseEntity<UserDto> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserDto userDto) {
         userService.create(userConverter.toEntity(userDto));
         logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
         return ResponseEntity.ok(userDto);
