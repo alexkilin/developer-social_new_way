@@ -44,10 +44,10 @@ public class PostDto {
     @ApiModelProperty(notes = "Ссылка на аватарку пользователя")
     private String avatar;
 
-    @ApiModelProperty(notes = "Дата последнего изменения")
+    @ApiModelProperty(notes = "Дата последнего изменения", hidden = true)
     private LocalDateTime lastRedactionDate;
 
-    @ApiModelProperty(notes = "Дата добавления поста")
+    @ApiModelProperty(notes = "Дата добавления поста", hidden = true)
     private LocalDateTime persistDate;
 
     @ApiModelProperty(notes = "Медиаконтент поста")

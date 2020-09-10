@@ -35,4 +35,8 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     public boolean existById(Long id) {
         return userDAO.existById(id);
     }
+    public User getById(Long id) {
+        return userDAO.getById(id);
+    }
+
 }

@@ -21,10 +21,10 @@ public class CommentDto {
     @ApiModelProperty(notes = "Текстовая информация в комментарии.")
     private String comment;
 
-    @ApiModelProperty(notes = "Время последней редакции комментария.")
+    @ApiModelProperty(notes = "Время последней редакции комментария.", hidden = true)
     private LocalDateTime lastRedactionDate;
 
-    @ApiModelProperty(notes = "Время создания комментария.")
+    @ApiModelProperty(notes = "Время создания комментария.", hidden = true)
     private LocalDateTime persistDate;
 
     @ApiModelProperty(notes = "ФИО пользователя оставившего комментарий.")
