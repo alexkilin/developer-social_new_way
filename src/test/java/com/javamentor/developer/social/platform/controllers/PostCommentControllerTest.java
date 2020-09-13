@@ -35,9 +35,7 @@ class PostCommentControllerTest extends AbstractIntegrationTest {
 
     @Test
     void addCommentToPost() throws Exception {
-        CommentDto commentDto = CommentDto.builder()
-                .userDto(UserDto.builder().userId(1L).build())
-                .comment("my comment to")
+        CommentDto commentDto = CommentDto.builder().userDto(UserDto.builder().userId(1L).build()).comment("my comment to")
                 .build();
 
         String commentDtoJson = new Gson().toJson(commentDto);

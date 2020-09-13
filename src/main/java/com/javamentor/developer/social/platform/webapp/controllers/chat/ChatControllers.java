@@ -5,37 +5,34 @@ import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.webapp.converters.GroupChatConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
+import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("api/user")
 @Api(value = "ApiAllChatsUser", description = "Получение всех чатов пользователя,и получение всех сообщений чата.")
 public class ChatControllers {
     private final ChatDtoService chatDto;
     private final MessageDtoService messageDto;
-    private UserService userService;
+    private final GroupChatConverter groupChatConverter;
     private GroupChatService groupChatService;
 
-    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService,UserService userService,GroupChatService groupChatService) {
+    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService,GroupChatService groupChatService,GroupChatConverter groupChatConverter) {
         this.chatDto = chatDtoService;
         this.messageDto = messageDtoService;
-        this.userService = userService;
         this.groupChatService = groupChatService;
+        this.groupChatConverter = groupChatConverter;
     }
-        private ChatDtoToGroupChat mapper
-                = Mappers.getMapper(ChatDtoToGroupChat.class);
-
 
     @GetMapping("/chats")
     @ApiOperation(value = "Список чатов юзера.")
@@ -68,22 +65,21 @@ public class ChatControllers {
     @PostMapping("/chat/group/create")
     @ApiOperation(value = "Создание группового чата")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = ChatDto.class),
+            @ApiResponse(code = 200, message = "OK", response = ChatDto.class),
             @ApiResponse(code = 404, message = "404 error")
     })
-    public ResponseEntity<ChatDto> createGroupChat(@RequestBody ChatDto chatDto, Long userId) {
+    public ResponseEntity<ChatDto> createGroupChat(@RequestBody @Valid @NonNull ChatDto chatDto) {
 
-        GroupChat groupChat = mapper.chatToGroupChat(chatDto);
-        groupChat.setUsers(Collections.singleton(userService.getById(userId)));
-        groupChatService.create(groupChat);
-        ChatDto outputChatDto = mapper.groupChatToChatDto(groupChat);
+        GroupChat groupChat = groupChatConverter.chatToGroupChat(chatDto,60L);
+
+        groupChatService.update(groupChat);
+
+        ChatDto outputChatDto =groupChatConverter.groupChatToChatDto(groupChat);
         return ResponseEntity.ok(outputChatDto);
+
+
     }
 
-    @Mapper
-    public interface ChatDtoToGroupChat {
-        GroupChat chatToGroupChat(ChatDto chatDto);
-        ChatDto groupChatToChatDto(GroupChat groupChat);
-    }
+
 
 }
