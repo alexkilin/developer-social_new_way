@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatD
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
+import com.javamentor.developer.social.platform.webapp.converters.GroupChatConverter;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 
 @Validated
@@ -26,12 +28,14 @@ public class ChatControllers {
     private final MessageDtoService messageDtoService;
     private final GroupChatService groupChatService;
     private final SingleChatService singleChatService;
+    private GroupChatConverter groupChatConverter;
 
-    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService, GroupChatService groupChatService, SingleChatService singleChatService) {
+    public ChatControllers(ChatDtoService chatDtoService, MessageDtoService messageDtoService, GroupChatService groupChatService, SingleChatService singleChatService,GroupChatConverter groupChatConverter) {
         this.chatDtoService = chatDtoService;
         this.messageDtoService = messageDtoService;
         this.groupChatService = groupChatService;
         this.singleChatService = singleChatService;
+        this.groupChatConverter = groupChatConverter;
     }
 
     @GetMapping("/chats")
@@ -84,5 +88,19 @@ public class ChatControllers {
         groupChat.setTitle(chatEditTitleDto.getTitle());
         groupChatService.update(groupChat);
      return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
+    }
+
+    @PostMapping("/chat/group/create")
+    @ApiOperation(value = "Создание группового чата")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK",  response = ChatDto.class),
+            @ApiResponse(code = 404, message = "404 error")
+    })
+    public ResponseEntity<ChatDto> createGroupChat(@RequestBody @NotNull @Valid ChatDto chatDto) {
+
+        GroupChat groupChat = groupChatConverter.chatToGroupChat(chatDto,60L) ;
+        groupChatService.update(groupChat);
+        ChatDto outputChatDto = groupChatConverter.groupChatToChatDto(groupChat);
+        return ResponseEntity.ok(outputChatDto);
     }
 }
