@@ -1,12 +1,12 @@
 package com.javamentor.developer.social.platform.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -36,6 +36,7 @@ public class UserDto {
     @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле имя должен начинаться с буквы")
     private String lastName;
 
+    @JsonFormat(pattern = "dd.MM.yyyy")
     @ApiModelProperty(notes = "Дата рождения пользователя", example = "01.01.2000", position = 6)
     private Date dateOfBirth;
 
@@ -65,14 +66,6 @@ public class UserDto {
     @Size(groups = OnCreate.class, min = 8, message = "Поле password должен быть не мение 8 символов.")
     private String password;
 
-    @ApiModelProperty(notes = "Дата создания учетной записи пользователя, "
-            + "явно указывать не нужно, назначается автоматически при создании", example = "не указывать", hidden = true)
-    private LocalDateTime persistDate;
-
-    @ApiModelProperty(notes = "Дата изменения учетной записи пользователя, явно указывать не нужно, " +
-            "назначается автоматически при внесении изменений", example = "не указывать", hidden = true)
-    private LocalDateTime lastRedactionDate;
-
     @ApiModelProperty(notes = "Город пользователя", example = "Moscow", position = 11)
     private String city;
 
@@ -86,8 +79,11 @@ public class UserDto {
     private String roleName;
 
     @ApiModelProperty(notes = "Статус пользователя, придуманный пользователем",
-            example = "- На моем компе все работает.\n" +
-                      "— Отправим клиенту твой комп.", position = 12)
+            example = "free", position = 12)
     private String statusName;
+
+    @ApiModelProperty(notes = "Показатель активности на сайте",
+            example = "Active", position = 13)
+    private String activeName;
 
 }

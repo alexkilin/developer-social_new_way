@@ -1,0 +1,36 @@
+media:
+  - url: "www.img1.ru"
+    persist_date: "2020-08-04 16:47:23.940175"
+    media_type: 0
+    user_id: 1
+    album_id: 1
+
+  - url: "www.img2.ru"
+    persist_date: "2020-08-04 16:47:23.940175"
+    media_type: 0
+    user_id: 1
+    album_id: 1
+
+  - url: "www.img3.ru"
+    persist_date: "2020-08-04 16:47:23.940175"
+    media_type: 0
+    user_id: 2
+    album_id: 2
+
+  - url: "www.img4.ru"
+    persist_date: "2020-08-04 16:47:23.940175"
+    media_type: 0
+    user_id: 2
+    album_id: 2
+
+  - url: "www.img5.ru"
+    persist_date: "2020-08-04 16:47:23.940175"
+    media_type: 0
+    user_id: 3
+    album_id: 3
+
+  - url: "www.img6.ru"
+    persist_date: "2020-08-04 16:47:23.940175"
+    media_type: 0
+    user_id: 3
+    album_id: 3

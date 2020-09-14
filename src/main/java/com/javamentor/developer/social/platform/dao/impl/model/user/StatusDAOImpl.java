@@ -16,9 +16,9 @@ public class StatusDAOImpl extends GenericDaoAbstract<Status, Long> implements S
 
     @Override
     public Status getByName(String name) {
-        return (Status) entityManager.createQuery(
-                  "FROM Status s" +
-                     "WHERE s.name = :paramName").setParameter("paramName", name)
+        return entityManager.createQuery(
+                  "SELECT s FROM Status s " +
+                     "WHERE s.name = :paramName", Status.class).setParameter("paramName", name.toLowerCase())
                      .getSingleResult();
     }
 }

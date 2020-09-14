@@ -44,6 +44,6 @@ public class AudioDto {
     @ApiModelProperty(notes = "Альбом аудио объекта")
     private String album;
 
-    @ApiModelProperty(notes = "Дата публикования медиа объекта, назначается автоматически при создании")
+    @ApiModelProperty(notes = "Дата публикования медиа объекта, назначается автоматически при создании", hidden = true)
     private LocalDateTime persistDateTime;
 }

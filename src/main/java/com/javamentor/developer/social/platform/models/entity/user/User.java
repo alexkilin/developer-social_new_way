@@ -1,15 +1,18 @@
 package com.javamentor.developer.social.platform.models.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
+import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 
@@ -70,7 +73,7 @@ public class User {
     private LocalDateTime lastRedactionDate;
 
 
-    @Column(name = "is_enable", nullable = false)
+    @Column(name = "is_enable", nullable = true)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean isEnable = true;
 
@@ -86,7 +89,7 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Status.class, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
@@ -101,12 +104,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "language_id"))
     private Set<Language> languages;
 
-
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Post.class, cascade = {CascadeType.PERSIST})
-    @JoinTable(name = "bookMarks", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private Set<Post> posts;
-
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "audio_id"))
@@ -117,8 +114,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "group_chat_id"))
     private Set<GroupChat> groupChats;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = SingleChat.class, cascade = {CascadeType.PERSIST})
-    @JoinTable(name = "user_single_chat", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id"))
-    private Set<SingleChat> singleChat;
 }

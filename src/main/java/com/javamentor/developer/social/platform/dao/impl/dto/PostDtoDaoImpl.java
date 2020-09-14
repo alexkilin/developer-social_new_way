@@ -28,6 +28,53 @@ public class PostDtoDaoImpl implements PostDtoDao {
         this.entityManager = entityManager;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<PostDto> getAllPosts() {
+        List<PostDto> postDtoList = entityManager.createQuery("select " +
+                "p.id, " +                  //0
+                "p.title, " +               //1
+                "p.text, " +                //2
+                "p.persistDate, " +         //3
+                "p.lastRedactionDate, " +   //4
+                "u.userId, " +              //5
+                "u.firstName, " +           //6
+                "u.lastName, " +            //7
+                "u.avatar, " +              //8
+                "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +     //9
+                "(select count(l.id) from PostLike as l where l.post.id = p.id), " +        //10
+                "(select count(c.id) from PostComment as c where c.post.id = p.id), " +     //11
+                "p.repostPerson.size " +    //12
+                "from Post as p " +
+                "join p.user as u ")
+                .unwrap(Query.class)
+                .setResultTransformer(new ResultTransformer() {
+                    @Override
+                    public Object transformTuple(Object[] objects, String[] strings) {
+                        return PostDto.builder()
+                                .id((Long) objects[0])
+                                .title((String) objects[1])
+                                .text((String) objects[2])
+                                .userId((Long) objects[5])
+                                .firstName((String) objects[6])
+                                .lastName((String) objects[7])
+                                .avatar((String) objects[8])
+                                .persistDate((LocalDateTime) objects[3])
+                                .lastRedactionDate((LocalDateTime) objects[4])
+                                .bookmarkAmount((Long) objects[9])
+                                .likeAmount((Long) objects[10])
+                                .commentAmount((Long) objects[11])
+                                .shareAmount(Long.valueOf((Integer) objects[12]))
+                                .build();
+                    }
+
+                    @Override
+                    public List transformList(List list) { return list; }
+                })
+                .getResultList();
+        return postDtoList;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public List<PostDto> getPostsByTag(String text) {
@@ -108,6 +155,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<PostDto> getPostsByUserId(Long id) {
         List<PostDto> postDtoList = new ArrayList<>();
 

@@ -12,9 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MessageDto {
-    @ApiModelProperty(notes = "Последнее редактирование.")
+    @ApiModelProperty(notes = "Последнее редактирование.", hidden = true)
     private LocalDateTime lastRedactionDate;
-    @ApiModelProperty(notes = "Дата публикования сообщения.")
+    @ApiModelProperty(notes = "Дата публикования сообщения.", hidden = true)
     private LocalDateTime persistDate;
     @ApiModelProperty(notes = "Все медиа.")
     private List<MediaDto> mediaDto;

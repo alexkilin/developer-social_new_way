@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.dao.impl;
 
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -52,7 +53,8 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     public void deleteById(PK id) {
-        entityManager.remove(id);
+        T entity = getById(id);
+        entityManager.remove(entity);
     }
 
     @Override
@@ -62,10 +64,12 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     public boolean existById(PK id) {
-        Query query = entityManager.createQuery(
-                "SELECT " +
-                        "CASE WHEN b.id IS NULL THEN false ELSE true END " +
-                        "FROM " + clazz.getSimpleName() + " b WHERE b.id = :paramId").setParameter("paramId", id);
-        return (boolean) query.getSingleResult();
+            Long count = entityManager.createQuery(
+                    "SELECT count(b) " +
+                            "FROM " + clazz.getSimpleName() + " b " +
+                            "WHERE b.id = :paramId", Long.class)
+                    .setParameter("paramId", id)
+                    .getSingleResult();
+            return (count > 0);
     }
 }

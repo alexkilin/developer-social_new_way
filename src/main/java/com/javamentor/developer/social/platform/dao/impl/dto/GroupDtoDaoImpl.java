@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
+import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
@@ -55,7 +56,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
     @Override
     @SuppressWarnings("unchecked")
     public Optional<GroupDto> getGroupById(Long id) {
-        Query queryForGroup = (Query) entityManager.createQuery(
+        Query<GroupDto> queryForGroup = entityManager.createQuery(
                 "SELECT " +
                         "g.id, " +
                         "g.name, " +
@@ -70,9 +71,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "JOIN g.groupCategory gc " +
                         "JOIN g.owner u " +
                     "WHERE g.id = :paramId")
-                .setParameter("paramId", id);
-
-        GroupDto groupDto = (GroupDto) queryForGroup.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
+                .setParameter("paramId", id)
+                .unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
             @Override
             public Object transformTuple(Object[] objects, String[] strings) {
@@ -94,9 +94,9 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
             public List transformList(List list) {
                 return list;
             }
-        }).getSingleResult();
+        });
 
-        return Optional.ofNullable(groupDto);
+        return SingleResultUtil.getSingleResultOrNull(queryForGroup);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
 
     @Override
     public Optional<GroupInfoDto> getGroupByName(String name) {
-        Query queryGroupByName = (Query) entityManager.createQuery(
+        Query<GroupInfoDto> queryGroupByName =  entityManager.createQuery(
                 "SELECT " +
                         "g.id, " +
                         "g.name, " +
@@ -153,9 +153,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id) " +
                     "FROM Group g " +
                     "WHERE g.name = :paramName")
-                .setParameter("paramName", name);
-
-        GroupInfoDto groupInfoDto = (GroupInfoDto) queryGroupByName.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
+                .setParameter("paramName", name)
+                .unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
             @Override
             public Object transformTuple(Object[] objects, String[] strings) {
@@ -171,8 +170,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
             public List transformList(List list) {
                 return list;
             }
-        }).getSingleResult();
+        });
 
-        return Optional.ofNullable(groupInfoDto);
+        return SingleResultUtil.getSingleResultOrNull(queryGroupByName);
     }
 }

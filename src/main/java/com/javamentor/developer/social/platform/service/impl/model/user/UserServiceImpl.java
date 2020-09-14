@@ -26,4 +26,17 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
         return userDAO.getAll();
     }
 
+    @Override
+    public void deleteById(Long id) {
+        userDAO.deleteById(id);
+    }
+
+    @Override
+    public boolean existById(Long id) {
+        return userDAO.existById(id);
+    }
+    public User getById(Long id) {
+        return userDAO.getById(id);
+    }
+
 }

@@ -5,12 +5,14 @@ import com.javamentor.developer.social.platform.models.dto.FriendDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserFriendsDtoDaoImpl implements UserFriendsDtoDao {
 
     @PersistenceContext
@@ -21,22 +23,19 @@ public class UserFriendsDtoDaoImpl implements UserFriendsDtoDao {
         List<FriendDto> userFriends = new ArrayList<>();
 
         try {
-            userFriends = entityManager.createQuery("select * " +
-                    "from friends f " +
-                    "join users u " +
-                    "on f.user_id = u.id" +
-                    "where u.id = " + id)
+            userFriends = entityManager.createQuery("select f.id, f.user.userId, f.friend.userId " +
+                    "from Friend f " +
+                    "where f.user.userId = " + id)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override
                         public Object transformTuple(Object[] objects, String[] strings) {
                             return FriendDto.builder()
-                                    .id(((Number) objects[0]).longValue())
-                                    .userId(((User) objects[1]).getUserId())
-                                    .friendId(((User) objects[2]).getUserId())
+                                    .id((Long) objects[0])
+                                    .userId((Long) objects[1])
+                                    .friendId((Long) objects[2])
                                     .build();
                         }
-
 
                         @Override
                         public List transformList(List list) {
