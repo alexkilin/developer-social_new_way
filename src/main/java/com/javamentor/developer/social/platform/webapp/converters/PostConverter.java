@@ -18,7 +18,11 @@ public abstract class PostConverter {
     public abstract Post toEntity(PostDto postDto);
 
     @Mappings({
-            @Mapping(target = "media", source = "media")
+            @Mapping(target = "media", source = "media"),
+            @Mapping(target = "userId", source = "user.userId"),
+            @Mapping(target = "firstName", source = "user.firstName"),
+            @Mapping(target = "lastName", source = "user.lastName"),
+            @Mapping(target = "avatar", source = "user.avatar")
     })
     public abstract PostDto toDto(Post post);
 

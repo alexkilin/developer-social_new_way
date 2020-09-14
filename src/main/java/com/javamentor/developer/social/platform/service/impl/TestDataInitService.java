@@ -16,6 +16,7 @@ import com.javamentor.developer.social.platform.models.entity.group.GroupCategor
 import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser;
 import com.javamentor.developer.social.platform.models.entity.like.*;
 import com.javamentor.developer.social.platform.models.entity.media.*;
+import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.post.Tag;
 import com.javamentor.developer.social.platform.models.entity.post.UserTabs;
@@ -36,6 +37,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.like.Com
 import com.javamentor.developer.social.platform.service.abstracts.model.like.MessageLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.PostLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.*;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.BookmarkService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.TagService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.*;
@@ -111,8 +113,8 @@ public class TestDataInitService {
 
     private SingleChatService singleChatService;
     private GroupChatService groupChatService;
-
     private GroupCategoryService groupCategoryService;
+    private BookmarkService bookmarkService;
 
 
     @Autowired
@@ -138,7 +140,8 @@ public class TestDataInitService {
                                TagService tagService,
                                SingleChatService singleChatService,
                                GroupChatService groupChatService,
-                               GroupCategoryService groupCategoryService) {
+                               GroupCategoryService groupCategoryService,
+                               BookmarkService bookmarkService) {
         this.userService = userService;
         this.followerService = followerService;
         this.friendService = friendService;
@@ -162,6 +165,7 @@ public class TestDataInitService {
         this.singleChatService = singleChatService;
         this.groupChatService = groupChatService;
         this.groupCategoryService = groupCategoryService;
+        this.bookmarkService = bookmarkService;
     }
 
     public void createEntity() {
@@ -183,13 +187,13 @@ public class TestDataInitService {
         createAudiosEntity();
         createImageEntity();
         createVideosEntity();
-        createPostMessageUserEntity();
         createAlbumAudiosEntity();
         createAlbumImageEntity();
         createAlbumVideoEntity();
         createUserTabsEntity();
         createSingleChatEntity();
         createGroupChatEntity();
+        createBookmarks();
     }
 
     private void createUserEntity() {
@@ -274,7 +278,6 @@ public class TestDataInitService {
                     .linkSite("www.mysite.ru")
                     .password("userpass" + i)
                     .persistDate(userLocalDate)
-                    .posts(null)
                     .role(role)
                     .status(statusTest)
                     .build();
@@ -587,23 +590,6 @@ public class TestDataInitService {
         }
     }
 
-    private void createPostMessageUserEntity() {
-        int postNum = 0;
-        int messageNum = 0;
-        for (int i = 0; i != numOfUsers / 2; i++) {
-            Set<Post> postSet = new HashSet<>();
-            postSet.add(posts[postNum]);
-            postSet.add(posts[postNum++]);
-            postNum++;
-            Set<Message> messageSet = new HashSet<>();
-            messageSet.add(messages[messageNum]);
-            messageSet.add(messages[messageNum++]);
-            messageNum++;
-            users[i].setPosts(postSet);
-            userService.update(users[i]);
-        }
-    }
-
     private void createUserTabsEntity() {
         for (int i = 0; i < 100; i++) {
             UserTabs userTab = UserTabs.builder()
@@ -615,6 +601,13 @@ public class TestDataInitService {
         }
 
 
+    }
+
+    private void createBookmarks() {
+        for (int i = 0; i < numOfUsers / 2; i++) {
+            bookmarkService.create(Bookmark.builder().post(posts[i]).user(users[i]).build());
+            bookmarkService.create(Bookmark.builder().post(posts[i+3]).user(users[i]).build());
+        }
     }
 
     private void createSingleChatEntity() {

@@ -4,6 +4,7 @@ import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -55,4 +56,16 @@ public class PostDto {
 
     @ApiModelProperty(notes = "Тэги новости")
     private List<TagDto> tags;
+
+    @ApiModelProperty(notes = "Количество добалений в избранное/закладки")
+    private Long bookmarkAmount;
+
+    @ApiModelProperty(notes = "Количество лайков")
+    private Long likeAmount;
+
+    @ApiModelProperty(notes = "Количество комментариев")
+    private Long commentAmount;
+
+    @ApiModelProperty(notes = "Количество репостов")
+    private Long shareAmount;
 }
