@@ -80,7 +80,7 @@ public class UserDto {
 
     @ApiModelProperty(notes = "Статус пользователя, придуманный пользователем",
             example = "free", position = 12)
-    private String statusName;
+    private String status;
 
     @ApiModelProperty(notes = "Показатель активности на сайте",
             example = "Active", position = 13)

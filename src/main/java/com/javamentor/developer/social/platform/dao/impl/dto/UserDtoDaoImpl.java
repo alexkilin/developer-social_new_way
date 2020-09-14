@@ -2,9 +2,6 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
-import com.javamentor.developer.social.platform.models.entity.user.Role;
-import com.javamentor.developer.social.platform.models.entity.user.Status;
-import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
@@ -12,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +55,7 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .password((String) objects[8])
                                     .city((String) objects[9])
                                     .roleName(((String) objects[10]))
-                                    .statusName((String) objects[11])
+                                    .status((String) objects[11])
                                     .build();
                         }
 
@@ -112,7 +108,7 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .password((String) objects[8])
                                     .city((String) objects[9])
                                     .roleName((String) objects[10])
-                                    .statusName((String) objects[11])
+                                    .status((String) objects[11])
                                     .build();
                         }
 
