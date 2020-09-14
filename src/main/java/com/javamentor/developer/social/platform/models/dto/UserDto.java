@@ -38,16 +38,24 @@ public class UserDto {
 
     @JsonFormat(pattern = "dd.MM.yyyy")
     @ApiModelProperty(notes = "Дата рождения пользователя", example = "01.01.2000", position = 6)
+    @Null(groups = OnCreate.class, message = "Поле dateOfBirth дложно принимать null значение при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле dateOfBirth не должно принимать null значение при обновлении")
     private Date dateOfBirth;
 
     @ApiModelProperty(notes = "Образование пользователя", example = "Высшее техническое", position = 7)
+    @Null(groups = OnCreate.class, message = "Поле education дложно принимать null значение при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле education не должно принимать null значение при обновлении")
     private String education;
 
     @ApiModelProperty(notes = "Любая информация о пользователе",
             example = "About me", position = 8)
+    @Null(groups = OnCreate.class, message = "Поле aboutMe должно принимать null значение при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле aboutMe не должно принимать null значение при обновлении")
     private String aboutMe;
 
     @ApiModelProperty(notes = "Картинка пользователя", example = "?", position = 10)
+    @Null(groups = OnCreate.class, message = "Поле avatar должно принимать null значение при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле avatar не должно принимать null значение при обновлении")
     private String avatar;
 
     @ApiModelProperty(notes = "Email должен быть корректным, смотрите пример",
@@ -67,9 +75,13 @@ public class UserDto {
     private String password;
 
     @ApiModelProperty(notes = "Город пользователя", example = "Moscow", position = 11)
+    @Null(groups = OnCreate.class, message = "Поле city должно принимать null значение при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле city не должно принимать null значение при обновлении")
     private String city;
 
     @ApiModelProperty(notes = "Ссылка на сайт пользователя", example = "www.site.com", position = 9)
+    @Null(groups = OnCreate.class, message = "Поле linkSite должно принимать null значение при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле linkSite не должно принимать null значение при обновлении")
     private String linkSite;
 
     @ApiModelProperty(notes = "Автоматически назначается при создании всем пользователям, явно указывать не нужно",
@@ -80,10 +92,13 @@ public class UserDto {
 
     @ApiModelProperty(notes = "Статус пользователя, придуманный пользователем",
             example = "free", position = 12)
+    @Null(groups = OnCreate.class, message = "Поле status должно принимать null значение при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле status не должно принимать null значение при обновлении")
     private String status;
 
     @ApiModelProperty(notes = "Показатель активности на сайте",
             example = "Active", position = 13)
+    @NotNull(groups = OnCreate.class, message = "Поле activeName не должно принимать null значение при создании")
     private String activeName;
 
 }
