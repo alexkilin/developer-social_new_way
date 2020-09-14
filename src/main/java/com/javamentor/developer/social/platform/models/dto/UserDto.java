@@ -1,12 +1,12 @@
 package com.javamentor.developer.social.platform.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -36,6 +36,7 @@ public class UserDto {
     @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле имя должен начинаться с буквы")
     private String lastName;
 
+    @JsonFormat(pattern = "dd.MM.yyyy")
     @ApiModelProperty(notes = "Дата рождения пользователя", example = "01.01.2000", position = 6)
     private Date dateOfBirth;
 
@@ -78,12 +79,11 @@ public class UserDto {
     private String roleName;
 
     @ApiModelProperty(notes = "Статус пользователя, придуманный пользователем",
-            example = "- На моем компе все работает.\n" +
-                      "— Отправим клиенту твой комп.", position = 12)
+            example = "free", position = 12)
     private String statusName;
 
     @ApiModelProperty(notes = "Показатель активности на сайте",
-            example = "Online/offline", position = 13)
+            example = "Active", position = 13)
     private String activeName;
 
 }

@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.models.entity.user.Status;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 @Repository
@@ -17,9 +18,10 @@ public class ActiveDAOImpl extends GenericDaoAbstract<Active, Long> implements A
 
     @Override
     public Active getByActiveName(String name) {
-        return (Active) entityManager.createQuery(
-                "from Active a " +
-                        "WHERE a.name = :paramName").setParameter("paramName", name)
+               return  entityManager.createQuery(
+                "SELECT a from Active a " +
+                        "WHERE a.name = :paramName", Active.class)
+                       .setParameter("paramName", name.toUpperCase())
                 .getSingleResult();
     }
 }

@@ -14,11 +14,11 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class MediaPostDto {
 
-    @ApiModelProperty(notes = "Айди пользователя, загрузившего медиа")
+    @ApiModelProperty(notes = "Айди пользователя, загрузившего медиа", example = "1")
     @NotNull
     private Long userId;
 
-    @ApiModelProperty(notes = "Вид медиаконтента")
+    @ApiModelProperty(notes = "Вид медиаконтента", example = "IMAGE")
     @NotNull
     private String mediaType;
 

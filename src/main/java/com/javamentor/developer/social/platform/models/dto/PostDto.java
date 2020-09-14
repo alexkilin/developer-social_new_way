@@ -1,9 +1,13 @@
 package com.javamentor.developer.social.platform.models.dto;
 
+import com.javamentor.developer.social.platform.models.util.OnCreate;
+import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +20,9 @@ import java.util.List;
 @Builder
 public class PostDto {
 
-    @ApiModelProperty(notes = "Автоматически генерируемыЙ ID новости. При создании не указывать, указывать при изменении")
+    @ApiModelProperty(notes = "Автоматически генерируемыЙ ID новости. При создании не указывать, указывать при изменении", example = "1")
+    @Null(groups = OnCreate.class, message = "Поле id должно принимать null значение при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле id не должно принимать null значение при обновлении")
     private Long id;
 
     @NotNull
@@ -24,10 +30,10 @@ public class PostDto {
     private String title;
 
     @NotNull
-    @ApiModelProperty(notes = "Текст новсти, поле не должно быть пустым")
+    @ApiModelProperty(notes = "Текст новости, поле не должно быть пустым")
     private String text;
 
-    @ApiModelProperty(notes = "Айди пользователя, добавившего пост")
+    @ApiModelProperty(notes = "Айди пользователя, добавившего пост", example = "1")
     private Long userId;
 
     @ApiModelProperty(notes = "Имя пользователя")
@@ -39,10 +45,10 @@ public class PostDto {
     @ApiModelProperty(notes = "Ссылка на аватарку пользователя")
     private String avatar;
 
-    @ApiModelProperty(notes = "Дата последнего изменения")
+    @ApiModelProperty(notes = "Дата последнего изменения", hidden = true)
     private LocalDateTime lastRedactionDate;
 
-    @ApiModelProperty(notes = "Дата добавления поста")
+    @ApiModelProperty(notes = "Дата добавления поста", hidden = true)
     private LocalDateTime persistDate;
 
     @ApiModelProperty(notes = "Медиаконтент поста")
@@ -50,4 +56,16 @@ public class PostDto {
 
     @ApiModelProperty(notes = "Тэги новости")
     private List<TagDto> tags;
+
+    @ApiModelProperty(notes = "Количество добалений в избранное/закладки")
+    private Long bookmarkAmount;
+
+    @ApiModelProperty(notes = "Количество лайков")
+    private Long likeAmount;
+
+    @ApiModelProperty(notes = "Количество комментариев")
+    private Long commentAmount;
+
+    @ApiModelProperty(notes = "Количество репостов")
+    private Long shareAmount;
 }

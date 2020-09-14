@@ -1,6 +1,8 @@
 package com.javamentor.developer.social.platform.models.entity.comment;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.javamentor.developer.social.platform.models.entity.like.CommentLike;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -52,3 +54,5 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 }
+
+
