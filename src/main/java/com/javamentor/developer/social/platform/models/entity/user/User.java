@@ -102,20 +102,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "language_id"))
     private Set<Language> languages;
 
-
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Post.class, cascade = {CascadeType.PERSIST})
-    @JoinTable(name = "bookMarks", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private Set<Post> posts;
-
-   /* @JoinTable(name = "comments", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = Comment.class, cascade = {CascadeType.ALL})
-    private Set<Comment> comments;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Follower> followers;*/
-
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "audio_id"))
