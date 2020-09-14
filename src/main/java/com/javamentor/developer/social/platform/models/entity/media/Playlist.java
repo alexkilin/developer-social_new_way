@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,6 +21,7 @@ import java.util.Set;
 public class Playlist {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "playlist_id")
     private Long id;
 
@@ -39,7 +41,15 @@ public class Playlist {
     private User ownerUser;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    @JoinTable(name = "playlist_has_audios", joinColumns = @JoinColumn(name = "audios_id"),
-            inverseJoinColumns = @JoinColumn(name = "playlist_id"))
-    private Set<Audios> playlistContent;
+    @JoinTable(name = "playlist_has_audios", joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "audios_id"))
+    private Set<Audios> playlistContent = new HashSet<>();
+
+    public boolean addAudio(Audios audios) {
+        return playlistContent.add(audios);
+    }
+
+    public boolean removeAudio(Audios audios) {
+        return playlistContent.remove(audios);
+    }
 }

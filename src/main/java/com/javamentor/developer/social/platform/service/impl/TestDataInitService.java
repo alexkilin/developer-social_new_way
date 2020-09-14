@@ -115,7 +115,7 @@ public class TestDataInitService {
     private GroupChatService groupChatService;
     private GroupCategoryService groupCategoryService;
     private BookmarkService bookmarkService;
-
+    private PlaylistService playlistService;
 
     @Autowired
     public TestDataInitService(UserService userService,
@@ -141,7 +141,8 @@ public class TestDataInitService {
                                SingleChatService singleChatService,
                                GroupChatService groupChatService,
                                GroupCategoryService groupCategoryService,
-                               BookmarkService bookmarkService) {
+                               BookmarkService bookmarkService,
+                               PlaylistService playlistService) {
         this.userService = userService;
         this.followerService = followerService;
         this.friendService = friendService;
@@ -166,6 +167,7 @@ public class TestDataInitService {
         this.groupChatService = groupChatService;
         this.groupCategoryService = groupCategoryService;
         this.bookmarkService = bookmarkService;
+        this.playlistService = playlistService;
     }
 
     public void createEntity() {
@@ -194,6 +196,7 @@ public class TestDataInitService {
         createSingleChatEntity();
         createGroupChatEntity();
         createBookmarks();
+        createPlaylists();
     }
 
     private void createUserEntity() {
@@ -607,6 +610,21 @@ public class TestDataInitService {
         for (int i = 0; i < numOfUsers / 2; i++) {
             bookmarkService.create(Bookmark.builder().post(posts[i]).user(users[i]).build());
             bookmarkService.create(Bookmark.builder().post(posts[i+3]).user(users[i]).build());
+        }
+    }
+
+    private void createPlaylists() {
+        User owner = userService.getById(60L);
+        for (int i = 1; i <= 5; i++) {
+            HashSet<Audios> audios = new HashSet<>(audiosService.getPart(i, 3));
+
+            Playlist playlist = Playlist.builder()
+                    .image("image" + i)
+                    .name("playlistName" + i)
+                    .ownerUser(owner)
+                    .playlistContent(audios)
+                    .build();
+            playlistService.create(playlist);
         }
     }
 
