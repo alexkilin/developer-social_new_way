@@ -15,18 +15,19 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 @Table(name = "playlists")
 public class Playlist {
 
     @Id
     @Column(name = "playlist_id")
-    Long id;
+    private Long id;
 
     @Column
-    String name;
+    private String name;
 
     @Column
-    String image;
+    private String image;
 
     @Column(name = "persist_date", nullable = false, updatable = false)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
@@ -35,10 +36,10 @@ public class Playlist {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
-    User ownerUser;
+    private User ownerUser;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "playlist_has_audios", joinColumns = @JoinColumn(name = "audios_id"),
             inverseJoinColumns = @JoinColumn(name = "playlist_id"))
-    Set<Audios> playlistContent;
+    private Set<Audios> playlistContent;
 }
