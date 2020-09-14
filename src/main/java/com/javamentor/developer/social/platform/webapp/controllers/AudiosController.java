@@ -246,7 +246,7 @@ public class AudiosController {
 
     @ApiOperation(value = "Удаление плейлиста по Id для текущего пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Плейлист удален", response = String.class),
+            @ApiResponse(code = 200, message = "Плейлист удален"),
             @ApiResponse(code = 404, message = "Плейлист не найден")})
     @DeleteMapping(value = "/playlist/{playlistId}")
     public ResponseEntity<?> deletePlaylist(@ApiParam(value = "Id плейлиста", example = "2") @PathVariable @NotNull Long playlistId) {
@@ -302,9 +302,9 @@ public class AudiosController {
 
     @ApiOperation(value = "Удаление аудио из плейлиста для текущего пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Аудио добавлено"),
+            @ApiResponse(code = 200, message = "Аудио удалено", response = PlaylistGetDto.class),
             @ApiResponse(code = 400, message = "Плейлист не содержит это аудио"),
-            @ApiResponse(code = 404, message = "Плейлист не найден")})
+            @ApiResponse(code = 404, message = "Плейлист или аудио не найдены")})
     @DeleteMapping(value = "/playlist", params = {"playlistId", "audioId"})
     public ResponseEntity<?> removeAudioFromPlaylist(@ApiParam(value = "Id плейлиста", example = "2")@RequestParam @NotNull Long playlistId,
                                                      @ApiParam(value = "Id аудио", example = "10")@RequestParam @NotNull Long audioId) {
