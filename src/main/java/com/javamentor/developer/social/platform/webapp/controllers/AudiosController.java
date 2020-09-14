@@ -144,7 +144,6 @@ public class AudiosController {
         return ResponseEntity.ok().body(audioDtoService.getAlbumAudioOfUser(60L, album));
     }
 
-    //TODO переделать метод
     @ApiOperation(value = "Добавление аудио в избранное пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено")})
