@@ -98,7 +98,8 @@ public class ChatControllers {
     })
     public ResponseEntity<ChatDto> createGroupChat(@RequestBody @NotNull @Valid ChatDto chatDto) {
 
-        GroupChat groupChat = groupChatConverter.chatToGroupChat(chatDto,60L) ;
+        GroupChat groupChat = groupChatConverter.chatToGroupChat(chatDto,2L) ;
+
         groupChatService.update(groupChat);
         ChatDto outputChatDto = groupChatConverter.groupChatToChatDto(groupChat);
         return ResponseEntity.ok(outputChatDto);
