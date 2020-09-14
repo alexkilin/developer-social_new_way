@@ -9,10 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< HEAD
 
-=======
->>>>>>> dev
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,8 +18,6 @@ public abstract class GroupChatConverter {
 
     @Autowired
     private UserService userService;
-
-<<<<<<< HEAD
 
 
 
@@ -44,25 +39,8 @@ public abstract class GroupChatConverter {
         userSet.add(user);
         return userSet;
     }
-=======
-    @Mapping(source = "chatDto.title", target = "title")
-    @Mapping(source = "chatDto.image", target = "image")
-    @Mapping(source = "userId", target = "users", qualifiedByName = "addUserToChat")
-    public abstract GroupChat chatToGroupChat(ChatDto chatDto, Long userId);
 
 
-    @Named("addUserToChat")
-    public Set<User> addUserToChat(Long userId) {
-      User user = userService.getById(userId);
-      Set<User> userSet = new HashSet<>();
-      userSet.add(user);
-      return userSet;
-    }
 
-    @Mapping(source = "groupChat.title", target = "title")
-    @Mapping(source = "groupChat.image", target = "image")
-    @Mapping(source = "groupChat.id", target = "id")
-    public abstract ChatDto groupChatToChatDto(GroupChat groupChat);
 
->>>>>>> dev
 }
