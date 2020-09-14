@@ -23,3 +23,4 @@ public class Follower {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     private User follower;
 }
+

@@ -18,6 +18,6 @@ public class MediaDto {
     private String url;
     @ApiModelProperty(notes = "Тип медиа.")
     private String mediaType;
-    @ApiModelProperty(notes = "Дата публикования медиа.")
+    @ApiModelProperty(notes = "Дата публикования медиа.", hidden = true)
     private LocalDateTime persistDateTime;
 }

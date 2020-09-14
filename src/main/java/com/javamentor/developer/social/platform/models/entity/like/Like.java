@@ -38,3 +38,4 @@ public class Like {
     private User user;
 
 }
+

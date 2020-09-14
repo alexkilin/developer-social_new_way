@@ -1,15 +1,18 @@
 package com.javamentor.developer.social.platform.models.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
+import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 
@@ -86,7 +89,7 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Status.class, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
