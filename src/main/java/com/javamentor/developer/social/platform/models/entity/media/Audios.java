@@ -54,6 +54,9 @@ public class Audios {
             inverseJoinColumns = @JoinColumn(name = "audio_id"))
     private Set<Audios> audios;
 
+    @ManyToMany(mappedBy = "playlistContent")
+    private Set<Playlist> playlists;
+
     @PrePersist
     private void prePersistFunction() {
         checkConstraints();
