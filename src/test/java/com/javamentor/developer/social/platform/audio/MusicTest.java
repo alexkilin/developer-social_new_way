@@ -113,7 +113,7 @@ class MusicTest extends AbstractIntegrationTest {
 
     @Test
     public void getAudioOfUser() throws Exception {
-        this.mockMvc.perform(get("/api/audios/user/"))
+        this.mockMvc.perform(get("/api/audios/user/{userId}", "60"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -132,7 +132,8 @@ class MusicTest extends AbstractIntegrationTest {
 
     @Test
     public void getPartAudioOfUser() throws Exception {
-        this.mockMvc.perform(get("/api/audios/PartAudioOfUser?currentPage=0&itemsOnPage=2"))
+        this.mockMvc.perform(get("/api/audios/PartAudioOfUser/{userId}?currentPage=0&itemsOnPage=2",
+                "60"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
