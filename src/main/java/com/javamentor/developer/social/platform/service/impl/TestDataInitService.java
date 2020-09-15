@@ -42,13 +42,12 @@ import com.javamentor.developer.social.platform.service.abstracts.model.post.Tag
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -89,6 +88,7 @@ public class TestDataInitService {
     private Album[] album = new Album[numOfAlbums];
     private Tag[] tags = new Tag[numOfTags];
     private SingleChat[] singleChats = new SingleChat[numOfChats];
+    private Audios[] audios = new Audios[numOfMedias];
 
     private UserService userService;
     private FollowerService followerService;
@@ -194,6 +194,7 @@ public class TestDataInitService {
         createSingleChatEntity();
         createGroupChatEntity();
         createBookmarks();
+        addAudiosToUserCollection();
     }
 
     private void createUserEntity() {
@@ -548,17 +549,23 @@ public class TestDataInitService {
     }
 
     private void createAudiosEntity() {
+        List<Audios> list = new ArrayList<>();
         for (int i = 0; i != numOfMedias; i++) {
             if (i % 5 == 0) {
-                audiosService.create(Audios.builder()
+                Audios audio = Audios.builder()
                         .author("Test Author " + i)
                         .icon("TestIcon" + i)
                         .name("AudioTestName " + i)
                         .album("AlbumTestName " + i)
                         .media(medias[i])
-                        .build());
+                        .build();
+
+                audiosService.create(audio);
+                list.add(audio);
             }
         }
+        audios = new Audios[list.size()];
+        audios = list.toArray(audios);
     }
 
     private void createImageEntity() {
@@ -655,6 +662,13 @@ public class TestDataInitService {
                 userService.update(user);
             });
         }
+    }
+
+    private void addAudiosToUserCollection() {
+        User user = userService.getById(60L);
+        HashSet<Audios> audiosSet = new HashSet<>(Arrays.asList(audios));
+        user.setAudios(audiosSet);
+        userService.update(user);
     }
 
 }
