@@ -208,7 +208,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.album " +
                         "FROM User u join u.audios c where u.userId =:userId")
                 .setParameter("userId", userId)
-                .setFirstResult(currentPage)
+                .setFirstResult(currentPage * itemsOnPage)
                 .setMaxResults(currentPage + itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
