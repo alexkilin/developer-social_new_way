@@ -49,6 +49,9 @@ public class Audios {
     @Column(name = "album")
     private String album;
 
+    @Column
+    private Integer length;
+
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "audio_id"))

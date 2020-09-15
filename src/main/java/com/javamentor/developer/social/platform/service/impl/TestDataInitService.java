@@ -557,6 +557,7 @@ public class TestDataInitService {
                         .icon("TestIcon" + i)
                         .name("AudioTestName " + i)
                         .album("AlbumTestName " + i)
+                        .length(238)
                         .media(medias[i])
                         .build();
 
