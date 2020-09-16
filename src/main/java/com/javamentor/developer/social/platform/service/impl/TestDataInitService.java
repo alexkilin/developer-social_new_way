@@ -46,9 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -89,6 +87,7 @@ public class TestDataInitService {
     private Album[] album = new Album[numOfAlbums];
     private Tag[] tags = new Tag[numOfTags];
     private SingleChat[] singleChats = new SingleChat[numOfChats];
+    private Audios[] audios = new Audios[numOfMedias];
 
     private UserService userService;
     private FollowerService followerService;
@@ -115,7 +114,7 @@ public class TestDataInitService {
     private GroupChatService groupChatService;
     private GroupCategoryService groupCategoryService;
     private BookmarkService bookmarkService;
-
+    private PlaylistService playlistService;
 
     @Autowired
     public TestDataInitService(UserService userService,
@@ -141,7 +140,8 @@ public class TestDataInitService {
                                SingleChatService singleChatService,
                                GroupChatService groupChatService,
                                GroupCategoryService groupCategoryService,
-                               BookmarkService bookmarkService) {
+                               BookmarkService bookmarkService,
+                               PlaylistService playlistService) {
         this.userService = userService;
         this.followerService = followerService;
         this.friendService = friendService;
@@ -166,6 +166,7 @@ public class TestDataInitService {
         this.groupChatService = groupChatService;
         this.groupCategoryService = groupCategoryService;
         this.bookmarkService = bookmarkService;
+        this.playlistService = playlistService;
     }
 
     public void createEntity() {
@@ -194,6 +195,8 @@ public class TestDataInitService {
         createSingleChatEntity();
         createGroupChatEntity();
         createBookmarks();
+        createPlaylists();
+        addAudiosToUserCollection();
     }
 
     private void createUserEntity() {
@@ -548,17 +551,24 @@ public class TestDataInitService {
     }
 
     private void createAudiosEntity() {
+        List<Audios> list = new ArrayList<>();
         for (int i = 0; i != numOfMedias; i++) {
             if (i % 5 == 0) {
-                audiosService.create(Audios.builder()
+                Audios audio = Audios.builder()
                         .author("Test Author " + i)
                         .icon("TestIcon" + i)
                         .name("AudioTestName " + i)
                         .album("AlbumTestName " + i)
+                        .length(238)
                         .media(medias[i])
-                        .build());
+                        .build();
+
+                audiosService.create(audio);
+                list.add(audio);
             }
         }
+        audios = new Audios[list.size()];
+        audios = list.toArray(audios);
     }
 
     private void createImageEntity() {
@@ -610,6 +620,21 @@ public class TestDataInitService {
         }
     }
 
+    private void createPlaylists() {
+        User owner = userService.getById(60L);
+        for (int i = 1; i <= 5; i++) {
+            HashSet<Audios> audios = new HashSet<>(audiosService.getPart(i, 3));
+
+            Playlist playlist = Playlist.builder()
+                    .image("image" + i)
+                    .name("playlistName" + i)
+                    .ownerUser(owner)
+                    .playlistContent(audios)
+                    .build();
+            playlistService.create(playlist);
+        }
+    }
+
     private void createSingleChatEntity() {
         for (int i = 0; i < numOfChats; i++) {
             HashSet<Message> messagesSet = new HashSet<>();
@@ -655,6 +680,13 @@ public class TestDataInitService {
                 userService.update(user);
             });
         }
+    }
+
+    private void addAudiosToUserCollection() {
+        User user = userService.getById(60L);
+        HashSet<Audios> audiosSet = new HashSet<>(Arrays.asList(audios));
+        user.setAudios(audiosSet);
+        userService.update(user);
     }
 
 }
