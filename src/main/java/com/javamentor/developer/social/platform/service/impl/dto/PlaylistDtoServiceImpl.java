@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlaylistDtoServiceImpl implements PlaylistDtoService {
@@ -29,10 +30,14 @@ public class PlaylistDtoServiceImpl implements PlaylistDtoService {
     }
 
     @Override
-    public PlaylistGetDto getById(Long id) {
-        PlaylistGetDto playlistGetDto = playlistDtoDao.getById(id);
-        playlistGetDto.setContent(playlistDtoDao.getAudioDtoByPlaylistId(playlistGetDto.getId()));
-        return playlistGetDto;
+    public Optional<PlaylistGetDto> getById(Long id) {
+        Optional<PlaylistGetDto> optional = playlistDtoDao.getById(id);
+        if (optional.isPresent()) {
+            PlaylistGetDto playlistGetDto = optional.get();
+            playlistGetDto.setContent(playlistDtoDao.getAudioDtoByPlaylistId(playlistGetDto.getId()));
+            optional = Optional.of(playlistGetDto);
+        }
+        return optional;
     }
 
     @Override

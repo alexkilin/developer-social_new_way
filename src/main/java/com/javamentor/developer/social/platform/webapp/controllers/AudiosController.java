@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -259,22 +259,28 @@ public class AudiosController {
 
     @ApiOperation(value = "Получение списка плейлистов текущего пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Плейлисты получены", response = PlaylistGetDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Плейлисты получены", response = PlaylistGetDto.class, responseContainer = "List"),
+            @ApiResponse(code = 404, message = "У текущего пользователя нет плейлистов")})
     @GetMapping(value = "/playlist/all")
     public ResponseEntity<?> getPlaylistsOfUser() {
-        return ResponseEntity.ok().body(playlistDtoService.getAllByUserId(60L));
+        List<PlaylistGetDto> playlistGetDtoList = playlistDtoService.getAllByUserId(60L);
+        if (playlistGetDtoList.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No playlists exist for current user");
+        }
+        return ResponseEntity.ok().body(playlistGetDtoList);
     }
 
-    @ApiOperation(value = "Получение плейлиста по Id для текущего пользователя")
+    @ApiOperation(value = "Получение плейлиста по Id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Плейлист получен", response = PlaylistGetDto.class),
             @ApiResponse(code = 404, message = "Плейлист не найден")})
     @GetMapping(value = "/playlist/{playlistId}")
     public ResponseEntity<?> getPlaylistById(@ApiParam(value = "Id плейлиста", example = "2")@PathVariable @NotNull Long playlistId) {
-        if (!playlistService.userHasPlaylist(60L, playlistId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s for current user", playlistId));
+        Optional<PlaylistGetDto> optionalPlaylistGetDto = playlistDtoService.getById(playlistId);
+        if (!optionalPlaylistGetDto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s", playlistId));
         }
-        return ResponseEntity.ok().body(playlistDtoService.getById(playlistId));
+        return ResponseEntity.ok().body(optionalPlaylistGetDto.get());
     }
 
     @ApiOperation(value = "Добавление аудио в плейлист для текущего пользователя")

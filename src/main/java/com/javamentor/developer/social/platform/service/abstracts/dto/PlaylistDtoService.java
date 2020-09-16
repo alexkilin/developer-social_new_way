@@ -4,9 +4,10 @@ import com.javamentor.developer.social.platform.models.dto.PlaylistCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PlaylistGetDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PlaylistDtoService {
-    PlaylistGetDto getById(Long id);
+    Optional<PlaylistGetDto> getById(Long id);
     List<PlaylistGetDto> getAllByUserId(Long userId);
     PlaylistGetDto create(PlaylistCreateDto playlistCreateDto);
 }

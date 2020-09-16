@@ -1,10 +1,9 @@
 package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.PlaylistDtoDao;
+import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PlaylistGetDto;
-import com.javamentor.developer.social.platform.models.dto.TagDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
@@ -13,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
@@ -22,8 +22,8 @@ public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public PlaylistGetDto getById(Long id) {
-        List<PlaylistGetDto> list = entityManager.createQuery("SELECT " +
+    public Optional<PlaylistGetDto> getById(Long id) {
+        Query<PlaylistGetDto> query = entityManager.createQuery("SELECT " +
                 "p.id," +
                 "p.name, " +
                 "p.image," +
@@ -49,9 +49,9 @@ public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
                     public List transformList(List collection) {
                         return collection;
                     }
-                })
-                .getResultList();
-        return list.get(0);
+                });
+
+        return SingleResultUtil.getSingleResultOrNull(query);
     }
 
     @Override
