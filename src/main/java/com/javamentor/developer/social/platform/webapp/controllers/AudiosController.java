@@ -123,20 +123,23 @@ public class AudiosController {
     @ApiOperation(value = "Получение всего аудио из коллекции пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Все аудио из коллекции пользователя",response = AudioDto.class, responseContainer = "List")})
-    @GetMapping(value = "/user/")
-    public ResponseEntity<List<AudioDto>> getAudioOfUser() {
-        logger.info(String.format("Отправка всего аудио пользователя %s", 60L));
-        return ResponseEntity.ok().body(audioDtoService.getAudioOfUser(60L));
+    @GetMapping(value = "/user/{userId}")
+    public ResponseEntity<List<AudioDto>> getAudioOfUser(
+            @ApiParam(value = "Id юзера", example = "1")@PathVariable("userId") @NonNull Long userId) {
+        logger.info(String.format("Отправка всего аудио пользователя %s", userId));
+        return ResponseEntity.ok().body(audioDtoService.getAudioOfUser(userId));
     }
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя по частям")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио из коллекции пользователя по частям",responseContainer = "List",response = AudioDto.class)})
-    @GetMapping(value = "/PartAudioOfUser", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<List<AudioDto>> getPartAudioOfUser(@ApiParam(value = "Текущая страница", example = "1")@RequestParam("currentPage") int currentPage,
-                                                             @ApiParam(value = "Количество данных на страницу", example = "15")@RequestParam("itemsOnPage") int itemsOnPage) {
-        logger.info(String.format("Аудио пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", 60L, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(audioDtoService.getPartAudioOfUser(60L, currentPage, itemsOnPage));
+    @GetMapping(value = "/PartAudioOfUser/{userId}", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<List<AudioDto>> getPartAudioOfUser(
+            @ApiParam(value = "Текущая страница", example = "1")@RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15")@RequestParam("itemsOnPage") int itemsOnPage,
+            @ApiParam(value = "Id юзера", example = "1")@PathVariable("userId") @NonNull Long userId) {
+        logger.info(String.format("Аудио пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
+        return ResponseEntity.ok().body(audioDtoService.getPartAudioOfUser(userId, currentPage, itemsOnPage));
     }
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя по автору")
