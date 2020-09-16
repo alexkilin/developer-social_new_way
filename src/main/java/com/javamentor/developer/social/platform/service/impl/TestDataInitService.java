@@ -227,20 +227,12 @@ public class TestDataInitService {
                 .name("ADMIN")
                 .build();
 
-        Status status = Status.builder()
-                .name("free")
-                .build();
-
-        Status status2 = Status.builder()
-                .name("busy")
-                .build();
-
         String name;
         String emailName;
         Active activityTest;
         Set<Language> languageTestSet;
         Role role;
-        Status statusTest;
+        String statusTest;
 
         for (int i = 0; i != numOfUsers; i++) {
             if (i == 0) {
@@ -249,21 +241,21 @@ public class TestDataInitService {
                 activityTest = active;
                 languageTestSet = langSet;
                 role = roleAdmin;
-                statusTest = status;
+                statusTest = "free";
             } else if (i % 2 == 0) {
                 name = "User";
                 emailName = "user";
                 activityTest = active;
                 languageTestSet = langSet;
                 role = roleUser;
-                statusTest = status;
+                statusTest = "free";
             } else {
                 name = "User";
                 emailName = "user";
                 activityTest = disabled;
                 languageTestSet = langSet2;
                 role = roleUser;
-                statusTest = status2;
+                statusTest = "free";
             }
             users[i] = User.builder()
                     .aboutMe("My description about life - " + name + i)
