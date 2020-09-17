@@ -52,10 +52,8 @@ public class Audios {
     @Column
     private Integer length;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = {CascadeType.PERSIST})
-    @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "audio_id"))
-    private Set<Audios> audios;
+    @ManyToMany(mappedBy = "audios")
+    private Set<User> users;
 
     @ManyToMany(mappedBy = "playlistContent")
     private Set<Playlist> playlists;
