@@ -14,41 +14,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DataSet(value = {
         "datasets/user/active.yml",
         "datasets/user/role.yml",
-        "datasets/user/status.yml",
+        //"datasets/user/status.yml",
         "datasets/user/userFriends.yml",
         "datasets/user/user.yml"
 }, cleanBefore = true, cleanAfter = true)
 public class UserControllerTests extends AbstractIntegrationTest {
 
-//    @Autowired
-//    private MockMvc mockMvc;
-//
-//    @Test
-//    void createUser() throws Exception {
-//        mockMvc.perform(post("/api/user/create")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("{" +
-//                        "\"firstName\": \"Админ\"," +
-//                        "\"lastName\": \"LastName\"," +
-//                        "\"dateOfBirth\": \"1994-05-30\"," +
-//                        "\"aboutMe\": \"Some information\"," +
-//                        "\"avatar\": \"myImage\"," +
-//                        "\"education\": \"PTU\"," +
-//                        "\"statusName\": \"Learning java\"," +
-//                        "\"activeName\": \"Online\"," +
-//                        "\"email\": \"admin@admin.ru\"," +
-//                        "\"password\": \"adminpass\"," +
-//                        "\"roleName\": \"User\"," +
-//                        "\"city\": \"Msc\"," +
-//                        "\"linkSite\": \"mysite.ru\"" +
-//                        "}"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.firstName").value("Админ"))
-//                .andExpect(jsonPath("$.email").value("admin@admin.ru"))
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-//    }
-//
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void createUser() throws Exception {
+        mockMvc.perform(post("/api/user/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"firstName\": \"Админ\"," +
+                        "\"lastName\": \"LastName\"," +
+                        //"\"dateOfBirth\": \"30.05.1994\"," +
+                        //"\"aboutMe\": \"Some information\"," +
+                        //"\"avatar\": \"myImage\"," +
+                        //"\"education\": \"PTU\"," +
+                        //"\"status\": \"Learning java\"," +
+                        "\"activeName\": \"ACTIVE\"," +
+                        "\"email\": \"admin@admin.ru\"," +
+                        "\"password\": \"Adminpass123\"" +
+                        //"\"roleName\": \"User\"" +
+                        //"\"city\": \"Msc\"," +
+                        //"\"linkSite\": \"mysite.ru\"" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("Админ"))
+                .andExpect(jsonPath("$.email").value("admin@admin.ru"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+   }
+
 //    @Test
 //    void findUserById() throws Exception {
 //        mockMvc.perform(get("/api/user/{id}", 4L))
