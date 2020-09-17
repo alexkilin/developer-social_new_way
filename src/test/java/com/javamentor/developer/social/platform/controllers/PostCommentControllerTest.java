@@ -30,22 +30,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         cleanBefore = true)
 class PostCommentControllerTest extends AbstractIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Test
-    void addCommentToPost() throws Exception {
-        CommentDto commentDto = CommentDto.builder()
-                .userDto(UserDto.builder().userId(1L).build())
-                .comment("my comment to")
-                .build();
-
-        String commentDtoJson = new Gson().toJson(commentDto);
-
-        this.mockMvc.perform(post("/api/postsComments/{postId}/comment", "1")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(commentDtoJson))
-                .andDo(print())
-                .andExpect(status().isCreated());
-    }
+//    @Autowired
+//    private MockMvc mockMvc;
+//
+//    @Test
+//    void addCommentToPost() throws Exception {
+//        CommentDto commentDto = CommentDto.builder()
+//                .userDto(UserDto.builder().userId(1L).build())
+//                .comment("my comment to")
+//                .build();
+//
+//        String commentDtoJson = new Gson().toJson(commentDto);
+//
+//        this.mockMvc.perform(post("/api/postsComments/{postId}/comment", "1")
+//        .contentType(MediaType.APPLICATION_JSON)
+//        .content(commentDtoJson))
+//                .andDo(print())
+//                .andExpect(status().isCreated());
+//    }
 }
