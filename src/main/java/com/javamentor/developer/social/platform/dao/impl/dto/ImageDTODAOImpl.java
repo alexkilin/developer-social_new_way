@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.ImageDTODAO;
-import com.javamentor.developer.social.platform.models.dto.ImageDTO;
+import com.javamentor.developer.social.platform.models.dto.ImageDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class ImageDTODAOImpl implements ImageDTODAO {
 
 
     @Override
-    public List<ImageDTO> getAllByUserId(Long id) {
+    public List<ImageDto> getAllByUserId(Long id) {
 
         Query q = manager.createQuery(
                 "SELECT img.id, " +
@@ -47,7 +47,7 @@ public class ImageDTODAOImpl implements ImageDTODAO {
                         String descr = (String) objects[2];
                         LocalDateTime time = (LocalDateTime) objects[3];
 
-                        return ImageDTO.builder()
+                        return ImageDto.builder()
                                 .id(id)
                                 .url(url)
                                 .description(descr)

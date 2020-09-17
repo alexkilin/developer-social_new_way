@@ -287,6 +287,7 @@ public class AudiosController {
         return ResponseEntity.ok().body(optionalPlaylistGetDto.get());
     }
 
+    //FIXME переименовать в "/playlist/{playlistId}/audio"
     @ApiOperation(value = "Добавление аудио в плейлист для текущего пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио добавлено", response = PlaylistGetDto.class),
@@ -310,6 +311,7 @@ public class AudiosController {
         return ResponseEntity.ok().body(playlistConverter.toPlaylistGetDto(playlist));
     }
 
+    //FIXME переименовать в "/playlist/{playlistId}/audio"
     @ApiOperation(value = "Удаление аудио из плейлиста для текущего пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио удалено", response = PlaylistGetDto.class),
