@@ -27,23 +27,26 @@ public class AudioDto {
     private Long id;
 
     @ApiModelProperty(notes = "Адрес, на котором располагается аудио объект",
-            required = true)
+            required = true, example = "/stuff/audio_341.mp3")
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "'url' Must not be null when creating and updating AudioDto.class")
     @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "'text' Must not consist of spaces AudioDto.class")
     private String url;
 
-    @ApiModelProperty(notes = "Адрес иконки (превью) аудио объекта")
+    @ApiModelProperty(notes = "Адрес иконки (превью) аудио объекта", example = "/icons/132_1.jpg")
     private String icon;
 
-    @ApiModelProperty(notes = "Название аудио объекта")
+    @ApiModelProperty(notes = "Название аудио объекта", example = "Voodoo People")
     private String name;
 
-    @ApiModelProperty(notes = "Автор аудио объекта")
+    @ApiModelProperty(notes = "Автор аудио объекта",  example = "The Prodigy")
     private String author;
 
-    @ApiModelProperty(notes = "Альбом аудио объекта")
+    @ApiModelProperty(notes = "Альбом аудио объекта",  example = "Music For The Jilted Generation")
     private String album;
 
-    @ApiModelProperty(notes = "Дата публикования медиа объекта, назначается автоматически при создании", hidden = true)
+    @ApiModelProperty(notes = "Длительность трека в секундах")
+    private Integer length;
+
+    @ApiModelProperty(notes = "Дата публикования медиа объекта, назначается автоматически при создании", hidden = true, example = "2020-09-14T23:24:17.900994")
     private LocalDateTime persistDateTime;
 }
