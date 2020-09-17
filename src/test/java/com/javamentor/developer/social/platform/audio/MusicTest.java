@@ -44,6 +44,7 @@ class MusicTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(5));
     }
 
+    //FIXME
     @Test
     public void getPartAudios() throws Exception {
         this.mockMvc.perform(get("/api/audios/getPart?currentPage=1&itemsOnPage=2"))

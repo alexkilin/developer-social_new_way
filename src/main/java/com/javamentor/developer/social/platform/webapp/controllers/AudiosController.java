@@ -260,6 +260,7 @@ public class AudiosController {
         return ResponseEntity.ok().body(String.format("Playlist with id %s deleted", playlistId));
     }
 
+    //FIXME Пагинация, переименовать в "/playlist"
     @ApiOperation(value = "Получение списка плейлистов текущего пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Плейлисты получены", response = PlaylistGetDto.class, responseContainer = "List"),
