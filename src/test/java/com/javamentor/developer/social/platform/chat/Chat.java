@@ -11,22 +11,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class Chat extends AbstractIntegrationTest {
-    @Autowired
-    private MockMvc mockMvc;
-
-    @DataSet(value = {
-            "chat/user/Active.yml",
-            "chat/user/Role.yml",
-            "chat/user/Status.yml",
-            "chat/user/User.yml",
-            "chat/chats/SingleChat.yml",
-            "chat/chats/User_single_chat.yml",
-    }, cleanBefore = true) /*, cleanAfter = true*/
-    @Test
-    public void testDeleteUserFromChat() throws Exception {
-        this.mockMvc.perform(post("/api/user/1/user/1/delete"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
+//    @Autowired
+//    private MockMvc mockMvc;
+//
+//    @DataSet(value = {
+//            "chat/user/Active.yml",
+//            "chat/user/Role.yml",
+//            "chat/user/Status.yml",
+//            "chat/user/User.yml",
+//            "chat/chats/SingleChat.yml",
+//            "chat/chats/User_single_chat.yml",
+//    }, cleanBefore = true) /*, cleanAfter = true*/
+//    @Test
+//    public void testDeleteUserFromChat() throws Exception {
+//        this.mockMvc.perform(post("/api/user/1/user/1/delete"))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//    }
 
 }

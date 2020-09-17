@@ -22,13 +22,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         cleanBefore = true)
 class GroupHasUserControllerTest extends AbstractIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Test
-    void userJoinGroup() throws Exception {
-        this.mockMvc.perform(post("/api/groupsHasUsers/add?groupId=5&userId=1"))
-                .andDo(print())
-                .andExpect(status().isCreated());
-    }
+//    @Autowired
+//    private MockMvc mockMvc;
+//
+//    @Test
+//    void userJoinGroup() throws Exception {
+//        this.mockMvc.perform(post("/api/groupsHasUsers/add?groupId=5&userId=1"))
+//                .andDo(print())
+//                .andExpect(status().isCreated());
+//    }
 }

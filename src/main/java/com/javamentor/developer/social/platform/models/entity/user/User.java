@@ -42,7 +42,7 @@ public class User {
     @NotNull
     private String lastName;
 
-    @NotNull
+    //@NotNull
     private Date dateOfBirth;
 
     @Column(name = "education")
@@ -89,10 +89,8 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Status.class, cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "status_id", nullable = false)
-    private Status status;
+    @Column(name = "status")
+    private String status;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Active.class, cascade = {CascadeType.PERSIST})

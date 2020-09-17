@@ -80,10 +80,11 @@ public class UserDto {
 
     @ApiModelProperty(notes = "Статус пользователя, придуманный пользователем",
             example = "free", position = 12)
-    private String statusName;
+    private String status;
 
     @ApiModelProperty(notes = "Показатель активности на сайте",
             example = "Active", position = 13)
+    @NotNull(groups = OnCreate.class, message = "Поле activeName не должно принимать null значение при создании")
     private String activeName;
 
 }
