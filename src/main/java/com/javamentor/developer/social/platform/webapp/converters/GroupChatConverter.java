@@ -29,7 +29,7 @@ public abstract class GroupChatConverter {
 
     @Mapping(source = "title", target = "title")
     @Mapping(source = "image", target = "image")
-    @Mapping(source = "id", target = "id")
+    @Mapping(source = "groupChat.id", target = "id")
     public abstract ChatDto groupChatToChatDto(GroupChat groupChat);
 
     @Named("userIdToSet")
