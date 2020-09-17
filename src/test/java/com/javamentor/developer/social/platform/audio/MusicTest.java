@@ -40,7 +40,7 @@ class MusicTest extends AbstractIntegrationTest {
         this.mockMvc.perform(get("/api/audios/all"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(5));
+                .andExpect(jsonPath("$.length()").value(6));
     }
 
     @Test
@@ -49,16 +49,16 @@ class MusicTest extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(2))
-                .andExpect(jsonPath("$[0].album").value("AlbumTestName 1"))
-                .andExpect(jsonPath("$[0].author").value("Test Author 1"))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon0"))
-                .andExpect(jsonPath("$[0].name").value("AudioTestName 1"))
-                .andExpect(jsonPath("$[1].id").value(3))
-                .andExpect(jsonPath("$[1].album").value("AlbumTestName 2"))
-                .andExpect(jsonPath("$[1].author").value("Test Author 2"))
-                .andExpect(jsonPath("$[1].icon").value("TestIcon2"))
-                .andExpect(jsonPath("$[1].name").value("AudioTestName 2"));
+                .andExpect(jsonPath("$[0].id").value(3))
+                .andExpect(jsonPath("$[0].album").value("AlbumTestName 2"))
+                .andExpect(jsonPath("$[0].author").value("Test Author 2"))
+                .andExpect(jsonPath("$[0].icon").value("TestIcon2"))
+                .andExpect(jsonPath("$[0].name").value("AudioTestName 2"))
+                .andExpect(jsonPath("$[1].id").value(4))
+                .andExpect(jsonPath("$[1].album").value("AlbumTestName 3"))
+                .andExpect(jsonPath("$[1].author").value("Test Author 3"))
+                .andExpect(jsonPath("$[1].icon").value("TestIcon3"))
+                .andExpect(jsonPath("$[1].name").value("AudioTestName 3"));
     }
 
     @Test
@@ -73,11 +73,11 @@ class MusicTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$[0].author").value("Test Author 2"))
                 .andExpect(jsonPath("$[0].icon").value("TestIcon2"))
                 .andExpect(jsonPath("$[0].name").value("AudioTestName 2"))
-                .andExpect(jsonPath("$[1].id").value(5))
-                .andExpect(jsonPath("$[1].album").value("AlbumTestName 4"))
+                .andExpect(jsonPath("$[1].id").value(6))
+                .andExpect(jsonPath("$[1].album").value("AlbumTestName 5"))
                 .andExpect(jsonPath("$[1].author").value("Test Author 2"))
-                .andExpect(jsonPath("$[1].icon").value("TestIcon2"))
-                .andExpect(jsonPath("$[1].name").value("AudioTestName 4"));
+                .andExpect(jsonPath("$[1].icon").value("TestIcon5"))
+                .andExpect(jsonPath("$[1].name").value("AudioTestName 5"));
     }
 
     @Test
