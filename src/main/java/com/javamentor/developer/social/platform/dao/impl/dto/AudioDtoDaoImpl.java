@@ -38,7 +38,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.author, " +
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
-                        "c.album " +
+                        "c.album, " +
+                        "c.length " +
                         "FROM Audios as c WHERE c.author = :author")
                 .setParameter("author", author)
                 .unwrap(Query.class)
@@ -55,6 +56,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                                         .url((String) objects[4])
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
+                                        .length((Integer) objects[7])
                                         .build();
                             }
 
@@ -78,7 +80,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                 "c.author, " +
                 "c.media.url, " +
                 "c.media.persistDateTime, " +
-                "c.album " +
+                "c.album, " +
+                "c.length " +
                 "FROM Audios as c WHERE c.name = :name")
                 .setParameter("name", name)
                 .unwrap(Query.class)
@@ -95,6 +98,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                                         .url((String) objects[4])
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
+                                        .length((Integer) objects[7])
                                         .build();
                             }
 
@@ -123,7 +127,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.author, " +
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
-                        "c.album " +
+                        "c.album, " +
+                        "c.length " +
                         "FROM Audios as c WHERE c.album = :album")
                 .setParameter("album", album)
                 .unwrap(Query.class)
@@ -140,6 +145,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                                         .url((String) objects[4])
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
+                                        .length((Integer) objects[7])
                                         .build();
                             }
 
@@ -164,7 +170,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.author, " +
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
-                        "c.album " +
+                        "c.album, " +
+                        "c.length " +
                         "FROM User u join u.audios c where u.userId =:userId")
                 .setParameter("userId", userId)
                 .unwrap(Query.class)
@@ -181,6 +188,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                                         .url((String) objects[4])
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
+                                        .length((Integer) objects[7])
                                         .build();
                             }
 
@@ -205,11 +213,12 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.author, " +
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
-                        "c.album " +
-                        "FROM User u join u.audios c where u.userId =:userId")
+                        "c.album, " +
+                        "c.length " +
+                        "FROM User u join u.audios c where u.userId =:userId order by c.id asc")
                 .setParameter("userId", userId)
                 .setFirstResult(currentPage * itemsOnPage)
-                .setMaxResults(currentPage + itemsOnPage)
+                .setMaxResults(itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {
@@ -224,6 +233,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                                         .url((String) objects[4])
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
+                                        .length((Integer) objects[7])
                                         .build();
                             }
 
@@ -248,7 +258,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.author, " +
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
-                        "c.album " +
+                        "c.album, " +
+                        "c.length " +
                         "FROM User u join u.audios c where u.userId =:userId and c.author =:author")
                 .setParameter("userId", userId)
                 .setParameter("author", author)
@@ -266,6 +277,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                                         .url((String) objects[4])
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
+                                        .length((Integer) objects[7])
                                         .build();
                             }
 
@@ -290,7 +302,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.author, " +
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
-                        "c.album " +
+                        "c.album, " +
+                        "c.length " +
                         "FROM User u join u.audios c where  c.album =:album and u.userId =:userId")
                 .setParameter("userId", userId)
                 .setParameter("album", album)
@@ -308,6 +321,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                                         .url((String) objects[4])
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
+                                        .length((Integer) objects[7])
                                         .build();
                             }
 
@@ -335,6 +349,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<AudioDto> getAudioFromAlbomOfUser(Long albumId) {
         List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
@@ -344,7 +359,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.author, " +
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
-                        "c.album " +
+                        "c.album, " +
+                        "c.length " +
                         "FROM AlbumAudios u join u.audios as c where u.album.id =:albumId")
                 .setParameter("albumId", albumId)
                 .unwrap(Query.class)
@@ -361,6 +377,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                                         .url((String) objects[4])
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
+                                        .length((Integer) objects[7])
                                         .build();
                             }
 

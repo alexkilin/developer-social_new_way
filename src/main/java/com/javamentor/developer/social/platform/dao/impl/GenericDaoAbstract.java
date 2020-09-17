@@ -18,6 +18,7 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     private Class<T> clazz;
 
+    @SuppressWarnings("unchecked")
     public GenericDaoAbstract() {
         Type t = getClass().getGenericSuperclass();
         ParameterizedType pt = (ParameterizedType) t;
@@ -25,13 +26,19 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<T> getPartAudio(int currentPage, int itemsOnPage) {
-        return entityManager.createQuery("SELECT a FROM " + clazz.getSimpleName() + " as a").setFirstResult(currentPage)
-                .setMaxResults(itemsOnPage).getResultList();
+        return entityManager.createQuery("SELECT " +
+                "a " +
+                "FROM " + clazz.getSimpleName() + " as a")
+                .setFirstResult(currentPage * itemsOnPage)
+                .setMaxResults(itemsOnPage)
+                .getResultList();
     }
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<T> getAll() {
         return entityManager.createQuery("SELECT a FROM " + clazz.getSimpleName() + " as a").getResultList();
     }
