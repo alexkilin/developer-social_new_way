@@ -7,9 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Date;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -25,7 +22,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
 //    @Autowired
 //    private MockMvc mockMvc;
-
+//
 //    @Test
 //    void createUser() throws Exception {
 //        mockMvc.perform(post("/api/user/create")
@@ -43,7 +40,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 //                .andExpect(jsonPath("$.email").value("admin@admin.ru"))
 //                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 //   }
-
+//
 //    @Test
 //    void findUserById() throws Exception {
 //        mockMvc.perform(get("/api/user/{id}", 4L))
@@ -103,7 +100,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 //                .andExpect(jsonPath("$.email").value("Update@email.com"))
 //                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 //    }
-
+//
 //    @Test
 //    void findUserFriends() throws Exception {
 //        mockMvc.perform(get("/api/user/getFriends/2"))
@@ -112,7 +109,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 //                .andExpect(status().isOk())
 //                .andExpect(jsonPath("$.length()").value(4));
 //    }
-//
+
 //    @Test
 //    public void deleteUserInvalidId() throws Exception {
 //        mockMvc.perform(delete("/api/user/delete/555")
