@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DataSet(value = {
         "datasets/user/active.yml",
         "datasets/user/role.yml",
-        //"datasets/user/status.yml",
         "datasets/user/userFriends.yml",
         "datasets/user/user.yml"
 }, cleanBefore = true, cleanAfter = true)
@@ -30,17 +29,9 @@ public class UserControllerTests extends AbstractIntegrationTest {
                 .content("{" +
                         "\"firstName\": \"Админ\"," +
                         "\"lastName\": \"LastName\"," +
-                        //"\"dateOfBirth\": \"30.05.1994\"," +
-                        //"\"aboutMe\": \"Some information\"," +
-                        //"\"avatar\": \"myImage\"," +
-                        //"\"education\": \"PTU\"," +
-                        //"\"status\": \"Learning java\"," +
                         "\"activeName\": \"ACTIVE\"," +
                         "\"email\": \"admin@admin.ru\"," +
                         "\"password\": \"Adminpass123\"" +
-                        //"\"roleName\": \"User\"" +
-                        //"\"city\": \"Msc\"," +
-                        //"\"linkSite\": \"mysite.ru\"" +
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk())
