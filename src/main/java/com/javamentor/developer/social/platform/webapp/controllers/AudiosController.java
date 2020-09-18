@@ -223,8 +223,8 @@ public class AudiosController {
             return ResponseEntity.badRequest()
                     .body(String.format("Audio album with name '%s' already exists", albumDto.getName()));
         }
-        AlbumAudios albumAudios = albumAudioService
-                .createAlbumAudiosWithOwner(albumConverter.toAlbumAudios(albumDto, userService.getById(60L)));
+        AlbumAudios albumAudios = albumAudioService.createAlbumAudiosWithOwner(
+                albumConverter.toAlbumAudios(albumDto, userService.getById(60L)));
         logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
         return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumAudios));
     }
@@ -235,7 +235,7 @@ public class AudiosController {
     @GetMapping(value = "/getFromAlbumOfUser", params = {"albumId"})
     public ResponseEntity<?> getFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7")@RequestParam @NotNull Long albumId) {
         logger.info(String.format("Все аудио из альбома с id:%s отправлено", albumId));
-        return ResponseEntity.ok().body(audioDtoService.getAudioFromAlbomOfUser(albumId));
+        return ResponseEntity.ok().body(audioDtoService.getAudioFromAlbumOfUser(albumId));
     }
 
     @ApiOperation(value = "Создание нового плейлиста для текущего пользователя")
