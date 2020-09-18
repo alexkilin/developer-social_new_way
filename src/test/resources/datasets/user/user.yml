@@ -5,7 +5,7 @@ users:
     date_of_birth: "2008-05-30 15:20:12.121000"
     about_me: "My description about life - Admin1"
     education: "MIT University"
-    status_id: 1
+    status: "Pureness and perfection"
     active_id: 1
     image: "www.myavatar0.ru/9090"
     email: "admin0@user.ru"
@@ -23,7 +23,7 @@ users:
     date_of_birth: "2008-05-30 15:20:12.121000"
     about_me: "My description about life - Admin2"
     education: "MIT University"
-    status_id: 1
+    status: "Pureness and perfection"
     active_id: 1
     image: "www.myavatar0.ru/9090"
     email: "admin0@user.ru"
@@ -41,7 +41,7 @@ users:
     date_of_birth: "2008-05-30 15:20:12.121000"
     about_me: "My description about life - Admin3"
     education: "MSU"
-    status_id: 1
+    status: "Pureness and perfection"
     active_id: 1
     image: "www.avatar.ru/9090"
     email: "admin0@user.ru"
@@ -59,7 +59,7 @@ users:
     date_of_birth: "2008-05-30 15:20:12.121000"
     about_me: "My description about life - Admin4"
     education: "MIT University"
-    status_id: 2
+    status: "Listen to music"
     active_id: 1
     image: "www.myavatar.ru/9080"
     email: "admin0@user.ru"
@@ -77,7 +77,7 @@ users:
     date_of_birth: "2008-05-30 15:20:12.121000"
     about_me: "My description about life - Admin0"
     education: "Harvard"
-    status_id: 1
+    status: "Pureness and perfection"
     active_id: 1
     image: "www.myavatar0.ru/9090"
     email: "admin0@user.ru"

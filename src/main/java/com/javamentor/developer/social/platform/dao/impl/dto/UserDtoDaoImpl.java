@@ -37,7 +37,7 @@ class UserDtoDaoImpl implements UserDtoDao {
                     "u.password, " +
                     "u.city, " +
                     "u.role.name, " +
-                    "u.status.name " +
+                    "u.status " +
                     "FROM User u")
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
@@ -90,7 +90,7 @@ class UserDtoDaoImpl implements UserDtoDao {
                     "u.password, " +
                     "u.city, " +
                     "u.role.name, " +
-                    "u.status.name " +
+                    "u.status " +
                     "FROM User u WHERE u.userId = " + id)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
