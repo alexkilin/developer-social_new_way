@@ -193,7 +193,7 @@ public class AudiosController {
     @GetMapping(value = "/getAllAlbumsFromUser")
     public ResponseEntity<List<AlbumDto>> getAllAlbums() {
         logger.info(String.format("Получение всех альбомов пользователя с id %s", 60L));
-        return ResponseEntity.ok().body(albumDtoService.getAlbumOfUser(60L));
+        return ResponseEntity.ok().body(albumDtoService.getAllByUserId(60L));
     }
 
 
@@ -241,6 +241,7 @@ public class AudiosController {
     @ApiOperation(value = "Создание нового плейлиста для текущего пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Плейлист успешно создан", response = PlaylistGetDto.class)})
+    @Validated(OnCreate.class)
     @PostMapping(value = "/playlist")
     public ResponseEntity<?> createPlaylist(@ApiParam(value = "Объект нового плейлиста") @RequestBody @NotNull @Valid PlaylistCreateDto playlistCreateDto) {
         playlistCreateDto.setOwnerUserId(60L);

@@ -19,13 +19,13 @@ public class AlbumDto {
 
     @ApiModelProperty(notes = "Автоматически генерируемый ID. Не указывать при создании, " +
             "обязательно указывать при изменении объекта")
-    @Null(groups = OnCreate.class, message = "'id' Must be null when creating AudioAlbum.class")
-    @NotNull(groups = OnUpdate.class, message = "'id' Must not accept null values when updating AudioAlbum.class")
+    @Null(groups = OnCreate.class, message = "'id' Must be null when creating")
+    @NotNull(groups = OnUpdate.class, message = "'id' Must not accept null values when updating")
     private Long id;
 
     @ApiModelProperty(notes = "Название альбома")
-    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "'name' Must not be null when creating and updating AudioAlbum.class")
-    @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "'name' Must not be empty when creating and updating AudioAlbum.class")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "'name' Must not be null when creating and updating")
+    @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "'name' Must not be empty when creating and updating")
     private String name;
 
     @ApiModelProperty(notes = "Адрес иконки (превью) альбома")

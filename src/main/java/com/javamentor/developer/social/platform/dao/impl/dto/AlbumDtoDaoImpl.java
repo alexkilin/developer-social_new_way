@@ -3,24 +3,17 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.dto.AlbumDto;
-import com.javamentor.developer.social.platform.models.entity.album.Album;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
-import com.javamentor.developer.social.platform.models.entity.album.UserHasAlbum;
-import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.models.dto.ImageDto;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.hibernate.query.Query;
-import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,14 +37,29 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
     }
 
     @Override
-    public List<AlbumDto> getAlbumOfUser(Long id) {
+    public List<AlbumDto> getAllByUserId(Long id) {
         return entityManager.createQuery(
-                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AlbumDto(c.album.id, c.album.name, c.album.icon)" +
-                        "FROM UserHasAlbum " +
-                        "AS c " +
-                        "WHERE c.user.userId = :id", AlbumDto.class)
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AlbumDto(" +
+                        "a.id, " +
+                        "a.name, " +
+                        "a.icon) " +
+                        "FROM Album a " +
+                        "WHERE a.userOwnerId.userId = :id", AlbumDto.class)
                 .setParameter("id", id)
                 .getResultList();
+    }
+
+    @Override
+    public Optional<AlbumDto> getById(Long id) {
+        Query<AlbumDto> query = (Query<AlbumDto>) entityManager.createQuery(
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AlbumDto(" +
+                "album.id, " +
+                "album.name, " +
+                "album.icon) " +
+                "FROM Album AS album " +
+                "WHERE album.id = :id", AlbumDto.class)
+                .setParameter("id", id);
+        return SingleResultUtil.getSingleResultOrNull(query);
     }
 
 }

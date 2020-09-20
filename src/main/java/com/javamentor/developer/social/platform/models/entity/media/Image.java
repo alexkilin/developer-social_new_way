@@ -1,11 +1,13 @@
 package com.javamentor.developer.social.platform.models.entity.media;
 
+import com.google.common.base.Objects;
 import com.javamentor.developer.social.platform.exception.ApiRequestException;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Blob;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -30,6 +32,14 @@ public class Image {
 
     @Column(name = "description")
     private String description;
+
+    @ManyToMany(mappedBy = "imageSet")
+    private Set<AlbumImage> album;
+
+    @PreRemove
+    private void preRemoveFunction() {
+        album.forEach(a -> a.removeImage(this));
+    }
 
     @PrePersist
     private void prePersistFunction() {

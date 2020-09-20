@@ -6,5 +6,8 @@ import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.service.abstracts.GenericService;
 
+import java.util.Optional;
+
 public interface AlbumImageService extends GenericService<AlbumImage, Long> {
+    Optional<AlbumImage> getOptionalById(Long id);
 }

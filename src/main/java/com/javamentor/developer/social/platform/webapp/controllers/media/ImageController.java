@@ -1,46 +1,229 @@
 package com.javamentor.developer.social.platform.webapp.controllers.media;
 
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.*;
+import com.javamentor.developer.social.platform.models.entity.album.Album;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
+import com.javamentor.developer.social.platform.models.entity.media.Image;
+import com.javamentor.developer.social.platform.models.util.OnCreate;
+import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDTOService;
+import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
+import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import io.swagger.annotations.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
-@RequestMapping(value = "/api/image")
+@Validated
+@RequestMapping(value = "/api/images")
 @Api(value = "ImageApi")
 public class ImageController {
 
+    ImageDTOService imageDTOService;
+    ImageService imageService;
+    AlbumDtoService albumDtoService;
+    AlbumImageService albumImageService;
+    UserService userService;
+    AlbumConverter albumConverter;
+
+    @Autowired
+    public ImageController(ImageDTOService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter) {
+        this.imageDTOService = imageDTOService;
+        this.imageService = imageService;
+        this.albumDtoService = albumDtoService;
+        this.albumImageService = albumImageService;
+        this.userService = userService;
+        this.albumConverter = albumConverter;
+    }
+
     @ApiOperation(value = "Создать изображение")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Изображение создано", response = AudioDto.class)})
-    @PostMapping(value = "/image")
-    public ResponseEntity<?> createImage() {
+            @ApiResponse(code = 201, message = "Изображение создано", response = ImageDto.class)})
+    @PostMapping(value = "")
+    @Validated(OnCreate.class)
+    public ResponseEntity<?> createImage(@ApiParam(value = "объект изображения") @RequestBody @Valid ImageCreateDto imageCreateDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(imageDTOService.create(imageCreateDto));
+    }
+
+    @ApiOperation(value = "Удалить изображение")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Изображение удалено", response = String.class),
+            @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
+    @DeleteMapping(value = "/{imageId}")
+    public ResponseEntity<?> deleteImage(@ApiParam(value = "Id изображения") @NotNull @PathVariable Long imageId) {
+        if(!imageService.existById(imageId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
+        }
+        imageService.deleteById(imageId);
+        return ResponseEntity.ok("Deleted");
+    }
+
+    @ApiOperation(value = "Получить изображение по Id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Изображение получено", response = ImageDto.class),
+            @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
+    @GetMapping(value = "/{imageId}")
+    public ResponseEntity<?> getImageById(@ApiParam(value = "Id изображения") @NotNull @PathVariable Long imageId) {
+        Optional<ImageDto> optional = imageDTOService.getById(imageId);
+        if(!optional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(optional.get());
+    }
+
+    //TODO Пагинация
+    @ApiOperation(value = "Получить все изображения по Id пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Изображения получены", response = ImageDto.class, responseContainer = "List"),
+            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class),
+            @ApiResponse(code = 404, message = "Изображения не найдены", response = String.class)})
+    @GetMapping(value = "")
+    public ResponseEntity<?> getAllImagesOfUser(@ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
+                                                @ApiParam(value = "Страница", example = "0") @RequestParam("offset") @NotNull int offset,
+                                                @ApiParam(value = "Количество данных на страницу", example = "5") @RequestParam("limit") @NotNull int limit) {
+        if(!userService.existById(userId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
+        }
+        List<ImageDto> imageDtoList = imageDTOService.getAllByUserId(offset, limit, userId);
+        if(imageDtoList.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No images for user id %s", userId));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(imageDtoList);
+    }
+
+    @ApiOperation(value = "Создать фотоальбом")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Альбом создан", response = AlbumDto.class)})
+    @Validated(OnCreate.class)
+    @PostMapping(value = "/albums")
+    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект альбома") @Valid @NotNull @RequestBody AlbumCreateDto albumCreateDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(albumDtoService.createAlbumImage(albumCreateDto));
+    }
+
+    @ApiOperation(value = "Удалить фотоальбом")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Фотоальбом удален", response = String.class),
+            @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class)})
+    @DeleteMapping(value = "/albums/{albumId}")
+    public ResponseEntity<?> deleteAlbum(@ApiParam(value = "Id альбома") @NotNull @PathVariable Long albumId) {
+        if(!albumImageService.existById(albumId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
+        }
+        albumImageService.deleteById(albumId);
+        return ResponseEntity.ok("Deleted");
+    }
+
+    @ApiOperation(value = "Добавить существующее изображение в фотоальбом")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Изображение добавлено", response = AudioDto.class),
+            @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class),
+            @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
+    @PutMapping(value = "/albums/{albumId}/images")
+    public ResponseEntity<?> addImageToAlbum(@ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId,
+                                             @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId) {
+        Optional<AlbumImage> optional = albumImageService.getOptionalById(albumId);
+        if(!optional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
+        }
+        Optional<Image> imageOptional = imageService.getOptionalById(imageId);
+        if(!imageOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
+        }
+        AlbumImage albumImage = optional.get();
+        if(!albumImage.addImage(imageOptional.get())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("This album already contains image with id %s", imageId));
+        }
+        albumImageService.update(albumImage);
+        return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumImage));
+    }
+
+    @ApiOperation(value = "Удалить существующее изображение из фотоальбома")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Изображение удалено", response = AudioDto.class),
+            @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class),
+            @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
+    @DeleteMapping(value = "/albums/{albumId}/images")
+    public ResponseEntity<?> removeImageFromAlbum(@ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId,
+                                             @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId) {
+        Optional<AlbumImage> optional = albumImageService.getOptionalById(albumId);
+        if(!optional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
+        }
+        Optional<Image> imageOptional = imageService.getOptionalById(imageId);
+        if(!imageOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
+        }
+        AlbumImage albumImage = optional.get();
+        if(!albumImage.removeImage(imageOptional.get())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("This album has no image with id %s", imageId));
+        }
+        albumImageService.update(albumImage);
+        return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumImage));
+    }
+
+    //TODO дописать
+    @ApiOperation(value = "Получить содержимое фотоальбома")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "", response = ImageDto.class, responseContainer = "List"),
+            @ApiResponse(code = 404, message = "", response = String.class),
+            @ApiResponse(code = 404, message = "", response = String.class)
+    })
+    @GetMapping(value = "/albums/{albumId}/images")
+    public ResponseEntity<?> getImagesFromAlbumById(
+            @ApiParam(value = "Id фотоальбома", example = "101") @PathVariable @NotNull Long albumId,
+            @ApiParam(value = "Страница", example = "0") @RequestParam("offset") @NotNull int offset,
+            @ApiParam(value = "Количество данных на страницу", example = "5") @RequestParam("limit") @NotNull int limit) {
+        if(!albumImageService.existById(albumId)) {
+            return null;
+        }
+//        List<ImageDto> imageDtoList =
+
         return null;
     }
 
-    @ApiOperation(value = "Получить все фотоальбомы пользователя по частям")
+    @ApiOperation(value = "Получить фотоальбом по Id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Фотоальбом получен", response = AlbumDto.class, responseContainer = "List"),
+            @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class)})
+    @GetMapping(value = "/albums/{albumId}")
+    public ResponseEntity<?> getImageAlbumById(
+            @ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId) {
+        Optional<AlbumDto> optional = albumDtoService.getById(albumId);
+        if(!optional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
+        }
+        return ResponseEntity.ok(optional.get());
+    }
+
+    //TODO Пагинация
+    @ApiOperation(value = "Получить все фотоальбомы пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Фотоальбомы получены", response = AudioDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Фотоальбомы не найдены", response = String.class)})
     @GetMapping(value = "/albums")
     public ResponseEntity<?> getAllImageAlbumsOfUser(
             @ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
-            @ApiParam(value = "Страница", example = "0") @RequestParam("currentPage") @NotNull int currentPage,
-            @ApiParam(value = "Количество данных на страницу", example = "5") @RequestParam("itemsOnPage") @NotNull int itemsOnPage) {
-        return null;
-    }
-
-    @ApiOperation(value = "Получить фотоальбом по Id")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Фотоальбом получен", response = AudioDto.class, responseContainer = "List"),
-            @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class)})
-    @GetMapping(value = "/albums/{userId}")
-    public ResponseEntity<?> getImageAlbumById(
-            @ApiParam(value = "Id пользователя", example = "60") @PathVariable @NotNull Long userId) {
-        return null;
+            @ApiParam(value = "Страница", example = "0") @RequestParam("offset") @NotNull int offset,
+            @ApiParam(value = "Количество данных на страницу", example = "5") @RequestParam("limit") @NotNull int limit) {
+        if(!userService.existById(userId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
+        }
+        List<AlbumDto> albumDtoList = albumDtoService.getAllByUserId(userId);
+        if(albumDtoList.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No albums for user id %s", userId));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(albumDtoList);
     }
 
 }

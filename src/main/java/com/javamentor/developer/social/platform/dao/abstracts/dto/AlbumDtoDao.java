@@ -4,9 +4,11 @@ import com.javamentor.developer.social.platform.models.dto.AlbumDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AlbumDtoDao {
 
-    List<AlbumDto> getAlbumOfUser(Long id);
+    List<AlbumDto> getAllByUserId(Long id);
+    Optional<AlbumDto> getById(Long id);
 
 }
