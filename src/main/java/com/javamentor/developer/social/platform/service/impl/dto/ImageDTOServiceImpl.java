@@ -33,7 +33,6 @@ public class ImageDTOServiceImpl implements ImageDTOService {
         return DAO.getAllByUserId(offset, limit, id);
     }
 
-    //TODO
     @Override
     public List<ImageDto> getAllByAlbumId(int offset, int limit, Long id) {
         return DAO.getAllByAlbumId(offset, limit, id);

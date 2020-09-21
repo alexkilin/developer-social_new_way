@@ -51,12 +51,12 @@ public class ImageDTODAOImpl implements ImageDTODAO {
                         "im.description, " +
                         "im.media.persistDateTime) " +
                         "FROM Image im " +
-                        "WHERE im.album = :userId " +
+                        "WHERE im.media.album.id = :albumId " +
                         "ORDER BY im.media.persistDateTime ASC", ImageDto.class)
-                .setParameter("userId", id)
+                .setParameter("albumId", id)
                 .setFirstResult(offset)
                 .setMaxResults(limit);
-        return null;
+        return query.getResultList();
     }
 
     @Override

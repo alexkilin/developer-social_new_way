@@ -33,12 +33,11 @@ public class Image {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(mappedBy = "imageSet")
-    private Set<AlbumImage> album;
-
     @PreRemove
     private void preRemoveFunction() {
-        album.forEach(a -> a.removeImage(this));
+        if(media.getAlbum() != null) {
+            media.getAlbum().removeMedia(media);
+        }
     }
 
     @PrePersist

@@ -25,7 +25,7 @@ public class Media {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -48,4 +48,6 @@ public class Media {
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
+
 }
+
