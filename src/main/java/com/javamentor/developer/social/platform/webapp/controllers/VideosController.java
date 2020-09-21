@@ -2,17 +2,24 @@ package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.models.entity.media.Audios;
+import com.javamentor.developer.social.platform.models.entity.media.MediaType;
+import com.javamentor.developer.social.platform.models.entity.media.Videos;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.VideoConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,13 +34,15 @@ public class VideosController {
     private final VideosService videosService;
     private final VideoConverter videoConverter;
     private final VideoDtoService videoDtoService;
+    private final UserService userService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public VideosController(VideosService videosService, VideoConverter videoConverter, VideoDtoService videoDtoService){
+    public VideosController(VideosService videosService, VideoConverter videoConverter, VideoDtoService videoDtoService, UserService userService){
         this.videosService =  videosService;
         this.videoConverter = videoConverter;
         this.videoDtoService = videoDtoService;
+        this.userService = userService;
     }
 
     @ApiOperation(value = "Получение всего видео")
@@ -85,5 +94,17 @@ public class VideosController {
             @ApiParam(value = "Id юзера", example = "4")@PathVariable("userId") @NonNull Long userId) {
         logger.info(String.format("Видео пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         return ResponseEntity.ok().body(videoDtoService.getPartVideoOfUser(userId, currentPage, itemsOnPage));
+    }
+
+    @ApiOperation(value = "Добавление видео")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Видео успешно добавлено", response = VideoDto.class)})
+    @PostMapping(value = "/add")
+    public ResponseEntity<?> addVideo(@ApiParam(value = "Объект добавляемого видео")@RequestBody @Valid @NonNull VideoDto videoDto) {
+        User user = userService.getById(60L);
+        Videos audios = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
+        videosService.create(audios);
+        logger.info(String.format("Добавление видео с id %s в бд", videoDto.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(videoDto);
     }
 }
