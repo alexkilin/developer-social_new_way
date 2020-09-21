@@ -2,10 +2,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.VideoDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.VideoDto;
-import org.hibernate.query.Query;
-import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -77,6 +74,10 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
 
     @Override
     public List<VideoDto> getVideoFromAlbumOfUser(Long albumId) {
-        return null;
+        return entityManager.createQuery(
+                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                        " v.media.url, v.name, v.icon, v.media.persistDateTime)" +
+                        " FROM AlbumVideo av JOIN av.videos as v WHERE av.album.id =:albumId", VideoDto.class)
+                .setParameter("albumId", albumId).getResultList();
     }
 }

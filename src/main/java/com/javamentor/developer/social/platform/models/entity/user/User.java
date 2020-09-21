@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
+import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -106,6 +107,11 @@ public class User {
     @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "audio_id"))
     private Set<Audios> audios;
+
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Videos.class, cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "users_videos_collections", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "video_id"))
+    private Set<Videos> videos;
 
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = GroupChat.class, cascade = {CascadeType.PERSIST})
     @JoinTable(joinColumns = @JoinColumn(name = "user_id"),

@@ -58,6 +58,6 @@ public class VideoDtoServiceImpl implements VideoDtoService {
 
     @Override
     public List<VideoDto> getVideoFromAlbumOfUser(Long albumId) {
-        return null;
+        return videoDtoDao.getVideoFromAlbumOfUser(albumId);
     }
 }
