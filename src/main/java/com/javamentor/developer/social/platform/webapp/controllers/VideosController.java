@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoSe
 import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
 import com.javamentor.developer.social.platform.webapp.converters.VideoConverter;
 import io.swagger.annotations.*;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -62,5 +63,27 @@ public class VideosController {
     public ResponseEntity<VideoDto> getVideoOfName(@ApiParam(value = "Название видео", example = "Test video 3")@PathVariable @NotNull String name) {
         logger.info(String.format("Отправка видео c названием %s", name));
         return ResponseEntity.ok().body(videoDtoService.getVideoOfName(name));
+    }
+
+    @ApiOperation(value = "Получение всего видео из коллекции пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Все видео из коллекции пользователя",response = VideoDto.class, responseContainer = "List")})
+    @GetMapping(value = "/user/{userId}")
+    public ResponseEntity<List<VideoDto>> getVideoOfUser(
+            @ApiParam(value = "Id юзера", example = "4")@PathVariable("userId") @NonNull Long userId) {
+        logger.info(String.format("Отправка всего видео пользователя %s", userId));
+        return ResponseEntity.ok().body(videoDtoService.getVideoOfUser(userId));
+    }
+
+    @ApiOperation(value = "Получение видео из коллекции пользователя по частям")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Видео из коллекции пользователя по частям",responseContainer = "List",response = VideoDto.class)})
+    @GetMapping(value = "/PartVideoOfUser/{userId}", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<List<VideoDto>> getPartVideoOfUser(
+            @ApiParam(value = "Текущая страница", example = "0")@RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "1")@RequestParam("itemsOnPage") int itemsOnPage,
+            @ApiParam(value = "Id юзера", example = "4")@PathVariable("userId") @NonNull Long userId) {
+        logger.info(String.format("Видео пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
+        return ResponseEntity.ok().body(videoDtoService.getPartVideoOfUser(userId, currentPage, itemsOnPage));
     }
 }

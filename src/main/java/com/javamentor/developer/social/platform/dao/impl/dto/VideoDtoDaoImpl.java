@@ -42,12 +42,22 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
 
     @Override
     public List<VideoDto> getVideoOfUser(Long userId) {
-        return null;
+        return entityManager.createQuery(
+                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                        " m.url, v.name, v.icon, m.persistDateTime)" +
+                        " FROM Videos as v JOIN Media as m ON v.media.id = m.id WHERE m.user.userId = :userId", VideoDto.class)
+                .setParameter("userId", userId).getResultList();
     }
 
     @Override
     public List<VideoDto> getPartVideoOfUser(Long userId, int currentPage, int itemsOnPage) {
-        return null;
+        return entityManager.createQuery(
+                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                        " m.url, v.name, v.icon, m.persistDateTime)" +
+                        " FROM Videos as v JOIN Media as m ON v.media.id = m.id WHERE m.user.userId = :userId", VideoDto.class)
+                .setParameter("userId", userId)
+                .setFirstResult(currentPage * itemsOnPage)
+                .setMaxResults(itemsOnPage).getResultList();
     }
 
     @Override

@@ -28,17 +28,17 @@ public class VideoDtoServiceImpl implements VideoDtoService {
 
     @Override
     public List<VideoDto> getVideoOfAlbum(String album) {
-        return null;
+        return videoDtoDao.getVideoOfAlbum(album);
     }
 
     @Override
     public List<VideoDto> getVideoOfUser(Long userId) {
-        return null;
+        return videoDtoDao.getVideoOfUser(userId);
     }
 
     @Override
     public List<VideoDto> getPartVideoOfUser(Long userId, int currentPage, int itemsOnPage) {
-        return null;
+        return videoDtoDao.getPartVideoOfUser(userId, currentPage, itemsOnPage);
     }
 
     @Override
