@@ -1,5 +1,5 @@
 role:
   - id: 1
-    name: "User"
+    name: "USER"
   - id: 2
-    name: "Admin"
+    name: "ADMIN"
