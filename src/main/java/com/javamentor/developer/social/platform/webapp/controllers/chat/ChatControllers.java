@@ -127,10 +127,24 @@ public class ChatControllers {
                 @ApiResponse(code = 200, message = "OK", response = ChatDto.class),
                 @ApiResponse(code = 404, message = "404 error")
         })
-        public ResponseEntity<ChatDto> createGroupChat (@RequestBody @NotNull @Valid ChatDto chatDto){
+        public ResponseEntity<?> createGroupChat (@RequestBody @NotNull @Valid ChatDto chatDto){
 
             GroupChat groupChat  = groupChatConverter.chatToGroupChat(chatDto, 3L);
-            groupChatService.create(groupChat);
+            if(groupChat.getId()!=null){
+
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("id is not null"));
+            }
+            if(groupChat.getImage()==null){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("image is  null"));
+            }
+            if(groupChat.getTitle()==null){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("title is  null"));
+            }
+            try {
+                groupChatService.create(groupChat);
+            }catch (Exception ex){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            }
             ChatDto outputChatDto = groupChatConverter.groupChatToChatDto(groupChat);
             return ResponseEntity.ok(outputChatDto);
         }

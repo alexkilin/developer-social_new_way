@@ -15,10 +15,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @DataSet(value = {
-        "datasets/postcommentset/user/Active.yml",
-        "datasets/postcommentset/user/Role.yml",
-        "datasets/postcommentset/user/Status.yml",
-        "datasets/postcommentset/user/User.yml"
+        "datasets/groupChat/user/Active.yml",
+        "datasets/groupChat/user/Role.yml",
+        "datasets/groupChat/user/Status.yml",
+        "datasets/groupChat/user/User.yml",
 }, cleanBefore = true, cleanAfter = true)
 public class ChatControllersTest extends AbstractIntegrationTest {
 
@@ -45,5 +45,64 @@ public class ChatControllersTest extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNotEmpty());
+    }
+    @Test
+    void createGroupChatWithId() throws Exception {
+
+        ChatDto chatDto = ChatDto.builder()
+                .id(2L)
+                .image("image")
+                .lastMessage("lastik")
+                .title("Tit")
+                .type("groupChats")
+                .active("1")
+                .build();
+
+        String json = new Gson().toJson(chatDto);
+
+
+        this.mockMvc.perform(post( "/api/user/chat/group/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    void createGroupChatWithoutImage() throws Exception {
+
+        ChatDto chatDto = ChatDto.builder()
+                .lastMessage("lastik")
+                .title("Tit")
+                .type("groupChats")
+                .active("1")
+                .build();
+
+        String json = new Gson().toJson(chatDto);
+
+
+        this.mockMvc.perform(post( "/api/user/chat/group/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    void createGroupChatWithoutTitle() throws Exception {
+
+        ChatDto chatDto = ChatDto.builder()
+                .image("image")
+                .lastMessage("lastik")
+                .type("groupChats")
+                .active("1")
+                .build();
+
+        String json = new Gson().toJson(chatDto);
+
+
+        this.mockMvc.perform(post( "/api/user/chat/group/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }
