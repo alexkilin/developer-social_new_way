@@ -2,13 +2,19 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.VideoDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
+import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import org.hibernate.query.Query;
+import org.hibernate.transform.ResultTransformer;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class VideoDtoDaoImpl implements VideoDtoDao {
 
     @PersistenceContext
@@ -24,8 +30,9 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     public Optional<VideoDto> getVideoOfName(String name) {
         return SingleResultUtil.getSingleResultOrNull(entityManager.createQuery(
                 "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
-                " v.media.url, v.name, v.icon, v.media.persistDateTime)" +
-                        " FROM Videos as v WHERE v.name = :name", VideoDto.class));
+                " m.url, v.name, v.icon, m.persistDateTime)" +
+                        " FROM Videos as v JOIN Media as m ON v.media.id = m.id WHERE v.name = :name", VideoDto.class)
+                .setParameter("name", name));
     }
 
     @Override

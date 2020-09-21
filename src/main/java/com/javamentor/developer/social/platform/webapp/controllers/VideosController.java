@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
 import com.javamentor.developer.social.platform.webapp.converters.VideoConverter;
 import io.swagger.annotations.*;
@@ -9,11 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,12 +25,14 @@ public class VideosController {
 
     private final VideosService videosService;
     private final VideoConverter videoConverter;
+    private final VideoDtoService videoDtoService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public VideosController(VideosService videosService, VideoConverter videoConverter){
+    public VideosController(VideosService videosService, VideoConverter videoConverter, VideoDtoService videoDtoService){
         this.videosService =  videosService;
         this.videoConverter = videoConverter;
+        this.videoDtoService = videoDtoService;
     }
 
     @ApiOperation(value = "Получение всего видео")
@@ -52,5 +53,14 @@ public class VideosController {
                                                         @ApiParam(value = "Количество данных на страницу", example = "15")@RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Видео начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         return ResponseEntity.ok().body(videosService.getPart(currentPage, itemsOnPage).stream().map(videoConverter::toDTO).collect(Collectors.toList()));
+    }
+
+    @ApiOperation(value = "Получение видео по названию")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "видео по названию получено",response = VideoDto.class)})
+    @GetMapping(value = "/name/{name}")
+    public ResponseEntity<VideoDto> getVideoOfName(@ApiParam(value = "Название видео", example = "Test video 3")@PathVariable @NotNull String name) {
+        logger.info(String.format("Отправка видео c названием %s", name));
+        return ResponseEntity.ok().body(videoDtoService.getVideoOfName(name));
     }
 }

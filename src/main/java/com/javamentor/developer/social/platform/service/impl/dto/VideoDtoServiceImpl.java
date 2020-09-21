@@ -1,11 +1,21 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
+import com.javamentor.developer.social.platform.dao.abstracts.dto.VideoDtoDao;
 import com.javamentor.developer.social.platform.models.dto.VideoDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class VideoDtoServiceImpl implements VideoDtoService {
+
+    private final VideoDtoDao videoDtoDao;
+
+    public VideoDtoServiceImpl(VideoDtoDao videoDtoDao){
+        this.videoDtoDao = videoDtoDao;
+    }
+
     @Override
     public List<VideoDto> getVideoOfAuthor(String author) {
         return null;
@@ -13,7 +23,7 @@ public class VideoDtoServiceImpl implements VideoDtoService {
 
     @Override
     public VideoDto getVideoOfName(String name) {
-        return null;
+        return videoDtoDao.getVideoOfName(name).orElseThrow(() -> new IllegalArgumentException("Invalid parameters"));
     }
 
     @Override
