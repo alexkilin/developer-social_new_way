@@ -1,14 +1,21 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
+import com.javamentor.developer.social.platform.models.dto.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
+import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumVideoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import com.javamentor.developer.social.platform.webapp.converters.VideoConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
@@ -35,14 +42,22 @@ public class VideosController {
     private final VideoConverter videoConverter;
     private final VideoDtoService videoDtoService;
     private final UserService userService;
+    private final AlbumService albumService;
+    private final AlbumVideoService albumVideoService;
+    private final AlbumConverter albumConverter;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public VideosController(VideosService videosService, VideoConverter videoConverter, VideoDtoService videoDtoService, UserService userService){
+    public VideosController(VideosService videosService, VideoConverter videoConverter, VideoDtoService videoDtoService,
+                            UserService userService, AlbumService albumService, AlbumVideoService albumVideoService,
+                            AlbumConverter albumConverter){
         this.videosService =  videosService;
         this.videoConverter = videoConverter;
         this.videoDtoService = videoDtoService;
         this.userService = userService;
+        this.albumService = albumService;
+        this.albumVideoService = albumVideoService;
+        this.albumConverter = albumConverter;
     }
 
     @ApiOperation(value = "Получение всего видео")
@@ -106,5 +121,22 @@ public class VideosController {
         videosService.create(audios);
         logger.info(String.format("Добавление видео с id %s в бд", videoDto.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(videoDto);
+    }
+
+    @ApiOperation(value = "Создание видео альбома пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Видео альбом успешно создан", response = AlbumDto.class),
+            @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)})
+    @Validated(OnCreate.class)
+    @PostMapping(value = "/createVideoAlbum")
+    public ResponseEntity<?> createVideoAlbum(@ApiParam(value = "объект создаваемого альбома")@RequestBody @NotNull @Valid AlbumDto albumDto) {
+        if(albumService.existsByNameAndMediaType(albumDto.getName(), MediaType.AUDIO)) {
+            return ResponseEntity.badRequest()
+                    .body(String.format("Audio album with name '%s' already exists", albumDto.getName()));
+        }
+        AlbumVideo albumVideo = albumVideoService.createAlbumVideosWithOwner(
+                albumConverter.toAlbumVideo(albumDto, userService.getById(60L)));
+        logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
+        return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumVideo));
     }
 }
