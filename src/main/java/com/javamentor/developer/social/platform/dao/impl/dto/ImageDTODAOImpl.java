@@ -41,7 +41,6 @@ public class ImageDTODAOImpl implements ImageDTODAO {
         return query.getResultList();
     }
 
-    //TODO переписать
     @Override
     public List<ImageDto> getAllByAlbumId(int offset, int limit, Long id) {
         Query<ImageDto> query = (Query<ImageDto>) entityManager.createQuery(
