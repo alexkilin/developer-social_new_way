@@ -118,4 +118,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "group_chat_id"))
     private Set<GroupChat> groupChats;
 
+    @OneToMany
+    private Set<Post> posts;
+
 }
