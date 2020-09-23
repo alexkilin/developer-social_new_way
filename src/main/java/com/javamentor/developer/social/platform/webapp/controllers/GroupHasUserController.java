@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("api/groupsHasUsers")
@@ -39,19 +42,21 @@ public class GroupHasUserController {
     @PostMapping(value = "/add", params = {"groupId", "userId"})
     public ResponseEntity<String> UserJoinGroup(@ApiParam(value = "Идентификатор группы", example = "1") @RequestParam("groupId") @NonNull Long groupId,
                                               @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
+                buildAndExpand().toUri();
         if (groupHasUserService.verificationUserInGroup(groupId,userId)) {
             String msg = String.format("Пользователь с id: %d уже есть в группе с id: %s", userId, groupId);
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(msg);
         }
         if (userService.existById(userId) & groupService.existById(groupId)) {
             User user = userService.getById(userId);
             Group group = groupService.getById(groupId);
             groupHasUserService.setUserIntoGroup(user, group);
             String msg = String.format("Пользователь с id: %d добавлен в группу с id: %s", userId, groupId);
-            return new ResponseEntity<>(msg, HttpStatus.CREATED);
+            return ResponseEntity.created(location).body(msg);
         } else {
-            String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
-            return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
+            //String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
+            return ResponseEntity.notFound().build();
         }
     }
 }
