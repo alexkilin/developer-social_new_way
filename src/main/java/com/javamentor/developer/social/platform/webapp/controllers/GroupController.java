@@ -69,7 +69,7 @@ public class GroupController {
     })
     @GetMapping(value = "/name", params = "name")
     public ResponseEntity<?> findGroupByName(@ApiParam(value = "Наименование группы", example = "JAVA IS 1") @RequestParam("name") String name) {
-        Optional<GroupInfoDto> groupInfoDto = groupDtoService.getGroupByName(name);
+        Optional<GroupDto> groupInfoDto = groupDtoService.getGroupByName(name);
         if(!groupInfoDto.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Группа с именем %s не найдена", name));
         }

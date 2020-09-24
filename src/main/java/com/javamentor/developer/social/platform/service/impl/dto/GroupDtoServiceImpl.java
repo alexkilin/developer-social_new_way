@@ -47,7 +47,7 @@ public class GroupDtoServiceImpl implements GroupDtoService {
     }
 
     @Override
-    public Optional<GroupInfoDto> getGroupByName(String name) {
+    public Optional<GroupDto> getGroupByName(String name) {
         return groupDtoDao.getGroupByName(name);
     }
 

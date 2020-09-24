@@ -43,4 +43,8 @@ public class GroupDto {
 
     @ApiModelProperty(notes = "Описание группы.")
     private String description;
+
+    @NonNull
+    @ApiModelProperty(notes = "Количество подписчиков группы. Не должно быть пустым.")
+    private Long subscribers;
 }

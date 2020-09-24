@@ -68,7 +68,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "gc.category, " +
                         "u.firstName, " +
                         "u.lastName, " +
-                        "g.description " +
+                        "g.description, " +
+                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id) " +
                     "FROM Group g " +
                         "JOIN g.groupCategory gc " +
                         "JOIN g.owner u " +
@@ -89,6 +90,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .groupCategory((String) objects[5])
                         .ownerFio(userOwnerFio)
                         .description((String) objects[8])
+                        .subscribers((Long) objects[9])
                         .build();
             }
 
@@ -146,35 +148,50 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
     }
 
     @Override
-    public Optional<GroupInfoDto> getGroupByName(String name) {
-        Query<GroupInfoDto> queryGroupByName =  entityManager.createQuery(
+    public Optional<GroupDto> getGroupByName(String name) {
+        Query<GroupDto> queryForGroup = entityManager.createQuery(
                 "SELECT " +
                         "g.id, " +
                         "g.name, " +
-                        "g.groupCategory.category, " +
+                        "g.persistDate, " +
+                        "g.linkSite, " +
+                        "g.lastRedactionDate, " +
+                        "gc.category, " +
+                        "u.firstName, " +
+                        "u.lastName, " +
+                        "g.description, " +
                         "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id) " +
-                    "FROM Group g " +
-                    "WHERE g.name = :paramName")
-                .setParameter("paramName", name)
+                        "FROM Group g " +
+                        "JOIN g.groupCategory gc " +
+                        "JOIN g.owner u " +
+                        "WHERE g.name = :name")
+                .setParameter("name", name)
                 .unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
-            @Override
-            public Object transformTuple(Object[] objects, String[] strings) {
-                return GroupInfoDto.builder()
-                        .id((Long) objects[0])
-                        .name((String) objects[1])
-                        .groupCategory((String) objects[2])
-                        .subscribers((Long) objects[3])
-                        .build();
-            }
+                    @Override
+                    public Object transformTuple(Object[] objects, String[] strings) {
+                        String userOwnerFio =  objects[7] + " " + objects[6];
 
-            @Override
-            public List transformList(List list) {
-                return list;
-            }
-        });
+                        return GroupDto.builder()
+                                .id((Long) objects[0])
+                                .name((String) objects[1])
+                                .persistDate((LocalDateTime) objects[2])
+                                .linkSite((String) objects[3])
+                                .lastRedactionDate((LocalDateTime) objects[4])
+                                .groupCategory((String) objects[5])
+                                .ownerFio(userOwnerFio)
+                                .description((String) objects[8])
+                                .subscribers((Long) objects[9])
+                                .build();
+                    }
 
-        return SingleResultUtil.getSingleResultOrNull(queryGroupByName);
+                    @Override
+                    public List transformList(List list) {
+                        return list;
+                    }
+                });
+
+        return SingleResultUtil.getSingleResultOrNull(queryForGroup);
     }
 
     @Override

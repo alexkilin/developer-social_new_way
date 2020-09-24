@@ -15,7 +15,7 @@ public interface GroupDtoService {
 
     List<GroupWallDto> getPostsByGroupId(Long id, int page, int size);
 
-    Optional<GroupInfoDto> getGroupByName(String name);
+    Optional<GroupDto> getGroupByName(String name);
 
     List<UserDto> getUsersFromTheGroup(Long id);
 }
