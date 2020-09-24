@@ -183,7 +183,7 @@ public class AudiosController {
         Audios audios = audioConverter.toAudio(audioDto, MediaType.AUDIO, user);
         audiosService.create(audios);
         logger.info(String.format("Добавление аудио с id %s в бд", audioDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(audioDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(audioConverter.toDTO(audios));
     }
 
     @ApiOperation(value = "Получение всех альбомов пользователя")
