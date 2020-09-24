@@ -117,8 +117,4 @@ public class User {
     @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_chat_id"))
     private Set<GroupChat> groupChats;
-
-    @OneToMany
-    private Set<Post> posts;
-
 }

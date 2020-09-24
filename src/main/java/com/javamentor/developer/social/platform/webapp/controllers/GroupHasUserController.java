@@ -10,10 +10,7 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -56,6 +53,23 @@ public class GroupHasUserController {
             return ResponseEntity.created(location).body(msg);
         } else {
             //String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @ApiOperation(value = "Удаление пользователя из группы")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Пользователь удален из группы", response = String.class),
+            @ApiResponse(code = 404, message = "Пользователь или группа не найдены")
+    })
+    @DeleteMapping(value = "/delete", params = {"groupId", "userId"})
+    public ResponseEntity<?> deleteUserById(@ApiParam(value = "Идентификатор группы", example = "10") @RequestParam("groupId") @NonNull Long groupId,
+                                                 @ApiParam(value = "Идентификатор юзера", example = "1") @RequestParam("userId") @NonNull Long userId){
+        if (groupHasUserService.verificationUserInGroup(groupId, userId)) {
+            groupHasUserService.deleteUserById(groupId, userId);
+            String msg = String.format("Пользователь с id: %d удален из группы с id: %s", userId, groupId);
+            return ResponseEntity.ok().body(msg);
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

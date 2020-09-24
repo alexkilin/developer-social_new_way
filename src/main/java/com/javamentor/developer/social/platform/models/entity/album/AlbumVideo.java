@@ -30,7 +30,7 @@ public class AlbumVideo {
     @MapsId
     private Album album = new Album(MediaType.VIDEO);
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Videos.class, cascade = {CascadeType.PERSIST})
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Videos.class, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "album_has_video", joinColumns = @JoinColumn(name = "album_id"),
             inverseJoinColumns = @JoinColumn(name = "videos_id"))
     private Set<Videos> videos;
