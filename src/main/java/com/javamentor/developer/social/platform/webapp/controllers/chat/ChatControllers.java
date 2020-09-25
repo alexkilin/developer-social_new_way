@@ -5,6 +5,7 @@ import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
@@ -127,24 +128,11 @@ public class ChatControllers {
                 @ApiResponse(code = 200, message = "OK", response = ChatDto.class),
                 @ApiResponse(code = 404, message = "404 error")
         })
+        @Validated(OnCreate.class)
         public ResponseEntity<?> createGroupChat (@RequestBody @NotNull @Valid ChatDto chatDto){
 
             GroupChat groupChat  = groupChatConverter.chatToGroupChat(chatDto, 3L);
-            if(groupChat.getId()!=null){
-
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("id is not null"));
-            }
-            if(groupChat.getImage()==null){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("image is  null"));
-            }
-            if(groupChat.getTitle()==null){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("title is  null"));
-            }
-            try {
-                groupChatService.create(groupChat);
-            }catch (Exception ex){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-            }
+               groupChatService.create(groupChat);
             ChatDto outputChatDto = groupChatConverter.groupChatToChatDto(groupChat);
             return ResponseEntity.ok(outputChatDto);
         }

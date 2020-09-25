@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.AbstractIntegrationTest;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/groupChat/user/User.yml",
 }, cleanBefore = true, cleanAfter = true)
 public class ChatControllersTest extends AbstractIntegrationTest {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private MockMvc mockMvc;
 
@@ -37,7 +39,6 @@ public class ChatControllersTest extends AbstractIntegrationTest {
                 .build();
 
         String json = new Gson().toJson(chatDto);
-
 
         this.mockMvc.perform(post( "/api/user/chat/group/create")
         .contentType(MediaType.APPLICATION_JSON)
@@ -60,7 +61,6 @@ public class ChatControllersTest extends AbstractIntegrationTest {
 
         String json = new Gson().toJson(chatDto);
 
-
         this.mockMvc.perform(post( "/api/user/chat/group/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -79,7 +79,6 @@ public class ChatControllersTest extends AbstractIntegrationTest {
 
         String json = new Gson().toJson(chatDto);
 
-
         this.mockMvc.perform(post( "/api/user/chat/group/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -97,7 +96,6 @@ public class ChatControllersTest extends AbstractIntegrationTest {
                 .build();
 
         String json = new Gson().toJson(chatDto);
-
 
         this.mockMvc.perform(post( "/api/user/chat/group/create")
                 .contentType(MediaType.APPLICATION_JSON)

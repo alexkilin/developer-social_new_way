@@ -9,7 +9,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +17,6 @@ public abstract class GroupChatConverter {
 
     @Autowired
     private UserService userService;
-
-
 
     @Mapping(source = "chatDto.title", target = "title")
     @Mapping(source = "chatDto.image", target = "image")
