@@ -31,7 +31,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "g.id, " +
                         "g.name, " +
                         "gc.category, " +
-                        "(SELECT COUNT(ghu.id) FROM ghu WHERE ghu.group.id = g.id) " +
+                        "(SELECT COUNT(ghu.id) FROM ghu WHERE ghu.group.id = g.id), " +
+                        "g.addressImageGroup " +
                     "FROM Group g JOIN GroupCategory gc ON gc.id = g.groupCategory.id " +
                         "JOIN GroupHasUser ghu ON g.id = ghu.group.id")
                 .setFirstResult((page - 1) * size)
@@ -45,6 +46,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .name((String) objects[1])
                         .groupCategory((String) objects[2])
                         .subscribers((Long) objects[3])
+                        .addressImageGroup((String) objects[4])
                         .build();
             }
 
@@ -68,6 +70,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "gc.category, " +
                         "u.firstName, " +
                         "u.lastName, " +
+                        "g.addressImageGroup," +
+                        "g.description " +
                         "g.description, " +
                         "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id) " +
                     "FROM Group g " +
@@ -89,6 +93,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .lastRedactionDate((LocalDateTime) objects[4])
                         .groupCategory((String) objects[5])
                         .ownerFio(userOwnerFio)
+                        .addressImageGroup((String) objects[8])
+                        .description((String) objects[9])
                         .description((String) objects[8])
                         .subscribers((Long) objects[9])
                         .build();
@@ -115,6 +121,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "p.text, " +
                         "(SELECT COUNT(pc) FROM PostComment pc WHERE p.id = pc.post.id), " +
                         "(SELECT COUNT(pl) FROM PostLike pl WHERE p.id = pl.post.id), " +
+                        "(SELECT COUNT(bm) FROM User bm WHERE bm.userId = p.user.userId), " +
                         "(SELECT COUNT(rp) FROM p.repostPerson rp) " +
                     "FROM Group g " +
                         "LEFT JOIN g.posts p " +
@@ -164,8 +171,24 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "JOIN g.owner u " +
                         "WHERE g.name = :name")
                 .setParameter("name", name)
+                        "g.groupCategory.category, " +
+                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id), " +
+                        "g.addressImageGroup " +
+                    "FROM Group g " +
+                    "WHERE g.name = :paramName")
+                .setParameter("paramName", name)
                 .unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
+            @Override
+            public Object transformTuple(Object[] objects, String[] strings) {
+                return GroupInfoDto.builder()
+                        .id((Long) objects[0])
+                        .name((String) objects[1])
+                        .groupCategory((String) objects[2])
+                        .subscribers((Long) objects[3])
+                        .addressImageGroup((String) objects[4])
+                        .build();
+            }
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
                         String userOwnerFio =  objects[7] + " " + objects[6];
