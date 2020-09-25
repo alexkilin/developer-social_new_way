@@ -33,12 +33,15 @@ public class AudioDto {
     private String url;
 
     @ApiModelProperty(notes = "Адрес иконки (превью) аудио объекта", example = "/icons/132_1.jpg")
+    @NotNull(groups = {OnCreate.class}, message = "'icon' Must not be null when creating AudioDto.class")
     private String icon;
 
     @ApiModelProperty(notes = "Название аудио объекта", example = "Voodoo People")
+    @NotNull(groups = {OnCreate.class}, message = "'name' Must not be null when creating AudioDto.class")
     private String name;
 
     @ApiModelProperty(notes = "Автор аудио объекта",  example = "The Prodigy")
+    @NotNull(groups = {OnCreate.class}, message = "'author' Must not be null when creating AudioDto.class")
     private String author;
 
     @ApiModelProperty(notes = "Альбом аудио объекта",  example = "Music For The Jilted Generation")

@@ -13,8 +13,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class AlbumVideoServiceImpl extends GenericServiceAbstract<AlbumVideo, Long> implements AlbumVideoService {
 
+    AlbumVideoDAO albumVideoDAO;
+
     @Autowired
     public AlbumVideoServiceImpl(AlbumVideoDAO dao) {
         super(dao);
+        this.albumVideoDAO = dao;
+    }
+
+    @Override
+    public AlbumVideo createAlbumVideosWithOwner(AlbumVideo albumVideo) {
+        return albumVideoDAO.createAlbumVideoWithOwner(albumVideo);
     }
 }
