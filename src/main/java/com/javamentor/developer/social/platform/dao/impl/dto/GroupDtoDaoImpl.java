@@ -71,7 +71,6 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "u.firstName, " +
                         "u.lastName, " +
                         "g.addressImageGroup," +
-                        "g.description " +
                         "g.description, " +
                         "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id) " +
                     "FROM Group g " +
@@ -95,8 +94,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .ownerFio(userOwnerFio)
                         .addressImageGroup((String) objects[8])
                         .description((String) objects[9])
-                        .description((String) objects[8])
-                        .subscribers((Long) objects[9])
+                        .subscribers((Long) objects[10])
                         .build();
             }
 
@@ -165,30 +163,15 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "u.firstName, " +
                         "u.lastName, " +
                         "g.description, " +
-                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id) " +
+                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id), " +
+                        "g.addressImageGroup " +
                         "FROM Group g " +
                         "JOIN g.groupCategory gc " +
                         "JOIN g.owner u " +
                         "WHERE g.name = :name")
                 .setParameter("name", name)
-                        "g.groupCategory.category, " +
-                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id), " +
-                        "g.addressImageGroup " +
-                    "FROM Group g " +
-                    "WHERE g.name = :paramName")
-                .setParameter("paramName", name)
                 .unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
-            @Override
-            public Object transformTuple(Object[] objects, String[] strings) {
-                return GroupInfoDto.builder()
-                        .id((Long) objects[0])
-                        .name((String) objects[1])
-                        .groupCategory((String) objects[2])
-                        .subscribers((Long) objects[3])
-                        .addressImageGroup((String) objects[4])
-                        .build();
-            }
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
                         String userOwnerFio =  objects[7] + " " + objects[6];
@@ -203,6 +186,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                                 .ownerFio(userOwnerFio)
                                 .description((String) objects[8])
                                 .subscribers((Long) objects[9])
+                                .addressImageGroup((String) objects[10])
                                 .build();
                     }
 
