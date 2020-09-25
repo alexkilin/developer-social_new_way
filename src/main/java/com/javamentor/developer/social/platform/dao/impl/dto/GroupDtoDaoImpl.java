@@ -151,7 +151,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "g.id, " +
                         "g.name, " +
                         "g.groupCategory.category, " +
-                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id) " +
+                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id), " +
+                        "g.addressImageGroup " +
                     "FROM Group g " +
                     "WHERE g.name = :paramName")
                 .setParameter("paramName", name)
@@ -164,6 +165,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .name((String) objects[1])
                         .groupCategory((String) objects[2])
                         .subscribers((Long) objects[3])
+                        .addressImageGroup((String) objects[4])
                         .build();
             }
 
