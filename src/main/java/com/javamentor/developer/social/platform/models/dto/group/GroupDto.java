@@ -43,4 +43,7 @@ public class GroupDto {
 
     @ApiModelProperty(notes = "Описание группы.")
     private String description;
+
+    @ApiModelProperty(notes = "Адрес аватарки группы.")
+    private String addressImageGroup;
 }

@@ -455,6 +455,7 @@ public class TestDataInitService {
                     .posts(postSet)
                     .description("This is a description of the group #" + i)
                     .owner(users[(int) (Math.random() * numOfUsers)])
+                    .addressImageGroup("This is a address of the group #" +i)
                     .build();
             groupService.create(groups[i]);
             num += startNum;
