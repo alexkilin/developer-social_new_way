@@ -29,7 +29,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "g.id, " +
                         "g.name, " +
                         "gc.category, " +
-                        "(SELECT COUNT(ghu.id) FROM ghu WHERE ghu.group.id = g.id) " +
+                        "(SELECT COUNT(ghu.id) FROM ghu WHERE ghu.group.id = g.id), " +
+                        "g.addressImageGroup " +
                     "FROM Group g JOIN GroupCategory gc ON gc.id = g.groupCategory.id " +
                         "JOIN GroupHasUser ghu ON g.id = ghu.group.id")
                 .setFirstResult((page - 1) * size)
@@ -43,6 +44,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .name((String) objects[1])
                         .groupCategory((String) objects[2])
                         .subscribers((Long) objects[3])
+                        .addressImageGroup((String) objects[4])
                         .build();
             }
 
@@ -66,6 +68,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "gc.category, " +
                         "u.firstName, " +
                         "u.lastName, " +
+                        "g.addressImageGroup," +
                         "g.description " +
                     "FROM Group g " +
                         "JOIN g.groupCategory gc " +
@@ -73,11 +76,9 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                     "WHERE g.id = :paramId")
                 .setParameter("paramId", id)
                 .unwrap(Query.class).setResultTransformer(new ResultTransformer() {
-
             @Override
             public Object transformTuple(Object[] objects, String[] strings) {
                 String userOwnerFio =  objects[7] + " " + objects[6];
-
                 return GroupDto.builder()
                         .id((Long) objects[0])
                         .name((String) objects[1])
@@ -86,10 +87,10 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .lastRedactionDate((LocalDateTime) objects[4])
                         .groupCategory((String) objects[5])
                         .ownerFio(userOwnerFio)
-                        .description((String) objects[8])
+                        .addressImageGroup((String) objects[8])
+                        .description((String) objects[9])
                         .build();
             }
-
             @Override
             public List transformList(List list) {
                 return list;
@@ -111,7 +112,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "p.text, " +
                         "(SELECT COUNT(pc) FROM PostComment pc WHERE p.id = pc.post.id), " +
                         "(SELECT COUNT(pl) FROM PostLike pl WHERE p.id = pl.post.id), " +
-                        "(SELECT COUNT(bm) FROM User u LEFT JOIN u.posts bm WHERE bm.id = p.id), " +
+                        "(SELECT COUNT(bm) FROM User bm WHERE bm.userId = p.user.userId), " +
                         "(SELECT COUNT(rp) FROM p.repostPerson rp) " +
                     "FROM Group g " +
                         "LEFT JOIN g.posts p " +
@@ -150,7 +151,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "g.id, " +
                         "g.name, " +
                         "g.groupCategory.category, " +
-                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id) " +
+                        "(SELECT COUNT(ghu.id) FROM GroupHasUser ghu WHERE ghu.group.id = g.id), " +
+                        "g.addressImageGroup " +
                     "FROM Group g " +
                     "WHERE g.name = :paramName")
                 .setParameter("paramName", name)
@@ -163,6 +165,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .name((String) objects[1])
                         .groupCategory((String) objects[2])
                         .subscribers((Long) objects[3])
+                        .addressImageGroup((String) objects[4])
                         .build();
             }
 
