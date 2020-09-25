@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
+import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
@@ -68,10 +69,24 @@ public class GroupController {
     })
     @GetMapping(value = "/name", params = "name")
     public ResponseEntity<?> findGroupByName(@ApiParam(value = "Наименование группы", example = "JAVA IS 1") @RequestParam("name") String name) {
-        Optional<GroupInfoDto> groupInfoDto = groupDtoService.getGroupByName(name);
+        Optional<GroupDto> groupInfoDto = groupDtoService.getGroupByName(name);
         if(!groupInfoDto.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Группа с именем %s не найдена", name));
         }
         return ResponseEntity.ok().body(groupInfoDto.get());
+    }
+
+    @ApiOperation(value = "Получение всех юзеров, входящих в группу")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Юзеры группы получены", responseContainer = "List",response = UserDto.class),
+            @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
+    })
+    @GetMapping(value = "/{id}/users")
+    public ResponseEntity<?> getUsersFromTheGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long id){
+        Optional<GroupDto> groupDtoOptional = groupDtoService.getGroupById(id);
+        if(!groupDtoOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Группа с id %s не найдена", id));
+        }
+        return ResponseEntity.ok(groupDtoService.getUsersFromTheGroup(id));
     }
 }

@@ -26,4 +26,12 @@ public class GroupHasUserDAOImpl extends GenericDaoAbstract<GroupHasUser, Long> 
                 .setParameter("paramGroupId", groupId);
         return (boolean) queryVerifyUserInGroup.unwrap(Query.class).getSingleResult();
     }
+
+    @Override
+    public int deleteUserById(Long groupId, Long userId) {
+        return entityManager.createQuery("DELETE from GroupHasUser ghu" +
+                " WHERE ghu.group.id = :paramGroupId AND ghu.user.userId = :paramUserId ")
+                .setParameter("paramUserId", userId)
+                .setParameter("paramGroupId", groupId).executeUpdate();
+    }
 }

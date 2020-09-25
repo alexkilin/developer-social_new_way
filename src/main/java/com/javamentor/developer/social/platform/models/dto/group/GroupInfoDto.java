@@ -26,4 +26,7 @@ public class GroupInfoDto {
     @NonNull
     @ApiModelProperty(notes = "Количество подписчиков группы. Не должно быть пустым.")
     private Long subscribers;
+
+    @ApiModelProperty(notes = "Адрес аватарки группы.")
+    private String addressImageGroup;
 }

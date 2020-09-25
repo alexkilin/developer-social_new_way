@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.dao.abstracts.dto;
 
+import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
@@ -14,5 +15,7 @@ public interface GroupDtoDao {
 
     List<GroupWallDto> getPostsByGroupId(Long id, int page, int size);
 
-    Optional<GroupInfoDto> getGroupByName(String name);
+    Optional<GroupDto> getGroupByName(String name);
+
+    List<UserDto> getUsersFromTheGroup(Long id);
 }

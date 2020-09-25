@@ -61,7 +61,7 @@ public class PostController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены",response = PostDto.class, responseContainer = "List")})
     @GetMapping("/{text}")
-    public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag")@PathVariable String text) {
+    public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag")@PathVariable("text") String text) {
         return ResponseEntity.ok(postDtoService.getPostsByTag(text));
     }
 

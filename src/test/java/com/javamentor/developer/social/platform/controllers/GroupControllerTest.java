@@ -15,7 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/groupset/user/User.yml",
         "datasets/groupset/user/Active.yml",
         "datasets/groupset/user/Role.yml",
-        "datasets/groupset/user/Status.yml",
         "datasets/groupset/group/GroupHasUser.yml",
         "datasets/groupset/post/media.yml",
         "datasets/groupset/post/post_media.yml",
