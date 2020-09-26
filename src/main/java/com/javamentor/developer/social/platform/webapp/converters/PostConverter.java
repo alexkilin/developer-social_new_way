@@ -13,7 +13,8 @@ import org.mapstruct.Mappings;
 public abstract class PostConverter {
 
     @Mappings({
-            @Mapping(target = "media", source = "media")
+            @Mapping(target = "media", source = "media"),
+            @Mapping(target = "user.userId", source = "userId")
     })
     public abstract Post toEntity(PostDto postDto);
 
@@ -26,6 +27,9 @@ public abstract class PostConverter {
     })
     public abstract PostDto toDto(Post post);
 
+    @Mappings({
+            @Mapping(target = "user.userId",source = "userId")
+    })
     public abstract Media toEntityMedia(MediaPostDto mediaPostDto);
 
 }
