@@ -264,7 +264,6 @@ public class AudiosController {
         return ResponseEntity.ok().body(String.format("Playlist with id %s deleted", playlistId));
     }
 
-    //TODO Пагинация
     @ApiOperation(value = "Получение списка плейлистов текущего пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Плейлисты получены", response = PlaylistGetDto.class, responseContainer = "List"),
@@ -301,15 +300,16 @@ public class AudiosController {
     @PutMapping(value = "/playlists/{playlistId}/audio")
     public ResponseEntity<?> addAudioToPlaylist(@ApiParam(value = "Id плейлиста", example = "2")@PathVariable @NotNull Long playlistId,
                                                 @ApiParam(value = "Id аудио", example = "10")@RequestParam("audioId") @NotNull Long audioId) {
-        Playlist playlist = playlistService.getById(playlistId);
-        if (playlist == null) {
+        Optional<Playlist> playlistOptional = playlistService.getOptionalById(playlistId);
+        if (!playlistOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s for current user", playlistId));
         }
-        Audios audio = audiosService.getById(audioId);
-        if (audio == null) {
+        Optional<Audios> audiosOptional = audiosService.getOptionalById(audioId);
+        if (!audiosOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No audio with id %s found", audioId));
         }
-        if (!playlist.addAudio(audio)) {
+        Playlist playlist = playlistOptional.get();
+        if (!playlist.addAudio(audiosOptional.get())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("This playlist already contains audio with id %s", audioId));
         }
         playlistService.update(playlist);
@@ -325,15 +325,16 @@ public class AudiosController {
     @DeleteMapping(value = "/playlists/{playlistId}/audio")
     public ResponseEntity<?> removeAudioFromPlaylist(@ApiParam(value = "Id плейлиста", example = "2")@PathVariable @NotNull Long playlistId,
                                                      @ApiParam(value = "Id аудио", example = "10")@RequestParam("audioId") @NotNull Long audioId) {
-        Playlist playlist = playlistService.getById(playlistId);
-        if (playlist == null) {
+        Optional<Playlist> playlistOptional = playlistService.getOptionalById(playlistId);
+        if (!playlistOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s for current user", playlistId));
         }
-        Audios audio = audiosService.getById(audioId);
-        if (audio == null) {
+        Optional<Audios> audiosOptional = audiosService.getOptionalById(audioId);
+        if (!audiosOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No audio with id %s found", audioId));
         }
-        if (!playlist.removeAudio(audio)) {
+        Playlist playlist = playlistOptional.get();
+        if (!playlist.removeAudio(audiosOptional.get())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("This playlist has no audio with id %s", audioId));
         }
         playlistService.update(playlist);
@@ -347,8 +348,8 @@ public class AudiosController {
             @ApiResponse(code = 404, message = "Плейлист найден")})
     @GetMapping(value = "/playlists/{playlistId}/audio")
     public ResponseEntity<?> getAudioFromPlaylist(@ApiParam(value = "Id плейлиста", example = "2")@PathVariable @NotNull Long playlistId,
-                                                  @ApiParam(value = "offset", example = "0")@RequestParam("offset") @NotNull int offset,
-                                                  @ApiParam(value = "limit", example = "10")@RequestParam("limit") @NotNull int limit) {
+                                                  @ApiParam(value = "Отступ", example = "0")@RequestParam("offset") @NotNull int offset,
+                                                  @ApiParam(value = "Количество данных на страницу", example = "10")@RequestParam("limit") @NotNull int limit) {
         if (!playlistService.existById(playlistId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s", playlistId));
         }

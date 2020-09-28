@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -70,5 +71,30 @@ public class ImageDTODAOImpl implements ImageDTODAO {
                         "WHERE im.id = :id", ImageDto.class)
                 .setParameter("id", id);
         return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+
+    public List<ImageDto> getData() {
+        return null;
+    }
+
+
+    public Long getTotalResultCout() {
+        return null;
+    }
+
+
+    @Override
+    public List<ImageDto> getData(Map<String, String> params) {
+        return null;
+    }
+
+    @Override
+    public Long getTotalResultCount(Map<String, String> params) {
+        return null;
+    }
+
+    public List<Object> getMeta() {
+        return null;
     }
 }

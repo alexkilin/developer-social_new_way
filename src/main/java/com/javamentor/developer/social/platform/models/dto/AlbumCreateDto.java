@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class AlbumCreateDto {
 
     @ApiModelProperty(value = "Id владельца альбома", example = "60")
-    @NotNull(groups = OnCreate.class, message = "Id cant be empty")
+    @NotNull(groups = OnCreate.class, message = "User Id cant be null")
     private Long userId;
 
     @ApiModelProperty(value = "Имя альбома", example = "Котики / Высоцкий - Лучшие песни / Видосики с отпуска")
