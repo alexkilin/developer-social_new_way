@@ -14,4 +14,6 @@ public class GroupChatServiceImpl extends GenericServiceAbstract<GroupChat, Long
     public GroupChatServiceImpl(GroupChatDAO dao) {
         super(dao);
     }
+
+
 }

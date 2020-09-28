@@ -43,6 +43,9 @@ public class Group {
     @Column
     private String description;
 
+    @Column
+    private String addressImageGroup;
+
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = GroupCategory.class, cascade = {CascadeType.PERSIST})
     private GroupCategory groupCategory;
 
