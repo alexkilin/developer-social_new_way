@@ -60,4 +60,16 @@ public class AlbumAudios {
                     "поле mediaType должно принимать значение MediaType.Audio");
         }
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public Set<Audios> getAudios() {
+        return audios;
+    }
 }
