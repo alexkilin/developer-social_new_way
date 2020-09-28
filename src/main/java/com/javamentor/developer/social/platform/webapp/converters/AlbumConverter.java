@@ -26,7 +26,7 @@ public abstract class AlbumConverter {
         this.userService = userService;
     }
 
-    @Mapping(target = "album.mediaType", expression = "java( MediaType.IMAGE)")
+    @Mapping(target = "album.mediaType", expression = "java( MediaType.AUDIO)")
     @Mapping(target = "album.name", source = "albumDto.name")
     @Mapping(target = "album.icon", source = "albumDto.icon")
     @Mapping(target = "album.userOwnerId", source = "userId")
