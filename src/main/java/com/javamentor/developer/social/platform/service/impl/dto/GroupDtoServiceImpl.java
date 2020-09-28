@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
+import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
@@ -46,7 +47,12 @@ public class GroupDtoServiceImpl implements GroupDtoService {
     }
 
     @Override
-    public Optional<GroupInfoDto> getGroupByName(String name) {
+    public Optional<GroupDto> getGroupByName(String name) {
         return groupDtoDao.getGroupByName(name);
+    }
+
+    @Override
+    public List<UserDto> getUsersFromTheGroup(Long id) {
+        return groupDtoDao.getUsersFromTheGroup(id);
     }
 }

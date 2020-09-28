@@ -38,4 +38,10 @@ public class GroupHasUserServiceImpl extends GenericServiceAbstract<GroupHasUser
     public boolean verificationUserInGroup(Long groupId, Long userId) {
         return groupHasUserDAO.verificationUserInGroup(groupId, userId);
     }
+
+    @Transactional
+    @Override
+    public void deleteUserById(Long groupId, Long userId) {
+        groupHasUserDAO.deleteUserById(groupId, userId);
+    }
 }

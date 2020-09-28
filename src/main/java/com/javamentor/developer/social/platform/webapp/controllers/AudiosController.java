@@ -178,6 +178,7 @@ public class AudiosController {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено", response = AudioDto.class)})
     @Validated(OnCreate.class)
     @PostMapping(value = "/add")
+    @Validated(OnCreate.class)
     public ResponseEntity<?> addAudio(@ApiParam(value = "Объект добавляемого аудио")@RequestBody @Valid @NonNull AudioDto audioDto) {
         User user = userService.getById(60L);
         Audios audios = audioConverter.toAudio(audioDto, MediaType.AUDIO, user);
