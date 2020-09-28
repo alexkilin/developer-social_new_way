@@ -12,9 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DataSet(value = {
-        "datasets/groupset/group/Group.yml",
         "datasets/groupset/user/User.yml",
-        "datasets/groupset/group/GroupCategory.yml",
         "datasets/groupset/user/Active.yml",
         "datasets/groupset/user/Role.yml",
         "datasets/groupset/group/GroupHasUser.yml",
