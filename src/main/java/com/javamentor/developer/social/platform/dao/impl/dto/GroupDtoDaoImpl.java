@@ -119,7 +119,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "p.text, " +
                         "(SELECT COUNT(pc) FROM PostComment pc WHERE p.id = pc.post.id), " +
                         "(SELECT COUNT(pl) FROM PostLike pl WHERE p.id = pl.post.id), " +
-                        "(SELECT COUNT(bm) FROM User bm WHERE bm.userId = p.user.userId), " +
+                        "(SELECT COUNT(bm) FROM Bookmark bm WHERE bm.post.id = p.id), " +
                         "(SELECT COUNT(rp) FROM p.repostPerson rp) " +
                     "FROM Group g " +
                         "LEFT JOIN g.posts p " +
@@ -139,7 +139,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .text((String) objects[4])
                         .title((String) objects[3])
                         .countLikes((Long) objects[6])
-                        .countReposts((Long) objects[7])
+                        .countBookmarks((Long) objects[7])
+                        .countReposts((Long) objects[8])
                         .build();
             }
 
