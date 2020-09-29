@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
@@ -390,4 +391,26 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
         return audios;
     }
 
+
+    @Override
+    public List<AudioDto> getAudioFromPlaylist(Long playlistId, int offset, int limit) {
+        Query<AudioDto> query = (Query<AudioDto>) entityManager.createQuery(
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AudioDto(" +
+                        "au.id, " +
+                        "au.media.url, " +
+                        "au.icon, " +
+                        "au.name, " +
+                        "au.author, " +
+                        "au.album, " +
+                        "au.length, " +
+                        "au.media.persistDateTime) " +
+                        "FROM Audios au " +
+                        "JOIN Playlist as pl " +
+                        "WHERE pl.id = :playlistId"
+                        , AudioDto.class)
+                .setParameter("playlistId", playlistId)
+                .setFirstResult(offset)
+                .setMaxResults(limit);
+        return query.getResultList();
+    }
 }

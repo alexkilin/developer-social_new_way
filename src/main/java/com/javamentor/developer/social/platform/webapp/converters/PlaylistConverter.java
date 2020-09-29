@@ -49,7 +49,7 @@ public abstract class PlaylistConverter {
         try {
             return userService.getById(userId);
         } catch (NoSuchElementException n) {
-            throw new EntityNotFoundException(String.format("User с именем %s не существует", userId));
+            throw new EntityNotFoundException(String.format("User с id %s не существует", userId));
         }
     }
 

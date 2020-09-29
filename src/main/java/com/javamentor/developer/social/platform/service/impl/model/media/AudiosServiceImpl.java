@@ -8,11 +8,22 @@ import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> implements AudiosService {
+
+    private AudiosDAO audiosDao;
 
     @Autowired
     public AudiosServiceImpl(AudiosDAO dao) {
         super(dao);
+        this.audiosDao = dao;
+    }
+
+
+    @Override
+    public Optional<Audios> getOptionalById(Long id) {
+        return Optional.ofNullable(getById(id));
     }
 }
