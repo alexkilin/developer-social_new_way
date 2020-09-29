@@ -83,13 +83,13 @@ public class PostController {
         return ResponseEntity.ok().body(post.getText());
     }
 
-    @ApiOperation(value = "Удаление поста")
+    @ApiOperation(value = "Удаление поста по id поста")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пост удалён", response = String.class),
             @ApiResponse(code = 400, message = "Пост не может быть удалён", response = String.class)
     })
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deletePost(@ApiParam(value = "ID пользователя", example = "20") @PathVariable @NotNull Long id) {
+    public ResponseEntity<?> deletePost(@ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
         if (postService.existById(id)) {
 
             Post post = postService.getById(id);
@@ -102,12 +102,12 @@ public class PostController {
         }
     }
 
-    @ApiOperation(value = "Получение всех коментов поста по id поста")
+    @ApiOperation(value = "Получение всех комментариев поста по id поста")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Комментарии получены", responseContainer = "List",
-                    response = PostDto.class)})
+                    response = CommentDto.class)})
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<CommentDto>> showPostComments(@ApiParam(value = "ID пользователя", example = "20") @PathVariable Long id) {
+    public ResponseEntity<List<CommentDto>> showPostComments(@ApiParam(value = "ID поста", example = "20") @PathVariable Long id) {
         return new ResponseEntity<>(postDtoService.getCommentsByPostId(id), HttpStatus.OK);
     }
 }
