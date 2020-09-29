@@ -177,6 +177,7 @@ public class AudiosController {
     @ApiOperation(value = "Добавление аудио")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено", response = AudioDto.class)})
+    @Validated(OnCreate.class)
     @PostMapping(value = "/add")
     @Validated(OnCreate.class)
     public ResponseEntity<?> addAudio(@ApiParam(value = "Объект добавляемого аудио")@RequestBody @Valid @NonNull AudioDto audioDto) {
@@ -184,7 +185,7 @@ public class AudiosController {
         Audios audios = audioConverter.toAudio(audioDto, MediaType.AUDIO, user);
         audiosService.create(audios);
         logger.info(String.format("Добавление аудио с id %s в бд", audioDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(audioDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(audioConverter.toDTO(audios));
     }
 
     @ApiOperation(value = "Получение всех альбомов пользователя")
