@@ -10,6 +10,7 @@ import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
+import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PlaylistDtoService;
@@ -219,7 +220,7 @@ public class AudiosController {
             @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)})
     @Validated(OnCreate.class)
     @PostMapping(value = "/createAlbum")
-    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект создаваемого альбома")@RequestBody @NotNull @Valid AlbumDto albumDto) {
+    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект создаваемого альбома")@RequestBody @Valid @NotNull AlbumDto albumDto) {
         if(albumService.existsByNameAndMediaType(albumDto.getName(), MediaType.AUDIO)) {
             return ResponseEntity.badRequest()
                     .body(String.format("Audio album with name '%s' already exists", albumDto.getName()));
