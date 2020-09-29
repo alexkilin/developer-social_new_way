@@ -26,6 +26,7 @@ import io.swagger.annotations.*;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -177,7 +178,6 @@ public class AudiosController {
     @ApiOperation(value = "Добавление аудио")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено", response = AudioDto.class)})
-    @Validated(OnCreate.class)
     @PostMapping(value = "/add")
     @Validated(OnCreate.class)
     public ResponseEntity<?> addAudio(@ApiParam(value = "Объект добавляемого аудио")@RequestBody @Valid @NonNull AudioDto audioDto) {
@@ -208,6 +208,11 @@ public class AudiosController {
                                          @ApiParam(value = "Id альбома",example = "242")@RequestParam @NotNull Long audioId) {
         logger.info(String.format("Аудио с id  %s добавлено в альбом с id %s", audioId, albumId));
         AlbumAudios albumAudios = albumAudioService.getById(albumId);
+
+        if (albumAudios == null) {
+            return ResponseEntity.badRequest().body(String.format("Альбома с id %s не существует", albumId));
+        }
+
         Set<Audios> audiosSet = albumAudios.getAudios();
         audiosSet.add(audiosService.getById(audioId));
         albumAudios.setAudios(audiosSet);
