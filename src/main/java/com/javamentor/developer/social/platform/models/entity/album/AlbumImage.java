@@ -27,7 +27,6 @@ public class AlbumImage {
     @MapsId
     private Album album = new Album(MediaType.IMAGE);
 
-
     @PrePersist
     private void prePersistFunction() {
         checkConstraints();

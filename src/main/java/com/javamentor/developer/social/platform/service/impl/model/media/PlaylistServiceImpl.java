@@ -7,6 +7,8 @@ import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PlaylistServiceImpl extends GenericServiceAbstract<Playlist, Long> implements PlaylistService {
     private final PlaylistDao playlistDao;
@@ -20,5 +22,10 @@ public class PlaylistServiceImpl extends GenericServiceAbstract<Playlist, Long> 
     @Override
     public boolean userHasPlaylist(Long userId, Long playlistId) {
         return playlistDao.userHasPlaylist(userId, playlistId);
+    }
+
+    @Override
+    public Optional<Playlist> getOptionalById(Long id) {
+        return Optional.ofNullable(getById(id));
     }
 }

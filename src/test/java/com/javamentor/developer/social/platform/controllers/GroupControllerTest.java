@@ -26,8 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         cleanBefore = true)
 class GroupControllerTest extends AbstractIntegrationTest {
 
-//    @Autowired
-//    private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 //
 //    @Test
 //    void getAllGroups() throws Exception {
@@ -70,4 +70,16 @@ class GroupControllerTest extends AbstractIntegrationTest {
 //                .andExpect(jsonPath("groupCategory").value("Programming"))
 //                .andExpect(jsonPath("subscribers").value(1));
 //    }
+
+    @Test
+    void getUsersFromTheGroup() throws Exception {
+        this.mockMvc.perform(get("/api/groups/name?name=JAVA IS 0"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(1))
+                .andExpect(jsonPath("name").value("JAVA IS 0"))
+                .andExpect(jsonPath("groupCategory").value("Programming"))
+                .andExpect(jsonPath("subscribers").value(1));
+    }
+
 }
