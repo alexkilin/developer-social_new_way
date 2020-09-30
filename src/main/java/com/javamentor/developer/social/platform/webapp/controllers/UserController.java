@@ -61,9 +61,10 @@ public class UserController {
             UserDto userDto = optionalUserDto.get();
             logger.info(String.format("Пользователь с ID: %d получен!", id));
             return ResponseEntity.ok(userDto);
+        } else {
+            logger.info(String.format("Пользователь с указанным ID: %d не найден!", id));
+            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", id));
         }
-        logger.info(String.format("Пользователь с указанным ID: %d не найден!", id));
-        return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", id));
     }
 
     @ApiOperation(value = "Получение списка пользователей")
@@ -101,9 +102,10 @@ public class UserController {
             userService.update(user);
             logger.info(String.format("Пользователь с ID: %d обновлён успешно", userDto.getUserId()));
             return ResponseEntity.ok(userConverter.toDto(user));
+        } else {
+            logger.info(String.format("Пользователь с ID: %d не существует", userDto.getUserId()));
+            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", userDto.getUserId()));
         }
-        logger.info(String.format("Пользователь с ID: %d не существует", userDto.getUserId()));
-        return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", userDto.getUserId()));
     }
 
     @ApiOperation(value = "Удаление пользователя по id")
