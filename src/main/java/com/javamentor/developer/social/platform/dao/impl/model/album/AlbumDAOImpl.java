@@ -17,9 +17,9 @@ import java.util.Optional;
 public class AlbumDAOImpl extends GenericDaoAbstract<Album, Long> implements AlbumDAO {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
-    AlbumConverter albumConverter;
+    private AlbumConverter albumConverter;
 
     @Autowired
     public AlbumDAOImpl(AlbumConverter albumConverter) {

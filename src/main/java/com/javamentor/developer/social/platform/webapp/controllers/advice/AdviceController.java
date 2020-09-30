@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.webapp.controllers.advice;
 
-import com.javamentor.developer.social.platform.exception.ApiRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -40,8 +39,6 @@ public class AdviceController  extends ResponseEntityExceptionHandler {
         String[] body = runtimeException.getMessage().split(":");
         return handleExceptionInternal(runtimeException, body[body.length - 1].trim(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
     }
-
-
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,

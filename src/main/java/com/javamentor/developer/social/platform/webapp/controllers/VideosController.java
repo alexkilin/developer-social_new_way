@@ -1,12 +1,15 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.dto.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.AlbumVideoDto;
+import com.javamentor.developer.social.platform.models.dto.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.VideoDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
+import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
@@ -129,11 +132,11 @@ public class VideosController {
             @ApiResponse(code = 200, message = "Видео альбом успешно создан", response = AlbumDto.class),
             @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)})
     @Validated(OnCreate.class)
-    @PostMapping(value = "/createVideoAlbum")
-    public ResponseEntity<?> createVideoAlbum(@ApiParam(value = "объект создаваемого альбома")@RequestBody @NotNull @Valid AlbumDto albumDto) {
-        if(albumService.existsByNameAndMediaType(albumDto.getName(), MediaType.AUDIO)) {
+    @PostMapping(value = "/createAlbum")
+    public ResponseEntity<?> createVideoAlbum(@ApiParam(value = "объект создаваемого альбома")@RequestBody @Valid @NotNull AlbumVideoDto albumDto) {
+        if(albumService.existsByNameAndMediaType(albumDto.getName(), MediaType.VIDEO)) {
             return ResponseEntity.badRequest()
-                    .body(String.format("Audio album with name '%s' already exists", albumDto.getName()));
+                    .body(String.format("Video album with name '%s' already exists", albumDto.getName()));
         }
         AlbumVideo albumVideo = albumVideoService.createAlbumVideosWithOwner(
                 albumConverter.toAlbumVideo(albumDto, userService.getById(60L)));
@@ -147,7 +150,7 @@ public class VideosController {
     @PostMapping(value = "/addInAlbums", params = {"albumId", "videoId"})
     public ResponseEntity<?> addInAlbums(@ApiParam(value = "Id альбома",example = "100")@RequestParam @Valid @NotNull Long albumId,
                                          @ApiParam(value = "Id видео",example = "1")@RequestParam @NotNull Long videoId) {
-        logger.info(String.format("Аудио с id  %s добавлено в альбом с id %s", videoId, albumId));
+        logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
         AlbumVideo albumVideo = albumVideoService.getById(albumId);
         Set<Videos> videosSet = albumVideo.getVideos();
         videosSet.add(videosService.getById(videoId));
@@ -164,7 +167,7 @@ public class VideosController {
     @GetMapping(value = "/getAllAlbumsFromUser")
     public ResponseEntity<List<AlbumDto>> getAllAlbums() {
         logger.info(String.format("Получение всех альбомов пользователя с id %s", 60L));
-        return ResponseEntity.ok().body(albumDtoService.getAlbumOfUser(60L));
+        return ResponseEntity.ok().body(albumDtoService.getAllByUserId(60L));
     }
 
     @ApiOperation(value = "Получение всех видео из альбома пользователя")
@@ -172,7 +175,16 @@ public class VideosController {
             @ApiResponse(code = 200, message = "видео из альбома пользователя успешно получено", response = VideoDto.class,responseContainer = "List")})
     @GetMapping(value = "/getFromAlbumOfUser", params = {"albumId"})
     public ResponseEntity<?> getFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7")@RequestParam @NotNull Long albumId) {
-        logger.info(String.format("Все аудио из альбома с id:%s отправлено", albumId));
+        logger.info(String.format("Все видео из альбома с id:%s отправлено", albumId));
         return ResponseEntity.ok().body(videoDtoService.getVideoFromAlbumOfUser(albumId));
+    }
+
+    @ApiOperation(value = "Получение видео из коллекции пользователя по альбому")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Видео из коллекции пользователя по альбому",response = VideoDto.class,responseContainer = "List")})
+    @GetMapping(value = "/AlbumVideoOfUser", params = {"album"})
+    public ResponseEntity<List<VideoDto>> getAlbumVideoOfUser(@ApiParam(value = "Название альбома",example = "My Album")@RequestParam("album") String album) {
+        logger.info(String.format("Отправка избранного видео пользователя c id %s альбома %s", 60L, album));
+        return ResponseEntity.ok().body(videoDtoService.getAlbumVideoOfUser(60L, album));
     }
 }

@@ -5,7 +5,6 @@ import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
-import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
@@ -22,9 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @RestController
 @RequestMapping(value = "api/posts", produces = "application/json")
@@ -53,23 +51,23 @@ public class PostController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PostDto.class)})
     @GetMapping
-        public ResponseEntity<List<PostDto>> getPosts() {
+    public ResponseEntity<List<PostDto>> getPosts() {
         return ResponseEntity.ok().body(postDtoService.getAllPosts());
     }
 
     @ApiOperation(value = "Получение поста по тэгу")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены",response = PostDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
     @GetMapping("/{text}")
-    public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag")@PathVariable("text") String text) {
+    public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("text") String text) {
         return ResponseEntity.ok(postDtoService.getPostsByTag(text));
     }
 
     @ApiOperation(value = "Получение списка постов пользователя по его ID")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены",response = PostDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<PostDto>> getPostsByUserId(@ApiParam(value = "ID пользователя", example = "20")@PathVariable Long id) {
+    public ResponseEntity<List<PostDto>> getPostsByUserId(@ApiParam(value = "ID пользователя", example = "20") @PathVariable Long id) {
         return ResponseEntity.ok(postDtoService.getPostsByUserId(id));
     }
 
@@ -80,35 +78,18 @@ public class PostController {
     @PostMapping("/add")
     @Validated(OnCreate.class)
     public ResponseEntity<?> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostDto postDto) {
-        List<MediaPostDto> mediaPostDtoList = postDto.getMedia();
-        Set<Media> mediaSet = new HashSet<>();
-
         Post post = postConverter.toEntity(postDto);
-
-        for (MediaPostDto mediaPostDto :
-                mediaPostDtoList) {
-            User user = userService.getById(mediaPostDto.getUserId());
-            Media media = postConverter.toEntityMedia(mediaPostDto);
-            media.setUser(user);
-            mediaSet.add(media);
-            mediaService.create(media);
-        }
-
-        User user = userService.getById(postDto.getUserId());
-
-        post.setMedia(mediaSet);
-        post.setUser(user);
         postService.create(post);
         return ResponseEntity.ok().body(post.getText());
     }
 
-    @ApiOperation(value = "Удаление поста")
+    @ApiOperation(value = "Удаление поста по id поста")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пост удалён", response = String.class),
             @ApiResponse(code = 400, message = "Пост не может быть удалён", response = String.class)
     })
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deletePost(@ApiParam(value = "ID пользователя", example = "20") @PathVariable @NotNull Long id) {
+    public ResponseEntity<?> deletePost(@ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
         if (postService.existById(id)) {
 
             Post post = postService.getById(id);
@@ -121,12 +102,12 @@ public class PostController {
         }
     }
 
-    @ApiOperation(value = "Получение всех коментов поста по id поста")
+    @ApiOperation(value = "Получение всех комментариев поста по id поста")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Комментарии получены",  responseContainer = "List",
-                    response = PostDto.class)})
+            @ApiResponse(code = 200, message = "Комментарии получены", responseContainer = "List",
+                    response = CommentDto.class)})
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<CommentDto>> showPostComments(@ApiParam(value = "ID пользователя", example = "20") @PathVariable Long id) {
+    public ResponseEntity<List<CommentDto>> showPostComments(@ApiParam(value = "ID поста", example = "20") @PathVariable Long id) {
         return new ResponseEntity<>(postDtoService.getCommentsByPostId(id), HttpStatus.OK);
     }
 }

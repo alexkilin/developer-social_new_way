@@ -18,15 +18,15 @@ import javax.validation.constraints.Null;
 public class PlaylistCreateDto {
 
 
-    @NotBlank(message = "Name can't be blank")
+    @NotBlank(groups = OnCreate.class, message = "Name can't be blank")
     @ApiModelProperty(notes = "Имя плейлиста")
     private String name;
 
-    @NotBlank(message = "Image name can't be blank")
+    @NotBlank(groups = OnCreate.class, message = "Image name can't be blank")
     @ApiModelProperty(notes = "Изображение для плейлиста")
     private String image;
 
-    @Null
+    @Null(groups = OnCreate.class)
     @ApiModelProperty(notes = "ID пользователя владельца", hidden = true)
     private Long ownerUserId;
 }

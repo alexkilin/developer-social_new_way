@@ -41,8 +41,8 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     public List<VideoDto> getVideoOfUser(Long userId) {
         return entityManager.createQuery(
                 "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
-                        " m.url, v.name, v.icon, m.persistDateTime)" +
-                        " FROM Videos as v JOIN Media as m ON v.media.id = m.id WHERE m.user.userId = :userId", VideoDto.class)
+                        " v.media.url, v.name, v.icon, v.media.persistDateTime)" +
+                        " FROM Videos as v WHERE v.media.mediaType = 2 AND v.media.user.userId = :userId", VideoDto.class)
                 .setParameter("userId", userId).getResultList();
     }
 
@@ -50,8 +50,8 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     public List<VideoDto> getPartVideoOfUser(Long userId, int currentPage, int itemsOnPage) {
         return entityManager.createQuery(
                 "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
-                        " m.url, v.name, v.icon, m.persistDateTime)" +
-                        " FROM Videos as v JOIN Media as m ON v.media.id = m.id WHERE m.user.userId = :userId", VideoDto.class)
+                        " v.media.url, v.name, v.icon, v.media.persistDateTime)" +
+                        " FROM Videos as v WHERE v.media.mediaType = 2 AND v.media.user.userId = :userId", VideoDto.class)
                 .setParameter("userId", userId)
                 .setFirstResult(currentPage * itemsOnPage)
                 .setMaxResults(itemsOnPage).getResultList();
@@ -64,7 +64,13 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
 
     @Override
     public List<VideoDto> getAlbumVideoOfUser(Long userId, String album) {
-        return null;
+        return entityManager.createQuery(
+                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                        " v.media.url, v.name, v.icon, v.media.persistDateTime)" +
+                        " FROM AlbumVideo av JOIN av.videos as v WHERE av.album.name =:album " +
+                        "AND av.album.userOwnerId.userId = :userId", VideoDto.class)
+                .setParameter("album", album)
+                .setParameter("userId", userId).getResultList();
     }
 
     @Override

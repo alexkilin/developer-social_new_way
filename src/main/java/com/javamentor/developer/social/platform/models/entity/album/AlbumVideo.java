@@ -52,4 +52,16 @@ public class AlbumVideo {
                     "поле MediaType должно принимать значение MediaType.VIDEO");
         }
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public Set<Videos> getVideos() {
+        return videos;
+    }
 }
