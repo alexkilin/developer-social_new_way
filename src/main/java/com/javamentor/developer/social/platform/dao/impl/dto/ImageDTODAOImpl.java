@@ -73,26 +73,4 @@ public class ImageDTODAOImpl implements ImageDTODAO {
         return SingleResultUtil.getSingleResultOrNull(query);
     }
 
-
-    public List<ImageDto> getData() {
-        return null;
-    }
-
-
-    public Long getTotalResultCount() {
-        return null;
-    }
-
-
-    public List<ImageDto> getData(Map<String, String> params) {
-        return null;
-    }
-
-    public Long getTotalResultCount(Map<String, String> params) {
-        return null;
-    }
-
-    public List<Object> getMeta() {
-        return null;
-    }
 }

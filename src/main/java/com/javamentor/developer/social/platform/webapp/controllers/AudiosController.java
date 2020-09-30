@@ -10,7 +10,6 @@ import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
-import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PlaylistDtoService;
@@ -22,7 +21,17 @@ import com.javamentor.developer.social.platform.service.abstracts.model.user.Use
 import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.PlaylistConverter;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +39,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
@@ -179,7 +189,6 @@ public class AudiosController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено", response = AudioDto.class)})
     @PostMapping(value = "/add")
-    @Validated(OnCreate.class)
     public ResponseEntity<?> addAudio(@ApiParam(value = "Объект добавляемого аудио")@RequestBody @Valid @NonNull AudioDto audioDto) {
         User user = userService.getById(60L);
         Audios audios = audioConverter.toAudio(audioDto, MediaType.AUDIO, user);
