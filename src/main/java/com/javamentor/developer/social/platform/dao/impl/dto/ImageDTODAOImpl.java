@@ -79,17 +79,15 @@ public class ImageDTODAOImpl implements ImageDTODAO {
     }
 
 
-    public Long getTotalResultCout() {
+    public Long getTotalResultCount() {
         return null;
     }
 
 
-    @Override
     public List<ImageDto> getData(Map<String, String> params) {
         return null;
     }
 
-    @Override
     public Long getTotalResultCount(Map<String, String> params) {
         return null;
     }
