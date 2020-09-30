@@ -37,6 +37,7 @@ public abstract class ImageConverter {
     @Mapping(target = "persistDateTime", source = "media.persistDateTime")
     public abstract ImageDto toImageDto(Image image);
 
+    // TODO : Убрать try catch
     @Named("userSetter")
     protected User userSetter(Long userId) {
         try {
