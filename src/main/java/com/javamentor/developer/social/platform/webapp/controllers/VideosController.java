@@ -119,12 +119,13 @@ public class VideosController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Видео успешно добавлено", response = VideoDto.class)})
     @PostMapping(value = "/add")
+    @Validated(OnCreate.class)
     public ResponseEntity<?> addVideo(@ApiParam(value = "Объект добавляемого видео")@RequestBody @Valid @NonNull VideoDto videoDto) {
         User user = userService.getById(60L);
-        Videos audios = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
-        videosService.create(audios);
+        Videos videos = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
+        videosService.create(videos);
         logger.info(String.format("Добавление видео с id %s в бд", videoDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(videoDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(videoConverter.toDTO(videos));
     }
 
     @ApiOperation(value = "Создание видео альбома пользователя")
@@ -152,6 +153,11 @@ public class VideosController {
                                          @ApiParam(value = "Id видео",example = "1")@RequestParam @NotNull Long videoId) {
         logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
         AlbumVideo albumVideo = albumVideoService.getById(albumId);
+
+        if (albumVideo == null) {
+            return ResponseEntity.badRequest().body(String.format("Видеоальбома с id %s не обнаружено", albumId));
+        }
+
         Set<Videos> videosSet = albumVideo.getVideos();
         videosSet.add(videosService.getById(videoId));
         albumVideo.setVideos(videosSet);
