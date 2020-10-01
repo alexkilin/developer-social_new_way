@@ -29,6 +29,7 @@ public abstract class GroupChatConverter {
     @Mapping(source = "groupChat.id", target = "id")
     public abstract ChatDto groupChatToChatDto(GroupChat groupChat);
 
+    // TODO : Убрать try catch
     @Named("userIdToSet")
     public  Set<User> userIdToSet(Long userId) {
         User user = userService.getById(userId);
