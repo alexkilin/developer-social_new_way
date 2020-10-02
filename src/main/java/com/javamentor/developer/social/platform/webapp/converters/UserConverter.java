@@ -53,6 +53,7 @@ public abstract class UserConverter {
     )
     public abstract User toEntity(UserDto userDto);
 
+    // TODO : Убрать try catch
     @Named("roleSetter")
     protected Role roleSetter(String role) {
         try {
@@ -65,6 +66,7 @@ public abstract class UserConverter {
         }
     }
 
+    // TODO : Убрать try catch
     @Named("activeSetter")
     protected Active activeSetter(String active) {
         try {
