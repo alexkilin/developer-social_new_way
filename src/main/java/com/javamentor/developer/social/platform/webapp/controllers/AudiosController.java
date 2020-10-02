@@ -166,10 +166,12 @@ public class AudiosController {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено")})
     @PostMapping(value = "/addToUser", params = {"audioId"})
     public ResponseEntity<?> addAudioInCollectionsOfUser(@ApiParam(value = "Id музыке",example = "153")@RequestParam("audioId") Long audioId) {
-        if (audioDtoService.addAudioInCollectionsOfUser(60L, audioId)) {
+        User user = userService.getById(60L);
+        if(audiosService.addAudioInCollectionsOfUser(user, audioId)){
+            userService.update(user);
             logger.info(String.format("Успешное добавление аудио с id %s в избранное пользователю с id %s", audioId, 60L));
             return ResponseEntity.ok().body("Успешно");
-        } else {
+       } else {
             return ResponseEntity.ok().body(String.format("Неудачное добавление аудио с id %s в избранное пользователю с id %s", audioId, 60L));
         }
     }
@@ -177,7 +179,7 @@ public class AudiosController {
     @ApiOperation(value = "Добавление аудио")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено", response = AudioDto.class)})
-    @Validated(OnCreate.class)
+   // @Validated(OnCreate.class)
     @PostMapping(value = "/add")
     @Validated(OnCreate.class)
     public ResponseEntity<?> addAudio(@ApiParam(value = "Объект добавляемого аудио")@RequestBody @Valid @NonNull AudioDto audioDto) {
