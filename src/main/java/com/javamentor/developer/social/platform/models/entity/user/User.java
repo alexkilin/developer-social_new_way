@@ -62,6 +62,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "profession")
+    private String profession;
+
 
     @Column(name = "persist_date", nullable = false, updatable = false)
     @Type(type = "org.hibernate.type.LocalDateTimeType")

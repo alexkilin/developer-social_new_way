@@ -72,6 +72,9 @@ public class UserDto {
     @ApiModelProperty(notes = "Ссылка на сайт пользователя", example = "www.site.com", position = 9)
     private String linkSite;
 
+    @ApiModelProperty(notes = "Профессия пользователя", example = "Plumber", position = 13)
+    private String profession;
+
     @ApiModelProperty(notes = "Автоматически назначается при создании всем пользователям, явно указывать не нужно",
             example = "не указывать", hidden = true)
     @Null(message = " 'role' автоматически назначается при создании всем пользователям, " +

@@ -18,7 +18,7 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
 
     @SuppressWarnings("unchecked")
     public List<User> getAll() {
-        return entityManager.createQuery("SELECT from User").getResultList();
+        return entityManager.createQuery("SELECT from  User").getResultList();
     }
 
 }
