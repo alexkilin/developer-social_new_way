@@ -15,6 +15,7 @@ users:
     is_enable: "1"
     role_id: 1
     city: "SPb"
+    profession: "Plumber"
     link_site: "www.jm.ru"
 
   - user_id: 3
@@ -33,6 +34,7 @@ users:
     is_enable: "1"
     role_id: 1
     city: "SPb"
+    profession: "Plumber"
     link_site: "www.mys.ru"
 
   - user_id: 4
@@ -51,6 +53,7 @@ users:
     is_enable: "1"
     role_id: 1
     city: "SPb"
+    profession: "Plumber"
     link_site: "www.vk.ru"
 
   - user_id: 5
@@ -69,6 +72,7 @@ users:
     is_enable: "1"
     role_id: 1
     city: "Msk"
+    profession: "Plumber"
     link_site: "www.site.ru"
 
   - user_id: 6
@@ -87,4 +91,5 @@ users:
     is_enable: "1"
     role_id: 1
     city: "SPb"
+    profession: "Plumber"
     link_site: "www.mysite.ru"

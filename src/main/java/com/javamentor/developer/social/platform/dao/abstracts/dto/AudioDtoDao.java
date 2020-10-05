@@ -25,8 +25,6 @@ public interface AudioDtoDao {
 
     List<AudioDto> getAlbumAudioOfUser(Long userId, String album);
 
-    boolean addAudioInCollectionsOfUser(Long userId, Long audioId);
-
     List<AudioDto> getAudioFromAlbumOfUser(Long albumId);
 
     List<AudioDto> getAudioFromPlaylist(Long playlistId, int offset, int limit);
