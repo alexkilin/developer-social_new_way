@@ -56,11 +56,6 @@ public class AudioDtoServiceImpl implements AudioDtoService {
     }
 
     @Override
-    public boolean addAudioInCollectionsOfUser(Long userId, Long audioId) {
-        return audioDtoDao.addAudioInCollectionsOfUser(userId, audioId);
-    }
-
-    @Override
     public List<AudioDto> getAudioFromAlbumOfUser(Long albumId) {
         return audioDtoDao.getAudioFromAlbumOfUser(albumId);
     }
