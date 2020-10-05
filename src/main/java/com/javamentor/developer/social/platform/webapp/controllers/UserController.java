@@ -1,14 +1,14 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
-import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
+import com.javamentor.developer.social.platform.models.dto.StatusDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.FriendsDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.UserFriendsService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.RoleService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import io.swagger.annotations.*;
@@ -34,20 +34,19 @@ public class UserController {
     private final UserDtoService userDtoService;
     private final FriendsDtoService friendsDtoService;
     private final UserService userService;
-    private final UserFriendsService userFriendsService;
     private final UserConverter userConverter;
+    private final RoleService roleService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserController(UserDtoService userDtoService, FriendsDtoService friendsDtoService, UserService userService, UserFriendsService userFriendsService, UserConverter userConverter) {
+    public UserController(UserDtoService userDtoService, FriendsDtoService friendsDtoService, UserService userService, UserConverter userConverter, RoleService roleService) {
         this.userDtoService = userDtoService;
         this.friendsDtoService = friendsDtoService;
         this.userService = userService;
-        this.userFriendsService = userFriendsService;
         this.userConverter = userConverter;
+        this.roleService = roleService;
     }
-
 
     @ApiOperation(value = "Получение пользователя по id")
     @ApiResponses(value = {
@@ -73,7 +72,7 @@ public class UserController {
     })
     @GetMapping("/all")
     public ResponseEntity<List<UserDto>> getAll() {
-        logger.info(String.format("Получен список пользователей"));
+        logger.info("Получен список пользователей");
         return ResponseEntity.ok(userDtoService.getUserDtoList());
     }
 
@@ -98,6 +97,7 @@ public class UserController {
     @Validated(OnUpdate.class)
     public ResponseEntity<?> updateUser(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserDto userDto) {
         User user = userConverter.toEntity(userDto);
+        user.setRole(roleService.getByUserId(user.getUserId()));
         if (userService.existById(userDto.getUserId())) {
             userService.update(user);
             logger.info(String.format("Пользователь с ID: %d обновлён успешно", userDto.getUserId()));
@@ -139,6 +139,26 @@ public class UserController {
         } else {
             logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
             return ResponseEntity.status(400).body(String.format("User with ID: %d does not exist.", id));
+        }
+    }
+
+    @ApiOperation(value = "Изменение статуса пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Статус пользователя изменён", response = UserDto.class),
+            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)
+    })
+    @PatchMapping(value = "/update/status")
+    public ResponseEntity<?> updateUserStatus(@RequestBody StatusDto statusDto) {
+        Optional<UserDto> optionalUserDto = userDtoService.getUserDtoById(statusDto.getUserId());
+        if (optionalUserDto.isPresent()) {
+            UserDto userDto = optionalUserDto.get();
+            userDto.setStatus(statusDto.getStatus());
+            userService.update(userConverter.toEntity(userDto));
+            logger.info("Статус изменён");
+            return ResponseEntity.ok(userDto);
+        } else {
+            logger.info(String.format("Пользователь с указанным ID: %d не найден!", statusDto.getUserId()));
+            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", statusDto.getUserId()));
         }
     }
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface RoleService extends GenericService<Role, Long> {
     Role getByRoleName(String role);
+
+    Role getByUserId(Long userId);
 }

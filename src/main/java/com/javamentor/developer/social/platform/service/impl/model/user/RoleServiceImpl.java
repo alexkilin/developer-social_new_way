@@ -22,4 +22,9 @@ public class RoleServiceImpl extends GenericServiceAbstract<Role, Long> implemen
     public Role getByRoleName(String name) {
         return roleDAO.getByName(name);
     }
+
+    @Override
+    public Role getByUserId(Long userId) {
+        return roleDAO.getByUserId(userId);
+    }
 }
