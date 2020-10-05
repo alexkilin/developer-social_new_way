@@ -27,13 +27,15 @@ public class UserDto {
     @ApiModelProperty(notes = "Имя пользователя, поле не должно быть пустым",
                      required = true, example = "Иван", position = 4)
     @NotNull(groups = OnCreate.class, message = "Поле имя не должно быть Null при создании")
-    @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле имя должен начинаться с буквы")
+    @NotNull(groups = OnUpdate.class, message = "Поле имя не должно быть Null при обновлении")
+    @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле имя должно начинаться с буквы")
     private String firstName;
 
     @ApiModelProperty(notes = "Фамилия пользователя, поле не должна быть пустой",
             required = true, example = "Иванов", position = 5)
-    @NotNull(groups = OnCreate.class, message = "Поле имя не должно быть Null при создании")
-    @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле имя должен начинаться с буквы")
+    @NotNull(groups = OnCreate.class, message = "Поле фамилия не должно быть Null при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле фамилия не должно быть Null при обновлении")
+    @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле фамилия должно начинаться с буквы")
     private String lastName;
 
     @JsonFormat(pattern = "dd.MM.yyyy")
