@@ -77,9 +77,9 @@ public class VideosController {
             @ApiResponse(code = 200, message = "Несколько видео получено",responseContainer = "List",response = VideoDto.class)})
     @GetMapping(value = "/getPart")
     public ResponseEntity<List<VideoDto>> getPartVideos(@ApiParam(value = "Текущая страница", example = "1")
-                                                        @RequestParam @NotNull Integer currentPage,
+                                                        @RequestParam @NotNull(message = "currentPage should not equal to null") Integer currentPage,
                                                         @ApiParam(value = "Количество данных на страницу", example = "15")
-                                                        @RequestParam @NotNull Integer itemsOnPage) {
+                                                        @RequestParam @NotNull(message = "itemsOnPage should not equal to null") Integer itemsOnPage) {
         logger.info(String.format("Видео начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         return ResponseEntity.ok().body(videosService.getPart(currentPage, itemsOnPage).stream().map(videoConverter::toDTO).collect(Collectors.toList()));
     }
@@ -98,7 +98,7 @@ public class VideosController {
             @ApiResponse(code = 200, message = "Все видео из коллекции пользователя",response = VideoDto.class, responseContainer = "List")})
     @GetMapping(value = "/user/{userId}")
     public ResponseEntity<List<VideoDto>> getVideoOfUser(
-            @ApiParam(value = "Id юзера", example = "4")@PathVariable("userId") @NonNull Long userId) {
+            @ApiParam(value = "Id юзера", example = "4")@PathVariable("userId") Long userId) {
         logger.info(String.format("Отправка всего видео пользователя %s", userId));
         return ResponseEntity.ok().body(videoDtoService.getVideoOfUser(userId));
     }
@@ -108,8 +108,12 @@ public class VideosController {
             @ApiResponse(code = 200, message = "Видео из коллекции пользователя по частям",responseContainer = "List",response = VideoDto.class)})
     @GetMapping(value = "/PartVideoOfUser/{userId}")
     public ResponseEntity<List<VideoDto>> getPartVideoOfUser(
-            @ApiParam(value = "Текущая страница", example = "0")@RequestParam("currentPage") @NotNull Integer currentPage,
-            @ApiParam(value = "Количество данных на страницу", example = "1")@RequestParam("itemsOnPage") @NotNull Integer itemsOnPage,
+            @ApiParam(value = "Текущая страница", example = "0")
+            @RequestParam("currentPage")
+            @NotNull(message = "currentPage should not equal to null") Integer currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "1")
+            @RequestParam("itemsOnPage")
+            @NotNull(message = "itemsOnPage should not equal to null") Integer itemsOnPage,
             @ApiParam(value = "Id юзера", example = "4")@PathVariable("userId") Long userId) {
         logger.info(String.format("Видео пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         return ResponseEntity.ok().body(videoDtoService.getPartVideoOfUser(userId, currentPage, itemsOnPage));
@@ -149,13 +153,16 @@ public class VideosController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "видео в альбом успешно добавлено", response = String.class)})
     @PostMapping(value = "/addInAlbums")
-    public ResponseEntity<?> addInAlbums(@ApiParam(value = "Id альбома",example = "100") @RequestParam @NotNull Long albumId,
-                                         @ApiParam(value = "Id видео",example = "1") @RequestParam @NotNull Long videoId) {
+    public ResponseEntity<?> addInAlbums(@ApiParam(value = "Id альбома",example = "100")
+                                         @RequestParam @NotNull(message = "albumId should not equal to null") Long albumId,
+                                         @ApiParam(value = "Id видео",example = "1")
+                                         @RequestParam @NotNull(message = "videoId should not equal to null") Long videoId) {
+
         logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
         AlbumVideo albumVideo = albumVideoService.getById(albumId);
 
         if (albumVideo == null) {
-            return ResponseEntity.badRequest().body(String.format("Видеоальбома с id %s не обнаружено", albumId));
+            return ResponseEntity.badRequest().body(String.format("VideoAlbum with id %s does not exist", albumId));
         }
 
         Set<Videos> videosSet = albumVideo.getVideos();
@@ -180,7 +187,9 @@ public class VideosController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "видео из альбома пользователя успешно получено", response = VideoDto.class,responseContainer = "List")})
     @GetMapping(value = "/getFromAlbumOfUser")
-    public ResponseEntity<?> getFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7")@RequestParam @NotNull Long albumId) {
+    public ResponseEntity<?> getFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7")
+                                                @RequestParam
+                                                @NotNull(message = "albumId should not equal to null") Long albumId) {
         logger.info(String.format("Все видео из альбома с id:%s отправлено", albumId));
         return ResponseEntity.ok().body(videoDtoService.getVideoFromAlbumOfUser(albumId));
     }
