@@ -7,6 +7,8 @@ import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ActiveServiceImpl extends GenericServiceAbstract<Active, Long> implements ActiveService {
 
@@ -20,7 +22,7 @@ public class ActiveServiceImpl extends GenericServiceAbstract<Active, Long> impl
 
 
     @Override
-    public Active getByActiveName(String active) {
+    public Optional<Active> getByActiveName(String active) {
         return activeDAO.getByActiveName(active);
     }
 }
