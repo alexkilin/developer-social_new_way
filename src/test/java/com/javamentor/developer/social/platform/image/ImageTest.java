@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/image/Active.yml",
         "datasets/image/User.yml",
         "datasets/image/Role.yml",
-        "datasets/image/Status.yml",
         "datasets/image/Media.yml",
         "datasets/image/Image.yml",
         "datasets/image/Album.yml",
@@ -35,7 +34,6 @@ public class ImageTest extends AbstractIntegrationTest {
             "datasets/image/Active.yml",
             "datasets/image/User.yml",
             "datasets/image/Role.yml",
-            "datasets/image/Status.yml"
     }, cleanBefore = true, cleanAfter = true)
     public void createImage() throws Exception {
         ImageCreateDto imageDto = ImageCreateDto.builder()
@@ -109,7 +107,6 @@ public class ImageTest extends AbstractIntegrationTest {
             "datasets/image/Active.yml",
             "datasets/image/User.yml",
             "datasets/image/Role.yml",
-            "datasets/image/Status.yml"
     }, cleanBefore = true, cleanAfter = true)
     public void createAlbum() throws Exception {
         AlbumCreateDto albumDto = AlbumCreateDto.builder()
