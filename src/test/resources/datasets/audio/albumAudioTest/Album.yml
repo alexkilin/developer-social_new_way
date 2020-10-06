@@ -5,7 +5,7 @@ albums:
     media_type: 1
     name: "audioAlbum"
     persist_date: "2020-08-07 23:35:34.817330"
-    user_owner_id_user_id: 1
+    user_owner_id_user_id: 60
 
   - id: 2
     icon: "icon 2"
@@ -13,7 +13,7 @@ albums:
     media_type: 1
     name: "audioAlbum"
     persist_date: "2020-08-07 23:35:34.817330"
-    user_owner_id_user_id: 1
+    user_owner_id_user_id: 60
 
   - id: 3
     icon: "icon 3"
@@ -21,7 +21,7 @@ albums:
     media_type: 1
     name: "audioAlbum"
     persist_date: "2020-08-07 23:35:34.817330"
-    user_owner_id_user_id: 1
+    user_owner_id_user_id: 60
 
   - id: 4
     icon: "icon 4"
