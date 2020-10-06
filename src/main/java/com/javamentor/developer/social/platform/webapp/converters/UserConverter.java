@@ -57,6 +57,9 @@ public abstract class UserConverter {
 
     @Named("roleSetter")
     protected Role roleSetter(String role) {
+        if (role == null) {
+            return roleService.getByRoleName("User").get();
+        }
         Optional<Role> opt = roleService.getByRoleName(role);
         if (opt.isPresent()) {
             return opt.get();
