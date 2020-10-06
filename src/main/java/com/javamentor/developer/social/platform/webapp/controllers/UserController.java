@@ -85,7 +85,7 @@ public class UserController {
     public ResponseEntity<UserDto> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserDto userDto) {
         userService.create(userConverter.toEntity(userDto));
         logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userConverter.toDto(userService.getByEmail(userDto.getEmail())));
     }
 
     @ApiOperation(value = "Обновление пользователя")
