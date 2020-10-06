@@ -47,12 +47,13 @@ public abstract class UserConverter {
     public abstract UserDto toDto(User user);
 
     @Mappings({
-            @Mapping(target = "role", source = "roleName", qualifiedByName = "roleSetter"),
-            @Mapping(target = "active", source = "activeName", qualifiedByName = "activeSetter"),
+            @Mapping(target = "role.name", source = "roleName", qualifiedByName = "roleSetter"),
+            @Mapping(target = "active.name", source = "activeName", qualifiedByName = "activeSetter"),
             @Mapping(target = "password", expression = "java(passwordEncoder.encode(userDto.getPassword()))")}
     )
     public abstract User toEntity(UserDto userDto);
 
+    // TODO : Убрать try catch
     @Named("roleSetter")
     protected Role roleSetter(String role) {
         try {
@@ -65,6 +66,7 @@ public abstract class UserConverter {
         }
     }
 
+    // TODO : Убрать try catch
     @Named("activeSetter")
     protected Active activeSetter(String active) {
         try {

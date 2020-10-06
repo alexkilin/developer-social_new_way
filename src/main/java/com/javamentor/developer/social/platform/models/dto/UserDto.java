@@ -27,13 +27,15 @@ public class UserDto {
     @ApiModelProperty(notes = "Имя пользователя, поле не должно быть пустым",
                      required = true, example = "Иван", position = 4)
     @NotNull(groups = OnCreate.class, message = "Поле имя не должно быть Null при создании")
-    @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле имя должен начинаться с буквы")
+    @NotNull(groups = OnUpdate.class, message = "Поле имя не должно быть Null при обновлении")
+    @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле имя должно начинаться с буквы")
     private String firstName;
 
     @ApiModelProperty(notes = "Фамилия пользователя, поле не должна быть пустой",
             required = true, example = "Иванов", position = 5)
-    @NotNull(groups = OnCreate.class, message = "Поле имя не должно быть Null при создании")
-    @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле имя должен начинаться с буквы")
+    @NotNull(groups = OnCreate.class, message = "Поле фамилия не должно быть Null при создании")
+    @NotNull(groups = OnUpdate.class, message = "Поле фамилия не должно быть Null при обновлении")
+    @Pattern(groups = OnCreate.class, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле фамилия должно начинаться с буквы")
     private String lastName;
 
     @JsonFormat(pattern = "dd.MM.yyyy")
@@ -71,6 +73,9 @@ public class UserDto {
 
     @ApiModelProperty(notes = "Ссылка на сайт пользователя", example = "www.site.com", position = 9)
     private String linkSite;
+
+    @ApiModelProperty(notes = "Профессия пользователя", example = "Plumber", position = 13)
+    private String profession;
 
     @ApiModelProperty(notes = "Автоматически назначается при создании всем пользователям, явно указывать не нужно",
             example = "не указывать", hidden = true)

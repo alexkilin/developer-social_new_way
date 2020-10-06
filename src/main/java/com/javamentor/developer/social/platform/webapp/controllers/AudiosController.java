@@ -35,7 +35,6 @@ import javax.validation.constraints.NotNull;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -177,10 +176,12 @@ public class AudiosController {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено")})
     @PostMapping(value = "/addToUser", params = {"audioId"})
     public ResponseEntity<?> addAudioInCollectionsOfUser(@ApiParam(value = "Id музыке",example = "153")@RequestParam("audioId") Long audioId) {
-        if (audioDtoService.addAudioInCollectionsOfUser(60L, audioId)) {
+        User user = userService.getById(60L);
+        if(audiosService.addAudioInCollectionsOfUser(user, audioId)){
+            userService.update(user);
             logger.info(String.format("Успешное добавление аудио с id %s в избранное пользователю с id %s", audioId, 60L));
             return ResponseEntity.ok().body("Успешно");
-        } else {
+       } else {
             return ResponseEntity.ok().body(String.format("Неудачное добавление аудио с id %s в избранное пользователю с id %s", audioId, 60L));
         }
     }
@@ -188,6 +189,7 @@ public class AudiosController {
     @ApiOperation(value = "Добавление аудио")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено", response = AudioDto.class)})
+   // @Validated(OnCreate.class)
     @PostMapping(value = "/add")
     public ResponseEntity<?> addAudio(@ApiParam(value = "Объект добавляемого аудио")@RequestBody @Valid @NonNull AudioDto audioDto) {
         User user = userService.getById(60L);
@@ -217,11 +219,6 @@ public class AudiosController {
                                          @ApiParam(value = "Id альбома",example = "242")@RequestParam @NotNull Long audioId) {
         logger.info(String.format("Аудио с id  %s добавлено в альбом с id %s", audioId, albumId));
         AlbumAudios albumAudios = albumAudioService.getById(albumId);
-
-        if (albumAudios == null) {
-            return ResponseEntity.badRequest().body(String.format("Альбома с id %s не существует", albumId));
-        }
-
         Set<Audios> audiosSet = albumAudios.getAudios();
         audiosSet.add(audiosService.getById(audioId));
         albumAudios.setAudios(audiosSet);

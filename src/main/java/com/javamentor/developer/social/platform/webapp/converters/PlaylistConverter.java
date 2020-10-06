@@ -44,6 +44,7 @@ public abstract class PlaylistConverter {
     @Mapping(target = "content", source = "playlistContent", qualifiedByName = "contentSetter")
     public abstract PlaylistGetDto toPlaylistGetDto(Playlist playlist);
 
+    // TODO : Убрать try catch
     @Named("userSetter")
     protected User userSetter(Long userId) {
         try {

@@ -36,6 +36,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+
     @NotNull
     private String firstName;
 
@@ -51,6 +52,7 @@ public class User {
     @Column
     private String aboutMe;
 
+
     @Column(name = "image")
     private String avatar;
 
@@ -59,6 +61,10 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "profession")
+    private String profession;
+
 
     @Column(name = "persist_date", nullable = false, updatable = false)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
@@ -70,6 +76,7 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime lastRedactionDate;
 
+
     @Column(name = "is_enable", nullable = true)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean isEnable = true;
@@ -79,6 +86,7 @@ public class User {
 
     @Column(name = "link_site")
     private String linkSite;
+
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Role.class, cascade = {CascadeType.PERSIST})
