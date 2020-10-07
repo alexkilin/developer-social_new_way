@@ -103,7 +103,6 @@ public class UserController {
     @Validated(OnUpdate.class)
     public ResponseEntity<?> updateUser(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserDto userDto) {
         User user = userConverter.toEntity(userDto);
-        user.setRole(roleService.getByUserId(user.getUserId()).get());
         if (userService.existById(userDto.getUserId())) {
             userService.update(user);
             logger.info(String.format("Пользователь с ID: %d обновлён успешно", userDto.getUserId()));
