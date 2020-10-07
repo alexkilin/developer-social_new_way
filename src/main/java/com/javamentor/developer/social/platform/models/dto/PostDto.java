@@ -33,7 +33,7 @@ public class PostDto {
     @ApiModelProperty(notes = "Текст новости, поле не должно быть пустым")
     private String text;
 
-    @ApiModelProperty(notes = "Айди пользователя, добавившего пост", example = "1")
+    @ApiModelProperty(notes = "ID пользователя, добавившего пост", example = "1")
     private Long userId;
 
     @ApiModelProperty(notes = "Имя пользователя")
@@ -57,15 +57,15 @@ public class PostDto {
     @ApiModelProperty(notes = "Тэги новости")
     private List<TagDto> tags;
 
-    @ApiModelProperty(notes = "Количество добалений в избранное/закладки")
+    @ApiModelProperty(notes = "Количество добавлений в избранное/закладки", example = "0")
     private Long bookmarkAmount;
 
-    @ApiModelProperty(notes = "Количество лайков")
+    @ApiModelProperty(notes = "Количество лайков", example = "0")
     private Long likeAmount;
 
-    @ApiModelProperty(notes = "Количество комментариев")
+    @ApiModelProperty(notes = "Количество комментариев", example = "0")
     private Long commentAmount;
 
-    @ApiModelProperty(notes = "Количество репостов")
+    @ApiModelProperty(notes = "Количество репостов", example = "0")
     private Long shareAmount;
 }
