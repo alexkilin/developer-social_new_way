@@ -58,8 +58,8 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .city((String) objects[9])
                                     .roleName(((String) objects[10]))
                                     .status((String) objects[11])
-                                    .profession((String) objects[12])
-                                    .activeName((String) objects[13])
+                                    .activeName((String) objects[12])
+                                    .profession((String) objects[13])
                                     .build();
                         }
 
