@@ -265,7 +265,7 @@ class MusicTest extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .string("'name' Must not be null when creating and updating"));
+                        .string("'name' Must not be empty when creating and updating"));
     }
 
     @Test
