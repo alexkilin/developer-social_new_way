@@ -8,4 +8,7 @@ public interface UserService extends GenericService<User, Long> {
 
     List<User> getAll();
 
+    User getByEmail(String email);
+
+    boolean existByEmail(String email);
 }
