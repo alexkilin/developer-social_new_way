@@ -20,10 +20,19 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
         this.userDAO = userDAO;
     }
 
-
     @Override
     public List<User> getAll() {
         return userDAO.getAll();
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userDAO.getByEmail(email);
+    }
+
+    @Override
+    public boolean existByEmail(String email) {
+        return userDAO.existByEmail(email);
     }
 
     @Override
@@ -34,9 +43,6 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     @Override
     public boolean existById(Long id) {
         return userDAO.existById(id);
-    }
-    public User getById(Long id) {
-        return userDAO.getById(id);
     }
 
 }
