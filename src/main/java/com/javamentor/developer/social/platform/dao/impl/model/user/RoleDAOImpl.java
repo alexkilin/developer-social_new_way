@@ -27,11 +27,11 @@ public class RoleDAOImpl extends GenericDaoAbstract<Role, Long> implements RoleD
     }
 
     @Override
-    public Role getByUserId(Long userId) {
-        return entityManager.createQuery(
+    public Optional<Role> getByUserId(Long userId) {
+        TypedQuery<Role> query = entityManager.createQuery(
                 "SELECT r FROM Role r, User u " +
                         "WHERE u.userId =: userId AND u.role.id = r.id", Role.class)
-                .setParameter("userId", userId)
-                .getSingleResult();
+                .setParameter("userId", userId);
+        return SingleResultUtil.getSingleResultOrNull(query);
     }
 }

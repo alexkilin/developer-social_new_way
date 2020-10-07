@@ -26,7 +26,7 @@ public class RoleServiceImpl extends GenericServiceAbstract<Role, Long> implemen
     }
 
     @Override
-    public Role getByUserId(Long userId) {
+    public Optional<Role> getByUserId(Long userId) {
         return roleDAO.getByUserId(userId);
     }
 }
