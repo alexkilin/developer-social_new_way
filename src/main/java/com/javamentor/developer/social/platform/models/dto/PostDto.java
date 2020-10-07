@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 public class PostDto {
 
-    @ApiModelProperty(notes = "Автоматически генерируемыЙ ID новости. При создании не указывать, указывать при изменении", example = "1")
+    @ApiModelProperty(notes = "Автоматически генерируемыЙ ID новости. При создании не указывать, указывать при изменении", example = "null")
     @Null(groups = OnCreate.class, message = "Поле id должно принимать null значение при создании")
     @NotNull(groups = OnUpdate.class, message = "Поле id не должно принимать null значение при обновлении")
     private Long id;
