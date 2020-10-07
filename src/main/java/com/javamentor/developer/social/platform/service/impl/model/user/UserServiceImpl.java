@@ -31,6 +31,11 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     }
 
     @Override
+    public boolean existByEmail(String email) {
+        return userDAO.existByEmail(email);
+    }
+
+    @Override
     public void deleteById(Long id) {
         userDAO.deleteById(id);
     }
@@ -40,7 +45,4 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
         return userDAO.existById(id);
     }
 
-    /*public User getById(Long id) {
-        return userDAO.getById(id);
-    }*/
 }

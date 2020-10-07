@@ -78,14 +78,20 @@ public class UserController {
 
     @ApiOperation(value = "Создание пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь создан", response = UserDto.class)
+            @ApiResponse(code = 200, message = "Пользователь создан", response = UserDto.class),
+            @ApiResponse(code = 400, message = "Пользователь с данным email существует. Email должен быть уникальным", response = String.class)
     })
     @PostMapping("/create")
     @Validated(OnCreate.class)
-    public ResponseEntity<UserDto> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserDto userDto) {
-        userService.create(userConverter.toEntity(userDto));
-        logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
-        return ResponseEntity.ok(userConverter.toDto(userService.getByEmail(userDto.getEmail())));
+    public ResponseEntity<?> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserDto userDto) {
+        if (userService.existByEmail(userDto.getEmail())) {
+            logger.info(String.format("Пользователь с email: %s уже существует", userDto.getEmail()));
+            return ResponseEntity.status(400).body(String.format("User with email: %s already exist. Email should be unique", userDto.getEmail()));
+        } else {
+            userService.create(userConverter.toEntity(userDto));
+            logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
+            return ResponseEntity.ok(userConverter.toDto(userService.getByEmail(userDto.getEmail())));
+        }
     }
 
     @ApiOperation(value = "Обновление пользователя")
@@ -148,7 +154,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)
     })
     @PatchMapping(value = "/update/status")
-    public ResponseEntity<?> updateUserStatus(@RequestBody StatusDto statusDto) {
+    public ResponseEntity<?> updateUserStatus(@ApiParam(value = "Статус пользователя") @Valid @RequestBody StatusDto statusDto) {
         Optional<UserDto> optionalUserDto = userDtoService.getUserDtoById(statusDto.getUserId());
         if (optionalUserDto.isPresent()) {
             UserDto userDto = optionalUserDto.get();
