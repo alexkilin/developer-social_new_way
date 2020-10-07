@@ -7,6 +7,8 @@ import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class RoleServiceImpl extends GenericServiceAbstract<Role, Long> implements RoleService {
 
@@ -19,7 +21,7 @@ public class RoleServiceImpl extends GenericServiceAbstract<Role, Long> implemen
     }
 
     @Override
-    public Role getByRoleName(String name) {
+    public Optional<Role> getByRoleName(String name) {
         return roleDAO.getByName(name);
     }
 

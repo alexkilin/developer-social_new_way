@@ -3,8 +3,8 @@ package com.javamentor.developer.social.platform.dao.abstracts.model.user;
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
 import com.javamentor.developer.social.platform.models.entity.user.Role;
 
-public interface RoleDAO extends GenericDao<Role, Long> {
-    Role getByName(String name);
+import java.util.Optional;
 
-    Role getByUserId(Long userId);
+public interface RoleDAO extends GenericDao<Role, Long> {
+    Optional<Role> getByName(String name);
 }
