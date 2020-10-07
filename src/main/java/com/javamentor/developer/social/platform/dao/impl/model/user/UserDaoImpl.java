@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.dao.impl.model.user;
 
-
 import com.javamentor.developer.social.platform.dao.abstracts.model.user.UserDao;
 import com.javamentor.developer.social.platform.dao.impl.GenericDaoAbstract;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -21,4 +20,19 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
         return entityManager.createQuery("SELECT from User").getResultList();
     }
 
+    @Override
+    public User getByEmail(String email) {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                .setParameter("email", email).getSingleResult();
+    }
+
+    @Override
+    public boolean existByEmail(String email) {
+        Long count = entityManager.createQuery(
+                "SELECT COUNT(u) " +
+                        "FROM User u WHERE u.email = :email", Long.class)
+                .setParameter("email", email)
+                .getSingleResult();
+        return (count > 0);
+    }
 }

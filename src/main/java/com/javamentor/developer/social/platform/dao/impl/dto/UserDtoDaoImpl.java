@@ -37,7 +37,9 @@ class UserDtoDaoImpl implements UserDtoDao {
                     "u.password, " +
                     "u.city, " +
                     "u.role.name, " +
-                    "u.status " +
+                    "u.status, " +
+                    "u.active.name, " +
+                    "u.profession " +
                     "FROM User u")
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
@@ -56,6 +58,8 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .city((String) objects[9])
                                     .roleName(((String) objects[10]))
                                     .status((String) objects[11])
+                                    .profession((String) objects[12])
+                                    .activeName((String) objects[13])
                                     .build();
                         }
 
@@ -90,7 +94,9 @@ class UserDtoDaoImpl implements UserDtoDao {
                     "u.password, " +
                     "u.city, " +
                     "u.role.name, " +
-                    "u.status " +
+                    "u.status, " +
+                    "u.profession, " +
+                    "u.active.name " +
                     "FROM User u WHERE u.userId = " + id)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
@@ -109,6 +115,8 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .city((String) objects[9])
                                     .roleName((String) objects[10])
                                     .status((String) objects[11])
+                                    .profession((String) objects[12])
+                                    .activeName((String) objects[13])
                                     .build();
                         }
 

@@ -59,6 +59,7 @@ public abstract class AlbumConverter {
     @Mapping(source = "albumImage.id", target = "id")
     public abstract AlbumDto toAlbumDto(AlbumImage albumImage);
 
+    // TODO : Убрать try catch
     @Named("userSetter")
     protected User userSetter(Long userId) {
         try {

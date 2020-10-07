@@ -22,7 +22,7 @@ public class UserTabsDAOImpl extends GenericDaoAbstract<UserTabs, Long> implemen
 
     @Override
     public void deletePost(Post post) {
-        entityManager.createNativeQuery("delete from book_marks where post_id = :id")
+        entityManager.createNativeQuery("delete from bookmarks where post_id = :id")
                 .setParameter("id", post.getId())
                 .executeUpdate();
 

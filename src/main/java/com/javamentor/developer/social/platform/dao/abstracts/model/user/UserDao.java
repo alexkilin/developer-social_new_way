@@ -8,4 +8,8 @@ import java.util.List;
 public interface UserDao extends GenericDao<User, Long> {
 
     List<User> getAll();
+
+    User getByEmail(String email);
+
+    boolean existByEmail(String email);
 }

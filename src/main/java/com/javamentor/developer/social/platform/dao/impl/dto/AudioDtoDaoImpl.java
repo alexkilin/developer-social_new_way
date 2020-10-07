@@ -336,19 +336,6 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
         return audios;
     }
 
-
-    @Override
-    @Transactional
-    public boolean addAudioInCollectionsOfUser(Long userId, Long audioId) {
-        User user = entityManager.find(User.class, userId);
-        Set<Audios> set = user.getAudios();
-        set.add(getAudioOfId(audioId));
-        user.setAudios(set);
-        entityManager.merge(user);
-        entityManager.flush();
-        return true;
-    }
-
     @Override
     public List<AudioDto> getAudioFromAlbumOfUser(Long albumId) {
         List<AudioDto> audios = entityManager
