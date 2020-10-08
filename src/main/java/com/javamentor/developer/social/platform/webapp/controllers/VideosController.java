@@ -81,7 +81,7 @@ public class VideosController {
                                                         @ApiParam(value = "Количество данных на страницу", example = "15")
                                                         @RequestParam @NotNull Integer itemsOnPage) {
         logger.info(String.format("Видео начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(videosService.getPart(currentPage, itemsOnPage).stream().map(videoConverter::toDTO).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(videoDtoService.getPart(currentPage, itemsOnPage));
     }
 
     @ApiOperation(value = "Получение видео по названию")
