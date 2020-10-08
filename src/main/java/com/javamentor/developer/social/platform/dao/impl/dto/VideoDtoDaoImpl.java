@@ -86,4 +86,14 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
                         " FROM AlbumVideo av JOIN av.videos as v WHERE av.album.id =:albumId", VideoDto.class)
                 .setParameter("albumId", albumId).getResultList();
     }
+
+    @Override
+    public List<VideoDto> getPart(int currentPage, int itemsOnPage) {
+        return entityManager.createQuery(
+                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                        "v.media.url, v.name, v.icon, v.media.persistDateTime)" +
+                        "FROM Videos as v WHERE v.media.mediaType = 2", VideoDto.class)
+                .setFirstResult(currentPage * itemsOnPage)
+                .setMaxResults(itemsOnPage).getResultList();
+    }
 }
