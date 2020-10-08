@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/audio/usersAudioTest/Active.yml",
         "datasets/audio/usersAudioTest/User.yml",
         "datasets/audio/usersAudioTest/Role.yml",
-        "datasets/audio/usersAudioTest/Status.yml",
         "datasets/audio/usersAudioTest/UsersAudiosCollections.yml",
         "datasets/audio/Media.yml",
         "datasets/audio/albumAudioTest/AudioAlbum.yml",
@@ -40,7 +39,7 @@ class PlaylistsTest extends AbstractIntegrationTest {
                 .image("albumImage")
                 .build();
 
-        this.mockMvc.perform(post("/api/audios/playlist")
+        this.mockMvc.perform(post("/api/audios/playlists")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(dto)))
                 .andDo(print())
@@ -51,23 +50,23 @@ class PlaylistsTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void createAndDelete() throws Exception {
+    void deletePlaylistById() throws Exception {
 
-        this.mockMvc.perform(delete("/api/audios/playlist/10"))
+        this.mockMvc.perform(delete("/api/audios/playlists/11"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(String.format("Playlist with id %s deleted", 10)));
+                .andExpect(content().string(String.format("Playlist with id %s deleted", 11)));
 
-        this.mockMvc.perform(delete("/api/audios/playlist/10"))
+        this.mockMvc.perform(delete("/api/audios/playlist/11"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(String.format("No playlist with id %s for current user", 10)));
+                .andExpect(content().string(String.format("No playlist with id %s for current user", 11)));
     }
 
 
     @Test
-    void getAll() throws Exception {
-        this.mockMvc.perform(get("/api/audios/playlist/all"))
+    void getAllPlaylists() throws Exception {
+        this.mockMvc.perform(get("/api/audios/playlists"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(5));
@@ -75,7 +74,7 @@ class PlaylistsTest extends AbstractIntegrationTest {
 
     @Test
     void getOneById() throws Exception {
-        this.mockMvc.perform(get("/api/audios/playlist/12"))
+        this.mockMvc.perform(get("/api/audios/playlists/12"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("test2"))
@@ -92,26 +91,26 @@ class PlaylistsTest extends AbstractIntegrationTest {
     @Test
     void addAudioToPlaylist() throws Exception {
 
-        this.mockMvc.perform(put("/api/audios/playlist?playlistId=10&audioId=4"))
+        this.mockMvc.perform(put("/api/audios/playlists/{playlistId}/audioId=4", 10))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("test0"))
                 .andExpect(jsonPath("$.image").value("testimage0"))
                 .andExpect(jsonPath("$.content.length()").value("4"));
 
-        this.mockMvc.perform(put("/api/audios/playlist?playlistId=10&audioId=4"))
+        this.mockMvc.perform(put("/api/audios/playlists/{playlistId}/audioId=4", 10))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void deleteAudioFromPlaylist() throws Exception {
-        this.mockMvc.perform(delete("/api/audios/playlist?playlistId=10&audioId=3"))
+        this.mockMvc.perform(delete("/api/audios/playlists/{playlistId}/audioId=3", 10))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value("2"));
 
-        this.mockMvc.perform(delete("/api/audios/playlist?playlistId=10&audioId=3"))
+        this.mockMvc.perform(delete("/api/audios/playlists/{playlistId}/audioId=3", 10))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
