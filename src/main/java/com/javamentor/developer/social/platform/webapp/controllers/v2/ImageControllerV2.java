@@ -34,14 +34,14 @@ import java.util.Optional;
 @Api(value = "ImageApi-v2")
 public class ImageControllerV2 {
 
-    private ImageDTOService imageDTOService;
-    private ImageService imageService;
-    private AlbumDtoService albumDtoService;
-    private AlbumImageService albumImageService;
-    private UserService userService;
-    private AlbumConverter albumConverter;
-    private AlbumService albumService;
-    private MediaService mediaService;
+    private final ImageDTOService imageDTOService;
+    private final ImageService imageService;
+    private final AlbumDtoService albumDtoService;
+    private final AlbumImageService albumImageService;
+    private final UserService userService;
+    private final AlbumConverter albumConverter;
+    private final AlbumService albumService;
+    private final MediaService mediaService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

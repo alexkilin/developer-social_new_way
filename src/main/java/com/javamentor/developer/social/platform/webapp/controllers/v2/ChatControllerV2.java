@@ -34,7 +34,7 @@ public class ChatControllerV2 {
     private final MessageDtoService messageDtoService;
     private final GroupChatService groupChatService;
     private final SingleChatService singleChatService;
-    private GroupChatConverter groupChatConverter;
+    private final GroupChatConverter groupChatConverter;
     private final UserService userService;
 
 

@@ -39,8 +39,8 @@ public class PostControllerV2 {
     private final UserService userService;
     private final MediaService mediaService;
     private final UserTabsService userTabsService;
-    public final PostCommentConverter postCommentConverter;
-    public final PostCommentService postCommentService;
+    private final PostCommentConverter postCommentConverter;
+    private final PostCommentService postCommentService;
 
     @Autowired
     public PostControllerV2(PostDtoService postDtoService, PostConverter postConverter, PostService postService, UserService userService, MediaService mediaService, UserTabsService userTabsService, PostCommentConverter postCommentConverter, PostCommentService postCommentService) {
