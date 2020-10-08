@@ -88,9 +88,10 @@ public class UserController {
             logger.info(String.format("Пользователь с email: %s уже существует", userDto.getEmail()));
             return ResponseEntity.status(400).body(String.format("User with email: %s already exist. Email should be unique", userDto.getEmail()));
         } else {
-            userService.create(userConverter.toEntity(userDto));
+            User user = userConverter.toEntity(userDto);
+            userService.create(user);
             logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
-            return ResponseEntity.ok(userConverter.toDto(userService.getByEmail(userDto.getEmail())));
+            return ResponseEntity.ok(userConverter.toDto(user));
         }
     }
 
@@ -103,7 +104,6 @@ public class UserController {
     @Validated(OnUpdate.class)
     public ResponseEntity<?> updateUser(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserDto userDto) {
         User user = userConverter.toEntity(userDto);
-        user.setRole(roleService.getByUserId(user.getUserId()).get());
         if (userService.existById(userDto.getUserId())) {
             userService.update(user);
             logger.info(String.format("Пользователь с ID: %d обновлён успешно", userDto.getUserId()));
