@@ -29,7 +29,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/v2/users", produces = "application/json")
 @SuppressWarnings("deprecation")
-@Api(value = "UserApi-v2", description = "CRUD-Операции с пользователем")
+@Api(value = "UserApi-v2", description = "Опирации над пользователем")
 public class UserControllerV2 {
 
     private final UserDtoService userDtoService;
@@ -74,7 +74,7 @@ public class UserControllerV2 {
     })
     @GetMapping("")
     public ResponseEntity<List<UserDto>> getAll() {
-        logger.info(String.format("Получен список пользователей"));
+        logger.info("Получен список пользователей");
         return ResponseEntity.ok(userDtoService.getUserDtoList());
     }
 

@@ -25,7 +25,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/v2/groups", produces = "application/json")
 @SuppressWarnings("deprecation")
-@Api(value = "GroupsApi-v2", description = "Операции по получению групп")
+@Api(value = "GroupsApi-v2", description = "Операции над группами")
 public class GroupControllerV2 {
     private final GroupDtoService groupDtoService;
     private final GroupHasUserService groupHasUserService;

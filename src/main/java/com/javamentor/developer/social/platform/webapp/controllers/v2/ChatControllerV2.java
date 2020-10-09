@@ -28,7 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v2/chats", produces = "application/json")
 @SuppressWarnings("deprecation")
-@Api(value = "ChatApi-v2", description = "Получение всех чатов пользователя,и получение всех сообщений чата.")
+@Api(value = "ChatApi-v2", description = "Операции над чатами")
 public class ChatControllerV2 {
     private final ChatDtoService chatDtoService;
     private final MessageDtoService messageDtoService;

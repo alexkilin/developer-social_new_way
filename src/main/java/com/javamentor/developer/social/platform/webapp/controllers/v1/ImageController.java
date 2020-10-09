@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers.media;
+package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
 import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.entity.album.Album;

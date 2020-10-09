@@ -31,7 +31,8 @@ import java.util.Optional;
 @RestController
 @Validated
 @RequestMapping(value = "/api/v2/images")
-@Api(value = "ImageApi-v2")
+@SuppressWarnings("deprecation")
+@Api(value = "ImageApi-v2", description = "Операции над изображениями")
 public class ImageControllerV2 {
 
     private final ImageDTOService imageDTOService;

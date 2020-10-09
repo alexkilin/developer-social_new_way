@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/api/v2/video", produces = "application/json")
 @SuppressWarnings("deprecation")
-@Api(value = "VideosApi-v2", description = "Операции с видеозаписями(получение, сортировка, добавление)")
+@Api(value = "VideosApi-v2", description = "Операции над видеозаписями")
 public class VideosControllerV2 {
 
     private final VideosService videosService;

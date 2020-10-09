@@ -30,7 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v2/posts", produces = "application/json")
 @SuppressWarnings("deprecation")
-@Api(value = "PostApi-v2", description = "Операции с постами пользователя (получение, добавление, удаление)")
+@Api(value = "PostApi-v2", description = "Операции над постами пользователя")
 @Validated
 public class PostControllerV2 {
     private final PostDtoService postDtoService;

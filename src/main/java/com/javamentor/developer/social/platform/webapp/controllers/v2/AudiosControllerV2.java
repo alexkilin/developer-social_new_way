@@ -54,7 +54,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/v2/audio", produces = "application/json")
 @SuppressWarnings("deprecation")
-@Api(value = "AudiosApi-v2", description = "Операции с аудиозаписями(получение, сортировка, добавление)")
+@Api(value = "AudiosApi-v2", description = "Операции над аудиозаписями")
 public class AudiosControllerV2 {
 
     private final AudioConverter audioConverter;
