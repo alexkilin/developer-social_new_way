@@ -81,14 +81,14 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Добавление поста")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пост добавлен", response = String.class)
+            @ApiResponse(code = 200, message = "Пост добавлен", response = PostDto.class)
     })
     @PostMapping("")
     @Validated(OnCreate.class)
-    public ResponseEntity<?> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostDto postDto) {
+    public ResponseEntity<PostDto> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostDto postDto) {
         Post post = postConverter.toEntity(postDto);
         postService.create(post);
-        return ResponseEntity.ok().body(post.getText());
+        return ResponseEntity.ok().body(postConverter.toDto(post));
     }
 
     @ApiOperation(value = "Удаление поста по id поста")
@@ -125,7 +125,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
     })
     @PostMapping("/{postId}/comment")
-    public ResponseEntity<String> addCommentToPost(@RequestBody CommentDto commentDto,
+    public ResponseEntity<String> addCommentToPost(@ApiParam(value = "Объект комментария к посту") @RequestBody CommentDto commentDto,
                                                    @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
         if (!userService.existById(commentDto.getUserDto().getUserId())) {
             String msg = String.format("Пользователь с id: %d не найден", commentDto.getUserDto().getUserId());

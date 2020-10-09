@@ -85,7 +85,7 @@ public class VideosControllerV2 {
     @ApiOperation(value = "Получение видео из коллекции пользователя по частям")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Видео из коллекции пользователя по частям", responseContainer = "List", response = VideoDto.class)})
-    @GetMapping(value = "/user/{userId}", params = {"currentPage", "itemsOnPage"})
+    @GetMapping(value = "/user/{userId}/video", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<List<VideoDto>> getPartVideoOfUser(
             @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
@@ -97,12 +97,12 @@ public class VideosControllerV2 {
     @ApiOperation(value = "Добавление видео для пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Видео успешно добавлено", response = VideoDto.class)})
-    @PostMapping(value = "/user/{userId}")
+    @PostMapping(value = "/user/{userId}/video")
     public ResponseEntity<?> addVideo(@ApiParam(value = "Объект добавляемого видео") @RequestBody @Valid @NonNull VideoDto videoDto,
                                       @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         User user = userService.getById(userId);
-        Videos audios = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
-        videosService.create(audios);
+        Videos videos = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
+        videosService.create(videos);
         logger.info(String.format("Добавление видео с id %s в бд", videoDto.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(videoDto);
     }
@@ -128,7 +128,7 @@ public class VideosControllerV2 {
     @ApiOperation(value = "Добавить видео в альбом")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "видео в альбом успешно добавлено", response = String.class)})
-    @PutMapping(value = "/album", params = {"albumId", "videoId"})
+    @PutMapping(value = "/album/video", params = {"albumId", "videoId"})
     public ResponseEntity<?> addInAlbums(@ApiParam(value = "Id альбома", example = "100") @RequestParam @Valid @NotNull Long albumId,
                                          @ApiParam(value = "Id видео", example = "1") @RequestParam @NotNull Long videoId) {
         logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
@@ -154,7 +154,7 @@ public class VideosControllerV2 {
     @ApiOperation(value = "Получение всех видео из альбома ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "видео из альбома пользователя успешно получено", response = VideoDto.class, responseContainer = "List")})
-    @GetMapping(value = "/album/{albumId}")
+    @GetMapping(value = "/album/{albumId}/video")
     public ResponseEntity<?> getFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7") @PathVariable @NotNull Long albumId) {
         logger.info(String.format("Все видео из альбома с id:%s отправлено", albumId));
         return ResponseEntity.ok().body(videoDtoService.getVideoFromAlbumOfUser(albumId));
@@ -163,7 +163,7 @@ public class VideosControllerV2 {
     @ApiOperation(value = "Получение видео пользователя по альбому")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Видео из коллекции пользователя по альбому", response = VideoDto.class, responseContainer = "List")})
-    @GetMapping(value = "/user/{userId}", params = {"album"})
+    @GetMapping(value = "/user/{userId}/video", params = {"album"})
     public ResponseEntity<List<VideoDto>> getAlbumVideoOfUser(@ApiParam(value = "Название альбома", example = "My Album") @RequestParam("album") String album,
                                                               @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         logger.info(String.format("Отправка избранного видео пользователя c id %s альбома %s", userId, album));

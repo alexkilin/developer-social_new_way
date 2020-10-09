@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
+import com.javamentor.developer.social.platform.models.dto.StatusDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
@@ -79,14 +80,21 @@ public class UserControllerV2 {
 
     @ApiOperation(value = "Создание пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь создан", response = UserDto.class)
+            @ApiResponse(code = 200, message = "Пользователь создан", response = UserDto.class),
+            @ApiResponse(code = 400, message = "Пользователь с данным email существует. Email должен быть уникальным", response = String.class)
     })
     @PostMapping("")
     @Validated(OnCreate.class)
-    public ResponseEntity<UserDto> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserDto userDto) {
-        userService.create(userConverter.toEntity(userDto));
-        logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
-        return ResponseEntity.ok(userDto);
+    public ResponseEntity<?> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserDto userDto) {
+        if (userService.existByEmail(userDto.getEmail())) {
+            logger.info(String.format("Пользователь с email: %s уже существует", userDto.getEmail()));
+            return ResponseEntity.status(400).body(String.format("User with email: %s already exist. Email should be unique", userDto.getEmail()));
+        } else {
+            User user = userConverter.toEntity(userDto);
+            userService.create(user);
+            logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
+            return ResponseEntity.ok(userConverter.toDto(user));
+        }
     }
 
     @ApiOperation(value = "Обновление пользователя")
@@ -94,7 +102,7 @@ public class UserControllerV2 {
             @ApiResponse(code = 200, message = "Пользователь обновлен", response = UserDto.class),
             @ApiResponse(code = 404, message = "Пользователь не обновлен из-за несоответствия id", response = String.class)
     })
-    @PutMapping("")
+    @PatchMapping("")
     @Validated(OnUpdate.class)
     public ResponseEntity<?> updateUser(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserDto userDto) {
         User user = userConverter.toEntity(userDto);
@@ -111,7 +119,7 @@ public class UserControllerV2 {
     @ApiOperation(value = "Удаление пользователя по id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пользователь удален", response = String.class),
-            @ApiResponse(code = 404, message = "Пользователя с данным id нет базе данных", response = String.class)
+            @ApiResponse(code = 404, message = "Пользователя с данным id нет в базе данных", response = String.class)
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUserById(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
@@ -139,6 +147,26 @@ public class UserControllerV2 {
         } else {
             logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
             return ResponseEntity.status(400).body(String.format("User with ID: %d does not exist.", id));
+        }
+    }
+
+    @ApiOperation(value = "Изменение статуса пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Статус пользователя изменён", response = UserDto.class),
+            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)
+    })
+    @PatchMapping(value = "/status")
+    public ResponseEntity<?> updateUserStatus(@ApiParam(value = "Статус пользователя") @Valid @RequestBody StatusDto statusDto) {
+        Optional<UserDto> optionalUserDto = userDtoService.getUserDtoById(statusDto.getUserId());
+        if (optionalUserDto.isPresent()) {
+            UserDto userDto = optionalUserDto.get();
+            userDto.setStatus(statusDto.getStatus());
+            userService.update(userConverter.toEntity(userDto));
+            logger.info("Статус изменён");
+            return ResponseEntity.ok(userDto);
+        } else {
+            logger.info(String.format("Пользователь с указанным ID: %d не найден!", statusDto.getUserId()));
+            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", statusDto.getUserId()));
         }
     }
 }
