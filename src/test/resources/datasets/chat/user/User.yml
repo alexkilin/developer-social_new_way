@@ -14,7 +14,7 @@ users:
     persist_date: "2020-08-04 16:42:02.437378"
     active_id: 1
     role_id: 1
-    status_id: 1
+    status: "happy"
 
   - about_me: "Admin1"
     image: "www.myavatar1.ru/9090"
@@ -31,7 +31,7 @@ users:
     persist_date: "2020-08-04 16:42:02.437378"
     active_id: 1
     role_id: 1
-    status_id: 1
+    status: "happy"
 
   - about_me: "Admin2"
     image: "www.myavatar2.ru/9090"
@@ -48,7 +48,7 @@ users:
     persist_date: "2020-08-04 16:42:02.437378"
     active_id: 1
     role_id: 1
-    status_id: 1
+    status: "happy"
 
   - about_me: "Admin3"
     image: "www.myavatar3.ru/9090"
@@ -65,4 +65,4 @@ users:
     persist_date: "2020-08-04 16:42:02.437378"
     active_id: 1
     role_id: 1
-    status_id: 1
+    status: "happy"
