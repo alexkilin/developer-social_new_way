@@ -170,7 +170,11 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "m.mediaType, " +
                 "m.url, " +
                 "t.id," +
-                "t.text " +
+                "t.text, " +
+                "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +
+                "(select count(l.id) from PostLike as l where l.post.id = p.id), " +
+                "(select count(c.id) from PostComment as c where c.post.id = p.id), " +
+                "p.repostPerson.size " +
                 "from Post as p " +
                 "join p.user as u " +
                 "join p.media as m " +
@@ -206,6 +210,10 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                 .tags(tagDtoList)
                                 .persistDate((LocalDateTime) objects[3])
                                 .lastRedactionDate((LocalDateTime) objects[4])
+                                .bookmarkAmount((Long) objects[13])
+                                .likeAmount((Long) objects[14])
+                                .commentAmount((Long) objects[15])
+                                .shareAmount(Long.valueOf((Integer) objects[16]))
                                 .build();
                     }
 

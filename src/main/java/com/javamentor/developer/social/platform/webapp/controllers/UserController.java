@@ -88,9 +88,10 @@ public class UserController {
             logger.info(String.format("Пользователь с email: %s уже существует", userDto.getEmail()));
             return ResponseEntity.status(400).body(String.format("User with email: %s already exist. Email should be unique", userDto.getEmail()));
         } else {
-            userService.create(userConverter.toEntity(userDto));
+            User user = userConverter.toEntity(userDto);
+            userService.create(user);
             logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
-            return ResponseEntity.ok(userConverter.toDto(userService.getByEmail(userDto.getEmail())));
+            return ResponseEntity.ok(userConverter.toDto(user));
         }
     }
 

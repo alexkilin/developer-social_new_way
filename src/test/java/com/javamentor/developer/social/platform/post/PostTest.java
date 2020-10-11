@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/post/group_has_user.yml",
         "datasets/post/group_wal.yml",
         "datasets/post/media.yml",
-        "datasets/post/likes.yml",
+        "datasets/post/like.yml",
         "datasets/post/post_media.yml"}, cleanBefore = true, cleanAfter = true)
 public class PostTest extends AbstractIntegrationTest {
 

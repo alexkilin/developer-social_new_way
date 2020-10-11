@@ -30,7 +30,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
                 .content("{" +
                         "\"firstName\": \"Admin\"," +
                         "\"lastName\": \"LastName\"," +
-                        "\"activeName\": \"1\"," +
+                        "\"activeName\": \"ACTIVE\"," +
                         "\"email\": \"admin@admin.ru\"," +
                         "\"password\": \"Adminpass123\"" +
                         "}"))
