@@ -382,7 +382,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
     @Override
     public List<AudioDto> getAudioFromPlaylist(Long playlistId, int offset, int limit) {
         Query<AudioDto> query = (Query<AudioDto>) entityManager.createQuery(
-                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AudioDto(" +
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AudioDto( " +
                         "au.id, " +
                         "au.media.url, " +
                         "au.icon, " +
@@ -392,7 +392,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "au.length, " +
                         "au.media.persistDateTime) " +
                         "FROM Audios au " +
-                        "JOIN Playlist as pl " +
+                        "JOIN au.playlists as pl " +
                         "WHERE pl.id = :playlistId"
                         , AudioDto.class)
                 .setParameter("playlistId", playlistId)
