@@ -1,0 +1,36 @@
+audios:
+  - album: "AlbumTestName 0"
+    author: "Test Author 0"
+    icon: "TestIcon0"
+    name: "AudioTestName 0"
+    media_id: "1"
+
+  - album: "AlbumTestName 1"
+    author: "Test Author 1"
+    icon: "TestIcon1"
+    name: "AudioTestName 1"
+    media_id: "2"
+
+  - album: "AlbumTestName 2"
+    author: "Test Author 2"
+    icon: "TestIcon2"
+    name: "AudioTestName 2"
+    media_id: "3"
+
+  - album: "AlbumTestName 3"
+    author: "Test Author 3"
+    icon: "TestIcon3"
+    name: "AudioTestName 3"
+    media_id: "4"
+
+  - album: "AlbumTestName 4"
+    author: "Test Author 4"
+    icon: "TestIcon4"
+    name: "AudioTestName 4"
+    media_id: "5"
+
+  - album: "AlbumTestName 5"
+    author: "Test Author 2"
+    icon: "TestIcon5"
+    name: "AudioTestName 5"
+    media_id: "6"

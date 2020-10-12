@@ -1,0 +1,6 @@
+album_has_audio:
+  - album_id: 1
+    audios_id: 1
+
+  - album_id: 1
+    audios_id: 2

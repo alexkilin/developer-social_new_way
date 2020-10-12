@@ -1,0 +1,20 @@
+user_tabs:
+  - user_id: 1
+    post_id: 1
+    persist_date: "2020-08-08 12:33:43.313276"
+
+  - user_id: 2
+    post_id: 2
+    persist_date: "2020-08-08 12:34:43.313276"
+
+  - user_id: 3
+    post_id: 3
+    persist_date: "2020-08-08 12:43:43.313276"
+
+  - user_id: 4
+    post_id: 4
+    persist_date: "2020-08-08 15:33:45.313276"
+
+  - user_id: 5
+    post_id: 5
+    persist_date: "2020-08-08 22:55:43.313276"

@@ -146,7 +146,7 @@ public class UserControllerV2 {
             return ResponseEntity.ok(userFriends);
         } else {
             logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
-            return ResponseEntity.status(400).body(String.format("User with ID: %d does not exist.", id));
+            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", id));
         }
     }
 
