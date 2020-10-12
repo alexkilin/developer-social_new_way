@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers;
+package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
