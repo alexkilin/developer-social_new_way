@@ -144,18 +144,18 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().string("User with ID: 222 does not exist."));
     }
 
-    @Test
-    void deleteUser() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/{userId}", 2L))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string("User with ID: 2 deleted"));
-
-        mockMvc.perform(delete(apiUrl + "/{userId}", 2L))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User with ID: 2 does not exist."));
-    }
+//    @Test
+//    void deleteUser() throws Exception {
+//        mockMvc.perform(delete(apiUrl + "/{userId}", 2L))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().string("User with ID: 2 deleted"));
+//
+//        mockMvc.perform(delete(apiUrl + "/{userId}", 2L))
+//                .andDo(print())
+//                .andExpect(status().isNotFound())
+//                .andExpect(content().string("User with ID: 2 does not exist."));
+//    }
 
     @Test
     void getUserById() throws Exception {
