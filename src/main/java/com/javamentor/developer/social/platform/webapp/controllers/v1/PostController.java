@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers;
+package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
@@ -73,14 +73,14 @@ public class PostController {
 
     @ApiOperation(value = "Добавление поста")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пост добавлен", response = String.class)
+            @ApiResponse(code = 200, message = "Пост добавлен", response = PostDto.class)
     })
     @PostMapping("/add")
     @Validated(OnCreate.class)
-    public ResponseEntity<?> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostDto postDto) {
+    public ResponseEntity<PostDto> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostDto postDto) {
         Post post = postConverter.toEntity(postDto);
         postService.create(post);
-        return ResponseEntity.ok().body(post.getText());
+        return ResponseEntity.ok().body(postConverter.toDto(post));
     }
 
     @ApiOperation(value = "Удаление поста по id поста")

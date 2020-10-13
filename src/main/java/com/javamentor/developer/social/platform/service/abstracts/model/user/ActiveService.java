@@ -4,6 +4,8 @@ import com.javamentor.developer.social.platform.models.entity.user.Active;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.GenericService;
 
+import java.util.Optional;
+
 public interface ActiveService extends GenericService<Active, Long> {
-    Active getByActiveName(String active);
+    Optional<Active> getByActiveName(String active);
 }

@@ -40,7 +40,7 @@ class PlaylistsTest extends AbstractIntegrationTest {
                 .image("albumImage")
                 .build();
 
-        this.mockMvc.perform(post("/api/audios/playlists")
+        this.mockMvc.perform(post("/api/audios/playlist")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(dto)))
                 .andDo(print())
@@ -51,7 +51,7 @@ class PlaylistsTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void createAndDelete() throws Exception {
+    void deletePlaylistById() throws Exception {
 
         this.mockMvc.perform(delete("/api/audios/playlists/10"))
                 .andDo(print())
@@ -66,8 +66,8 @@ class PlaylistsTest extends AbstractIntegrationTest {
 
 
     @Test
-    void getAll() throws Exception {
-        this.mockMvc.perform(get("/api/audios/playlists/all"))
+    void getAllPlaylists() throws Exception {
+        this.mockMvc.perform(get("/api/audios/playlists"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(5));
@@ -88,8 +88,7 @@ class PlaylistsTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.content[1].album").value("AlbumTestName 3"))
                 .andExpect(jsonPath("$.content[1].persistDateTime").isNotEmpty());
     }
-// playlists?playlistId=10&audioId=4
-    // playlists?playlistId=10&audioId=4
+
     @Test
     void addAudioToPlaylist() throws Exception {
 

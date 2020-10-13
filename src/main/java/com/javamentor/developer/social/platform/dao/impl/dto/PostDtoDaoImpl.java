@@ -157,79 +157,81 @@ public class PostDtoDaoImpl implements PostDtoDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<PostDto> getPostsByUserId(Long id) {
-        List<PostDto> postDtoList = new ArrayList<>();
+        List<PostDto> postDtoList = entityManager.createQuery("select " +
+                "p.id, " +
+                "p.title, " +
+                "p.text, " +
+                "p.persistDate, " +
+                "p.lastRedactionDate, " +
+                "u.userId, " +
+                "u.firstName, " +
+                "u.lastName, " +
+                "u.avatar, " +
+                "m.mediaType, " +
+                "m.url, " +
+                "t.id," +
+                "t.text, " +
+                "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +
+                "(select count(l.id) from PostLike as l where l.post.id = p.id), " +
+                "(select count(c.id) from PostComment as c where c.post.id = p.id), " +
+                "p.repostPerson.size " +
+                "from Post as p " +
+                "join p.user as u " +
+                "join p.media as m " +
+                "left join p.tags as t " +
+                "where u.userId = :userId")
+                .setParameter("userId", id)
+                .unwrap(Query.class)
+                .setResultTransformer(new ResultTransformer() {
+                    @Override
+                    public Object transformTuple(Object[] objects, String[] strings) {
+                        MediaPostDto mediaPostDto = MediaPostDto.builder()
+                                .userId((Long) objects[5])
+                                .mediaType(objects[9] == null ? "null" : objects[9].toString())
+                                .url((String) objects[10])
+                                .build();
+                        List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
+                        mediaPostDtoList.add(mediaPostDto);
+                        TagDto tagDto = TagDto.builder()
+                                .id(objects[11] == null ? 0 : (Long) objects[11])
+                                .text(objects[12] == null ? "null" : (String) objects[12])
+                                .build();
+                        List<TagDto> tagDtoList = new ArrayList<>();
+                        tagDtoList.add(tagDto);
+                        return PostDto.builder()
+                                .id((Long) objects[0])
+                                .title((String) objects[1])
+                                .text((String) objects[2])
+                                .userId((Long) objects[5])
+                                .firstName((String) objects[6])
+                                .lastName((String) objects[7])
+                                .avatar((String) objects[8])
+                                .media(mediaPostDtoList)
+                                .tags(tagDtoList)
+                                .persistDate((LocalDateTime) objects[3])
+                                .lastRedactionDate((LocalDateTime) objects[4])
+                                .bookmarkAmount((Long) objects[13])
+                                .likeAmount((Long) objects[14])
+                                .commentAmount((Long) objects[15])
+                                .shareAmount(Long.valueOf((Integer) objects[16]))
+                                .build();
+                    }
 
-        try {
-            postDtoList = entityManager.createQuery("select " +
-                    "p.id, " +
-                    "p.title, " +
-                    "p.text, " +
-                    "p.persistDate, " +
-                    "p.lastRedactionDate, " +
-                    "u.userId, " +
-                    "u.firstName, " +
-                    "u.lastName, " +
-                    "u.avatar, " +
-                    "m.mediaType, " +
-                    "m.url, " +
-                    "t.id," +
-                    "t.text " +
-                    "from Post as p " +
-                    "join p.user as u " +
-                    "join p.media as m " +
-                    "left join p.tags as t " +
-                    "where u.userId = :userId")
-                    .setParameter("userId", id)
-                    .unwrap(Query.class)
-                    .setResultTransformer(new ResultTransformer() {
-                        @Override
-                        public Object transformTuple(Object[] objects, String[] strings) {
-                            MediaPostDto mediaPostDto = MediaPostDto.builder()
-                                    .userId((Long) objects[5])
-                                    .mediaType(objects[9] == null ? "null" : objects[9].toString())
-                                    .url((String) objects[10])
-                                    .build();
-                            List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
-                            mediaPostDtoList.add(mediaPostDto);
-                            TagDto tagDto = TagDto.builder()
-                                    .id(objects[11] == null ? 0 : (Long) objects[11])
-                                    .text(objects[12] == null ? "null" : (String) objects[12])
-                                    .build();
-                            List<TagDto> tagDtoList = new ArrayList<>();
-                            tagDtoList.add(tagDto);
-                            return PostDto.builder()
-                                    .id((Long) objects[0])
-                                    .title((String) objects[1])
-                                    .text((String) objects[2])
-                                    .userId((Long) objects[5])
-                                    .firstName((String) objects[6])
-                                    .lastName((String) objects[7])
-                                    .avatar((String) objects[8])
-                                    .media(mediaPostDtoList)
-                                    .tags(tagDtoList)
-                                    .persistDate((LocalDateTime) objects[3])
-                                    .lastRedactionDate((LocalDateTime) objects[4])
-                                    .build();
-                        }
-
-                        @Override
-                        public List transformList(List list) {
-                            Map<Long, PostDto> result = new TreeMap<>(Comparator.reverseOrder());
-                            for (Object obj : list) {
-                                PostDto postDto = (PostDto) obj;
-                                if (result.containsKey(postDto.getId())) {
-                                    result.get(postDto.getId()).getMedia().addAll(postDto.getMedia());
-                                } else {
-                                    result.put(postDto.getId(), postDto);
-                                }
+                    @Override
+                    public List transformList(List list) {
+                        Map<Long, PostDto> result = new TreeMap<>(Comparator.reverseOrder());
+                        for (Object obj : list) {
+                            PostDto postDto = (PostDto) obj;
+                            if (result.containsKey(postDto.getId())) {
+                                result.get(postDto.getId()).getMedia().addAll(postDto.getMedia());
+                            } else {
+                                result.put(postDto.getId(), postDto);
                             }
-                            return new ArrayList<>(result.values());
                         }
-                    })
-                    .getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                        return new ArrayList<>(result.values());
+                    }
+                })
+                .getResultList();
         return postDtoList;
     }
 

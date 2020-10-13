@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DataSet(value = {
@@ -24,28 +25,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/postcommentset/post/tags.yml",
         "datasets/postcommentset/user/Active.yml",
         "datasets/postcommentset/user/Role.yml",
-        "datasets/postcommentset/user/Status.yml",
         "datasets/postcommentset/user/User.yml"
 },
         cleanBefore = true)
 class PostCommentControllerTest extends AbstractIntegrationTest {
 
-  //  @Autowired
- //  private MockMvc mockMvc;
+    @Autowired
+   private MockMvc mockMvc;
 
-  // @Test
-   // void addCommentToPost() throws Exception {
-    //    CommentDto commentDto = CommentDto.builder()
-    //            .userDto(UserDto.builder().userId(1L).build())
-     //           .comment("my comment to")
-    //            .build();
+   @Test
+    void addCommentToPost() throws Exception {
+        CommentDto commentDto = CommentDto.builder()
+                .userDto(UserDto.builder().userId(1L).build())
+                .comment("my comment to")
+                .build();
 
-    //    String commentDtoJson = new Gson().toJson(commentDto);
+        String commentDtoJson = new Gson().toJson(commentDto);
 
-    //    this.mockMvc.perform(post("/api/postsComments/{postId}/comment", "1")
-    //    .contentType(MediaType.APPLICATION_JSON)
-    //    .content(commentDtoJson))
-    //            .andDo(print())
-    //           .andExpect(status().isCreated());
-  //  }
+        this.mockMvc.perform(post("/api/postsComments/{postId}/comment", 1)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(commentDtoJson))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(content().string("Пользователь с id: 1 добавил комментарий в пост с id: 1"));
+    }
 }

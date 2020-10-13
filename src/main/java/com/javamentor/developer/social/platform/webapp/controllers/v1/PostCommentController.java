@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers;
+package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
@@ -37,7 +37,7 @@ public class PostCommentController {
             @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
     })
     @PostMapping("/{postId}/comment")
-    public ResponseEntity<String> addCommentToPost(@RequestBody CommentDto commentDto,
+    public ResponseEntity<String> addCommentToPost(@ApiParam(value = "Объект комментария к посту") @RequestBody CommentDto commentDto,
                                                  @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
         if (!userService.existById(commentDto.getUserDto().getUserId())) {
             String msg = String.format("Пользователь с id: %d не найден", commentDto.getUserDto().getUserId());

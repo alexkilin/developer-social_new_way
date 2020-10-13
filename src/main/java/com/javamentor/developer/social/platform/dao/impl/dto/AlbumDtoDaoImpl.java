@@ -44,7 +44,8 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
                         "a.name, " +
                         "a.icon) " +
                         "FROM Album a " +
-                        "WHERE a.userOwnerId.userId = :id", AlbumDto.class)
+                        "WHERE a.userOwnerId.userId = :id " +
+                        "ORDER BY a.id ASC", AlbumDto.class)
                 .setParameter("id", id)
                 .getResultList();
     }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 @Service
@@ -53,25 +54,27 @@ public abstract class UserConverter {
     )
     public abstract User toEntity(UserDto userDto);
 
-    // TODO : Убрать try catch
+
     @Named("roleSetter")
     protected Role roleSetter(String role) {
-        try {
-            if (role == null) {
-                role = "User";
-            }
-            return roleService.getByRoleName(role);
-        } catch (NoSuchElementException n) {
+        if (role == null) {
+            return roleService.getByRoleName("User").get();
+        }
+        Optional<Role> opt = roleService.getByRoleName(role);
+        if (opt.isPresent()) {
+            return opt.get();
+        } else {
             throw new EntityNotFoundException(String.format("Role с именем %s не существует", role));
         }
     }
 
-    // TODO : Убрать try catch
+
     @Named("activeSetter")
     protected Active activeSetter(String active) {
-        try {
-            return activeService.getByActiveName(active);
-        } catch (NoSuchElementException n) {
+        Optional<Active> opt = activeService.getByActiveName(active);
+        if (opt.isPresent()) {
+            return opt.get();
+        } else {
             throw new EntityNotFoundException(String.format("Active с именем %s не существует", active));
         }
     }
