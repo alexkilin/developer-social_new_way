@@ -1,12 +1,13 @@
-package com.javamentor.developer.social.platform.controllers;
+package com.javamentor.developer.social.platform.controllers.v1;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.developer.social.platform.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -80,5 +81,66 @@ class GroupControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("groupCategory").value("Programming"))
                 .andExpect(jsonPath("subscribers").value(1));
     }
-    
+
+    @Test
+    public void showGroupInvalidId() throws Exception {
+        this.mockMvc.perform(get("/api/groups/{id}", 100L))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Группа с id 100 не найдена"));
+    }
+
+    @Test
+    void findGroupByInvalidName() throws Exception {
+        this.mockMvc.perform(get("/api/groups/name?name=JavaGroupTest"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Группа с именем JavaGroupTest не найдена"));
+    }
+
+    @Test
+    void getUsersFromTheGroupInvalidId() throws Exception {
+        this.mockMvc.perform(get("/api/groups/{id}/users", 100L))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Группа с id 100 не найдена"));
+    }
+
+    @Test
+    void showGroupWallInvalidId() throws Exception {
+        this.mockMvc.perform(get("/api/groups/{id}/posts?page=1&size=2", 100L))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+
+
+    @Test
+    void userJoinGroup() throws Exception {
+        this.mockMvc.perform(post("/api/groupsHasUsers/add?groupId=5&userId=1"))
+                .andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void deleteUserByIdOfGroup() throws Exception {
+        this.mockMvc.perform(delete("/api/groupsHasUsers/delete?groupId=5&userId=5"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void userJoinGroupInvalidId() throws Exception {
+        this.mockMvc.perform(post("/api/groupsHasUsers/add?groupId=100&userId=100"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deleteUserByInvalidIdOfGroup() throws Exception {
+        this.mockMvc.perform(delete("/api/groupsHasUsers/delete?groupId=100&userId=100"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
 }
