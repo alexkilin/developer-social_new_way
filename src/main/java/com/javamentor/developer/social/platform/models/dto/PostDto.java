@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.Formula;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
@@ -55,6 +56,7 @@ public class PostDto {
     private List<MediaPostDto> media;
 
     @ApiModelProperty(notes = "Тэги новости")
+    @Valid
     private List<TagDto> tags;
 
     @ApiModelProperty(notes = "Количество добавлений в избранное/закладки", example = "0")
