@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers.chat;
+package com.javamentor.developer.social.platform.webapp.controllers.v1;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;

@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers;
+package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
 import com.javamentor.developer.social.platform.models.dto.StatusDto;
@@ -8,7 +8,7 @@ import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.FriendsDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.RoleService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserFriendsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import io.swagger.annotations.*;
@@ -27,26 +27,28 @@ import java.util.Optional;
 
 @Validated
 @RestController
-@RequestMapping(value = "/api/user", produces = "application/json")
-@Api(value = "UserApi", description = "CRUD-Операции с пользователем")
-public class UserController {
+@RequestMapping(value = "/api/v2/users", produces = "application/json")
+@SuppressWarnings("deprecation")
+@Api(value = "UserApi-v2", description = "Опирации над пользователем")
+public class UserControllerV2 {
 
     private final UserDtoService userDtoService;
     private final FriendsDtoService friendsDtoService;
     private final UserService userService;
+    private final UserFriendsService userFriendsService;
     private final UserConverter userConverter;
-    private final RoleService roleService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserController(UserDtoService userDtoService, FriendsDtoService friendsDtoService, UserService userService, UserConverter userConverter, RoleService roleService) {
+    public UserControllerV2(UserDtoService userDtoService, FriendsDtoService friendsDtoService, UserService userService, UserFriendsService userFriendsService, UserConverter userConverter) {
         this.userDtoService = userDtoService;
         this.friendsDtoService = friendsDtoService;
         this.userService = userService;
+        this.userFriendsService = userFriendsService;
         this.userConverter = userConverter;
-        this.roleService = roleService;
     }
+
 
     @ApiOperation(value = "Получение пользователя по id")
     @ApiResponses(value = {
@@ -70,7 +72,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список пользователей получен", responseContainer = "List", response = UserDto.class)
     })
-    @GetMapping("/all")
+    @GetMapping("")
     public ResponseEntity<List<UserDto>> getAll() {
         logger.info("Получен список пользователей");
         return ResponseEntity.ok(userDtoService.getUserDtoList());
@@ -81,7 +83,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "Пользователь создан", response = UserDto.class),
             @ApiResponse(code = 400, message = "Пользователь с данным email существует. Email должен быть уникальным", response = String.class)
     })
-    @PostMapping("/create")
+    @PostMapping("")
     @Validated(OnCreate.class)
     public ResponseEntity<?> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserDto userDto) {
         if (userService.existByEmail(userDto.getEmail())) {
@@ -100,7 +102,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "Пользователь обновлен", response = UserDto.class),
             @ApiResponse(code = 404, message = "Пользователь не обновлен из-за несоответствия id", response = String.class)
     })
-    @PutMapping("/update")
+    @PatchMapping("")
     @Validated(OnUpdate.class)
     public ResponseEntity<?> updateUser(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserDto userDto) {
         User user = userConverter.toEntity(userDto);
@@ -117,14 +119,14 @@ public class UserController {
     @ApiOperation(value = "Удаление пользователя по id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пользователь удален", response = String.class),
-            @ApiResponse(code = 404, message = "Пользователя с данным id нет базе данных", response = String.class)
+            @ApiResponse(code = 404, message = "Пользователя с данным id нет в базе данных", response = String.class)
     })
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUserById(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUserById(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
         if (userService.existById(id)) {
             userService.deleteById(id);
             logger.info(String.format("Пользователь с ID: %d удалён успешно ", id));
-            return ResponseEntity.ok(String.format("Пользователь с ID: %d удалён успешно.", id));
+            return ResponseEntity.ok(String.format("User with ID: %d deleted", id));
         } else {
             logger.info(String.format("Пользователь с ID: %d не удалён", id));
             return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", id));
@@ -136,7 +138,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = FriendDto.class),
             @ApiResponse(code = 400, message = "Пользователя с таким id не существует", response = String.class)
     })
-    @GetMapping("/getFriends/{id}")
+    @GetMapping("/{id}/friends")
     public ResponseEntity<?> getUserFriends(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
         if (userService.existById(id)) {
             List<FriendDto> userFriends = friendsDtoService.getUserFriendsDtoById(id);
@@ -153,7 +155,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "Статус пользователя изменён", response = UserDto.class),
             @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)
     })
-    @PatchMapping(value = "/update/status")
+    @PatchMapping(value = "/status")
     public ResponseEntity<?> updateUserStatus(@ApiParam(value = "Статус пользователя") @Valid @RequestBody StatusDto statusDto) {
         Optional<UserDto> optionalUserDto = userDtoService.getUserDtoById(statusDto.getUserId());
         if (optionalUserDto.isPresent()) {
