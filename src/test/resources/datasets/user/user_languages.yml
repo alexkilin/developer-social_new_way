@@ -1,0 +1,7 @@
+user_languages:
+  - user_id: 4
+    language_id: 2
+  - user_id: 4
+      language_id: 1
+
+

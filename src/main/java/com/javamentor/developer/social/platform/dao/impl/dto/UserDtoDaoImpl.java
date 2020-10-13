@@ -80,7 +80,6 @@ class UserDtoDaoImpl implements UserDtoDao {
     @Override
     public Optional<UserDto> getUserDtoById(Long id) {
         Optional<UserDto> userDto = Optional.empty();
-
         try {
             userDto = Optional.of((UserDto) entityManager.createQuery("SELECT " +
                     "u.userId, " +
@@ -97,7 +96,8 @@ class UserDtoDaoImpl implements UserDtoDao {
                     "u.status, " +
                     "u.profession, " +
                     "u.active.name " +
-                    "FROM User u WHERE u.userId = " + id)
+                    "FROM User u WHERE u.userId = :paramId")
+                    .setParameter("paramId", id)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override
@@ -119,7 +119,6 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .activeName((String) objects[13])
                                     .build();
                         }
-
                         @Override
                         public List transformList(List list) {
                             return list;
@@ -133,4 +132,38 @@ class UserDtoDaoImpl implements UserDtoDao {
         return userDto;
     }
 
+     /*@Override
+     public Optional<List<LanguageDto>> getUserLanguageDtoById(Long userId) {
+         Optional<List<LanguageDto>> userLanguageDto = Optional.empty();
+         try {
+             userLanguageDto = Optional.of((List<LanguageDto>) entityManager.createNativeQuery("SELECT " +
+                     "l.id, " +
+                     "l.name " +
+                     "FROM language l join user_languages ul  where ul.user_id = :paramId") //" ON u.language_id = l.id WHERE u.user_id = :paramId" JOIN u.languages as l)
+                     .setParameter("paramId", userId)
+                     .unwrap(Query.class)
+                     .setResultTransformer(new ResultTransformer() {
+                         @Override
+                         public Object transformTuple(Object[] objects, String[] strings) {
+                             return LanguageDto.builder()
+                                    // .id(((Number) objects[0]).longValue())
+                                     .name((String) objects[1])
+
+                                     .build();
+                         }
+                         @Override
+                         public List transformList(List list) {
+                             return list;
+                         }
+                     })
+                     .getSingleResult());
+         } catch (NoResultException e) {
+             e.printStackTrace();
+         }
+         return userLanguageDto;
+     }*/
+
 }
+
+
+

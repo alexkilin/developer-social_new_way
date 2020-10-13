@@ -2,11 +2,11 @@ package com.javamentor.developer.social.platform.userControllerTests;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.developer.social.platform.AbstractIntegrationTest;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -16,30 +16,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/user/active.yml",
         "datasets/user/role.yml",
         "datasets/user/userFriends.yml",
+        "datasets/user/language.yml",
         "datasets/user/user.yml"
 }, cleanBefore = true, cleanAfter = true)
 public class UserControllerTests extends AbstractIntegrationTest {
 
-   @Autowired
+    @Autowired
     private MockMvc mockMvc;
 
-   @Test
+    @Test
     void createUser() throws Exception {
         mockMvc.perform(post("/api/user/create")
-               .contentType(MediaType.APPLICATION_JSON)
-               .content("{" +
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
                         "\"firstName\": \"Админ\"," +
-                       "\"lastName\": \"LastName\"," +
-                       "\"activeName\": \"ACTIVE\"," +
-                       "\"email\": \"admin@admin.ru\"," +
-                       "\"password\": \"Adminpass123\"" +
-                       "}"))
-               .andDo(print())
+                        "\"lastName\": \"LastName\"," +
+                        "\"activeName\": \"ACTIVE\"," +
+                        "\"email\": \"admin@admin.ru\"," +
+                        "\"password\": \"Adminpass123\"" +
+                        "}"))
+                .andDo(print())
                 .andExpect(status().isOk())
-              .andExpect(jsonPath("$.firstName").value("Админ"))
+                .andExpect(jsonPath("$.firstName").value("Админ"))
                 .andExpect(jsonPath("$.email").value("admin@admin.ru"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-  }
+    }
 
     @Test
     void findUserById() throws Exception {
@@ -47,16 +48,17 @@ public class UserControllerTests extends AbstractIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-               .andExpect(jsonPath("$.userId").value(4))
-               .andExpect(jsonPath("$.firstName").value("Admin3"))
-               .andExpect(jsonPath("$.email").value("admin0@user.ru"))
-               .andExpect(jsonPath("$.roleName").value("USER"))
+                .andExpect(jsonPath("$.userId").value(4))
+                .andExpect(jsonPath("$.firstName").value("Admin3"))
+                .andExpect(jsonPath("$.email").value("admin0@user.ru"))
+                .andExpect(jsonPath("$.roleName").value("USER"))
                 .andExpect(jsonPath("$.aboutMe").value("My description about life - Admin3"))
-               .andExpect(jsonPath("$.city").value("SPb"))
+                .andExpect(jsonPath("$.city").value("SPb"))
                 .andExpect(jsonPath("$.profession").value("Plumber"))
                 .andExpect(jsonPath("$.activeName").value("ACTIVE"))
+                .andExpect(jsonPath("$.languages").value("Russian,English"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-  }
+    }
 //
 //    @Test
 //    void findUserInvalidId() throws Exception {

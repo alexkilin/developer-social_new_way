@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -86,8 +87,13 @@ public class UserDto {
     private String status;
 
     @ApiModelProperty(notes = "Показатель активности на сайте",
-            example = "Active", position = 13)
+            example = "Active", position = 14)
     @NotNull(groups = OnCreate.class, message = "Поле activeName не должно принимать null значение при создании")
     private String activeName;
+
+    @ApiModelProperty(notes = "не обязательное поле", example = "Russian", hidden = true)
+    private List<LanguageDto> languages;
+
+
 
 }
