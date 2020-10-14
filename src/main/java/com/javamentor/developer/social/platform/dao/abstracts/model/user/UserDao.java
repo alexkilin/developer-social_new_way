@@ -4,6 +4,7 @@ import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDao extends GenericDao<User, Long> {
 
@@ -12,4 +13,6 @@ public interface UserDao extends GenericDao<User, Long> {
     User getByEmail(String email);
 
     boolean existByEmail(String email);
+
+    Optional<User> getUserById(Long id);
 }
