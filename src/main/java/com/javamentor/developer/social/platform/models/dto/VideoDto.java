@@ -27,7 +27,7 @@ public class VideoDto {
     @ApiModelProperty(notes = "Адрес, на котором располагается видео объект",
             required = true, example = "/stuff/video_341.mpg")
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "'url' Must not be null when creating and updating VideoDto.class")
-    @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "'text' Must not consist of spaces VideoDto.class")
+    @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "'url' Must not consist of spaces VideoDto.class")
     private String url;
 
     @ApiModelProperty(notes = "Название видео объекта", example = "Matrix")
