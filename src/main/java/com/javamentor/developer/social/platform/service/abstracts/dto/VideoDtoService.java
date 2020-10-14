@@ -23,4 +23,6 @@ public interface VideoDtoService {
     boolean addVideoInCollectionsOfUser(Long userId, Long videoId);
 
     List<VideoDto> getVideoFromAlbumOfUser(Long albumId);
+
+    List<VideoDto> getPart(int currentPage, int itemsOnPage);
 }
