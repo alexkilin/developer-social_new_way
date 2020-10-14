@@ -120,8 +120,8 @@ public class GroupControllerV2 {
             return ResponseEntity.badRequest().body(msg);
         }
         if (userService.existById(userId) & groupService.existById(groupId)) {
-            User user = userService.getById(userId);
-            Group group = groupService.getById(groupId);
+            User user = userService.getById(userId).get();
+            Group group = groupService.getById(groupId).get();
             groupHasUserService.setUserIntoGroup(user, group);
             String msg = String.format("Пользователь с id: %d добавлен в группу с id: %s", userId, groupId);
             return ResponseEntity.created(location).body(msg);

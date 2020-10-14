@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.service.abstracts;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 public interface GenericService<T, PK> {
 
@@ -13,7 +14,7 @@ public interface GenericService<T, PK> {
 
     void update(T entity);
 
-    T getById(PK id);
+    Optional<T> getById(PK id);
 
     void delete(T entity);
 

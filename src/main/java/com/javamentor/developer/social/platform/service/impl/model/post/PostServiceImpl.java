@@ -34,13 +34,13 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
         Set<Media> mediaSet = new HashSet<>();
         if (entity.getMedia() != null) {
             for (Media media : entity.getMedia()) {
-                User user = userService.getById(media.getUser().getUserId());
+                User user = userService.getById(media.getUser().getUserId()).get();
                 media.setUser(user);
                 mediaSet.add(media);
                 mediaService.create(media);
             }
         }
-        User user = userService.getById(entity.getUser().getUserId());
+        User user = userService.getById(entity.getUser().getUserId()).get();
         entity.setUser(user);
         entity.setMedia(mediaSet);
         super.create(entity);

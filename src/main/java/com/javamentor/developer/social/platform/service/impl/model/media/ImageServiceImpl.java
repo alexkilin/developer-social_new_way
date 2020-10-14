@@ -24,6 +24,6 @@ public class ImageServiceImpl extends GenericServiceAbstract<Image, Long> implem
 
     @Override
     public Optional<Image> getOptionalById(Long id) {
-        return Optional.ofNullable(super.getById(id));
+        return Optional.ofNullable(super.getById(id).get());
     }
 }

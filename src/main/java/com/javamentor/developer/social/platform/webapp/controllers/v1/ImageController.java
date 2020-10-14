@@ -158,8 +158,8 @@ public class ImageController {
         if (!imageService.existById(imageId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
-        Album album = albumService.getById(albumId);
-        Media media = mediaService.getById(imageId);
+        Album album = albumService.getById(albumId).get();
+        Media media = mediaService.getById(imageId).get();
         media.setAlbum(album);
         mediaService.update(media);
         logger.info(String.format("Изображение %s добавлено в фотоальбом %s", imageId, albumId));
@@ -180,7 +180,7 @@ public class ImageController {
         if (!imageService.existById(imageId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
-        Media media = mediaService.getById(imageId);
+        Media media = mediaService.getById(imageId).get();
         media.setAlbum(null);
         mediaService.update(media);
         logger.info(String.format("Изображение %s удалено из фотоальбома %s", imageId, albumId));

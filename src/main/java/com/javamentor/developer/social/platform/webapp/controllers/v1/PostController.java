@@ -92,7 +92,7 @@ public class PostController {
     public ResponseEntity<?> deletePost(@ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
         if (postService.existById(id)) {
 
-            Post post = postService.getById(id);
+            Post post = postService.getById(id).get();
 
             userTabsService.deletePost(post);
 

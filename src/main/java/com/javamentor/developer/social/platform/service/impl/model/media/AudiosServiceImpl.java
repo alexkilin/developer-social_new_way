@@ -29,18 +29,18 @@ public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> impl
 
     @Override
     public Optional<Audios> getOptionalById(Long id) {
-        return Optional.ofNullable(getById(id));
+        return getById(id);
     }
 
 
     @Override
     public boolean addAudioInCollectionsOfUser(User user, Long audioId) {
-       Audios audios = audiosDao.getById(audioId);
-       if(audios==null){
+       Optional<Audios> audios = audiosDao.getById(audioId);
+       if(!audios.isPresent()){
            return false;
        }
         Set<Audios> set = user.getAudios();
-        set.add(audios);
+        set.add(audios.get());
         user.setAudios(set);
         return true;
 

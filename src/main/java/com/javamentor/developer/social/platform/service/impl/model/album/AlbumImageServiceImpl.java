@@ -29,7 +29,7 @@ public class AlbumImageServiceImpl extends GenericServiceAbstract<AlbumImage, Lo
 
     @Override
     public Optional<AlbumImage> getOptionalById(Long id) {
-        return Optional.ofNullable(getById(id));
+        return Optional.ofNullable(getById(id).get());
     }
 
 }

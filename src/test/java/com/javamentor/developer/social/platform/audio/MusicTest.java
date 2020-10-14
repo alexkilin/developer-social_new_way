@@ -241,7 +241,8 @@ class MusicTest extends AbstractIntegrationTest {
             "datasets/audio/usersAudioTest/Active.yml",
             "datasets/audio/usersAudioTest/User.yml",
             "datasets/audio/usersAudioTest/Role.yml",}, cleanBefore = true, cleanAfter = true)
-    public void createAlbumWithIncorrectName() throws Exception {
+    public void createAlbumWithEmptyName() throws Exception {
+
         AlbumDto albumTest = AlbumDto.builder()
                 .name("")
                 .icon("iconTest")
@@ -254,8 +255,16 @@ class MusicTest extends AbstractIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
                         .string("'name' Must not be empty when creating and updating"));
+    }
 
-        albumTest = AlbumDto.builder()
+    @Test
+    @DataSet(value = {
+            "datasets/audio/usersAudioTest/Active.yml",
+            "datasets/audio/usersAudioTest/User.yml",
+            "datasets/audio/usersAudioTest/Role.yml",}, cleanBefore = true, cleanAfter = true)
+    public void createAlbumWithoutName() throws Exception {
+
+        AlbumDto albumTest = AlbumDto.builder()
                 .icon("iconTest")
                 .build();
 

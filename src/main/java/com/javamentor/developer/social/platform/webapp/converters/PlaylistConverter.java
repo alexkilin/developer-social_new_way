@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -44,14 +41,11 @@ public abstract class PlaylistConverter {
     @Mapping(target = "content", source = "playlistContent", qualifiedByName = "contentSetter")
     public abstract PlaylistGetDto toPlaylistGetDto(Playlist playlist);
 
-    // TODO : Убрать try catch
     @Named("userSetter")
     protected User userSetter(Long userId) {
-        try {
-            return userService.getById(userId);
-        } catch (NoSuchElementException n) {
-            throw new EntityNotFoundException(String.format("User с id %s не существует", userId));
-        }
+        Optional<User> userOptional = userService.getById(userId);
+
+        return userOptional.orElseThrow(() -> new EntityNotFoundException(String.format("User с id %s не существует", userId)));
     }
 
     @Named("contentSetter")

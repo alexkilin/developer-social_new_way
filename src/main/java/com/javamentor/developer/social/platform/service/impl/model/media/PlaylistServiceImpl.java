@@ -26,6 +26,6 @@ public class PlaylistServiceImpl extends GenericServiceAbstract<Playlist, Long> 
 
     @Override
     public Optional<Playlist> getOptionalById(Long id) {
-        return Optional.ofNullable(getById(id));
+        return Optional.ofNullable(getById(id).get());
     }
 }

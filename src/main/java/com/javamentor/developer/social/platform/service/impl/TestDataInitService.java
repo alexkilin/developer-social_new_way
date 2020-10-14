@@ -614,7 +614,7 @@ public class TestDataInitService {
     }
 
     private void createPlaylists() {
-        User owner = userService.getById(60L);
+        User owner = userService.getById(60L).get();
         for (int i = 1; i <= 5; i++) {
             HashSet<Audios> audios = new HashSet<>(audiosService.getPart(i, 3));
 
@@ -676,7 +676,7 @@ public class TestDataInitService {
     }
 
     private void addAudiosToUserCollection() {
-        User user = userService.getById(60L);
+        User user = userService.getById(60L).get();
         HashSet<Audios> audiosSet = new HashSet<>(Arrays.asList(audios));
         user.setAudios(audiosSet);
         userService.update(user);
