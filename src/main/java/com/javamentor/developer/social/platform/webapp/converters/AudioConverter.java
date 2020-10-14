@@ -7,7 +7,6 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
 @Mapper(componentModel = "spring")
 public abstract class AudioConverter {
 
