@@ -3,12 +3,16 @@ package com.javamentor.developer.social.platform.restv2;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.AbstractIntegrationTest;
-import com.javamentor.developer.social.platform.models.dto.StatusDto;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.*;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.persistence.PersistenceContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -29,16 +33,23 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
+
     private final Gson gson = new Gson();
+
+
 
     @Test
     void createUser() throws Exception {
-        UserDto userDto = UserDto.builder()
-                .firstName("AdminFirstName")
-                .lastName("AdminLastName")
-                .activeName("ACTIVE")
+        UserRegisterDto userDto = UserRegisterDto.builder()
                 .email("admin@admin.ru")
                 .password("AdminPwd123")
+                .firstName("AdminFirstName")
+                .lastName("AdminLastName")
                 .build();
 
         mockMvc.perform(post(apiUrl + "/")
@@ -46,10 +57,12 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(userDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("admin@admin.ru"))
+                .andExpect(jsonPath("$.password").isNotEmpty())
                 .andExpect(jsonPath("$.firstName").value("AdminFirstName"))
                 .andExpect(jsonPath("$.lastName").value("AdminLastName"))
                 .andExpect(jsonPath("$.activeName").value("ACTIVE"))
-                .andExpect(jsonPath("$.email").value("admin@admin.ru"))
+                .andExpect(jsonPath("$.roleName").value("USER"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         mockMvc.perform(post(apiUrl + "/")
@@ -57,32 +70,47 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(userDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("User with email: admin@admin.ru already exist. Email should be unique"));
+                .andExpect(content().string(
+                        "User with email: admin@admin.ru already exist. Email should be unique"));
     }
 
     @Test
     void updateUser() throws Exception {
-        UserDto userDto = UserDto.builder()
+        UserUpdateInfoDto userDto = UserUpdateInfoDto.builder()
                 .userId(2L)
                 .firstName("NewName")
                 .lastName("NewLastName")
-                .activeName("ACTIVE")
                 .email("newadmin123@admin.ru")
-                .password("AdminPwd123")
-                .roleName("ADMIN")
                 .build();
 
-        mockMvc.perform(patch(apiUrl + "/")
+        mockMvc.perform(put(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("NewName"))
                 .andExpect(jsonPath("$.lastName").value("NewLastName"))
-                .andExpect(jsonPath("$.activeName").value("ACTIVE"))
                 .andExpect(jsonPath("$.email").value("newadmin123@admin.ru"))
-                .andExpect(jsonPath("$.roleName").value("ADMIN"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void changeUserPassword() throws Exception {
+        String pwd = "ocheSlozhniParol111";
+        UserResetPasswordDto userResetPasswordDto = UserResetPasswordDto.builder()
+                .password(pwd)
+                .build();
+
+        mockMvc.perform(patch(apiUrl + "/2/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(userResetPasswordDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("Password changed for user 2"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        Assert.assertTrue("Сравнение с паролем в базе, подтверждение изменения",
+                passwordEncoder.matches(pwd, userService.getById(2L).getPassword()));
     }
 
     @Test

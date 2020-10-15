@@ -12,4 +12,6 @@ public interface UserDao extends GenericDao<User, Long> {
     User getByEmail(String email);
 
     boolean existByEmail(String email);
+
+    boolean existsAnotherByEmail(String email, Long userId);
 }
