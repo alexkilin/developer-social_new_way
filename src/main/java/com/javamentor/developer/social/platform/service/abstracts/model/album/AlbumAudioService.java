@@ -8,4 +8,5 @@ import com.javamentor.developer.social.platform.service.abstracts.GenericService
 
 public interface AlbumAudioService extends GenericService<AlbumAudios, Long> {
     AlbumAudios createAlbumAudiosWithOwner(AlbumAudios albumAudios);
+
 }
