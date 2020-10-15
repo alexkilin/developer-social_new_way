@@ -101,7 +101,11 @@ public class VideosControllerV2 {
     @PostMapping(value = "/user/{userId}/video")
     public ResponseEntity<?> addVideo(@ApiParam(value = "Объект добавляемого видео") @RequestBody @Valid @NonNull VideoDto videoDto,
                                       @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
-        User user = userService.getById(userId).get();
+        Optional<User> userOptional = userService.getById(userId);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Пользователь с %d id не найден", userId));
+        }
+        User user = userOptional.get();
         Videos videos = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
         videosService.create(videos);
         logger.info(String.format("Добавление видео с id %s в бд", videoDto.getId()));
@@ -120,8 +124,12 @@ public class VideosControllerV2 {
             return ResponseEntity.badRequest()
                     .body(String.format("Video album with name '%s' already exists", albumDto.getName()));
         }
+        Optional<User> userOptional = userService.getById(userId);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Пользователь с %d id не найден", userId));
+        }
         AlbumVideo albumVideo = albumVideoService.createAlbumVideosWithOwner(
-                albumConverter.toAlbumVideo(albumDto, userService.getById(userId).get()));
+                albumConverter.toAlbumVideo(albumDto, userOptional.get()));
         logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
         return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumVideo));
     }
