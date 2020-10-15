@@ -60,7 +60,7 @@ public abstract class PlaylistConverter {
             return null;
         }
         return audiosSet.stream()
-               .map(audios -> audioConverter.toDTO(audios))
+               .map(audios -> audioConverter.toDto(audios))
                .collect(Collectors.toCollection(ArrayList<AudioDto>::new));
     }
 

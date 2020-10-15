@@ -92,7 +92,7 @@ public class AudiosControllerV2 {
     public ResponseEntity<List<AudioDto>> getPartAudios(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                         @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Аудио начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(audiosService.getPart(currentPage, itemsOnPage).stream().map(audioConverter::toDTO).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(audiosService.getPart(currentPage, itemsOnPage).stream().map(audioConverter::toDto).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение аудио по автору")
@@ -183,7 +183,7 @@ public class AudiosControllerV2 {
         Audios audios = audioConverter.toAudio(audioDto, MediaType.AUDIO, user);
         audiosService.create(audios);
         logger.info(String.format("Добавление аудио с id %s в бд", audioDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(audioConverter.toDTO(audios));
+        return ResponseEntity.status(HttpStatus.CREATED).body(audioConverter.toDto(audios));
     }
 
     @ApiOperation(value = "Получение всех альбомов пользователя")

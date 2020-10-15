@@ -3,11 +3,10 @@ package com.javamentor.developer.social.platform.webapp.controllers.v1;
 import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
-import com.javamentor.developer.social.platform.models.entity.media.Image;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
-import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDTOService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
@@ -15,7 +14,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.media.Me
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import io.swagger.annotations.*;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +34,7 @@ import java.util.Optional;
 @Api(value = "ImageApi")
 public class ImageController {
 
-    private ImageDTOService imageDTOService;
+    private ImageDtoService imageDTOService;
     private ImageService imageService;
     private AlbumDtoService albumDtoService;
     private AlbumImageService albumImageService;
@@ -49,7 +46,7 @@ public class ImageController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public ImageController(ImageDTOService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
+    public ImageController(ImageDtoService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
         this.imageDTOService = imageDTOService;
         this.imageService = imageService;
         this.albumDtoService = albumDtoService;
