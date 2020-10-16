@@ -108,7 +108,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         Assert.assertTrue("Сравнение с паролем в базе, подтверждение изменения",
-                passwordEncoder.matches(pwd, userService.getById(2L).getPassword()));
+                passwordEncoder.matches(pwd, userService.getById(2L).get().getPassword()));
     }
 
     @Test

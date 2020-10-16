@@ -35,7 +35,7 @@ class MusicTest extends AbstractIntegrationTest {
     private final Gson gson = new Gson();
 
     @Test
-    public void getAllAudios() throws Exception {
+    void getAllAudios() throws Exception {
         this.mockMvc.perform(get("/api/audios/all"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -43,7 +43,7 @@ class MusicTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void getPartAudios() throws Exception {
+     void getPartAudios() throws Exception {
         this.mockMvc.perform(get("/api/audios/getPart?currentPage=1&itemsOnPage=2"))
                 .andDo(print())
                 .andExpect(status().isOk())
