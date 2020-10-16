@@ -39,14 +39,4 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
                 .getSingleResult();
         return (count > 0);
     }
-
-    @Override
-    public Optional<User> getUserById(Long id) {
-        TypedQuery<User> query = entityManager.createQuery(
-                "SELECT u FROM User u JOIN FETCH u.role JOIN FETCH u.active WHERE u.userId = :id", User.class)
-                .setParameter("id", id);
-        return SingleResultUtil.getSingleResultOrNull(query);
-    }
-
-
 }

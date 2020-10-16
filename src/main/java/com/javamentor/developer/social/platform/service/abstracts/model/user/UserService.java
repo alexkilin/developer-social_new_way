@@ -13,6 +13,6 @@ public interface UserService extends GenericService<User, Long> {
 
     boolean existByEmail(String email);
 
-    Optional<User> getPrincipal(Long id);
+    User getPrincipal();
 
 }
