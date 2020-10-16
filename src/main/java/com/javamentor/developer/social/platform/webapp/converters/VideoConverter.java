@@ -22,5 +22,5 @@ public abstract class VideoConverter {
     @Mapping(source = "videos.icon", target = "icon")
     @Mapping(source = "videos.name", target = "name")
     @Mapping(source = "videos.media.persistDateTime", target = "persistDateTime")
-    public abstract VideoDto toDTO(Videos videos);
+    public abstract VideoDto toDto(Videos videos);
 }

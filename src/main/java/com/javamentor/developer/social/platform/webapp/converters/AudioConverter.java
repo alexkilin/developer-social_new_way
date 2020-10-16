@@ -27,6 +27,6 @@ public abstract class AudioConverter {
     @Mapping(source = "audios.author", target = "author")
     @Mapping(source = "audios.album", target = "album")
     @Mapping(source = "audios.media.persistDateTime", target = "persistDateTime")
-    public abstract AudioDto toDTO(Audios audios);
+    public abstract AudioDto toDto(Audios audios);
 
 }

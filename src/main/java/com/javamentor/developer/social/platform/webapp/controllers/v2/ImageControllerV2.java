@@ -6,7 +6,7 @@ import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
-import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDTOService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
@@ -35,7 +35,7 @@ import java.util.Optional;
 @Api(value = "ImageApi-v2", description = "Операции над изображениями")
 public class ImageControllerV2 {
 
-    private final ImageDTOService imageDTOService;
+    private final ImageDtoService imageDTOService;
     private final ImageService imageService;
     private final AlbumDtoService albumDtoService;
     private final AlbumImageService albumImageService;
@@ -47,7 +47,7 @@ public class ImageControllerV2 {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public ImageControllerV2(ImageDTOService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
+    public ImageControllerV2(ImageDtoService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
         this.imageDTOService = imageDTOService;
         this.imageService = imageService;
         this.albumDtoService = albumDtoService;
