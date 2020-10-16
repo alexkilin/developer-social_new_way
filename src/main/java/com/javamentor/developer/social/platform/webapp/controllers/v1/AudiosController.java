@@ -90,7 +90,7 @@ public class AudiosController {
     @GetMapping(value = "/all")
     public ResponseEntity<List<AudioDto>> getAllAudios() {
         logger.info("Отправка всех аудио записей");
-        return ResponseEntity.ok().body(audiosService.getAll().stream().map(audioConverter::toDTO).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(audiosService.getAll().stream().map(audioConverter::toDto).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение некоторого количества аудио")
@@ -100,7 +100,7 @@ public class AudiosController {
     public ResponseEntity<List<AudioDto>> getPartAudios(@ApiParam(value = "Текущая страница", example = "1")@RequestParam("currentPage") int currentPage,
                                                         @ApiParam(value = "Количество данных на страницу", example = "15")@RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Аудио начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(audiosService.getPart(currentPage, itemsOnPage).stream().map(audioConverter::toDTO).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(audiosService.getPart(currentPage, itemsOnPage).stream().map(audioConverter::toDto).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение всего аудио одного автора")
@@ -176,7 +176,11 @@ public class AudiosController {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено")})
     @PostMapping(value = "/addToUser", params = {"audioId"})
     public ResponseEntity<?> addAudioInCollectionsOfUser(@ApiParam(value = "Id музыке",example = "153")@RequestParam("audioId") Long audioId) {
-        User user = userService.getById(60L);
+        Optional<User> userOptional = userService.getById(60L);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Пользователя с id %s не найдено", 60L));
+        }
+        User user = userOptional.get();
         if(audiosService.addAudioInCollectionsOfUser(user, audioId)){
             userService.update(user);
             logger.info(String.format("Успешное добавление аудио с id %s в избранное пользователю с id %s", audioId, 60L));
@@ -192,11 +196,15 @@ public class AudiosController {
    // @Validated(OnCreate.class)
     @PostMapping(value = "/add")
     public ResponseEntity<?> addAudio(@ApiParam(value = "Объект добавляемого аудио")@RequestBody @Valid @NonNull AudioDto audioDto) {
-        User user = userService.getById(60L);
+        Optional<User> userOptional = userService.getById(60L);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Пользователя с id %s не найдено", 60L));
+        }
+        User user = userOptional.get();
         Audios audios = audioConverter.toAudio(audioDto, MediaType.AUDIO, user);
         audiosService.create(audios);
         logger.info(String.format("Добавление аудио с id %s в бд", audioDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(audioConverter.toDTO(audios));
+        return ResponseEntity.status(HttpStatus.CREATED).body(audioConverter.toDto(audios));
     }
 
     @ApiOperation(value = "Получение всех альбомов пользователя")
@@ -218,9 +226,17 @@ public class AudiosController {
     public ResponseEntity<?> addInAlbums(@ApiParam(value = "Id альбома",example = "242")@RequestParam @Valid @NotNull Long albumId,
                                          @ApiParam(value = "Id альбома",example = "242")@RequestParam @NotNull Long audioId) {
         logger.info(String.format("Аудио с id  %s добавлено в альбом с id %s", audioId, albumId));
-        AlbumAudios albumAudios = albumAudioService.getById(albumId);
+        Optional<AlbumAudios> albumAudiosOptional = albumAudioService.getById(albumId);
+        if (!albumAudiosOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("AlbumAudios id %s not found", albumId));
+        }
+        Optional<Audios> audiosOptional = audiosService.getById(audioId);
+        if (!audiosOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Аудио с id %s не найдено", audioId));
+        }
+        AlbumAudios albumAudios = albumAudiosOptional.get();
         Set<Audios> audiosSet = albumAudios.getAudios();
-        audiosSet.add(audiosService.getById(audioId));
+        audiosSet.add(audiosOptional.get());
         albumAudios.setAudios(audiosSet);
         albumAudioService.create(albumAudios);
         return ResponseEntity.ok().body(String.format("Аудио с id  %s добавлено в альбом с id %s", audioId, albumId));
@@ -237,8 +253,12 @@ public class AudiosController {
             return ResponseEntity.badRequest()
                     .body(String.format("Audio album with name '%s' already exists", albumDto.getName()));
         }
+        Optional<User> userOptional = userService.getById(60L);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Пользователь с %d id не найден", 60L));
+        }
         AlbumAudios albumAudios = albumAudioService.createAlbumAudiosWithOwner(
-                albumConverter.toAlbumAudios(albumDto, userService.getById(60L)));
+                albumConverter.toAlbumAudios(albumDto, userOptional.get()));
         logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
         return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumAudios));
     }

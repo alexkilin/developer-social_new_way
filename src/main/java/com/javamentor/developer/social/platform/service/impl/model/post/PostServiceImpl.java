@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.model.post;
 
-import com.javamentor.developer.social.platform.dao.abstracts.model.post.PostDAO;
+import com.javamentor.developer.social.platform.dao.abstracts.model.post.PostDao;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.post.Tag;
@@ -27,7 +27,7 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
 
 
     @Autowired
-    public PostServiceImpl(PostDAO dao, UserService userService, MediaService mediaService, TagService tagService) {
+    public PostServiceImpl(PostDao dao, UserService userService, MediaService mediaService, TagService tagService) {
         super(dao);
         this.userService = userService;
         this.mediaService = mediaService;
@@ -37,31 +37,29 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
     @Override
     public void create(Post entity) {
         Set<Media> mediaSet = new HashSet<>();
+
         if (entity.getMedia() != null) {
             for (Media media : entity.getMedia()) {
-                User user = userService.getById(media.getUser().getUserId());
-                media.setUser(user);
-                mediaSet.add(media);
-                mediaService.create(media);
-            }
-        }
 
-        if (entity.getTags() != null) {
-            Set<Tag> tags = new HashSet<>();
-            for (Tag tag : entity.getTags()) {
-                Optional<Tag> tagFromDB = tagService.getTagByText(tag.getText());
-                if (tagFromDB.isPresent()) {
-                    tag = tagFromDB.get();
-                } else {
-                    tagService.create(tag);
+                Optional<User> userOptional = userService.getById(media.getUser().getUserId());
+                if (userOptional.isPresent()) {
+                    User user = userOptional.get();
+                    media.setUser(user);
+                    mediaSet.add(media);
+                    mediaService.create(media);
                 }
-                tags.add(tag);
             }
-            entity.setTags(tags);
+        }
+        Optional<User> userOptional = userService.getById(entity.getUser().getUserId());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            entity.setUser(user);
+            entity.setMedia(mediaSet);
+            super.create(entity);
         }
 
-        User user = userService.getById(entity.getUser().getUserId());
-        entity.setUser(user);
+        Optional<User> user = userService.getById(entity.getUser().getUserId());
+        entity.setUser(user.get());
         entity.setMedia(mediaSet);
         super.create(entity);
     }

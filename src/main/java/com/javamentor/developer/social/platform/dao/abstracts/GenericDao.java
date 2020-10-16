@@ -4,13 +4,14 @@ import com.javamentor.developer.social.platform.models.dto.AudioDto;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 public interface GenericDao<T, PK extends Serializable> {
     void create(T entity);
 
     void update(T entity);
 
-    T getById(PK id);
+    Optional<T> getById(PK id);
 
     void delete(T entity);
 

@@ -20,6 +20,7 @@ class UserDtoDaoImpl implements UserDtoDao {
     @PersistenceContext
     protected EntityManager entityManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<UserDto> getUserDtoList() {
         List<UserDto> getAllUsers = new ArrayList<>();
@@ -58,8 +59,8 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .city((String) objects[9])
                                     .roleName(((String) objects[10]))
                                     .status((String) objects[11])
-                                    .activeName((String) objects[12])
                                     .profession((String) objects[13])
+                                    .activeName((String) objects[12])
                                     .build();
                         }
 

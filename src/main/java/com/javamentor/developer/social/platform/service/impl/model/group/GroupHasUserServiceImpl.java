@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.model.group;
 
-import com.javamentor.developer.social.platform.dao.abstracts.model.group.GroupHasUserDAO;
+import com.javamentor.developer.social.platform.dao.abstracts.model.group.GroupHasUserDao;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 
 @Service
 public class GroupHasUserServiceImpl extends GenericServiceAbstract<GroupHasUser, Long> implements GroupHasUserService {
-    public final GroupHasUserDAO groupHasUserDAO;
+    public final GroupHasUserDao groupHasUserDAO;
 
     @Autowired
-    public GroupHasUserServiceImpl(GroupHasUserDAO dao, GroupHasUserDAO groupHasUserDAO) {
+    public GroupHasUserServiceImpl(GroupHasUserDao dao, GroupHasUserDao groupHasUserDAO) {
         super(dao);
         this.groupHasUserDAO = groupHasUserDAO;
     }

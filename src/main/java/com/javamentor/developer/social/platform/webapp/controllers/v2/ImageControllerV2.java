@@ -6,7 +6,7 @@ import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
-import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDTOService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
@@ -35,7 +35,7 @@ import java.util.Optional;
 @Api(value = "ImageApi-v2", description = "Операции над изображениями")
 public class ImageControllerV2 {
 
-    private final ImageDTOService imageDTOService;
+    private final ImageDtoService imageDTOService;
     private final ImageService imageService;
     private final AlbumDtoService albumDtoService;
     private final AlbumImageService albumImageService;
@@ -47,7 +47,7 @@ public class ImageControllerV2 {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public ImageControllerV2(ImageDTOService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
+    public ImageControllerV2(ImageDtoService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
         this.imageDTOService = imageDTOService;
         this.imageService = imageService;
         this.albumDtoService = albumDtoService;
@@ -156,8 +156,8 @@ public class ImageControllerV2 {
         if (!imageService.existById(imageId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
-        Album album = albumService.getById(albumId);
-        Media media = mediaService.getById(imageId);
+        Album album = albumService.getById(albumId).get();
+        Media media = mediaService.getById(imageId).get();
         media.setAlbum(album);
         mediaService.update(media);
         logger.info(String.format("Изображение %s добавлено в фотоальбом %s", imageId, albumId));
@@ -178,7 +178,7 @@ public class ImageControllerV2 {
         if (!imageService.existById(imageId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
-        Media media = mediaService.getById(imageId);
+        Media media = mediaService.getById(imageId).get();
         media.setAlbum(null);
         mediaService.update(media);
         logger.info(String.format("Изображение %s удалено из фотоальбома %s", imageId, albumId));

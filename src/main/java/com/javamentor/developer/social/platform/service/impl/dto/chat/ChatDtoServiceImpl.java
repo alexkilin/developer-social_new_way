@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.dto.chat;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.chat.ChatDtoDAO;
+import com.javamentor.developer.social.platform.dao.abstracts.dto.chat.ChatDtoDao;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.util.List;
 public class ChatDtoServiceImpl implements ChatDtoService {
 
     @Autowired
-    private ChatDtoDAO dao;
+    private ChatDtoDao dao;
 
     @Override
     @Transactional

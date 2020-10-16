@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
-import com.javamentor.developer.social.platform.models.dto.AlbumImageDTO;
+import com.javamentor.developer.social.platform.models.dto.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring", imports = {MediaType.class})
 public abstract class AlbumImageConverter {
@@ -25,14 +26,14 @@ public abstract class AlbumImageConverter {
     }
 
     @Mappings({
-            @Mapping(source = "albumImageDTO.id", target = "id"),
+            @Mapping(source = "albumImageDto.id", target = "id"),
             @Mapping(target = "album.mediaType", expression = "java(MediaType.IMAGE)"),
-            @Mapping(source = "albumImageDTO.id", target = "album.id"),
-            @Mapping(source = "albumImageDTO.name", target = "album.name"),
-            @Mapping(source = "albumImageDTO.icon", target = "album.icon"),
+            @Mapping(source = "albumImageDto.id", target = "album.id"),
+            @Mapping(source = "albumImageDto.name", target = "album.name"),
+            @Mapping(source = "albumImageDto.icon", target = "album.icon"),
             @Mapping(source = "userOwner.userId", target = "album.userOwnerId", qualifiedByName = "userSetter")
     })
-    public abstract AlbumImage toAlbumImage(AlbumImageDTO albumImageDTO, User userOwner);
+    public abstract AlbumImage toAlbumImage(AlbumImageDto albumImageDto, User userOwner);
 
     @Mappings({
             @Mapping(source = "albumImage.id", target = "id"),
@@ -41,15 +42,12 @@ public abstract class AlbumImageConverter {
             @Mapping(source = "albumImage.album.persistDate", target = "persistDate"),
             @Mapping(source = "albumImage.album.lastRedactionDate", target = "lastRedactionDate")
     })
-    public abstract AlbumImageDTO toAlbumImageDto(AlbumImage albumImage);
+    public abstract AlbumImageDto toAlbumImageDto(AlbumImage albumImage);
 
-    // TODO : Убрать try catch
     @Named("userSetter")
     User userSetter(Long userId) {
-        try {
-            return userService.getById(userId);
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException(String.format("User с id %s не существует", userId));
-        }
+        Optional<User> userOptional = userService.getById(userId);
+
+        return userOptional.orElseThrow(() -> new EntityNotFoundException(String.format("User с id %s не существует", userId)));
     }
 }
