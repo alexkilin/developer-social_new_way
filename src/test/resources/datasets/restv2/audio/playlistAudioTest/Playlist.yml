@@ -1,0 +1,30 @@
+playlists:
+- playlist_id: 10
+  image: testimage0
+  name: test0
+  persist_date: '2020-09-15 00:08:44.271371'
+  user_id: 60
+
+- playlist_id: 11
+  image: testimage1
+  name: test1
+  persist_date: '2020-09-15 00:25:03.570274'
+  user_id: 60
+
+- playlist_id: 12
+  image: testimage2
+  name: test2
+  persist_date: '2020-09-15 00:25:04.633258'
+  user_id: 60
+
+- playlist_id: 13
+  image: testimage3
+  name: test3
+  persist_date: '2020-09-15 00:25:05.205605'
+  user_id: 60
+
+- playlist_id: 14
+  image: testimage4
+  name: test4
+  persist_date: '2020-09-15 00:25:05.624127'
+  user_id: 60
