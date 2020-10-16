@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 @RestController
@@ -94,7 +95,7 @@ public class ChatControllers {
             if (!groupChatService.existById(chatId)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Чат с id %s не найден.", chatId));
             }
-            GroupChat groupChat = groupChatService.getById(chatId);
+            GroupChat groupChat = groupChatService.getById(chatId).get();
             groupChat.setTitle(chatEditTitleDto.getTitle());
             groupChatService.update(groupChat);
             return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
@@ -109,14 +110,15 @@ public class ChatControllers {
         public ResponseEntity<?> deleteUserFromSingleChat (
                 @PathVariable("chatId") Long chatId,
                 @PathVariable("userId") Long userId){
-            SingleChat singleChat = singleChatService.getById(chatId);
-            User user = userService.getById(userId);
-            if (singleChat == null) {
-                return ResponseEntity.badRequest().body("chat not found");
-            } else if (user == null) {
+            Optional<SingleChat> singleChatOptional = singleChatService.getById(chatId);
+            Optional<User> userOptional = userService.getById(userId);
+            if (!singleChatOptional.isPresent()) {
+                return ResponseEntity.badRequest().body("Single chat not found");
+            }
+            if (!userOptional.isPresent()) {
                 return ResponseEntity.badRequest().body("user not found");
             }
-            if (!singleChatService.deleteUserFromSingleChat(singleChat, userId)) {
+            if (!singleChatService.deleteUserFromSingleChat(singleChatOptional.get(), userId)) {
                 return ResponseEntity.badRequest().body("user has not found chat");
             }
             return ResponseEntity.ok("done delete chat from user");

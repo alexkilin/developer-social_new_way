@@ -24,7 +24,6 @@ public class AlbumDto {
     private Long id;
 
     @ApiModelProperty(notes = "Название альбома")
-    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "'name' Must not be null when creating and updating")
     @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "'name' Must not be empty when creating and updating")
     private String name;
 
