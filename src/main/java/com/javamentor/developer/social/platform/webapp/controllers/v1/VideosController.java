@@ -69,7 +69,7 @@ public class VideosController {
     @GetMapping(value = "/all")
     public ResponseEntity<List<VideoDto>> getAllVideos() {
         logger.info("Отправка всех видео записей");
-        return ResponseEntity.ok().body(videosService.getAll().stream().map(videoConverter::toDTO).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(videosService.getAll().stream().map(videoConverter::toDto).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение некоторого количества видео")
@@ -125,7 +125,7 @@ public class VideosController {
         Videos videos = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
         videosService.create(videos);
         logger.info(String.format("Добавление видео с id %s в бд", videoDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(videoConverter.toDTO(videos));
+        return ResponseEntity.status(HttpStatus.CREATED).body(videoConverter.toDto(videos));
     }
 
     @ApiOperation(value = "Создание видео альбома пользователя")

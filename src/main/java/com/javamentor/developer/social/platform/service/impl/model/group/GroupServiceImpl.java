@@ -1,9 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.model.group;
 
-import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
-import com.javamentor.developer.social.platform.dao.abstracts.model.chat.GroupChatDAO;
-import com.javamentor.developer.social.platform.dao.abstracts.model.group.GroupDAO;
-import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
+import com.javamentor.developer.social.platform.dao.abstracts.model.group.GroupDao;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupService;
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
@@ -15,7 +12,7 @@ public class GroupServiceImpl extends GenericServiceAbstract<Group, Long> implem
 
 
     @Autowired
-    public GroupServiceImpl(GroupDAO dao) {
+    public GroupServiceImpl(GroupDao dao) {
         super(dao);
     }
 

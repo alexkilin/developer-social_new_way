@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.model.user;
 
-import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
-import com.javamentor.developer.social.platform.dao.abstracts.model.user.FriendDAO;
+import com.javamentor.developer.social.platform.dao.abstracts.model.user.FriendDao;
 import com.javamentor.developer.social.platform.models.entity.user.Friend;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.FriendService;
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class FriendServiceImpl extends GenericServiceAbstract<Friend, Long> implements FriendService {
 
     @Autowired
-    public FriendServiceImpl(FriendDAO dao) {
+    public FriendServiceImpl(FriendDao dao) {
         super(dao);
     }
 }

@@ -1,14 +1,11 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
-import com.javamentor.developer.social.platform.models.dto.FriendDto;
-import com.javamentor.developer.social.platform.models.dto.StatusDto;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.FriendsDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.UserFriendsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import io.swagger.annotations.*;
@@ -35,17 +32,15 @@ public class UserControllerV2 {
     private final UserDtoService userDtoService;
     private final FriendsDtoService friendsDtoService;
     private final UserService userService;
-    private final UserFriendsService userFriendsService;
     private final UserConverter userConverter;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserControllerV2(UserDtoService userDtoService, FriendsDtoService friendsDtoService, UserService userService, UserFriendsService userFriendsService, UserConverter userConverter) {
+    public UserControllerV2(UserDtoService userDtoService, FriendsDtoService friendsDtoService, UserService userService, UserConverter userConverter) {
         this.userDtoService = userDtoService;
         this.friendsDtoService = friendsDtoService;
         this.userService = userService;
-        this.userFriendsService = userFriendsService;
         this.userConverter = userConverter;
     }
 
@@ -80,39 +75,66 @@ public class UserControllerV2 {
 
     @ApiOperation(value = "Создание пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь создан", response = UserDto.class),
+            @ApiResponse(code = 200, message = "Пользователь создан", response = UserRegisterDto.class),
             @ApiResponse(code = 400, message = "Пользователь с данным email существует. Email должен быть уникальным", response = String.class)
     })
     @PostMapping("")
     @Validated(OnCreate.class)
-    public ResponseEntity<?> create(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserDto userDto) {
-        if (userService.existByEmail(userDto.getEmail())) {
-            logger.info(String.format("Пользователь с email: %s уже существует", userDto.getEmail()));
-            return ResponseEntity.status(400).body(String.format("User with email: %s already exist. Email should be unique", userDto.getEmail()));
+    public ResponseEntity<?> createUser(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserRegisterDto userRegisterDto) {
+        if (userService.existByEmail(userRegisterDto.getEmail())) {
+            logger.info(String.format("Пользователь с email: %s уже существует", userRegisterDto.getEmail()));
+            return ResponseEntity.status(400).body(String.format("User with email: %s already exist. Email should be unique", userRegisterDto.getEmail()));
         } else {
-            User user = userConverter.toEntity(userDto);
+            User user = userConverter.toEntity(userRegisterDto);
             userService.create(user);
-            logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userDto.getEmail()));
+            logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userRegisterDto.getEmail()));
             return ResponseEntity.ok(userConverter.toDto(user));
         }
     }
 
-    @ApiOperation(value = "Обновление пользователя")
+    @ApiOperation(value = "Обновление личной информации пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь обновлен", response = UserDto.class),
+            @ApiResponse(code = 200, message = "Пользователь обновлен", response = UserUpdateInfoDto.class),
+            @ApiResponse(code = 400, message = "E-mail занят другим пользователем", response = String.class),
             @ApiResponse(code = 404, message = "Пользователь не обновлен из-за несоответствия id", response = String.class)
     })
-    @PatchMapping("")
+    @PutMapping("")
     @Validated(OnUpdate.class)
-    public ResponseEntity<?> updateUser(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserDto userDto) {
-        User user = userConverter.toEntity(userDto);
-        if (userService.existById(userDto.getUserId())) {
-            userService.update(user);
-            logger.info(String.format("Пользователь с ID: %d обновлён успешно", userDto.getUserId()));
+    public ResponseEntity<?> updateUserInfo(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserUpdateInfoDto userUpdateInfoDto) {
+        if (userService.existById(userUpdateInfoDto.getUserId())) {
+            if (userService.existsAnotherByEmail(userUpdateInfoDto.getEmail(), userUpdateInfoDto.getUserId())) {
+                logger.info(String.format("Пользователь с email: %s уже существует", userUpdateInfoDto.getEmail()));
+                return ResponseEntity.status(400).body(String.format("User with email: %s already exist. Email should be unique", userUpdateInfoDto.getEmail()));
+            }
+            User user = userConverter.toEntity(userUpdateInfoDto);
+            userService.updateInfo(user);
+            logger.info(String.format("Пользователь с ID: %d обновлён успешно", userUpdateInfoDto.getUserId()));
             return ResponseEntity.ok(userConverter.toDto(user));
         } else {
-            logger.info(String.format("Пользователь с ID: %d не существует", userDto.getUserId()));
-            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", userDto.getUserId()));
+            logger.info(String.format("Пользователь с ID: %d не существует", userUpdateInfoDto.getUserId()));
+            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", userUpdateInfoDto.getUserId()));
+        }
+    }
+
+    @ApiOperation(value = "Изменение пароля")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пароль обновлен", response = UserResetPasswordDto.class),
+            @ApiResponse(code = 404, message = "Пароль не обновлен из-за несоответствия id", response = String.class)
+    })
+    @PatchMapping("/{id}/password")
+    @Validated(OnCreate.class)
+    public ResponseEntity<?> updateUserPassword(
+            @ApiParam(value = "Id пользователя") @PathVariable Long id,
+            @ApiParam(value = "Новый пароль") @Valid @RequestBody UserResetPasswordDto userResetPasswordDto) {
+        if (!userService.existById(id)) {
+            logger.info(String.format("Пользователь с ID: %d не существует", id));
+            return ResponseEntity.status(404)
+                    .body(String.format("User with ID: %d does not exist.", id));
+        } else {
+            userService.setPassword(userResetPasswordDto, id);
+            logger.info(String.format("Пароль пользователя %d изменен", id));
+            return ResponseEntity.status(200)
+                    .body(String.format("Password changed for user %d", id));
         }
     }
 
@@ -146,7 +168,7 @@ public class UserControllerV2 {
             return ResponseEntity.ok(userFriends);
         } else {
             logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
-            return ResponseEntity.status(400).body(String.format("User with ID: %d does not exist.", id));
+            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", id));
         }
     }
 

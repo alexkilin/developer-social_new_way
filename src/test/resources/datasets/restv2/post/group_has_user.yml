@@ -1,0 +1,25 @@
+group_has_user:
+  - id: 1
+    persist_date: "2020-08-13 11:46:35.493000"
+    group_id: 1
+    user_user_id: 1
+
+  - id: 2
+    persist_date: "2020-08-13 11:46:35.493000"
+    group_id: 2
+    user_user_id: 2
+
+  - id: 3
+    persist_date: "2020-08-13 11:46:35.493000"
+    group_id: 3
+    user_user_id: 3
+
+  - id: 4
+    persist_date: "2020-08-13 11:46:35.493000"
+    group_id: 4
+    user_user_id: 4
+
+  - id: 5
+    persist_date: "2020-08-13 11:46:35.493000"
+    group_id: 5
+    user_user_id: 5

@@ -110,8 +110,8 @@ public class GroupControllerV2 {
             @ApiResponse(code = 400, message = "Пользователь уже есть в данной группе"),
             @ApiResponse(code = 404, message = "Пользователь или группа не найдены")
     })
-    @PutMapping(value = "/{groupId}/users", params = {"groupId", "userId"})
-    public ResponseEntity<String> UserJoinGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
+    @PutMapping(value = "/{groupId}/users", params = "userId")
+    public ResponseEntity<String> userJoinGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
                                                 @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
                 buildAndExpand().toUri();
@@ -136,7 +136,7 @@ public class GroupControllerV2 {
             @ApiResponse(code = 201, message = "Пользователь удален из группы", response = String.class),
             @ApiResponse(code = 404, message = "Пользователь или группа не найдены")
     })
-    @DeleteMapping(value = "/{groupId}/users", params = {"groupId", "userId"})
+    @DeleteMapping(value = "/{groupId}/users", params = "userId")
     public ResponseEntity<?> deleteUserById(@ApiParam(value = "Идентификатор группы", example = "10") @PathVariable("groupId") @NonNull Long groupId,
                                             @ApiParam(value = "Идентификатор юзера", example = "1") @RequestParam("userId") @NonNull Long userId){
         if (groupHasUserService.verificationUserInGroup(groupId, userId)) {
