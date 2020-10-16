@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
+import com.javamentor.developer.social.platform.models.dto.LanguageDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,8 @@ public class UserDtoServiceImpl implements UserDtoService {
     @Override
     public Optional<UserDto> getUserDtoById(Long id) {
         Optional<UserDto> userDto = userDtoDao.getUserDtoById(id);
-           // Optional<List<LanguageDto>> languages = userDtoDao.getUserLanguageDtoById(id);
-          //  userDto.get().setLanguages(languages.get());
-
+        Optional<List<LanguageDto>>  langueges = userDtoDao.getUserLanguageDtoById(id);
+        userDto.get().setLanguages( langueges.get());
         return userDto;
 
     }

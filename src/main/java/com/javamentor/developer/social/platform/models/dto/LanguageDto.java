@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.models.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 @Getter
@@ -11,8 +12,10 @@ import lombok.*;
 @Builder
 public class LanguageDto {
 
+    @ApiModelProperty(notes = "Id языка")
     private Long id;
 
+    @ApiModelProperty(notes = "название языка")
     private String name;
 
 }

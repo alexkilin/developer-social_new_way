@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
+import com.javamentor.developer.social.platform.models.dto.LanguageDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -119,6 +120,7 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .activeName((String) objects[13])
                                     .build();
                         }
+
                         @Override
                         public List transformList(List list) {
                             return list;
@@ -132,23 +134,23 @@ class UserDtoDaoImpl implements UserDtoDao {
         return userDto;
     }
 
-     /*@Override
+
+     @Override
      public Optional<List<LanguageDto>> getUserLanguageDtoById(Long userId) {
          Optional<List<LanguageDto>> userLanguageDto = Optional.empty();
          try {
-             userLanguageDto = Optional.of((List<LanguageDto>) entityManager.createNativeQuery("SELECT " +
+             userLanguageDto = Optional.of((List<LanguageDto>) entityManager.createQuery("SELECT " +
                      "l.id, " +
                      "l.name " +
-                     "FROM language l join user_languages ul  where ul.user_id = :paramId") //" ON u.language_id = l.id WHERE u.user_id = :paramId" JOIN u.languages as l)
+                     "FROM User u left join u.languages l  where u.userId = :paramId")
                      .setParameter("paramId", userId)
                      .unwrap(Query.class)
                      .setResultTransformer(new ResultTransformer() {
                          @Override
                          public Object transformTuple(Object[] objects, String[] strings) {
                              return LanguageDto.builder()
-                                    // .id(((Number) objects[0]).longValue())
+                                     .id(((Number) objects[0]).longValue())
                                      .name((String) objects[1])
-
                                      .build();
                          }
                          @Override
@@ -156,12 +158,12 @@ class UserDtoDaoImpl implements UserDtoDao {
                              return list;
                          }
                      })
-                     .getSingleResult());
+                     .getResultList());
          } catch (NoResultException e) {
              e.printStackTrace();
          }
          return userLanguageDto;
-     }*/
+     }
 
 }
 
