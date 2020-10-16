@@ -17,7 +17,7 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
 
     @SuppressWarnings("unchecked")
     public List<User> getAll() {
-        return entityManager.createQuery("SELECT from User").getResultList();
+        return entityManager.createQuery("SELECT u from User u").getResultList();
     }
 
     @Override
@@ -32,6 +32,18 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
                 "SELECT COUNT(u) " +
                         "FROM User u WHERE u.email = :email", Long.class)
                 .setParameter("email", email)
+                .getSingleResult();
+        return (count > 0);
+    }
+
+    public boolean existsAnotherByEmail(String email, Long userId) {
+        Long count = entityManager.createQuery(
+                "SELECT COUNT(u) " +
+                        "FROM User u " +
+                        "WHERE u.email = :email " +
+                        "AND NOT u.userId = :userId ", Long.class)
+                .setParameter("email", email)
+                .setParameter("userId", userId)
                 .getSingleResult();
         return (count > 0);
     }

@@ -6,6 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -38,6 +40,16 @@ public class AdviceController  extends ResponseEntityExceptionHandler {
         logger.info(runtimeException.fillInStackTrace().toString());
         String[] body = runtimeException.getMessage().split(":");
         return handleExceptionInternal(runtimeException, body[body.length - 1].trim(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
+                                                                          HttpHeaders headers, HttpStatus status,
+                                                                          WebRequest request) {
+        String name = ex.getParameterName();
+        logger.error(name + " parameter is missing");
+
+        return ResponseEntity.badRequest().body(name + " parameter is missing");
     }
 
     @Override

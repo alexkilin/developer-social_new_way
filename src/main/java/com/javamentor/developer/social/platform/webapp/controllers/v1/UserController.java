@@ -120,7 +120,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "Пользователя с данным id нет базе данных", response = String.class)
     })
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUserById(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
+    public ResponseEntity<String> deleteUserById(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable Long id) {
         if (userService.existById(id)) {
             userService.deleteById(id);
             logger.info(String.format("Пользователь с ID: %d удалён успешно ", id));

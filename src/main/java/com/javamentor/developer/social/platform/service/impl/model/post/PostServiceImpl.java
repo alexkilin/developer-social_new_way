@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.model.post;
 
-import com.javamentor.developer.social.platform.dao.abstracts.model.post.PostDAO;
+import com.javamentor.developer.social.platform.dao.abstracts.model.post.PostDao;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -23,7 +23,7 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
 
 
     @Autowired
-    public PostServiceImpl(PostDAO dao, UserService userService, MediaService mediaService) {
+    public PostServiceImpl(PostDao dao, UserService userService, MediaService mediaService) {
         super(dao);
         this.userService = userService;
         this.mediaService = mediaService;
