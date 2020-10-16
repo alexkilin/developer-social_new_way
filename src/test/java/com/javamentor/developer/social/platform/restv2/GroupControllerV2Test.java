@@ -12,18 +12,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DataSet(value = {
-        "datasets/groupset/user/User.yml",
-        "datasets/groupset/user/Active.yml",
-        "datasets/groupset/user/Role.yml",
-        "datasets/groupset/group/Group.yml",
-        "datasets/groupset/group/GroupHasUser.yml",
-        "datasets/groupset/group/GroupWal.yml",
-        "datasets/groupset/group/GroupCategory.yml",
-        "datasets/groupset/post/media.yml",
-        "datasets/groupset/post/post_media.yml",
-        "datasets/groupset/post/post_tags.yml",
-        "datasets/groupset/post/posts.yml",
-        "datasets/groupset/post/tags.yml"}, cleanBefore = true, cleanAfter = true)
+        "datasets/restv2/groupset/user/User.yml",
+        "datasets/restv2/groupset/user/Active.yml",
+        "datasets/restv2/groupset/user/Role.yml",
+        "datasets/restv2/groupset/group/Group.yml",
+        "datasets/restv2/groupset/group/GroupHasUser.yml",
+        "datasets/restv2/groupset/group/GroupWal.yml",
+        "datasets/restv2/groupset/group/GroupCategory.yml",
+        "datasets/restv2/groupset/post/media.yml",
+        "datasets/restv2/groupset/post/post_media.yml",
+        "datasets/restv2/groupset/post/post_tags.yml",
+        "datasets/restv2/groupset/post/posts.yml",
+        "datasets/restv2/groupset/post/tags.yml"}, cleanBefore = true, cleanAfter = true)
 public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Autowired
