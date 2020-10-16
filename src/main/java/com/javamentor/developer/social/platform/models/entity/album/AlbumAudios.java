@@ -3,11 +3,25 @@ package com.javamentor.developer.social.platform.models.entity.album;
 import com.javamentor.developer.social.platform.exception.ApiRequestException;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
-import com.javamentor.developer.social.platform.models.entity.user.Language;
 import com.javamentor.developer.social.platform.models.entity.user.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import java.util.Set;
 
 
@@ -72,4 +86,17 @@ public class AlbumAudios {
     public Set<Audios> getAudios() {
         return audios;
     }
+
+    public void setAlbumName(String name) {
+        album.setName(name);
+    }
+
+    public void setAlbumIcon(String icon) {
+        album.setIcon(icon);
+    }
+
+    public void setAlbumUser(User albumUser) {
+        album.setUserOwnerId(albumUser);
+    }
+
 }
