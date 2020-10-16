@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.controllers.v1;
+package com.javamentor.developer.social.platform.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.google.gson.Gson;

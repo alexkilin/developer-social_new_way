@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.controllers.v1;
+package com.javamentor.developer.social.platform.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.developer.social.platform.AbstractIntegrationTest;
@@ -83,7 +83,7 @@ class GroupControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void showGroupInvalidId() throws Exception {
+    void showGroupInvalidId() throws Exception {
         this.mockMvc.perform(get("/api/groups/{id}", 100L))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -123,7 +123,7 @@ class GroupControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void deleteUserByIdOfGroup() throws Exception {
+    void deleteUserByIdOfGroup() throws Exception {
         this.mockMvc.perform(delete("/api/groupsHasUsers/delete?groupId=5&userId=5"))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -137,7 +137,7 @@ class GroupControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void deleteUserByInvalidIdOfGroup() throws Exception {
+    void deleteUserByInvalidIdOfGroup() throws Exception {
         this.mockMvc.perform(delete("/api/groupsHasUsers/delete?groupId=100&userId=100"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
