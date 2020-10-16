@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,12 +31,14 @@ public abstract class GroupChatConverter {
     @Mapping(source = "groupChat.id", target = "id")
     public abstract ChatDto groupChatToChatDto(GroupChat groupChat);
 
-    // TODO : Убрать try catch
     @Named("userIdToSet")
     public  Set<User> userIdToSet(Long userId) {
-        User user = userService.getById(userId);
+        User user = userService.getById(userId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("User с id %s не существует", userId)));
+
         Set<User> userSet = new HashSet<>();
         userSet.add(user);
+
         return userSet;
     }
 
