@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl extends GenericServiceAbstract<User, Long> implements UserService {
@@ -56,19 +57,25 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
 
     @Transactional
     public void setPassword(UserResetPasswordDto userResetPasswordDto, Long userId) {
-        User user = userDAO.getById(userId);
-        user.setPassword(passwordEncoder.encode(userResetPasswordDto.getPassword()));
-        userDAO.update(user);
+
+        Optional<User> user = userDAO.getById(userId);
+
+        if (user.isPresent()) {
+            user.get().setPassword(passwordEncoder.encode(userResetPasswordDto.getPassword()));
+            userDAO.update(user.get());
+        }
     }
 
     @Transactional
     public void updateInfo(User user) {
-        User userOld = userDAO.getById(user.getUserId());
-        user.setPassword(userOld.getPassword());
-        user.setRole(userOld.getRole());
-        user.setActive(userOld.getActive());
-        user.setIsEnable(userOld.getIsEnable());
-        userDAO.update(user);
+        Optional<User> userOld = userDAO.getById(user.getUserId());
+        if (userOld.isPresent()) {
+            user.setPassword(userOld.get().getPassword());
+            user.setRole(userOld.get().getRole());
+            user.setActive(userOld.get().getActive());
+            user.setIsEnable(userOld.get().getIsEnable());
+            userDAO.update(user);
+        }
     }
 
 }
