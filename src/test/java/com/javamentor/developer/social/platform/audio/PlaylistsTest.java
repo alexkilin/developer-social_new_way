@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/audio/usersAudioTest/Active.yml",
         "datasets/audio/usersAudioTest/User.yml",
         "datasets/audio/usersAudioTest/Role.yml",
-        "datasets/audio/usersAudioTest/Status.yml",
+      //  "datasets/audio/usersAudioTest/Status.yml",
         "datasets/audio/usersAudioTest/UsersAudiosCollections.yml",
         "datasets/audio/Media.yml",
         "datasets/audio/albumAudioTest/AudioAlbum.yml",
@@ -92,26 +92,26 @@ class PlaylistsTest extends AbstractIntegrationTest {
     @Test
     void addAudioToPlaylist() throws Exception {
 
-        this.mockMvc.perform(put("/api/audios/audio/playlists/10/4"))
+        this.mockMvc.perform(put("/api/audios/playlists/10/audio?audioId=4"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("test0"))
                 .andExpect(jsonPath("$.image").value("testimage0"))
                 .andExpect(jsonPath("$.content.length()").value("4"));
 
-        this.mockMvc.perform(put("/api/audios/audio/playlists/10/4"))
+        this.mockMvc.perform(put("/api/audios/playlists/10/audio?audioId=4"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void deleteAudioFromPlaylist() throws Exception {
-        this.mockMvc.perform(delete("/api/audios/audio/playlists/?playlistId=10&audioId=3"))
+        this.mockMvc.perform(delete("/api/audios/playlists/10/audio/3"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value("2"));
 
-        this.mockMvc.perform(delete("/api/audios/audio/playlists?playlistId=10&audioId=3" +
+        this.mockMvc.perform(delete("/api/audios/playlists/10/audio/3" +
                 ""))
                 .andDo(print())
                 .andExpect(status().isBadRequest());

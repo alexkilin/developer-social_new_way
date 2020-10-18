@@ -28,8 +28,8 @@ public class UserDtoServiceImpl implements UserDtoService {
     @Override
     public Optional<UserDto> getUserDtoById(Long id) {
         Optional<UserDto> userDto = userDtoDao.getUserDtoById(id);
-        Optional<List<LanguageDto>>  langueges = userDtoDao.getUserLanguageDtoById(id);
-        userDto.get().setLanguages( langueges.get());
+       List<LanguageDto>  langueges = userDtoDao.getUserLanguageDtoById(id);
+        userDto.get().setLanguages( langueges);
         return userDto;
 
     }

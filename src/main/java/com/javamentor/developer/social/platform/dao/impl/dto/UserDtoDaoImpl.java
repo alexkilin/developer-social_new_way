@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.javamentor.developer.social.platform.dao.util.SingleResultUtil.getSingleResultOrNull;
+
 @Repository
 class UserDtoDaoImpl implements UserDtoDao {
 
@@ -137,16 +139,20 @@ class UserDtoDaoImpl implements UserDtoDao {
 
 
      @Override
-     public Optional<List<LanguageDto>> getUserLanguageDtoById(Long userId) {
-         Optional<List<LanguageDto>> userLanguageDto = Optional.empty();
-         try {
-             userLanguageDto = Optional.of((List<LanguageDto>) entityManager.createQuery("SELECT " +
+     public List<LanguageDto> getUserLanguageDtoById(Long userId) {
+
+         List<LanguageDto> userLanguageDto;
+
+              Query query =  entityManager.createQuery("SELECT " +
                      "l.id, " +
                      "l.name " +
                      "FROM User u left join u.languages l  where u.userId = :paramId")
                      .setParameter("paramId", userId)
-                     .unwrap(Query.class)
-                     .setResultTransformer(new ResultTransformer() {
+                     .unwrap(Query.class);
+
+         getSingleResultOrNull(query);
+
+                  userLanguageDto =   query.setResultTransformer(new ResultTransformer() {
                          @Override
                          public Object transformTuple(Object[] objects, String[] strings) {
                              return LanguageDto.builder()
@@ -159,10 +165,8 @@ class UserDtoDaoImpl implements UserDtoDao {
                              return list;
                          }
                      })
-                     .getResultList());
-         } catch (NoResultException e) {
-             e.printStackTrace();
-         }
+                     .getResultList();
+
          return userLanguageDto;
      }
 
