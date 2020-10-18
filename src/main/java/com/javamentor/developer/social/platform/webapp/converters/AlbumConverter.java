@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring", imports = {MediaType.class})
 public abstract class AlbumConverter {
@@ -59,13 +60,10 @@ public abstract class AlbumConverter {
     @Mapping(source = "albumImage.id", target = "id")
     public abstract AlbumDto toAlbumDto(AlbumImage albumImage);
 
-    // TODO : Убрать try catch
     @Named("userSetter")
     protected User userSetter(Long userId) {
-        try {
-            return userService.getById(userId);
-        } catch (NoSuchElementException n) {
-            throw new EntityNotFoundException(String.format("User с id %s не существует", userId));
-        }
+        Optional<User> userOptional = userService.getById(userId);
+
+        return userOptional.orElseThrow(() -> new EntityNotFoundException(String.format("User с id %s не существует", userId)));
     }
 }

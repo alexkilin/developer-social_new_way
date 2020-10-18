@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class GenericServiceAbstract<T, PK extends Serializable> implements GenericService<T, PK> {
     private final GenericDao<T, PK> dao;
@@ -42,7 +43,7 @@ public abstract class GenericServiceAbstract<T, PK extends Serializable> impleme
 
     @Transactional
     @Override
-    public T getById(PK id) {
+    public Optional<T> getById(PK id) {
         return dao.getById(id);
     }
 

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -32,18 +33,26 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
     @Override
     public void create(Post entity) {
         Set<Media> mediaSet = new HashSet<>();
+
         if (entity.getMedia() != null) {
             for (Media media : entity.getMedia()) {
-                User user = userService.getById(media.getUser().getUserId());
-                media.setUser(user);
-                mediaSet.add(media);
-                mediaService.create(media);
+
+                Optional<User> userOptional = userService.getById(media.getUser().getUserId());
+                if (userOptional.isPresent()) {
+                    User user = userOptional.get();
+                    media.setUser(user);
+                    mediaSet.add(media);
+                    mediaService.create(media);
+                }
             }
         }
-        User user = userService.getById(entity.getUser().getUserId());
-        entity.setUser(user);
-        entity.setMedia(mediaSet);
-        super.create(entity);
+        Optional<User> userOptional = userService.getById(entity.getUser().getUserId());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            entity.setUser(user);
+            entity.setMedia(mediaSet);
+            super.create(entity);
+        }
     }
 
 

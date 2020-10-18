@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -121,7 +122,7 @@ public class VideosController {
     @PostMapping(value = "/add")
     @Validated(OnCreate.class)
     public ResponseEntity<?> addVideo(@ApiParam(value = "Объект добавляемого видео")@RequestBody @Valid @NonNull VideoDto videoDto) {
-        User user = userService.getById(60L);
+        User user = userService.getById(60L).get();
         Videos videos = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
         videosService.create(videos);
         logger.info(String.format("Добавление видео с id %s в бд", videoDto.getId()));
@@ -140,7 +141,7 @@ public class VideosController {
                     .body(String.format("Video album with name '%s' already exists", albumDto.getName()));
         }
         AlbumVideo albumVideo = albumVideoService.createAlbumVideosWithOwner(
-                albumConverter.toAlbumVideo(albumDto, userService.getById(60L)));
+                albumConverter.toAlbumVideo(albumDto, userService.getById(60L).get()));
         logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
         return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumVideo));
     }
@@ -151,17 +152,23 @@ public class VideosController {
     @PostMapping(value = "/addInAlbums")
     public ResponseEntity<?> addInAlbums(@ApiParam(value = "Id альбома",example = "100") @RequestParam @NotNull Long albumId,
                                          @ApiParam(value = "Id видео",example = "1") @RequestParam @NotNull Long videoId) {
-        logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
-        AlbumVideo albumVideo = albumVideoService.getById(albumId);
-
-        if (albumVideo == null) {
-            return ResponseEntity.badRequest().body(String.format("Видеоальбома с id %s не обнаружено", albumId));
+        Optional<AlbumVideo> albumVideoOptional = albumVideoService.getById(albumId);
+        if (!albumVideoOptional.isPresent()) {
+            logger.info(String.format("Видеоальбом с id  %s не найден", albumId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Видеоальбом с id  %s не найден", albumId));
         }
+        Optional<Videos> videosOptional = videosService.getById(videoId);
+        if (!videosOptional.isPresent()) {
+            logger.info(String.format("Видео с id  %s не найдено", videoId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Видео с id  %s не найдено", videoId));
+        }
+        AlbumVideo albumVideo = albumVideoOptional.get();
 
         Set<Videos> videosSet = albumVideo.getVideos();
-        videosSet.add(videosService.getById(videoId));
+        videosSet.add(videosOptional.get());
         albumVideo.setVideos(videosSet);
         albumVideoService.create(albumVideo);
+        logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
         return ResponseEntity.ok().body(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
     }
 

@@ -35,7 +35,7 @@ class MusicTest extends AbstractIntegrationTest {
     private final Gson gson = new Gson();
 
     @Test
-    public void getAllAudios() throws Exception {
+    void getAllAudios() throws Exception {
         this.mockMvc.perform(get("/api/audios/all"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -43,7 +43,7 @@ class MusicTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void getPartAudios() throws Exception {
+     void getPartAudios() throws Exception {
         this.mockMvc.perform(get("/api/audios/getPart?currentPage=1&itemsOnPage=2"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -241,7 +241,8 @@ class MusicTest extends AbstractIntegrationTest {
             "datasets/audio/usersAudioTest/Active.yml",
             "datasets/audio/usersAudioTest/User.yml",
             "datasets/audio/usersAudioTest/Role.yml",}, cleanBefore = true, cleanAfter = true)
-    public void createAlbumWithIncorrectName() throws Exception {
+    public void createAlbumWithEmptyName() throws Exception {
+
         AlbumDto albumTest = AlbumDto.builder()
                 .name("")
                 .icon("iconTest")
@@ -254,8 +255,16 @@ class MusicTest extends AbstractIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
                         .string("'name' Must not be empty when creating and updating"));
+    }
 
-        albumTest = AlbumDto.builder()
+    @Test
+    @DataSet(value = {
+            "datasets/audio/usersAudioTest/Active.yml",
+            "datasets/audio/usersAudioTest/User.yml",
+            "datasets/audio/usersAudioTest/Role.yml",}, cleanBefore = true, cleanAfter = true)
+    public void createAlbumWithoutName() throws Exception {
+
+        AlbumDto albumTest = AlbumDto.builder()
                 .icon("iconTest")
                 .build();
 
