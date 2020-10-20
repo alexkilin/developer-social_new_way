@@ -1,0 +1,30 @@
+comments:
+  - comment: "my comment to 1"
+    comment_type: 2
+    persist_date: "2020-08-13 11:46:35.493000"
+    last_redaction_date: "2020-08-13 11:46:35.493000"
+    user_id: 1
+
+  - comment: "my comment to 2"
+    comment_type: 2
+    persist_date: "2020-08-13 11:46:35.493000"
+    last_redaction_date: "2020-08-13 11:46:35.493000"
+    user_id: 1
+
+  - comment: "my comment to 3"
+    comment_type: 2
+    persist_date: "2020-08-13 11:46:35.493000"
+    last_redaction_date: "2020-08-13 11:46:35.493000"
+    user_id: 2
+
+  - comment: "my comment to 4"
+    comment_type: 2
+    persist_date: "2020-08-13 11:46:35.493000"
+    last_redaction_date: "2020-08-13 11:46:35.493000"
+    user_id: 3
+
+  - comment: "my comment to 5"
+    comment_type: 2
+    persist_date: "2020-08-13 11:46:35.493000"
+    last_redaction_date: "2020-08-13 11:46:35.493000"
+    user_id: 4

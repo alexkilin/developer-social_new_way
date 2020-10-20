@@ -246,7 +246,8 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         "c.comment, " +//3
                         "(SELECT u.lastName FROM User u WHERE c.user.userId = u.userId), " +
                         "(SELECT u.firstName FROM User u WHERE c.user.userId = u.userId), " +
-                        "(SELECT u.userId FROM User u WHERE c.user.userId = u.userId)" +
+                        "(SELECT u.userId FROM User u WHERE c.user.userId = u.userId)," +
+                        "(SELECT u.avatar FROM User u WHERE c.user.userId = u.userId)" +
                     "FROM Post p " +
                         "LEFT JOIN PostComment pc on p.id = pc.post.id " +
                         "LEFT JOIN Comment c on pc.comment.id = c.id " +
@@ -260,6 +261,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         .userId((Long) objects[6])
                         .firstName((String) objects[5])
                         .lastName((String) objects[4])
+                        .avatar((String) objects[7])
                         .build();
                 return CommentDto.builder()
                         .userDto(userDto)
