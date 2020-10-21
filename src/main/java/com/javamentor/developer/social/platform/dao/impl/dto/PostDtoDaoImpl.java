@@ -246,11 +246,12 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         "c.comment, " +//3
                         "(SELECT u.lastName FROM User u WHERE c.user.userId = u.userId), " +
                         "(SELECT u.firstName FROM User u WHERE c.user.userId = u.userId), " +
-                        "(SELECT u.userId FROM User u WHERE c.user.userId = u.userId)" +
-                        "FROM Post p " +
+                        "(SELECT u.userId FROM User u WHERE c.user.userId = u.userId)," +
+                        "(SELECT u.avatar FROM User u WHERE c.user.userId = u.userId)" +
+                    "FROM Post p " +
                         "LEFT JOIN PostComment pc on p.id = pc.post.id " +
                         "LEFT JOIN Comment c on pc.comment.id = c.id " +
-                        "WHERE p.id = :paramId")
+                    "WHERE p.id = :paramId")
                 .setParameter("paramId", id);
         return queryCommentsForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
@@ -260,6 +261,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         .userId((Long) objects[6])
                         .firstName((String) objects[5])
                         .lastName((String) objects[4])
+                        .avatar((String) objects[7])
                         .build();
                 return CommentDto.builder()
                         .userDto(userDto)
@@ -272,14 +274,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
             @Override
             public List transformList(List list) {
-                Map<Long, CommentDto> result = new TreeMap<>();
-                for (Object obj : list) {
-                    CommentDto commentDto = (CommentDto) obj;
-                    if (commentDto.getId() != null) {
-                        result.put(commentDto.getId(), commentDto);
-                    }
-                }
-                return new ArrayList<>(result.values());
+                return list;
             }
         }).getResultList();
     }
@@ -291,9 +286,9 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "SELECT " +
                         "m.mediaType, " +
                         "m.url " +
-                        "FROM Post p " +
+                    "FROM Post p " +
                         "LEFT JOIN p.media m " +
-                        "WHERE p.id = :paramId")
+                    "WHERE p.id = :paramId")
                 .setParameter("paramId", id);
         return queryMediasForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 

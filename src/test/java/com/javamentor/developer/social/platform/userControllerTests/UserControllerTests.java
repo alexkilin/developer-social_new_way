@@ -2,11 +2,12 @@ package com.javamentor.developer.social.platform.userControllerTests;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.developer.social.platform.AbstractIntegrationTest;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -16,7 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/user/active.yml",
         "datasets/user/role.yml",
         "datasets/user/userFriends.yml",
-        "datasets/user/user.yml"
+        "datasets/user/language.yml",
+        "datasets/user/user.yml",
+        "datasets/user/user_languages.yml"
 }, cleanBefore = true, cleanAfter = true)
 public class UserControllerTests extends AbstractIntegrationTest {
 
@@ -43,17 +46,18 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     void findUserById() throws Exception {
-        mockMvc.perform(get("/api/user/{id}", 4L))
+        mockMvc.perform(get("/api/user/{id}", 6L))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value(4))
-                .andExpect(jsonPath("$.firstName").value("Admin3"))
-                .andExpect(jsonPath("$.email").value("admin0@user.ru"))
+                .andExpect(jsonPath("$.userId").value(6))
+                .andExpect(jsonPath("$.firstName").value("Admin8"))
+                .andExpect(jsonPath("$.email").value("admin8@mail.ru"))
                 .andExpect(jsonPath("$.roleName").value("USER"))
-                .andExpect(jsonPath("$.aboutMe").value("My description about life - Admin3"))
+                .andExpect(jsonPath("$.aboutMe").value("My description about life - Admin8"))
                 .andExpect(jsonPath("$.city").value("SPb"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.languages",hasSize(2)));
     }
 
     @Test
@@ -98,6 +102,10 @@ public class UserControllerTests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.userId").value("5"))
                 .andExpect(jsonPath("$.firstName").value("Update"))
                 .andExpect(jsonPath("$.email").value("Update@email.com"))
+                .andExpect(jsonPath("$.city").value("SPb"))
+                .andExpect(jsonPath("$.profession").value("Plumber"))
+                .andExpect(jsonPath("$.activeName").value("ACTIVE"))
+                .andExpect(jsonPath("$.languages").value("Russian,English"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 

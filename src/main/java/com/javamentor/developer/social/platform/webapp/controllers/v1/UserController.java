@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.webapp.controllers.v1;
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
 import com.javamentor.developer.social.platform.models.dto.StatusDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.UserUpdateInfoDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
@@ -72,8 +73,8 @@ public class UserController {
     })
     @GetMapping("/all")
     public ResponseEntity<List<UserDto>> getAll() {
-        logger.info("Получен список пользователей");
-        return ResponseEntity.ok(userDtoService.getUserDtoList());
+        logger.info(String.format("Получен список пользователей"));
+        return ResponseEntity.ok(userDtoService.getAllUserDto());
     }
 
     @ApiOperation(value = "Создание пользователя")
@@ -102,15 +103,19 @@ public class UserController {
     })
     @PutMapping("/update")
     @Validated(OnUpdate.class)
-    public ResponseEntity<?> updateUser(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserDto userDto) {
-        User user = userConverter.toEntity(userDto);
-        if (userService.existById(userDto.getUserId())) {
-            userService.update(user);
-            logger.info(String.format("Пользователь с ID: %d обновлён успешно", userDto.getUserId()));
+    public ResponseEntity<?> updateUserInfo(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserUpdateInfoDto userUpdateInfoDto) {
+        if (userService.existById(userUpdateInfoDto.getUserId())) {
+            if (userService.existsAnotherByEmail(userUpdateInfoDto.getEmail(), userUpdateInfoDto.getUserId())) {
+                logger.info(String.format("Пользователь с email: %s уже существует", userUpdateInfoDto.getEmail()));
+                return ResponseEntity.status(400).body(String.format("User with email: %s already exist. Email should be unique", userUpdateInfoDto.getEmail()));
+            }
+            User user = userConverter.toEntity(userUpdateInfoDto);
+            userService.updateInfo(user);
+            logger.info(String.format("Пользователь с ID: %d обновлён успешно", userUpdateInfoDto.getUserId()));
             return ResponseEntity.ok(userConverter.toDto(user));
         } else {
-            logger.info(String.format("Пользователь с ID: %d не существует", userDto.getUserId()));
-            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", userDto.getUserId()));
+            logger.info(String.format("Пользователь с ID: %d не существует", userUpdateInfoDto.getUserId()));
+            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", userUpdateInfoDto.getUserId()));
         }
     }
 

@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -297,6 +297,34 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 //                .andDo(print())
 //                .andExpect(status().isOk())
 //                .andExpect(jsonPath("$.length()").value(3));
+//    }
+//
+//    @Test
+//    void addAudioToPlaylist() throws Exception {
+//
+//        this.mockMvc.perform(put("/api/audios/playlists/10/audio?audioId=4"))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.name").value("test0"))
+//                .andExpect(jsonPath("$.image").value("testimage0"))
+//                .andExpect(jsonPath("$.content.length()").value("4"));
+//
+//        this.mockMvc.perform(put("/api/audios/playlists/10/audio?audioId=4"))
+//                .andDo(print())
+//                .andExpect(status().isBadRequest());
+//    }
+//
+//    @Test
+//    void deleteAudioFromPlaylist() throws Exception {
+//        this.mockMvc.perform(delete("/api/audios/playlists/10/audio/3"))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.content.length()").value("2"));
+//
+//        this.mockMvc.perform(delete("/api/audios/playlists/10/audio/3" +
+//                ""))
+//                .andDo(print())
+//                .andExpect(status().isBadRequest());
 //    }
 
 }

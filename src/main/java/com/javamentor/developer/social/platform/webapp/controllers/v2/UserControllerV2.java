@@ -70,7 +70,7 @@ public class UserControllerV2 {
     @GetMapping("")
     public ResponseEntity<List<UserDto>> getAll() {
         logger.info("Получен список пользователей");
-        return ResponseEntity.ok(userDtoService.getUserDtoList());
+        return ResponseEntity.ok(userDtoService.getAllUserDto());
     }
 
     @ApiOperation(value = "Создание пользователя")

@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.post;
+package com.javamentor.developer.social.platform.restv2.post;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.google.gson.Gson;
@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/post/comment.yml",
         "datasets/post/postComment.yml",
         "datasets/post/post_media.yml"}, cleanBefore = true, cleanAfter = true)
-public class PostTest extends AbstractIntegrationTest {
+public class PostTest2 extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

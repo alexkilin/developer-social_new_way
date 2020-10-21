@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserDtoService {
 
-    List<UserDto> getUserDtoList();
+    List<UserDto> getAllUserDto();
 
     Optional<UserDto> getUserDtoById(Long id);
 

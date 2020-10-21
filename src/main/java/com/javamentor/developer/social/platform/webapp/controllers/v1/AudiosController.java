@@ -356,9 +356,9 @@ public class AudiosController {
             @ApiResponse(code = 200, message = "Аудио удалено", response = PlaylistGetDto.class),
             @ApiResponse(code = 400, message = "Плейлист не содержит это аудио"),
             @ApiResponse(code = 404, message = "Плейлист или аудио не найдены")})
-    @DeleteMapping(value = "/playlists/{playlistId}/audio")
+    @DeleteMapping(value = "/playlists/{playlistId}/audio/{audioId}")
     public ResponseEntity<?> removeAudioFromPlaylist(@ApiParam(value = "Id плейлиста", example = "2")@PathVariable @NotNull Long playlistId,
-                                                     @ApiParam(value = "Id аудио", example = "10")@RequestParam("audioId") @NotNull Long audioId) {
+                                                     @ApiParam(value = "Id аудио", example = "10")@PathVariable("audioId") @NotNull Long audioId) {
         Optional<Playlist> playlistOptional = playlistService.getOptionalById(playlistId);
         if (!playlistOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s for current user", playlistId));

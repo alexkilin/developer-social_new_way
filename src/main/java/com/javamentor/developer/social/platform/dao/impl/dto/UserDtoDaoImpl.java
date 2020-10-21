@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
+import com.javamentor.developer.social.platform.models.dto.LanguageDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static com.javamentor.developer.social.platform.dao.util.SingleResultUtil.getSingleResultOrNull;
 
 @Repository
 class UserDtoDaoImpl implements UserDtoDao {
@@ -81,7 +84,6 @@ class UserDtoDaoImpl implements UserDtoDao {
     @Override
     public Optional<UserDto> getUserDtoById(Long id) {
         Optional<UserDto> userDto = Optional.empty();
-
         try {
             userDto = Optional.of((UserDto) entityManager.createQuery("SELECT " +
                     "u.userId, " +
@@ -98,7 +100,8 @@ class UserDtoDaoImpl implements UserDtoDao {
                     "u.status, " +
                     "u.profession, " +
                     "u.active.name " +
-                    "FROM User u WHERE u.userId = " + id)
+                    "FROM User u WHERE u.userId = :paramId")
+                    .setParameter("paramId", id)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override
@@ -134,4 +137,40 @@ class UserDtoDaoImpl implements UserDtoDao {
         return userDto;
     }
 
+
+     @Override
+     public List<LanguageDto> getUserLanguageDtoById(Long userId) {
+
+         List<LanguageDto> userLanguageDto;
+
+              Query query =  entityManager.createQuery("SELECT " +
+                     "l.id, " +
+                     "l.name " +
+                     "FROM User u left join u.languages l  where u.userId = :paramId")
+                     .setParameter("paramId", userId)
+                     .unwrap(Query.class);
+
+         getSingleResultOrNull(query);
+
+                  userLanguageDto =   query.setResultTransformer(new ResultTransformer() {
+                         @Override
+                         public Object transformTuple(Object[] objects, String[] strings) {
+                             return LanguageDto.builder()
+                                     .id(((Number) objects[0]).longValue())
+                                     .name((String) objects[1])
+                                     .build();
+                         }
+                         @Override
+                         public List transformList(List list) {
+                             return list;
+                         }
+                     })
+                     .getResultList();
+
+         return userLanguageDto;
+     }
+
 }
+
+
+
