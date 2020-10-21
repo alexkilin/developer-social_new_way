@@ -38,19 +38,18 @@ public class PostCommentController {
     })
     @PostMapping("/{postId}/comment")
     public ResponseEntity<String> addCommentToPost(@ApiParam(value = "Объект комментария к посту") @RequestBody CommentDto commentDto,
-                                                 @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
+                                                   @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
         if (!userService.existById(commentDto.getUserDto().getUserId())) {
-            String msg = String.format("Пользователь с id: %d не найден", commentDto.getUserDto().getUserId());
-            return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(404).body(String.format("Пользователь с id: %d не найден", commentDto.getUserDto().getUserId()));
         }
         if (!postService.existById(postId)) {
-            String msg = String.format("Пост с id: %d не найден", postId);
-            return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(404).body(String.format("Пост с id: %d не найден", postId));
         }
         PostComment postComment = postCommentConverter.toPostCommentEntity(commentDto, postId);
         postComment.getComment().setCommentType(CommentType.POST);
         postCommentService.create(postComment);
-        String msg = String.format("Пользователь с id: %d добавил комментарий в пост с id: %s", commentDto.getUserDto().getUserId(), postId);
-        return new ResponseEntity<>(msg, HttpStatus.CREATED);
+        return ResponseEntity.status(201).body(String.format("Пользователь с id: %d добавил комментарий в пост с id: %s",
+                commentDto.getUserDto().getUserId(), postId));
     }
 }
+
