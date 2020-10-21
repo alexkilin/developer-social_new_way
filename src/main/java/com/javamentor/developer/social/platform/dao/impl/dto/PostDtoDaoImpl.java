@@ -274,7 +274,14 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
             @Override
             public List transformList(List list) {
-                return list;
+                Map<Long, CommentDto> result = new TreeMap<>();
+                for (Object obj : list) {
+                    CommentDto commentDto = (CommentDto) obj;
+                    if (commentDto.getId() != null) {
+                        result.put(commentDto.getId(), commentDto);
+                    }
+                }
+                return new ArrayList<>(result.values());
             }
         }).getResultList();
     }
