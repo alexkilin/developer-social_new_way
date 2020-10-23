@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface TagService extends GenericService<Tag, Long> {
 
+    Optional<Tag> getTagByText(String text);
+
 }
