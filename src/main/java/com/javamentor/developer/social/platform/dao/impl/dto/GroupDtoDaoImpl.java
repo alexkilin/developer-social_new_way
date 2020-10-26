@@ -201,7 +201,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
     }
 
     @Override
-    public List<UserDto> getUsersFromTheGroup(Long id) {
+    public List<UserDto> getUsersFromTheGroup(Long id, int page, int size) {
         Query<UserDto> queryUsersFromTheGroup = (Query<UserDto>) entityManager.createQuery(
                 "SELECT " +
                         "u.userId, " +
@@ -219,7 +219,9 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "u.status, " +
                         "u.active.name" +
                         " FROM User u join GroupHasUser g ON u.userId = g.user.userId WHERE g.group.id = :id")
-                .setParameter("id", id);
+                .setParameter("id", id)
+                .setFirstResult((page - 1) * size)
+                .setMaxResults(size);
         return (List<UserDto>) queryUsersFromTheGroup.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
