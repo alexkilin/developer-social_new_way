@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 public class PostDaoImpl extends GenericDaoAbstract<Post, Long> implements PostDao {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
     @Override
     public void deletePostFromUserWallById(Long id) {
