@@ -208,7 +208,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                     .text(objects[13] == null ? "null" : (String) objects[13])
                                     .build();
                         }
-                        
+
                         tagDtoList.add(tagDto);
 
                         return PostDto.builder()
@@ -317,7 +317,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
             public Object transformTuple(Object[] objects, String[] strings) {
                 return MediaPostDto.builder()
                         .url((String) objects[1])
-                        .mediaType(objects[0].toString())
+                        .mediaType(objects[0] == null ? "null" : objects[0].toString())
                         .build();
             }
 
