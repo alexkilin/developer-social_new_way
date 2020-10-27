@@ -69,7 +69,9 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     }
 
                     @Override
-                    public List transformList(List list) { return list; }
+                    public List transformList(List list) {
+                        return list;
+                    }
                 })
                 .getResultList();
         return postDtoList;
@@ -262,10 +264,10 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         "(SELECT u.firstName FROM User u WHERE c.user.userId = u.userId), " +
                         "(SELECT u.userId FROM User u WHERE c.user.userId = u.userId)," +
                         "(SELECT u.avatar FROM User u WHERE c.user.userId = u.userId)" +
-                    "FROM Post p " +
+                        "FROM Post p " +
                         "LEFT JOIN PostComment pc on p.id = pc.post.id " +
                         "LEFT JOIN Comment c on pc.comment.id = c.id " +
-                    "WHERE p.id = :paramId")
+                        "WHERE p.id = :paramId")
                 .setParameter("paramId", id);
         return queryCommentsForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
@@ -306,10 +308,11 @@ public class PostDtoDaoImpl implements PostDtoDao {
         Query queryMediasForPost = (Query) entityManager.createQuery(
                 "SELECT " +
                         "m.mediaType, " +
-                        "m.url " +
-                    "FROM Post p " +
+                        "m.url, " +
+                        "m.user.userId " +
+                        "FROM Post p " +
                         "LEFT JOIN p.media m " +
-                    "WHERE p.id = :paramId")
+                        "WHERE p.id = :paramId")
                 .setParameter("paramId", id);
         return queryMediasForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
@@ -317,7 +320,8 @@ public class PostDtoDaoImpl implements PostDtoDao {
             public Object transformTuple(Object[] objects, String[] strings) {
                 return MediaPostDto.builder()
                         .url((String) objects[1])
-                        .mediaType(objects[0] == null ? "null" : objects[0].toString())
+                        .mediaType(objects[0] == null ? null : objects[0].toString())
+                        .userId((Long) objects[2])
                         .build();
             }
 
@@ -335,9 +339,9 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "SELECT " +
                         "t.text, " +
                         "t.id " +
-                    "FROM Post p " +
+                        "FROM Post p " +
                         "LEFT JOIN p.tags t " +
-                    "WHERE p.id = :paramId")
+                        "WHERE p.id = :paramId")
                 .setParameter("paramId", id);
         return queryTagsForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
