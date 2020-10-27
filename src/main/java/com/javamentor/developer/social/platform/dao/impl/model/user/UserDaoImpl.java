@@ -6,8 +6,10 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserDao {
@@ -21,9 +23,13 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
     }
 
     @Override
-    public User getByEmail(String email) {
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
-                .setParameter("email", email).getSingleResult();
+    public Optional<User> getByEmail(String email) {
+        try {
+            return Optional.of(entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                    .setParameter("email", email).getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
