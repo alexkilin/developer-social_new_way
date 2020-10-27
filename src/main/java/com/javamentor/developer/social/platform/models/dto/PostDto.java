@@ -9,6 +9,7 @@ import org.hibernate.annotations.Formula;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,10 +28,12 @@ public class PostDto {
     private Long id;
 
     @NotNull
+    @Size(groups = OnCreate.class, max = 50, message = "Значение поля title не может превышать 50 символов")
     @ApiModelProperty(notes = "Заголовок новости, поле не должно быть пустым")
     private String title;
 
     @NotNull
+    @Size(groups = OnCreate.class, max = 1000, message = "Значение поля text не может превышать 1000 символов")
     @ApiModelProperty(notes = "Текст новости, поле не должно быть пустым")
     private String text;
 
