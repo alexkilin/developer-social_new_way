@@ -119,6 +119,9 @@ public class GroupControllerV2 {
                                                 @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
                 buildAndExpand().toUri();
+        if (!userService.existById(userId)) {
+            return ResponseEntity.badRequest().body(String.format("User with id = %s is not exist", userId));
+        }
         if (groupHasUserService.verificationUserInGroup(groupId,userId)) {
             String msg = String.format("Пользователь с id: %d уже есть в группе с id: %s", userId, groupId);
             return ResponseEntity.badRequest().body(msg);

@@ -7,21 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Repository
 public class PostDaoImpl extends GenericDaoAbstract<Post, Long> implements PostDao {
 
-    private final EntityManager entityManager;
-
-    @Autowired
-    public PostDaoImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     @Override
-    public void deleteByPostId(Long id) {
+    public void deletePostFromUserWallById(Long id) {
 
-        entityManager.createNativeQuery("delete from user_tabs as ut where ut.post_id = :id")
+        entityManager.createQuery("DELETE FROM UserTabs WHERE id = :id")
                 .setParameter("id", id)
                 .executeUpdate();
     }
