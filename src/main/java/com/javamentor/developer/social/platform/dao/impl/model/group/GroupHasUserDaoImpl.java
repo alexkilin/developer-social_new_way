@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 @Repository
 public class GroupHasUserDaoImpl extends GenericDaoAbstract<GroupHasUser, Long> implements GroupHasUserDao {
@@ -17,7 +18,7 @@ public class GroupHasUserDaoImpl extends GenericDaoAbstract<GroupHasUser, Long> 
 
     @Override
     public boolean verificationUserInGroup(Long groupId, Long userId) {
-        Query queryVerifyUserInGroup = (Query) entityManager.createQuery(
+        TypedQuery<Boolean> queryVerifyUserInGroup = (Query) entityManager.createQuery(
                 "SELECT " +
                         "CASE WHEN COUNT(ghu)>0 THEN true ELSE false END " +
                     "FROM GroupHasUser ghu " +
