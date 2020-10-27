@@ -17,5 +17,5 @@ public interface GroupDtoDao {
 
     Optional<GroupDto> getGroupByName(String name);
 
-    List<UserDto> getUsersFromTheGroup(Long id);
+    List<UserDto> getUsersFromTheGroup(Long id, int page, int size);
 }

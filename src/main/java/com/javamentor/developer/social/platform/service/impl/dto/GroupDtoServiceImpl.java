@@ -52,7 +52,7 @@ public class GroupDtoServiceImpl implements GroupDtoService {
     }
 
     @Override
-    public List<UserDto> getUsersFromTheGroup(Long id) {
-        return groupDtoDao.getUsersFromTheGroup(id);
+    public List<UserDto> getUsersFromTheGroup(Long id, int page, int size) {
+        return groupDtoDao.getUsersFromTheGroup(id, page, size);
     }
 }

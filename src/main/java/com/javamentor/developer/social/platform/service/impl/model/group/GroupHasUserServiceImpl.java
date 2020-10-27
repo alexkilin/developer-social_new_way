@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.model.group;
 
 import com.javamentor.developer.social.platform.dao.abstracts.model.group.GroupHasUserDao;
+import com.javamentor.developer.social.platform.models.dto.group.GroupHasUserInfoDto;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -44,4 +45,13 @@ public class GroupHasUserServiceImpl extends GenericServiceAbstract<GroupHasUser
     public void deleteUserById(Long groupId, Long userId) {
         groupHasUserDAO.deleteUserById(groupId, userId);
     }
+
+    @Override
+    public GroupHasUserInfoDto returnGroupHasUserInfoDto(Long groupId, boolean groupHasUser) {
+        return GroupHasUserInfoDto.builder()
+                .id(groupId)
+                .groupHasUser(groupHasUser)
+                .build();
+    }
+
 }
