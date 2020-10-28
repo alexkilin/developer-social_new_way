@@ -2,20 +2,22 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
+import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
+import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class GroupDtoDaoImpl implements GroupDtoDao {
@@ -120,10 +122,18 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "(SELECT COUNT(pc) FROM PostComment pc WHERE p.id = pc.post.id), " +
                         "(SELECT COUNT(pl) FROM PostLike pl WHERE p.id = pl.post.id), " +
                         "(SELECT COUNT(bm) FROM Bookmark bm WHERE bm.post.id = p.id), " +
-                        "(SELECT COUNT(rp) FROM p.repostPerson rp) " +
-                    "FROM Group g " +
+                        "(SELECT COUNT(rp) FROM p.repostPerson rp), " +
+                        "m.mediaType, " +
+                        "m.url, " +
+                        "t.id," +
+                        "t.text, " +
+                        "u.userId " +
+                        "FROM Group g " +
                         "LEFT JOIN g.posts p " +
-                    "WHERE g.id = :paramId")
+                        "LEFT JOIN p.user u " +
+                        "LEFT JOIN p.media m " +
+                        "LEFT JOIN p.tags t " +
+                        "WHERE g.id = :paramId")
                 .setParameter("paramId", id)
                 .setFirstResult((page - 1) * size)
                 .setMaxResults(size);
@@ -131,6 +141,21 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
 
             @Override
             public Object transformTuple(Object[] objects, String[] strings) {
+                MediaPostDto mediaPostDto = MediaPostDto.builder()
+                        .userId((Long) objects[13])
+                        .mediaType(objects[9] == null ? "null" : objects[9].toString())
+                        .url((String) objects[10])
+                        .build();
+                List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
+                mediaPostDtoList.add(mediaPostDto);
+
+                TagDto tagDto = TagDto.builder()
+                        .id(objects[11] == null ? 0 : (Long) objects[11])
+                        .text(objects[12] == null ? "null" : (String) objects[12])
+                        .build();
+                List<TagDto> tagDtoList = new ArrayList<>();
+                tagDtoList.add(tagDto);
+
                 return GroupWallDto.builder()
                         .countComments((Long) objects[5])
                         .id((Long) objects[0])
@@ -141,15 +166,48 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .countLikes((Long) objects[6])
                         .countBookmarks((Long) objects[7])
                         .countReposts((Long) objects[8])
+                        .media(mediaPostDtoList)
+                        .tags(tagDtoList)
                         .build();
             }
 
             @Override
             public List transformList(List list) {
-                return list;
+                Map<Long, GroupWallDto> groupWallDtoMap = new TreeMap<>();
+                Map<Long, List<MediaPostDto>> mediaPostDtoMap = new TreeMap<>();
+                Map<Long, List<TagDto>> tagDtoMap = new TreeMap<>();
+
+                for (Object obj : list) {
+                    GroupWallDto groupWallDto = (GroupWallDto) obj;
+                    Long groupWallDtoId = groupWallDto.getId();
+
+                    if (groupWallDto.getMedia().get(0).getMediaType().equals("null")) {
+                        groupWallDto.setMedia(null);
+                    }
+
+                    List<MediaPostDto> mediaPostDtoList
+                            = mediaPostDtoMap.put(groupWallDtoId, groupWallDto.getMedia());
+                    if (mediaPostDtoList != null) {
+                        mediaPostDtoList.addAll(groupWallDto.getMedia());
+                        mediaPostDtoMap.put(groupWallDtoId, mediaPostDtoList);
+                    }
+                    groupWallDto.setMedia(mediaPostDtoMap.get(groupWallDtoId));
+
+                    List<TagDto> tagDtoList = tagDtoMap.put(groupWallDtoId, groupWallDto.getTags());
+                    if (tagDtoList != null) {
+                        tagDtoList.removeAll(groupWallDto.getTags());
+                        tagDtoList.addAll(groupWallDto.getTags());
+                        tagDtoMap.put(groupWallDtoId, tagDtoList);
+                    }
+                    groupWallDto.setTags(tagDtoMap.get(groupWallDtoId));
+
+                    groupWallDtoMap.put(groupWallDtoId, groupWallDto);
+                }
+                return new ArrayList<>(groupWallDtoMap.values());
             }
         }).getResultList();
     }
+
 
     @Override
     public Optional<GroupDto> getGroupByName(String name) {
@@ -247,5 +305,17 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         return list;
                     }
                 }).getResultList();
+    }
+
+    public  Map<String, Integer> aliasToIndexMap(
+            String[] aliases) {
+
+        Map<String, Integer> aliasToIndexMap = new LinkedHashMap<>();
+
+        for (int i = 0; i < aliases.length; i++) {
+            aliasToIndexMap.put(aliases[i], i);
+        }
+
+        return aliasToIndexMap;
     }
 }
