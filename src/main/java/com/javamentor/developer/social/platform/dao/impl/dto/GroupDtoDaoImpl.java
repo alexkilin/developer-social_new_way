@@ -147,14 +147,18 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         .url((String) objects[10])
                         .build();
                 List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
-                mediaPostDtoList.add(mediaPostDto);
+                if (!mediaPostDto.getMediaType().equals("null")) {
+                    mediaPostDtoList.add(mediaPostDto);
+                }
 
                 TagDto tagDto = TagDto.builder()
                         .id(objects[11] == null ? 0 : (Long) objects[11])
                         .text(objects[12] == null ? "null" : (String) objects[12])
                         .build();
                 List<TagDto> tagDtoList = new ArrayList<>();
-                tagDtoList.add(tagDto);
+                if (!tagDto.getText().equals("null")) {
+                    tagDtoList.add(tagDto);
+                }
 
                 return GroupWallDto.builder()
                         .countComments((Long) objects[5])
@@ -180,10 +184,6 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                 for (Object obj : list) {
                     GroupWallDto groupWallDto = (GroupWallDto) obj;
                     Long groupWallDtoId = groupWallDto.getId();
-
-                    if (groupWallDto.getMedia().get(0).getMediaType().equals("null")) {
-                        groupWallDto.setMedia(null);
-                    }
 
                     List<MediaPostDto> mediaPostDtoList
                             = mediaPostDtoMap.put(groupWallDtoId, groupWallDto.getMedia());
