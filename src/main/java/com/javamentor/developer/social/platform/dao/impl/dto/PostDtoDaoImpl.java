@@ -305,7 +305,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<MediaPostDto> getMediasByPostId(Long id) {
-        Query<MediaPostDto> queryMediasForPost = (Query) entityManager.createQuery(
+        Query queryMediasForPost = (Query) entityManager.createQuery(
                 "SELECT " +
                         "m.mediaType, " +
                         "m.url, " +
