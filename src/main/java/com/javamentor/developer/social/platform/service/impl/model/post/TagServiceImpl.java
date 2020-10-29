@@ -12,8 +12,16 @@ import java.util.Optional;
 @Service
 public class TagServiceImpl extends GenericServiceAbstract<Tag, Long> implements TagService {
 
+    private final TagDao dao;
+
     @Autowired
     public TagServiceImpl(TagDao dao) {
         super(dao);
+        this.dao = dao;
+    }
+
+    @Override
+    public Optional<Tag> getTagByText(String text) {
+        return this.dao.getTagByText(text);
     }
 }

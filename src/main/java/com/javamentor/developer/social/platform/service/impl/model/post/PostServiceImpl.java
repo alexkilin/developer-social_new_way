@@ -50,6 +50,26 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
                 }
             }
         }
+
+        if (entity.getTags() != null) {
+            Set<Tag> tagSet = new HashSet<>();
+
+            for (Tag tag : entity.getTags()) {
+                tag.setText(tag.getText().toLowerCase());
+                Optional<Tag> tagFromDB = tagService.getTagByText(tag.getText());
+
+                if (!tagFromDB.isPresent()) {
+                    tagService.create(tag);
+                    tagSet.add(tag);
+                } else {
+                    tagSet.add(tagFromDB.get());
+                }
+            }
+
+            entity.setTags(tagSet);
+        }
+
+
         Optional<User> userOptional = userService.getById(entity.getUser().getUserId());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
