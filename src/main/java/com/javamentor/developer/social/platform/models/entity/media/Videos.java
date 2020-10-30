@@ -27,6 +27,13 @@ public class Videos {
         media.setUrl(icon);
     }
 
+    public Videos(User user, String icon, String name, String author) {
+        media.setUser(user);
+        media.setUrl(icon);
+        this.name = name;
+        this.author = author;
+    }
+
     @Id
     private Long id;
 
@@ -39,6 +46,9 @@ public class Videos {
 
     @Column(name = "icon")
     private String icon;
+
+    @Column(name = "author")
+    private String author;
 
     @PrePersist
     private void prePersistFunction() {
