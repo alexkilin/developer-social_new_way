@@ -37,13 +37,7 @@ public class GroupDtoServiceImpl implements GroupDtoService {
 
     @Override
     public List<GroupWallDto> getPostsByGroupId(Long id, int page, int size) {
-        List<GroupWallDto> groupWallDtoList = groupDtoDao.getPostsByGroupId(id, page, size);
-
-        for (GroupWallDto element : groupWallDtoList) {
-            element.setMedia(postDtoDao.getMediasByPostId(element.getId()));
-            element.setTags(postDtoDao.getTagsByPostId(element.getId()));
-        }
-        return groupWallDtoList;
+        return groupDtoDao.getPostsByGroupId(id, page, size);
     }
 
     @Override
