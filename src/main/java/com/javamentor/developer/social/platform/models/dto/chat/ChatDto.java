@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.models.dto.chat;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 

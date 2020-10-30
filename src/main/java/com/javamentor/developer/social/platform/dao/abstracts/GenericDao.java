@@ -1,7 +1,5 @@
 package com.javamentor.developer.social.platform.dao.abstracts;
 
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;

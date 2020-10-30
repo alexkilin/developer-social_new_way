@@ -9,7 +9,6 @@ import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

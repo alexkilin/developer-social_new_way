@@ -1,10 +1,5 @@
 package com.javamentor.developer.social.platform.models.entity.like;
 
-import com.javamentor.developer.social.platform.models.entity.chat.Message;
-import com.javamentor.developer.social.platform.models.entity.comment.Comment;
-import com.javamentor.developer.social.platform.models.entity.media.Media;
-import com.javamentor.developer.social.platform.models.entity.post.Post;
-import com.javamentor.developer.social.platform.models.entity.user.Active;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 

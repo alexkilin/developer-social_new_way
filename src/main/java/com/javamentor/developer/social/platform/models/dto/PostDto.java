@@ -4,7 +4,6 @@ import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.hibernate.annotations.Formula;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

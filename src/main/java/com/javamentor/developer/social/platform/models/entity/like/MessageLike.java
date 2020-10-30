@@ -2,7 +2,6 @@ package com.javamentor.developer.social.platform.models.entity.like;
 
 import com.javamentor.developer.social.platform.exception.ApiRequestException;
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
-import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 
