@@ -37,7 +37,7 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     }
 
     @Override
-    public User getByEmail(String email) {
+    public Optional<User> getByEmail(String email) {
         return userDAO.getByEmail(email);
     }
 

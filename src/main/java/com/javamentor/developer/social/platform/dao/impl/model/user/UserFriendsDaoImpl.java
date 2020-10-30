@@ -20,7 +20,8 @@ public class UserFriendsDaoImpl extends GenericDaoAbstract<Friend, Long> impleme
     public List<Friend> getUserFriendsById(Long id) {
         return entityManager.createQuery("select f.id, f.user, f.friend " +
                 "from Friend f " +
-                "where f.user.userId = " + id)
+                "where f.user.userId =:paramId")
+                .setParameter("paramId", id)
                 .getResultList();
     }
 }

@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.service.abstracts.model.group;
 
+import com.javamentor.developer.social.platform.models.dto.group.GroupHasUserInfoDto;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -12,4 +13,6 @@ public interface GroupHasUserService extends GenericService<GroupHasUser, Long> 
     boolean verificationUserInGroup(Long groupId, Long userId);
 
     void deleteUserById(Long groupId, Long userId);
+
+    GroupHasUserInfoDto returnGroupHasUserInfoDto(Long groupId, boolean groupHasUser);
 }

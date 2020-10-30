@@ -69,7 +69,9 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     }
 
                     @Override
-                    public List transformList(List list) { return list; }
+                    public List transformList(List list) {
+                        return list;
+                    }
                 })
                 .getResultList();
         return postDtoList;
@@ -169,6 +171,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "u.avatar, " +
                 "m.mediaType, " +
                 "m.url, " +
+                "m.user.userId," +
                 "t.id," +
                 "t.text, " +
                 "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +
@@ -177,7 +180,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "p.repostPerson.size " +
                 "from Post as p " +
                 "join p.user as u " +
-                "join p.media as m " +
+                "left join p.media as m " +
                 "left join p.tags as t " +
                 "where u.userId = :userId")
                 .setParameter("userId", id)
@@ -185,19 +188,31 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 .setResultTransformer(new ResultTransformer() {
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
-                        MediaPostDto mediaPostDto = MediaPostDto.builder()
-                                .userId((Long) objects[5])
-                                .mediaType(objects[9] == null ? "null" : objects[9].toString())
-                                .url((String) objects[10])
-                                .build();
                         List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
+                        MediaPostDto mediaPostDto = null;
+
+                        if (objects[9] != null || objects[10] != null || objects[11] != null) {
+                            mediaPostDto = MediaPostDto.builder()
+                                    .userId(objects[11] == null ? 0 : (Long) objects[11])
+                                    .mediaType(objects[9] == null ? "null" : objects[9].toString())
+                                    .url(objects[10] == null ? "null" : objects[10].toString())
+                                    .build();
+                        }
+
                         mediaPostDtoList.add(mediaPostDto);
-                        TagDto tagDto = TagDto.builder()
-                                .id(objects[11] == null ? 0 : (Long) objects[11])
-                                .text(objects[12] == null ? "null" : (String) objects[12])
-                                .build();
+
                         List<TagDto> tagDtoList = new ArrayList<>();
+                        TagDto tagDto = null;
+
+                        if (objects[12] != null || objects[13] != null) {
+                            tagDto = TagDto.builder()
+                                    .id(objects[12] == null ? 0 : (Long) objects[12])
+                                    .text(objects[13] == null ? "null" : (String) objects[13])
+                                    .build();
+                        }
+
                         tagDtoList.add(tagDto);
+
                         return PostDto.builder()
                                 .id((Long) objects[0])
                                 .title((String) objects[1])
@@ -210,10 +225,10 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                 .tags(tagDtoList)
                                 .persistDate((LocalDateTime) objects[3])
                                 .lastRedactionDate((LocalDateTime) objects[4])
-                                .bookmarkAmount((Long) objects[13])
-                                .likeAmount((Long) objects[14])
-                                .commentAmount((Long) objects[15])
-                                .shareAmount(Long.valueOf((Integer) objects[16]))
+                                .bookmarkAmount((Long) objects[14])
+                                .likeAmount((Long) objects[15])
+                                .commentAmount((Long) objects[16])
+                                .shareAmount(Long.valueOf((Integer) objects[17]))
                                 .build();
                     }
 
@@ -232,6 +247,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     }
                 })
                 .getResultList();
+
         return postDtoList;
     }
 
@@ -248,10 +264,10 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         "(SELECT u.firstName FROM User u WHERE c.user.userId = u.userId), " +
                         "(SELECT u.userId FROM User u WHERE c.user.userId = u.userId)," +
                         "(SELECT u.avatar FROM User u WHERE c.user.userId = u.userId)" +
-                    "FROM Post p " +
+                        "FROM Post p " +
                         "LEFT JOIN PostComment pc on p.id = pc.post.id " +
                         "LEFT JOIN Comment c on pc.comment.id = c.id " +
-                    "WHERE p.id = :paramId")
+                        "WHERE p.id = :paramId")
                 .setParameter("paramId", id);
         return queryCommentsForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
@@ -292,10 +308,11 @@ public class PostDtoDaoImpl implements PostDtoDao {
         Query queryMediasForPost = (Query) entityManager.createQuery(
                 "SELECT " +
                         "m.mediaType, " +
-                        "m.url " +
-                    "FROM Post p " +
+                        "m.url, " +
+                        "m.user.userId " +
+                        "FROM Post p " +
                         "LEFT JOIN p.media m " +
-                    "WHERE p.id = :paramId")
+                        "WHERE p.id = :paramId")
                 .setParameter("paramId", id);
         return queryMediasForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
@@ -303,7 +320,8 @@ public class PostDtoDaoImpl implements PostDtoDao {
             public Object transformTuple(Object[] objects, String[] strings) {
                 return MediaPostDto.builder()
                         .url((String) objects[1])
-                        .mediaType(objects[0].toString())
+                        .mediaType(objects[0] == null ? null : objects[0].toString())
+                        .userId((Long) objects[2])
                         .build();
             }
 
@@ -321,9 +339,9 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "SELECT " +
                         "t.text, " +
                         "t.id " +
-                    "FROM Post p " +
+                        "FROM Post p " +
                         "LEFT JOIN p.tags t " +
-                    "WHERE p.id = :paramId")
+                        "WHERE p.id = :paramId")
                 .setParameter("paramId", id);
         return queryTagsForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 

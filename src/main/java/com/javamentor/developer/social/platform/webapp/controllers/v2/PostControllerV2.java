@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
+import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
@@ -85,8 +86,8 @@ public class PostControllerV2 {
     })
     @PostMapping("")
     @Validated(OnCreate.class)
-    public ResponseEntity<PostDto> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostDto postDto) {
-        Post post = postConverter.toEntity(postDto);
+    public ResponseEntity<PostDto> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostCreateDto postCreateDto) {
+        Post post = postConverter.toEntity(postCreateDto);
         postService.create(post);
         return ResponseEntity.ok().body(postConverter.toDto(post));
     }

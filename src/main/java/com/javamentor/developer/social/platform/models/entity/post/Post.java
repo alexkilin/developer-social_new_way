@@ -26,12 +26,12 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(length = 50)
     @NotNull
     private String title;
 
     @NotNull
-    @Column
+    @Column(length = 1000)
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

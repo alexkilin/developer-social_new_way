@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
+import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
@@ -39,5 +40,16 @@ public abstract class PostConverter {
             @Mapping(target = "user.userId",source = "userId")
     })
     public abstract Media toEntityMedia(MediaPostDto mediaPostDto);
+
+    @Mappings({
+            @Mapping(target = "userId",source = "user.userId")
+    })
+    public abstract MediaPostDto toMediaPostDto(Media media);
+
+    @Mappings({
+            @Mapping(target = "media", source = "media"),
+            @Mapping(target = "user.userId", source = "userId"),
+    })
+    public abstract Post toEntity(PostCreateDto postCreateDto);
 
 }

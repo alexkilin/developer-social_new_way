@@ -22,5 +22,4 @@ public interface GenericService<T, PK> {
 
     boolean existById(PK id);
 
-
 }

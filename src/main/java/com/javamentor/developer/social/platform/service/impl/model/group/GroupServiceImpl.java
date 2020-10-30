@@ -6,15 +6,30 @@ import com.javamentor.developer.social.platform.service.abstracts.model.group.Gr
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class GroupServiceImpl extends GenericServiceAbstract<Group, Long> implements GroupService {
 
+    private final GroupDao groupDao;
 
     @Autowired
-    public GroupServiceImpl(GroupDao dao) {
-        super(dao);
+    public GroupServiceImpl(GroupDao groupDao) {
+        super(groupDao);
+        this.groupDao = groupDao;
     }
 
-
+    @Transactional
+    public void updateInfo(Group group) {
+        Optional<Group> groupOld = groupDao.getById(group.getId());
+        if (groupOld.isPresent()) {
+            group.setPersistDate(groupOld.get().getPersistDate());
+            group.setLastRedactionDate(groupOld.get().getLastRedactionDate());
+            group.setPosts(groupOld.get().getPosts());
+            group.setOwner(groupOld.get().getOwner());
+            groupDao.update(group);
+        }
+    }
 }

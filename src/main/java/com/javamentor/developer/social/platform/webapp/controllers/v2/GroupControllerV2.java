@@ -1,15 +1,14 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.UserDto;
-import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
-import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
-import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
+import com.javamentor.developer.social.platform.models.dto.group.*;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupHasUserService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.webapp.converters.GroupConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -31,13 +31,15 @@ public class GroupControllerV2 {
     private final GroupHasUserService groupHasUserService;
     private final UserService userService;
     private final GroupService groupService;
+    private final GroupConverter groupConverter;
 
     @Autowired
-    public GroupControllerV2(GroupDtoService groupDtoService, GroupHasUserService groupHasUserService, UserService userService, GroupService groupService) {
+    public GroupControllerV2(GroupDtoService groupDtoService, GroupHasUserService groupHasUserService, UserService userService, GroupService groupService, GroupConverter groupConverter) {
         this.groupDtoService = groupDtoService;
         this.groupHasUserService = groupHasUserService;
         this.userService = userService;
         this.groupService = groupService;
+        this.groupConverter = groupConverter;
     }
 
     @ApiOperation(value = "Получение информации обо всех группах")
@@ -95,13 +97,15 @@ public class GroupControllerV2 {
             @ApiResponse(code = 200, message = "Юзеры группы получены", responseContainer = "List", response = UserDto.class),
             @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
     })
-    @GetMapping(value = "/{groupId}/users")
-    public ResponseEntity<?> getUsersFromTheGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long groupId) {
+    @GetMapping(value = "/{groupId}/users", params = {"page", "size"})
+    public ResponseEntity<?> getUsersFromTheGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long groupId,
+                                                  @ApiParam(value = "Текущая страница", example = "0") @RequestParam("page") int page,
+                                                  @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
         Optional<GroupDto> groupDtoOptional = groupDtoService.getGroupById(groupId);
         if (!groupDtoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Group id %s not found", groupId));
         }
-        return ResponseEntity.ok(groupDtoService.getUsersFromTheGroup(groupId));
+        return ResponseEntity.ok(groupDtoService.getUsersFromTheGroup(groupId, page, size));
     }
 
     @ApiOperation(value = "Вступление в группу пользователя")
@@ -115,6 +119,9 @@ public class GroupControllerV2 {
                                                 @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
                 buildAndExpand().toUri();
+        if (!userService.existById(userId)) {
+            return ResponseEntity.badRequest().body(String.format("User with id = %s is not exist", userId));
+        }
         if (groupHasUserService.verificationUserInGroup(groupId,userId)) {
             String msg = String.format("Пользователь с id: %d уже есть в группе с id: %s", userId, groupId);
             return ResponseEntity.badRequest().body(msg);
@@ -129,6 +136,23 @@ public class GroupControllerV2 {
             //String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @ApiOperation(value = "Есть ли пользователь в группе")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Поиск пользователя в группе", response = GroupHasUserInfoDto.class),
+            @ApiResponse(code = 404, message = "Пользователь и/или группа не найдены", response = String.class)
+    })
+    @GetMapping(value = "/{groupId}/users", params = "userId")
+    public ResponseEntity<?> groupHasUser(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
+                                           @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
+                buildAndExpand().toUri();
+        if (!(userService.existById(userId) & groupService.existById(groupId))) {
+            String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(msg);
+        }
+        return ResponseEntity.ok(groupHasUserService.returnGroupHasUserInfoDto(groupId, groupHasUserService.verificationUserInGroup(groupId,userId)));
     }
 
     @ApiOperation(value = "Удаление пользователя из группы")
@@ -146,5 +170,20 @@ public class GroupControllerV2 {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @ApiOperation(value = "Изменение группы")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Группа изменена", response = GroupDto.class),
+            @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
+    })
+    @PutMapping(value = "/update")
+    public ResponseEntity<?> updateGroup(@ApiParam(value = "Группа с обновленными данными") @Valid @RequestBody GroupUpdateInfoDto groupUpdateInfoDto) {
+        if (!groupService.getById(groupUpdateInfoDto.getId()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Группа с id %s не найдена", groupUpdateInfoDto.getId()));
+        }
+        Group group = groupConverter.groupUpdateInfoDtoToGroup(groupUpdateInfoDto);
+        groupService.updateInfo(group);
+        return ResponseEntity.ok(groupConverter.groupToGroupDto(group));
     }
 }
