@@ -21,16 +21,18 @@ public class UserDtoServiceImpl implements UserDtoService {
     }
 
     @Override
-    public List<UserDto> getAllUserDto() {  //getAllUserDto
+    public List<UserDto> getAllUserDto() {
         return userDtoDao.getUserDtoList();
     }
 
     @Override
     public Optional<UserDto> getUserDtoById(Long id) {
         Optional<UserDto> userDto = userDtoDao.getUserDtoById(id);
-       List<LanguageDto>  langueges = userDtoDao.getUserLanguageDtoById(id);
-        userDto.get().setLanguages( langueges);
-        return userDto;
+        if (userDto.isPresent()) {
+            List<LanguageDto> languages = userDtoDao.getUserLanguageDtoById(id);
+            userDto.get().setLanguages(languages);
+        }
 
+        return userDto;
     }
 }
