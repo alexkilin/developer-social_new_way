@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -106,7 +105,7 @@ public class UserControllerV2 {
         if (userService.existById(userUpdateInfoDto.getUserId())) {
             if (userService.existsAnotherByEmail(userUpdateInfoDto.getEmail(), userUpdateInfoDto.getUserId())) {
                 logger.info(String.format("Пользователь с email: %s уже существует", userUpdateInfoDto.getEmail()));
-                return ResponseEntity.status(400).body(String.format("User with email: %s already exist. Email should be unique", userUpdateInfoDto.getEmail()));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("User with email: %s already exist. Email should be unique", userUpdateInfoDto.getEmail()));
             }
             User user = userConverter.toEntity(userUpdateInfoDto);
             userService.updateInfo(user);
@@ -114,7 +113,7 @@ public class UserControllerV2 {
             return ResponseEntity.ok(userConverter.toDto(user));
         } else {
             logger.info(String.format("Пользователь с ID: %d не существует", userUpdateInfoDto.getUserId()));
-            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", userUpdateInfoDto.getUserId()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userUpdateInfoDto.getUserId()));
         }
     }
 

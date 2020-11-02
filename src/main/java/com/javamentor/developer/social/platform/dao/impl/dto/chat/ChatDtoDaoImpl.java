@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.List;
 
 @Repository
 public class ChatDtoDaoImpl implements ChatDtoDao {

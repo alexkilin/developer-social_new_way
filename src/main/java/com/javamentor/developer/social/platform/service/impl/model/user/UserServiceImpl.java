@@ -74,14 +74,19 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     @Transactional
     public void updateInfo(User user) {
         Optional<User> userOld = userDAO.getById(user.getUserId());
-        if (userOld.isPresent()) {
-            user.setPassword(userOld.get().getPassword());
-            user.setRole(userOld.get().getRole());
-            user.setActive(userOld.get().getActive());
-            user.setIsEnable(userOld.get().getIsEnable());
-            userDAO.update(user);
-        }
+       userDAO.updateInfo(user);
+        user.setPassword(userOld.get().getPassword());
+        user.setRole(userOld.get().getRole());
+        user.setActive(userOld.get().getActive());
+        user.setIsEnable(userOld.get().getIsEnable());
+        user.setLanguages(userOld.get().getLanguages());
+        user.setPersistDate(userOld.get().getPersistDate());
+        user.setLastRedactionDate(userOld.get().getLastRedactionDate());
+        user.setStatus(userOld.get().getStatus());
+        userDAO.update(user);
     }
+
+
 
     @Override
     public User getPrincipal() {
@@ -89,7 +94,7 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
                 "My description about life - User61", "www.myavatar61.ru/9090", "user61@user.ru", "userpass61",
                 null,
                 LocalDateTime.of(2020, 10, 18, 21, 35, 58, 32),
-                LocalDateTime.of( 2020, 10, 18, 21, 35, 58),
+                LocalDateTime.of(2020, 10, 18, 21, 35, 58),
                 true, "SPb", "www.mysite.ru", new Role(2L, "USER", new HashSet<User>()),
                 "free", new Active(2L, "DISABLED", new HashSet<User>()), null, null, null, null);
     }

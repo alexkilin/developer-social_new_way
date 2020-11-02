@@ -2,7 +2,6 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserFriendsDtoDao;
 import com.javamentor.developer.social.platform.models.dto.FriendDto;
-import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;

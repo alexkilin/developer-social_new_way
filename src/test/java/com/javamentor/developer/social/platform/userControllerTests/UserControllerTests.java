@@ -46,7 +46,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     void findUserById() throws Exception {
-        mockMvc.perform(get("/api/user/{id}", 6L))
+        mockMvc.perform(get("/api/v2/users/{id}", 6L))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -80,10 +80,10 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     void updateUser() throws Exception {
-        this.mockMvc.perform(put("/api/user/update")
+        this.mockMvc.perform(put("/api/v2/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
-                        "\"userId\": \"5\"," +
+                        "\"userId\": \"6\"," +
                         "\"firstName\": \"Update\"," +
                         "\"lastName\": \"LastName\"," +
                         "\"dateOfBirth\": \"02.05.1994\"," +
@@ -91,22 +91,23 @@ public class UserControllerTests extends AbstractIntegrationTest {
                         "\"aboutMe\": \"Some new information\"," +
                         "\"avatar\": \"www\"," +
                         "\"email\": \"Update@email.com\"," +
-                        "\"password\": \"Qwerty123\"," +
                         "\"city\": \"Msc\"," +
                         "\"linkSite\": \"myNewSite.ru\"," +
+                        "\"profession\": \"Gamer\"," +
                         "\"status\": \"Pureness and perfection\"," +
                         "\"activeName\": \"ACTIVE\"" +
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value("5"))
+                .andExpect(jsonPath("$.userId").value("6"))
                 .andExpect(jsonPath("$.firstName").value("Update"))
                 .andExpect(jsonPath("$.email").value("Update@email.com"))
-                .andExpect(jsonPath("$.city").value("SPb"))
-                .andExpect(jsonPath("$.profession").value("Plumber"))
+                .andExpect(jsonPath("$.city").value("Msc"))
+                .andExpect(jsonPath("$.profession").value("Gamer"))
                 .andExpect(jsonPath("$.activeName").value("ACTIVE"))
-                .andExpect(jsonPath("$.languages").value("Russian,English"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.languages",hasSize(2)));
+
     }
 
     @Test

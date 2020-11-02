@@ -1,13 +1,10 @@
 package com.javamentor.developer.social.platform.models.entity.media;
 
-import com.google.common.base.Objects;
 import com.javamentor.developer.social.platform.exception.ApiRequestException;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Getter

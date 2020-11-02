@@ -1,4 +1,5 @@
 package com.javamentor.developer.social.platform.webapp.converters;
+
 import com.javamentor.developer.social.platform.models.dto.ImageCreateDto;
 import com.javamentor.developer.social.platform.models.dto.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.media.Image;
@@ -10,9 +11,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 import javax.persistence.EntityNotFoundException;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 

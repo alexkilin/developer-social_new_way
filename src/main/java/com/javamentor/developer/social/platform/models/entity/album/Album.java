@@ -1,25 +1,20 @@
 package com.javamentor.developer.social.platform.models.entity.album;
 
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
 import com.javamentor.developer.social.platform.exception.ApiRequestException;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
