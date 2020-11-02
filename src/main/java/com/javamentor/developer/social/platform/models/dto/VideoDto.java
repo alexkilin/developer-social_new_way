@@ -36,6 +36,10 @@ public class VideoDto {
     @ApiModelProperty(notes = "Адрес иконки (превью) видео объекта", example = "/icons/132_1.jpg")
     private String icon;
 
+    @ApiModelProperty(notes = "Автор видео объекта",  example = "Netflix TV")
+    @NotNull(groups = {OnCreate.class}, message = "'author' Must not be null when creating VideoDto.class")
+    private String author;
+
     @ApiModelProperty(notes = "Дата публикования медиа объекта, назначается автоматически при создании", hidden = true, example = "2020-09-14T23:24:17.900994")
     private LocalDateTime persistDateTime;
 }

@@ -1,4 +1,5 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v1;
+
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
@@ -10,13 +11,14 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatD
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
-import com.javamentor.developer.social.platform.webapp.converters.GroupChatConverter;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.webapp.converters.GroupChatConverter;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;

@@ -3,24 +3,16 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
-import com.javamentor.developer.social.platform.models.dto.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
-import com.javamentor.developer.social.platform.models.entity.user.User;
-import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
-import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
+import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import org.hibernate.query.Query;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AudioDtoDaoImpl implements AudioDtoDao {

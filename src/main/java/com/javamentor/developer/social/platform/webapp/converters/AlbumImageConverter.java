@@ -12,7 +12,6 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Mapper(componentModel = "spring", imports = {MediaType.class})

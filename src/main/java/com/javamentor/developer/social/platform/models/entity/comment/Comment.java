@@ -1,10 +1,6 @@
 package com.javamentor.developer.social.platform.models.entity.comment;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.javamentor.developer.social.platform.models.entity.like.CommentLike;
-import com.javamentor.developer.social.platform.models.entity.media.Media;
-import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Getter

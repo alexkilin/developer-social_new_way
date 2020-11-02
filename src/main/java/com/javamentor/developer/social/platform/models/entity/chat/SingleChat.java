@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.models.entity.chat;
 
 import com.javamentor.developer.social.platform.models.entity.user.User;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;

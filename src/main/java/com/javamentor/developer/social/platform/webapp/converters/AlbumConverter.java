@@ -4,8 +4,8 @@ import com.javamentor.developer.social.platform.models.dto.AlbumCreateDto;
 import com.javamentor.developer.social.platform.models.dto.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.AlbumVideoDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
@@ -15,7 +15,6 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Mapper(componentModel = "spring", imports = {MediaType.class})
