@@ -12,7 +12,7 @@ public class VideoDtoServiceImpl implements VideoDtoService {
 
     private final VideoDtoDao videoDtoDao;
 
-    public VideoDtoServiceImpl(VideoDtoDao videoDtoDao){
+    public VideoDtoServiceImpl(VideoDtoDao videoDtoDao) {
         this.videoDtoDao = videoDtoDao;
     }
 
@@ -56,10 +56,6 @@ public class VideoDtoServiceImpl implements VideoDtoService {
         return videoDtoDao.getAlbumVideoOfUser(userId, album);
     }
 
-    @Override
-    public boolean addVideoInCollectionsOfUser(Long userId, Long videoId) {
-        return false;
-    }
 
     @Override
     public List<VideoDto> getVideoFromAlbumOfUser(Long albumId) {
