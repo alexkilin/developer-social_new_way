@@ -6,5 +6,5 @@ import com.javamentor.developer.social.platform.service.abstracts.GenericService
 
 public interface VideosService extends GenericService<Videos, Long> {
 
-    public boolean addVideoInCollectionsOfUser(User user, Long videoId);
+    public void addVideoInCollectionsOfUser(User user, Long videoId);
 }

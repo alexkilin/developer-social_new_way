@@ -8,6 +8,7 @@ import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,14 +24,13 @@ public class VideosServiceImpl extends GenericServiceAbstract<Videos, Long> impl
     }
 
     @Override
-    public boolean addVideoInCollectionsOfUser(User user, Long videoId) {
+    public void addVideoInCollectionsOfUser(User user, Long videoId) {
         Optional<Videos> video = videosDao.getById(videoId);
-        if(!video.isPresent()){
-            return false;
+        if (!video.isPresent()) {
+            throw new EntityNotFoundException(String.format("Видео с id %d не найдено", videoId));
         }
         Set<Videos> set = user.getVideos();
         set.add(video.get());
         user.setVideos(set);
-        return true;
     }
 }
