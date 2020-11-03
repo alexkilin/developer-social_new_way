@@ -13,7 +13,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.Set;
 
