@@ -23,7 +23,7 @@ public class VideoDtoServiceImpl implements VideoDtoService {
 
     @Override
     public List<VideoDto> getVideoOfAuthor(String author) {
-        return null;
+        return videoDtoDao.getVideoOfAuthor(author);
     }
 
     @Override
