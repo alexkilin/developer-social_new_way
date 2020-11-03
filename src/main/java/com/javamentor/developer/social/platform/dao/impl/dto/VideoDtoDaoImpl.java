@@ -18,8 +18,11 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
 
     @Override
     public List<VideoDto> getVideoOfAuthor(String author) {
-
-        return null;
+        return entityManager.createQuery(
+                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                        " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
+                        " FROM Videos as v JOIN Media as m ON v.media.id = m.id WHERE v.author = :author", VideoDto.class)
+                .setParameter("author", author).getResultList();
     }
 
     @Override
