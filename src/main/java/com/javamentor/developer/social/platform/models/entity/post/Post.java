@@ -1,6 +1,9 @@
 package com.javamentor.developer.social.platform.models.entity.post;
 
 
+import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
+import com.javamentor.developer.social.platform.models.entity.group.Group;
+import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
@@ -10,6 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -60,4 +64,22 @@ public class Post {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "reposts", joinColumns = @JoinColumn(name = "post_id"))
     private Set<User> repostPerson;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<Bookmark> bookmarks;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinTable(name = "group_wal", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Group group;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<PostComment> postComments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<UserTabs> userTabs;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "post_id")
+    private Set<PostLike> postLikes;
+
 }
