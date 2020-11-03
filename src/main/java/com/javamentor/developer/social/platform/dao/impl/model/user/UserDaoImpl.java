@@ -2,13 +2,14 @@ package com.javamentor.developer.social.platform.dao.impl.model.user;
 
 import com.javamentor.developer.social.platform.dao.abstracts.model.user.UserDao;
 import com.javamentor.developer.social.platform.dao.impl.GenericDaoAbstract;
+import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,12 +26,9 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
 
     @Override
     public Optional<User> getByEmail(String email) {
-        try {
-            return Optional.of(entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
-                    .setParameter("email", email).getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                .setParameter("email", email);
+        return SingleResultUtil.getSingleResultOrNull(query);
     }
 
     @Override
