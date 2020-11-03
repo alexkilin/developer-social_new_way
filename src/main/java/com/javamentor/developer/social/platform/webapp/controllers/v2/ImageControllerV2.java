@@ -203,9 +203,6 @@ public class ImageControllerV2 {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
         List<ImageDto> imageDtoList = imageDTOService.getAllByAlbumId(offset, limit, albumId);
-        if(imageDtoList.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s has no images", albumId));
-        }
         logger.info(String.format("Изображения из фотоальбома %s отправлены", albumId));
         return ResponseEntity.ok(imageDtoList);
     }
