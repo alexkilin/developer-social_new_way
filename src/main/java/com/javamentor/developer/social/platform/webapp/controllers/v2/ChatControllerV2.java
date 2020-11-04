@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Validated
@@ -95,13 +96,16 @@ public class ChatControllerV2 {
     public ResponseEntity<?> editGroupChatTitle(
             @ApiParam(value = "Объект чата") @RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto) {
         Long chatId = chatEditTitleDto.getId();
-        if (!groupChatService.existById(chatId)) {
+
+        Optional<GroupChat> result = groupChatService.getById(chatId);
+        if (Objects.nonNull(result) && result.isPresent()) {
+            GroupChat groupChat = result.get();
+            groupChat.setTitle(chatEditTitleDto.getTitle());
+            groupChatService.update(groupChat);
+            return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Chat id %s not found", chatId));
         }
-        GroupChat groupChat = groupChatService.getById(chatId).get();
-        groupChat.setTitle(chatEditTitleDto.getTitle());
-        groupChatService.update(groupChat);
-        return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
     }
 
     @DeleteMapping("/single-chats/{chatId}/user/{userId}")
