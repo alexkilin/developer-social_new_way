@@ -26,10 +26,9 @@ public class PostComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, optional = false)
     @MapsId
     private Comment comment = new Comment(CommentType.POST);
-
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

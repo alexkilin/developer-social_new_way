@@ -22,25 +22,6 @@ public class UserTabsDaoImpl extends GenericDaoAbstract<UserTabs, Long> implemen
 
     @Override
     public void deletePost(Post post) {
-        entityManager.createNativeQuery("delete from bookmarks where post_id = :id")
-                .setParameter("id", post.getId())
-                .executeUpdate();
-
-        entityManager.createNativeQuery("delete from group_wal where post_id = :id")
-                .setParameter("id", post.getId())
-                .executeUpdate();
-
-        entityManager.createNativeQuery("delete from post_comment where post_id = :id")
-                .setParameter("id", post.getId())
-                .executeUpdate();
-
-        entityManager.createNativeQuery("delete from post_like where post_id = :id")
-                .setParameter("id", post.getId())
-                .executeUpdate();
-
-        entityManager.createQuery("delete from UserTabs where post.id = :id")
-                .setParameter("id", post.getId())
-                .executeUpdate();
 
         entityManager.remove(post);
     }
