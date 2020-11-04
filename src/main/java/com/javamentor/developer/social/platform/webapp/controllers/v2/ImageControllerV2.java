@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -235,6 +236,7 @@ public class ImageControllerV2 {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
         List<AlbumDto> albumDtoList = albumDtoService.getAllByUserId(userId);
+        albumDtoList.removeIf(albumDto -> !albumDto.getName().equals("imageAlbum"));
         if(albumDtoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No albums for user id %s", userId));
         }
