@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -159,24 +160,24 @@ public class PostDtoDaoImpl implements PostDtoDao {
     @SuppressWarnings("unchecked")
     public List<PostDto> getPostsByUserId(Long id) {
         List<PostDto> postDtoList = entityManager.createQuery("select " +
-                "p.id, " +
-                "p.title, " +
-                "p.text, " +
-                "p.persistDate, " +
-                "p.lastRedactionDate, " +
-                "u.userId, " +
-                "u.firstName, " +
-                "u.lastName, " +
-                "u.avatar, " +
-                "m.mediaType, " +
-                "m.url, " +
-                "m.user.userId," +
-                "t.id," +
-                "t.text, " +
-                "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +
-                "(select count(l.id) from PostLike as l where l.post.id = p.id), " +
-                "(select count(c.id) from PostComment as c where c.post.id = p.id), " +
-                "p.repostPerson.size " +
+                "p.id, " +                      //0
+                "p.title, " +                   //1
+                "p.text, " +                    //2
+                "p.persistDate, " +             //3
+                "p.lastRedactionDate, " +       //4
+                "u.userId, " +                  //5
+                "u.firstName, " +               //6
+                "u.lastName, " +                //7
+                "u.avatar, " +                  //8
+                "m.mediaType, " +               //9
+                "m.url, " +                     //10
+                "m.user.userId," +              //11
+                "t.id," +                       //12
+                "t.text, " +                    //13
+                "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +     //14
+                "(select count(l.id) from PostLike as l where l.post.id = p.id), " +        //15
+                "(select count(c.id) from PostComment as c where c.post.id = p.id), " +     //16
+                "p.repostPerson.size " +        //17
                 "from Post as p " +
                 "join p.user as u " +
                 "left join p.media as m " +
@@ -197,20 +198,17 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                     .url(objects[10] == null ? "null" : objects[10].toString())
                                     .build();
                         }
-
                         mediaPostDtoList.add(mediaPostDto);
 
                         List<TagDto> tagDtoList = new ArrayList<>();
-                        TagDto tagDto = null;
 
                         if (objects[12] != null || objects[13] != null) {
-                            tagDto = TagDto.builder()
+                            TagDto tagDto = TagDto.builder()
                                     .id(objects[12] == null ? 0 : (Long) objects[12])
                                     .text(objects[13] == null ? "null" : (String) objects[13])
                                     .build();
+                            tagDtoList.add(tagDto);
                         }
-
-                        tagDtoList.add(tagDto);
 
                         return PostDto.builder()
                                 .id((Long) objects[0])
@@ -237,7 +235,13 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         for (Object obj : list) {
                             PostDto postDto = (PostDto) obj;
                             if (result.containsKey(postDto.getId())) {
-                                result.get(postDto.getId()).getMedia().addAll(postDto.getMedia());
+                                List <MediaPostDto> mediaDtoList = result.get(postDto.getId()).getMedia();
+                                mediaDtoList.removeAll(postDto.getMedia());
+                                mediaDtoList.addAll(postDto.getMedia());
+
+                                List <TagDto> tagDtoList = result.get(postDto.getId()).getTags();
+                                tagDtoList.removeAll(postDto.getTags());
+                                tagDtoList.addAll(postDto.getTags());
                             } else {
                                 result.put(postDto.getId(), postDto);
                             }
