@@ -11,8 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
@@ -62,26 +61,67 @@ public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
                 "p.name, " +
                 "p.image," +
                 "p.ownerUser.userId," +
-                "p.persistDateTime " +
+                "p.persistDateTime, " +
+                "c.id," +
+                "c.media.url," +
+                "c.icon," +
+                "c.name," +
+                "c.author," +
+                "c.album," +
+                "c.media.persistDateTime, " +
+                "c.length " +
                 "FROM Playlist as p " +
+                "LEFT JOIN p.playlistContent as c " +
                 "WHERE p.ownerUser.userId = :userId")
                 .setParameter("userId", userId)
                 .unwrap(Query.class)
                 .setResultTransformer(new ResultTransformer() {
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
+
+                        AudioDto audioDto = AudioDto.builder()
+                                .id((Long) objects[5])
+                                .url((String) objects[6])
+                                .icon((String) objects[7])
+                                .name((String) objects[8])
+                                .author((String) objects[9])
+                                .album((String) objects[10])
+                                .persistDateTime((LocalDateTime) objects[11])
+                                .length((Integer) objects[12])
+                                .build();
+
+                        List<AudioDto> audioDtoList = new ArrayList<>();
+                        audioDtoList.add(audioDto);
+
                         return PlaylistGetDto.builder()
                                 .id((Long) objects[0])
                                 .name((String) objects[1])
                                 .image((String) objects[2])
                                 .ownerUserId((Long) objects[3])
                                 .persistDateTime((LocalDateTime) objects[4])
+                                .content(audioDtoList)
                                 .build();
                     }
 
                     @Override
                     public List transformList(List collection) {
-                        return collection;
+                        Map<Long, PlaylistGetDto> playlistGetDtoMap = new TreeMap<>();
+                        Map<Long, List<AudioDto>> audioDtoMap = new TreeMap<>();
+
+                        for (Object obj : collection) {
+                            PlaylistGetDto playlistGetDto = (PlaylistGetDto) obj;
+                            Long playlistGetDtoId = playlistGetDto.getId();
+
+                            List<AudioDto> audioDtoList = audioDtoMap.put(playlistGetDtoId, playlistGetDto.getContent());
+                            if (audioDtoList != null) {
+                                audioDtoList.addAll(playlistGetDto.getContent());
+                                audioDtoMap.put(playlistGetDtoId, audioDtoList);
+                            }
+                            playlistGetDto.setContent(audioDtoMap.get(playlistGetDtoId));
+
+                            playlistGetDtoMap.put(playlistGetDtoId, playlistGetDto);
+                        }
+                        return new ArrayList<>(playlistGetDtoMap.values());
                     }
                 })
                 .getResultList();
