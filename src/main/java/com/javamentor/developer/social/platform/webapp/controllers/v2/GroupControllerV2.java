@@ -48,8 +48,9 @@ public class GroupControllerV2 {
             @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)
     })
     @GetMapping(value = "", params = {"page", "size"})
-    public ResponseEntity<List<GroupInfoDto>> getAllGroups(@ApiParam(value = "Текущая страница", example = "0") @RequestParam("page") int page,
-                                                           @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
+    public ResponseEntity<List<GroupInfoDto>> getAllGroups(
+            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("page") int page,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
         return ResponseEntity.ok().body(groupDtoService.getAllGroups(page, size));
     }
 
@@ -59,7 +60,8 @@ public class GroupControllerV2 {
             @ApiResponse(code = 404, message = "Группа с данным id не найдена", response = String.class)
     })
     @GetMapping("/{groupId}")
-    public ResponseEntity<?> showGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long groupId) {
+    public ResponseEntity<?> showGroup(@ApiParam(value = "Идентификатор группы", example = "1")
+                                           @PathVariable @NonNull Long groupId) {
         Optional<GroupDto> groupDtoOptional = groupDtoService.getGroupById(groupId);
         if (!groupDtoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Group id %s not found", groupId));
@@ -72,9 +74,10 @@ public class GroupControllerV2 {
             @ApiResponse(code = 200, message = "Посты группы получены", responseContainer = "List", response = GroupWallDto.class)
     })
     @GetMapping(value = "/{groupId}/posts", params = {"page", "size"})
-    public ResponseEntity<List<GroupWallDto>> showGroupWall(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long groupId,
-                                                            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("page") int page,
-                                                            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
+    public ResponseEntity<List<GroupWallDto>> showGroupWall(
+            @ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long groupId,
+            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("page") int page,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
         return ResponseEntity.ok().body(groupDtoService.getPostsByGroupId(groupId, page, size));
     }
 
@@ -84,7 +87,8 @@ public class GroupControllerV2 {
             @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
     })
     @GetMapping(value = "/name", params = "name")
-    public ResponseEntity<?> findGroupByName(@ApiParam(value = "Наименование группы", example = "JAVA IS 1") @RequestParam("name") String name) {
+    public ResponseEntity<?> findGroupByName(@ApiParam(value = "Наименование группы", example = "JAVA IS 1")
+                                                 @RequestParam("name") String name) {
         Optional<GroupDto> groupInfoDto = groupDtoService.getGroupByName(name);
         if (!groupInfoDto.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Group name %s not found", name));
@@ -98,9 +102,10 @@ public class GroupControllerV2 {
             @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
     })
     @GetMapping(value = "/{groupId}/users", params = {"page", "size"})
-    public ResponseEntity<?> getUsersFromTheGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long groupId,
-                                                  @ApiParam(value = "Текущая страница", example = "0") @RequestParam("page") int page,
-                                                  @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
+    public ResponseEntity<?> getUsersFromTheGroup(
+            @ApiParam(value = "Идентификатор группы", example = "1") @PathVariable @NonNull Long groupId,
+            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("page") int page,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
         Optional<GroupDto> groupDtoOptional = groupDtoService.getGroupById(groupId);
         if (!groupDtoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Group id %s not found", groupId));
@@ -115,8 +120,9 @@ public class GroupControllerV2 {
             @ApiResponse(code = 404, message = "Пользователь или группа не найдены")
     })
     @PutMapping(value = "/{groupId}/users", params = "userId")
-    public ResponseEntity<String> userJoinGroup(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
-                                                @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
+    public ResponseEntity<String> userJoinGroup(
+            @ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
+            @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
                 buildAndExpand().toUri();
         if (!userService.existById(userId)) {
@@ -144,8 +150,9 @@ public class GroupControllerV2 {
             @ApiResponse(code = 404, message = "Пользователь и/или группа не найдены", response = String.class)
     })
     @GetMapping(value = "/{groupId}/users", params = "userId")
-    public ResponseEntity<?> groupHasUser(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
-                                           @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
+    public ResponseEntity<?> groupHasUser(
+            @ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
+            @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
                 buildAndExpand().toUri();
         if (!(userService.existById(userId) & groupService.existById(groupId))) {
@@ -161,8 +168,9 @@ public class GroupControllerV2 {
             @ApiResponse(code = 404, message = "Пользователь или группа не найдены")
     })
     @DeleteMapping(value = "/{groupId}/users", params = "userId")
-    public ResponseEntity<?> deleteUserById(@ApiParam(value = "Идентификатор группы", example = "10") @PathVariable("groupId") @NonNull Long groupId,
-                                            @ApiParam(value = "Идентификатор юзера", example = "1") @RequestParam("userId") @NonNull Long userId){
+    public ResponseEntity<?> deleteUserById(
+            @ApiParam(value = "Идентификатор группы", example = "10") @PathVariable("groupId") @NonNull Long groupId,
+            @ApiParam(value = "Идентификатор юзера", example = "1") @RequestParam("userId") @NonNull Long userId){
         if (groupHasUserService.verificationUserInGroup(groupId, userId)) {
             groupHasUserService.deleteUserById(groupId, userId);
             String msg = String.format("Пользователь с id: %d удален из группы с id: %s", userId, groupId);
@@ -178,9 +186,11 @@ public class GroupControllerV2 {
             @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
     })
     @PutMapping(value = "/update")
-    public ResponseEntity<?> updateGroup(@ApiParam(value = "Группа с обновленными данными") @Valid @RequestBody GroupUpdateInfoDto groupUpdateInfoDto) {
-        if (!groupService.getById(groupUpdateInfoDto.getId()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Группа с id %s не найдена", groupUpdateInfoDto.getId()));
+    public ResponseEntity<?> updateGroup(@ApiParam(value = "Группа с обновленными данными")
+                                             @Valid @RequestBody GroupUpdateInfoDto groupUpdateInfoDto) {
+        if (!groupService.existById(groupUpdateInfoDto.getId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("Группа с id %s не найдена", groupUpdateInfoDto.getId()));
         }
         Group group = groupConverter.groupUpdateInfoDtoToGroup(groupUpdateInfoDto);
         groupService.updateInfo(group);
