@@ -113,10 +113,7 @@ public class ImageControllerV2 {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
         List<ImageDto> imageDtoList = imageDTOService.getAllByUserId(offset, limit, userId);
-        if(imageDtoList.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No images for user id %s", userId));
-        }
-        logger.info(String.format("Изображения пользователя %s отправлены", userId));
+        logger.info(String.format("Отправлен список пустой или с изображениями пользователя с id: %s", userId));
         return ResponseEntity.status(HttpStatus.OK).body(imageDtoList);
     }
 
@@ -235,10 +232,7 @@ public class ImageControllerV2 {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
         List<AlbumDto> albumDtoList = albumDtoService.getAllByUserId(userId);
-        if(albumDtoList.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No albums for user id %s", userId));
-        }
-        logger.info(String.format("Фотоальбомы пользователя %s отправлены", userId));
+        logger.info(String.format("Отправлен список пустой или с альбомами пользователя с id: %s", userId));
         return ResponseEntity.status(HttpStatus.OK).body(albumDtoList);
     }
 
