@@ -46,6 +46,7 @@ public class PostLike {
         if (this.like.getLikeType() != LikeType.POST) {
             throw new ApiRequestException("У экземпляра Like, связанного с PostLike, " +
                     "поле LikeType должно принимать значение LikeType.Post");
+
         }
     }
 }
