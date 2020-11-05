@@ -3,6 +3,8 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.dto.AlbumDto;
+import com.javamentor.developer.social.platform.models.entity.album.Album;
+import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
@@ -47,6 +49,23 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
                         "ORDER BY a.id ASC", AlbumDto.class)
                 .setParameter("id", id)
                 .getResultList();
+    }
+
+    @Override
+    public List<AlbumDto> getAllByTypeAndUserId(MediaType type, Long userId) {
+        return entityManager.createQuery(
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AlbumDto(" +
+                        "a.id, " +
+                        "a.name, " +
+                        "a.icon) " +
+                        "FROM Album a " +
+                        "WHERE a.mediaType = :type " +
+                        "AND a.userOwnerId.userId = :id " +
+                        "ORDER BY a.id ASC", AlbumDto.class)
+                .setParameter("type", type)
+                .setParameter("id", userId)
+                .getResultList();
+
     }
 
     @Override
