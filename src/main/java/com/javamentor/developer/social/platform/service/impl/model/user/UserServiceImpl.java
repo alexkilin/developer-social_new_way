@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl extends GenericServiceAbstract<User, Long> implements UserService {
@@ -90,7 +87,8 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
 
     @Override
     public User getPrincipal() {
-        return new User(62L, "User61", "LastNameUser61", new Date("2008-05-30 08:20:12.121000"), "MIT University",
+        Calendar dateOfBirth = new GregorianCalendar(2008, 05, 30, 8, 20, 12);
+        return new User(62L, "User61", "LastNameUser61", dateOfBirth.getTime() /*new Date("2008-05-30 08:20:12.121000")*/, "MIT University",
                 "My description about life - User61", "www.myavatar61.ru/9090", "user61@user.ru", "userpass61",
                 null,
                 LocalDateTime.of(2020, 10, 18, 21, 35, 58, 32),
