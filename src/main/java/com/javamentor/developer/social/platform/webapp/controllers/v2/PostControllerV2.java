@@ -30,7 +30,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v2/posts", produces = "application/json")
-@SuppressWarnings("deprecation")
 @Api(value = "PostApi-v2", description = "Операции над постами пользователя")
 @Validated
 public class PostControllerV2 {
@@ -38,7 +37,6 @@ public class PostControllerV2 {
     private final PostConverter postConverter;
     private final PostService postService;
     private final UserService userService;
-    private final MediaService mediaService;
     private final UserTabsService userTabsService;
     private final PostCommentConverter postCommentConverter;
     private final PostCommentService postCommentService;
@@ -49,7 +47,6 @@ public class PostControllerV2 {
         this.postConverter = postConverter;
         this.postService = postService;
         this.userService = userService;
-        this.mediaService = mediaService;
         this.userTabsService = userTabsService;
         this.postCommentConverter = postCommentConverter;
         this.postCommentService = postCommentService;
@@ -84,7 +81,7 @@ public class PostControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пост добавлен", response = PostDto.class)
     })
-    @PostMapping("")
+    @PostMapping
     @Validated(OnCreate.class)
     public ResponseEntity<PostDto> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostCreateDto postCreateDto) {
         Post post = postConverter.toEntity(postCreateDto);
