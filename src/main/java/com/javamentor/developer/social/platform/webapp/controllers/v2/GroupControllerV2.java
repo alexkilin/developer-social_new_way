@@ -119,22 +119,19 @@ public class GroupControllerV2 {
                                                 @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
                 buildAndExpand().toUri();
-        if (!userService.existById(userId)) {
-            return ResponseEntity.badRequest().body(String.format("User with id = %s is not exist", userId));
-        }
         if (groupHasUserService.verificationUserInGroup(groupId,userId)) {
-            String msg = String.format("Пользователь с id: %d уже есть в группе с id: %s", userId, groupId);
-            return ResponseEntity.badRequest().body(msg);
+            return ResponseEntity.badRequest()
+                    .body(String.format("Пользователь с id: %d уже есть в группе с id: %s", userId, groupId));
         }
-        if (userService.existById(userId) & groupService.existById(groupId)) {
+        if (userService.existById(userId) && groupService.existById(groupId)) {
             User user = userService.getById(userId).get();
             Group group = groupService.getById(groupId).get();
             groupHasUserService.setUserIntoGroup(user, group);
-            String msg = String.format("Пользователь с id: %d добавлен в группу с id: %s", userId, groupId);
-            return ResponseEntity.created(location).body(msg);
+            return ResponseEntity.created(location)
+                    .body(String.format("Пользователь с id: %d добавлен в группу с id: %s", userId, groupId));
         } else {
-            //String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId));
         }
     }
 
@@ -144,13 +141,12 @@ public class GroupControllerV2 {
             @ApiResponse(code = 404, message = "Пользователь и/или группа не найдены", response = String.class)
     })
     @GetMapping(value = "/{groupId}/users", params = "userId")
-    public ResponseEntity<?> groupHasUser(@ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
-                                           @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
-                buildAndExpand().toUri();
-        if (!(userService.existById(userId) & groupService.existById(groupId))) {
-            String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(msg);
+    public ResponseEntity<?> groupHasUser(
+            @ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
+            @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
+        if (!(userService.existById(userId) && groupService.existById(groupId))) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId));
         }
         return ResponseEntity.ok(groupHasUserService.returnGroupHasUserInfoDto(groupId, groupHasUserService.verificationUserInGroup(groupId,userId)));
     }
