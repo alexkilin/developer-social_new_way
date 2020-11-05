@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.models.dto.ImageCreateDto;
 import com.javamentor.developer.social.platform.models.dto.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
+import com.javamentor.developer.social.platform.models.entity.media.Image;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -175,16 +177,27 @@ public class ImageControllerV2 {
     @DeleteMapping(value = "/albums/{albumId}/images")
     public ResponseEntity<?> removeImageFromAlbum(@ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId,
                                              @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId) {
-        if (!albumImageService.existById(albumId)) {
+
+        Optional<AlbumImage> optionalAlbumImage = albumImageService.getById(albumId);
+        Optional<Image> imageOptional = imageService.getById(imageId);
+        Optional<Media> optionalMedia = mediaService.getById(imageId);
+
+        if (!optionalAlbumImage.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
-        if (!imageService.existById(imageId)) {
+        if (!imageOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
-        Media media = mediaService.getById(imageId).get();
-        media.setAlbum(null);
-        mediaService.update(media);
-        logger.info(String.format("Изображение %s удалено из фотоальбома %s", imageId, albumId));
+        if (Objects.nonNull(optionalMedia) && optionalMedia.isPresent()) {
+            Media media = optionalMedia.get();
+
+            if (Objects.nonNull(media.getAlbum())) {
+                media.setAlbum(null);
+                mediaService.update(media);
+                logger.info(String.format("Изображение %s удалено из фотоальбома %s", imageId, albumId));
+            }
+        }
+
         return ResponseEntity.ok().body(String.format("Image %s removed from album %s", imageId, albumId));
     }
 
