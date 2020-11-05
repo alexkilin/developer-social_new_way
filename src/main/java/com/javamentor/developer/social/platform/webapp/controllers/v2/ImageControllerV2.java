@@ -103,8 +103,7 @@ public class ImageControllerV2 {
     @ApiOperation(value = "Получить все изображения по Id пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Изображения получены", response = ImageDto.class, responseContainer = "List"),
-            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class),
-            @ApiResponse(code = 404, message = "Изображения не найдены", response = String.class)})
+            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)})
     @GetMapping(value = "")
     public ResponseEntity<?> getAllImagesOfUser(@ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
                                                 @ApiParam(value = "Отступ", example = "0") @RequestParam(value = "offset", defaultValue = "0", required = false) @NotNull Integer offset,
@@ -221,8 +220,7 @@ public class ImageControllerV2 {
 
     @ApiOperation(value = "Получить все фотоальбомы пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Фотоальбомы получены", response = AlbumDto.class, responseContainer = "List"),
-            @ApiResponse(code = 404, message = "Фотоальбомы не найдены", response = String.class)})
+            @ApiResponse(code = 200, message = "Фотоальбомы получены", response = AlbumDto.class, responseContainer = "List")})
     @GetMapping(value = "/albums")
     public ResponseEntity<?> getAllImageAlbumsOfUser(
             @ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
