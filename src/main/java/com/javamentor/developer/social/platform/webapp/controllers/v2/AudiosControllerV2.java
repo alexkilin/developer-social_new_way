@@ -188,7 +188,7 @@ public class AudiosControllerV2 {
     @GetMapping(value = "/user/{userId}/album")
     public ResponseEntity<List<AlbumDto>> getAllAlbums(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         logger.info(String.format("Получение всех альбомов пользователя с id %s", userId));
-        return ResponseEntity.ok().body(albumDtoService.getAllByUserId(userId));
+        return ResponseEntity.ok().body(albumDtoService.getAllByTypeAndUserId(MediaType.AUDIO, userId));
     }
 
     @ApiOperation(value = "Добавить существующее аудио в альбом")

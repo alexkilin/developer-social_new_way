@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface AlbumDtoDao {
 
-    List<AlbumDto> getAllByUserId(Long id);
     List<AlbumDto> getAllByTypeAndUserId(MediaType type, Long userId);
     Optional<AlbumDto> getById(Long id);
 

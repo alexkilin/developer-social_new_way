@@ -236,9 +236,6 @@ public class ImageControllerV2 {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
         List<AlbumDto> albumDtoList = albumDtoService.getAllByTypeAndUserId(MediaType.IMAGE, userId);
-        if(albumDtoList.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No albums for user id %s", userId));
-        }
         logger.info(String.format("Фотоальбомы пользователя %s отправлены", userId));
         return ResponseEntity.status(HttpStatus.OK).body(albumDtoList);
     }

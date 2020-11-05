@@ -32,11 +32,6 @@ public class AlbumDtoServiceImpl implements AlbumDtoService {
     }
 
     @Override
-    public List<AlbumDto> getAllByUserId(Long id) {
-        return albumDtoDao.getAllByUserId(id);
-    }
-
-    @Override
     public List<AlbumDto> getAllByTypeAndUserId(MediaType type, Long userId) {
         return albumDtoDao.getAllByTypeAndUserId(type, userId);
     }

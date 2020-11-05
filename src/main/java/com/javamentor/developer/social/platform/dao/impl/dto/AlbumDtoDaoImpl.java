@@ -38,20 +38,6 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
     }
 
     @Override
-    public List<AlbumDto> getAllByUserId(Long id) {
-        return entityManager.createQuery(
-                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AlbumDto(" +
-                        "a.id, " +
-                        "a.name, " +
-                        "a.icon) " +
-                        "FROM Album a " +
-                        "WHERE a.userOwnerId.userId = :id " +
-                        "ORDER BY a.id ASC", AlbumDto.class)
-                .setParameter("id", id)
-                .getResultList();
-    }
-
-    @Override
     public List<AlbumDto> getAllByTypeAndUserId(MediaType type, Long userId) {
         return entityManager.createQuery(
                 "SELECT NEW com.javamentor.developer.social.platform.models.dto.AlbumDto(" +
