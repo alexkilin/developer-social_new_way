@@ -179,8 +179,8 @@ public class VideosController {
     })
     @GetMapping(value = "/getAllAlbumsFromUser")
     public ResponseEntity<List<AlbumDto>> getAllAlbums() {
-        logger.info(String.format("Получение всех альбомов пользователя с id %s", 60L));
-        return ResponseEntity.ok().body(albumDtoService.getAllByTypeAndUserId(MediaType.VIDEO, 60L));
+        logger.info(String.format("Получение всех альбомов пользователя с id %s", userService.getPrincipal().getUserId()));
+        return ResponseEntity.ok().body(albumDtoService.getAllByTypeAndUserId(MediaType.VIDEO, userService.getPrincipal().getUserId()));
     }
 
     @ApiOperation(value = "Получение всех видео из альбома пользователя")
