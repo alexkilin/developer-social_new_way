@@ -4,6 +4,7 @@ import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
+import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDtoService;
@@ -233,7 +234,7 @@ public class ImageController {
         if(!userService.existById(userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
-        List<AlbumDto> albumDtoList = albumDtoService.getAllByUserId(userId);
+        List<AlbumDto> albumDtoList = albumDtoService.getAllByTypeAndUserId(MediaType.IMAGE, userId);
         if(albumDtoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No albums for user id %s", userId));
         }
