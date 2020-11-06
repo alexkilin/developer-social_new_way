@@ -37,11 +37,6 @@ public class PostDtoServiceImpl implements PostDtoService {
     @Override
     public List<PostDto> getAllPosts() {
         List<PostDto> postDtoList = postDtoDao.getAllPosts();
-        postDtoList.forEach(postDto -> {
-            Long id = postDto.getId();
-            postDto.setMedia(postDtoDao.getMediasByPostId(id));
-            postDto.setTags(postDtoDao.getTagsByPostId(id));
-        });
         return postDtoList;
     }
 }
