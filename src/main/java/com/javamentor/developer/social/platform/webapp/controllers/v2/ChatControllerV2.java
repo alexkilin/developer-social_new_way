@@ -102,10 +102,8 @@ public class ChatControllerV2 {
             GroupChat groupChat = result.get();
             groupChat.setTitle(chatEditTitleDto.getTitle());
             groupChatService.update(groupChat);
-            return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Chat id %s not found", chatId));
         }
+        return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
     }
 
     @DeleteMapping("/single-chats/{chatId}/user/{userId}")
