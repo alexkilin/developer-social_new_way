@@ -58,16 +58,16 @@ public class ImageController {
         this.mediaService = mediaService;
     }
 
-    @ApiOperation(value = "Создать изображение")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Изображение создано", response = ImageDto.class)})
-    @PostMapping(value = "")
-    @Validated(OnCreate.class)
-    public ResponseEntity<?> createImage(@ApiParam(value = "объект изображения") @RequestBody @Valid ImageCreateDto imageCreateDto) {
-        ImageDto imageDto = imageDTOService.create(imageCreateDto);
-        logger.info(String.format("Изображение %s создано", imageDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(imageDto);
-    }
+//    @ApiOperation(value = "Создать изображение")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 201, message = "Изображение создано", response = ImageDto.class)})
+//    @PostMapping(value = "")
+//    @Validated(OnCreate.class)
+//    public ResponseEntity<?> createImage(@ApiParam(value = "объект изображения") @RequestBody @Valid ImageCreateDto imageCreateDto) {
+//        ImageDto imageDto = imageDTOService.create(imageCreateDto);
+//        logger.info(String.format("Изображение %s создано", imageDto.getId()));
+//        return ResponseEntity.status(HttpStatus.CREATED).body(imageDto);
+//    }
 
     @ApiOperation(value = "Удалить изображение")
     @ApiResponses(value = {
@@ -117,16 +117,16 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK).body(imageDtoList);
     }
 
-    @ApiOperation(value = "Создать фотоальбом")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Альбом создан", response = AlbumDto.class)})
-    @Validated(OnCreate.class)
-    @PostMapping(value = "/albums")
-    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект альбома") @Valid @NotNull @RequestBody AlbumCreateDto albumCreateDto) {
-        AlbumDto albumDto = albumDtoService.createAlbumImage(albumCreateDto);
-        logger.info(String.format("Фотоальбом %s создан", albumDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(albumDto);
-    }
+//    @ApiOperation(value = "Создать фотоальбом")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 201, message = "Альбом создан", response = AlbumDto.class)})
+//    @Validated(OnCreate.class)
+//    @PostMapping(value = "/albums")
+//    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект альбома") @Valid @NotNull @RequestBody AlbumCreateDto albumCreateDto) {
+//        AlbumDto albumDto = albumDtoService.createAlbumImage(albumCreateDto);
+//        logger.info(String.format("Фотоальбом %s создан", albumDto.getId()));
+//        return ResponseEntity.status(HttpStatus.CREATED).body(albumDto);
+//    }
 
     @ApiOperation(value = "Удалить фотоальбом")
     @ApiResponses(value = {

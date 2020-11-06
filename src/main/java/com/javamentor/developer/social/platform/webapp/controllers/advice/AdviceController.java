@@ -22,23 +22,17 @@ public class AdviceController  extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> constraintEx(RuntimeException runtimeException, WebRequest webRequest) {
-        logger.info(runtimeException.fillInStackTrace().toString());
-        String[] split = runtimeException.getMessage().split(":");
-        return handleExceptionInternal(runtimeException, split[split.length - 1].trim(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+        return exceptionHandlerResponse(runtimeException, webRequest);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<Object> apiRequestException(RuntimeException runtimeException, WebRequest webRequest) {
-        logger.info(runtimeException.fillInStackTrace().toString());
-        String[] split = runtimeException.getMessage().split(":");
-        return handleExceptionInternal(runtimeException, split[split.length - 1].trim(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+        return exceptionHandlerResponse(runtimeException, webRequest);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> notFoundEx(RuntimeException runtimeException, WebRequest webRequest) {
-        logger.info(runtimeException.fillInStackTrace().toString());
-        String[] body = runtimeException.getMessage().split(":");
-        return handleExceptionInternal(runtimeException, body[body.length - 1].trim(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+        return exceptionHandlerResponse(runtimeException, webRequest);
     }
 
     @Override
@@ -57,5 +51,11 @@ public class AdviceController  extends ResponseEntityExceptionHandler {
                                                                   WebRequest request) {
         String[] m = ex.getCause().getMessage().split(":");
         return ResponseEntity.badRequest().body(m[0]);
+    }
+
+    private ResponseEntity<Object> exceptionHandlerResponse(RuntimeException runtimeException, WebRequest webRequest) {
+        logger.info(runtimeException.fillInStackTrace().toString());
+        String[] body = runtimeException.getMessage().split(":");
+        return handleExceptionInternal(runtimeException, body[body.length - 1].trim(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
     }
 }

@@ -37,13 +37,6 @@ public class AlbumDtoServiceImpl implements AlbumDtoService {
     }
 
     @Override
-    public AlbumDto createAlbumImage(AlbumCreateDto albumCreateDto) {
-        AlbumImage newAlbumImage = albumConverter.toAlbumImage(albumCreateDto);
-        albumImageService.create(newAlbumImage);
-        return albumConverter.toAlbumDto(newAlbumImage);
-    }
-
-    @Override
     public Optional<AlbumDto> getById(Long id) {
         return albumDtoDao.getById(id);
     }

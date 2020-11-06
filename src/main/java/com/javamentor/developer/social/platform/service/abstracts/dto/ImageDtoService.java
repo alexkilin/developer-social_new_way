@@ -10,7 +10,6 @@ public interface ImageDtoService {
 
     List<ImageDto> getAllByUserId(int offset, int limit, Long id);
     List<ImageDto> getAllByAlbumId(int offset, int limit, Long id);
-    ImageDto create(ImageCreateDto imageCreateDto);
     Optional<ImageDto> getById(Long id);
 
 
