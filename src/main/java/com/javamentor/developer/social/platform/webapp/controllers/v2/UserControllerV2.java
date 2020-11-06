@@ -221,9 +221,9 @@ public class UserControllerV2 {
     public ResponseEntity<?> getPrincipal(){
         User userPrincipal = userService.getPrincipal();
         if(userPrincipal != null){
-            return ResponseEntity.status(200).body(userConverter.toDto(userPrincipal));
+            return ResponseEntity.status(HttpStatus.OK).body(userConverter.toDto(userPrincipal));
         }
-        return ResponseEntity.status(404).body(String.format("Авторизованный пользователь не найден"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Авторизованный пользователь не найден"));
 
     }
 }
