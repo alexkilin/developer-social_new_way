@@ -189,6 +189,6 @@ public class GroupControllerV2 {
         }
         Group group = groupConverter.groupUpdateInfoDtoToGroup(groupUpdateInfoDto);
         groupService.updateInfo(group);
-        return ResponseEntity.ok(groupConverter.groupToGroupDto(group));
+        return ResponseEntity.ok(groupConverter.groupToGroupUpdateInfoDto(group));
     }
 }
