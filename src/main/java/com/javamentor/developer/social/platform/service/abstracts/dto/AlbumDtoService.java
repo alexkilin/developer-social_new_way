@@ -9,6 +9,5 @@ import java.util.Optional;
 public interface AlbumDtoService {
 
     List<AlbumDto> getAllByUserId(Long id);
-    AlbumDto createAlbumImage(AlbumCreateDto albumCreateDto);
     Optional<AlbumDto> getById(Long id);
 }
