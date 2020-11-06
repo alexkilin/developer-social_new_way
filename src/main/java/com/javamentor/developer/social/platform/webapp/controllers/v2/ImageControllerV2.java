@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.models.dto.ImageCreateDto;
 import com.javamentor.developer.social.platform.models.dto.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
+import com.javamentor.developer.social.platform.models.entity.media.Image;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
@@ -16,6 +17,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.media.Im
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
+import com.javamentor.developer.social.platform.webapp.converters.ImageConverter;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,11 +48,12 @@ public class ImageControllerV2 {
     private final AlbumConverter albumConverter;
     private final AlbumService albumService;
     private final MediaService mediaService;
+    private final ImageConverter imageConverter;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public ImageControllerV2(ImageDtoService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
+    public ImageControllerV2(ImageDtoService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService, ImageConverter imageConverter) {
         this.imageDTOService = imageDTOService;
         this.imageService = imageService;
         this.albumDtoService = albumDtoService;
@@ -59,17 +62,19 @@ public class ImageControllerV2 {
         this.albumConverter = albumConverter;
         this.albumService = albumService;
         this.mediaService = mediaService;
+        this.imageConverter = imageConverter;
     }
 
     @ApiOperation(value = "Создать изображение")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Изображение создано", response = ImageDto.class)})
-    @PostMapping(value = "")
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Изображение создано", response = ImageDto.class)})
+    @PostMapping
     @Validated(OnCreate.class)
-    public ResponseEntity<?> createImage(@ApiParam(value = "объект изображения") @RequestBody @Valid ImageCreateDto imageCreateDto) {
-        ImageDto imageDto = imageDTOService.create(imageCreateDto);
-        logger.info(String.format("Изображение %s создано", imageDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(imageDto);
+    public ResponseEntity<?> createImage(@ApiParam(value = "объект изображения")
+                                             @RequestBody @Valid ImageCreateDto imageCreateDto) {
+        Image newImage = imageConverter.toEntity(imageCreateDto);
+        imageService.create(newImage);
+        logger.info(String.format("Изображение %s создано", newImage.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(imageConverter.toImageDto(newImage));
     }
 
     @ApiOperation(value = "Удалить изображение")
@@ -77,7 +82,8 @@ public class ImageControllerV2 {
             @ApiResponse(code = 200, message = "Изображение удалено", response = String.class),
             @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
     @DeleteMapping(value = "/{imageId}")
-    public ResponseEntity<?> deleteImage(@ApiParam(value = "Id изображения") @NotNull @PathVariable Long imageId) {
+    public ResponseEntity<?> deleteImage(@ApiParam(value = "Id изображения")
+                                             @NotNull @PathVariable Long imageId) {
         if(!imageService.existById(imageId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
@@ -91,7 +97,8 @@ public class ImageControllerV2 {
             @ApiResponse(code = 200, message = "Изображение получено", response = ImageDto.class),
             @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
     @GetMapping(value = "/{imageId}")
-    public ResponseEntity<?> getImageById(@ApiParam(value = "Id изображения") @NotNull @PathVariable Long imageId) {
+    public ResponseEntity<?> getImageById(@ApiParam(value = "Id изображения")
+                                              @NotNull @PathVariable Long imageId) {
         Optional<ImageDto> optional = imageDTOService.getById(imageId);
         if(!optional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
@@ -105,30 +112,31 @@ public class ImageControllerV2 {
             @ApiResponse(code = 200, message = "Изображения получены", response = ImageDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class),
             @ApiResponse(code = 404, message = "Изображения не найдены", response = String.class)})
-    @GetMapping(value = "")
-    public ResponseEntity<?> getAllImagesOfUser(@ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
-                                                @ApiParam(value = "Отступ", example = "0") @RequestParam(value = "offset", defaultValue = "0", required = false) @NotNull Integer offset,
-                                                @ApiParam(value = "Количество данных на страницу", example = "5") @RequestParam(value = "limit", defaultValue = "20",  required = false) @NotNull Integer limit) {
+    @GetMapping
+    public ResponseEntity<?> getAllImagesOfUser(
+            @ApiParam(value = "Id пользователя", example = "60")
+            @RequestParam("userId") @NotNull Long userId,
+            @ApiParam(value = "Отступ", example = "0")
+            @RequestParam(value = "offset", defaultValue = "0", required = false) @NotNull Integer offset,
+            @ApiParam(value = "Количество данных на страницу", example = "5")
+            @RequestParam(value = "limit", defaultValue = "20",  required = false) @NotNull Integer limit) {
         if(!userService.existById(userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
         List<ImageDto> imageDtoList = imageDTOService.getAllByUserId(offset, limit, userId);
-        if(imageDtoList.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No images for user id %s", userId));
-        }
         logger.info(String.format("Изображения пользователя %s отправлены", userId));
         return ResponseEntity.status(HttpStatus.OK).body(imageDtoList);
     }
 
     @ApiOperation(value = "Создать фотоальбом")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Альбом создан", response = AlbumDto.class)})
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Альбом создан", response = AlbumDto.class)})
     @Validated(OnCreate.class)
     @PostMapping(value = "/albums")
-    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект альбома") @Valid @NotNull @RequestBody AlbumCreateDto albumCreateDto) {
-        AlbumDto albumDto = albumDtoService.createAlbumImage(albumCreateDto);
-        logger.info(String.format("Фотоальбом %s создан", albumDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(albumDto);
+    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект альбома")
+                                             @Valid @NotNull @RequestBody AlbumCreateDto albumCreateDto) {
+        AlbumImage newAlbumImage = albumConverter.toAlbumImage(albumCreateDto);
+        logger.info(String.format("Фотоальбом %s создан", newAlbumImage.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(albumConverter.toAlbumDto(newAlbumImage));
     }
 
     @ApiOperation(value = "Удалить фотоальбом")
@@ -136,7 +144,8 @@ public class ImageControllerV2 {
             @ApiResponse(code = 200, message = "Фотоальбом удален", response = String.class),
             @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class)})
     @DeleteMapping(value = "/albums/{albumId}")
-    public ResponseEntity<?> deleteAlbum(@ApiParam(value = "Id альбома") @NotNull @PathVariable Long albumId) {
+    public ResponseEntity<?> deleteAlbum(@ApiParam(value = "Id альбома")
+                                             @NotNull @PathVariable Long albumId) {
         if(!albumImageService.existById(albumId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
@@ -151,8 +160,9 @@ public class ImageControllerV2 {
             @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class),
             @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
     @PutMapping(value = "/albums/{albumId}/images")
-    public ResponseEntity<?> addImageToAlbum(@ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId,
-                                             @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId) {
+    public ResponseEntity<?> addImageToAlbum(
+            @ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId,
+            @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId) {
         if (!albumImageService.existById(albumId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
@@ -173,8 +183,9 @@ public class ImageControllerV2 {
             @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class),
             @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
     @DeleteMapping(value = "/albums/{albumId}/images")
-    public ResponseEntity<?> removeImageFromAlbum(@ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId,
-                                             @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId) {
+    public ResponseEntity<?> removeImageFromAlbum(
+            @ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId,
+            @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId) {
         if (!albumImageService.existById(albumId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
@@ -212,8 +223,8 @@ public class ImageControllerV2 {
             @ApiResponse(code = 200, message = "Фотоальбом получен", response = AlbumDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class)})
     @GetMapping(value = "/albums/{albumId}")
-    public ResponseEntity<?> getImageAlbumById(
-            @ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId) {
+    public ResponseEntity<?> getImageAlbumById(@ApiParam(value = "Id альбома", example = "11")
+                                                   @PathVariable @NotNull Long albumId) {
         Optional<AlbumImage> optionalAlbum = albumImageService.getOptionalById(albumId);
         if(!optionalAlbum.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));

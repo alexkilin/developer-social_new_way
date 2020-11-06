@@ -39,13 +39,6 @@ public class ImageDtoServiceImpl implements ImageDtoService {
     }
 
     @Override
-    public ImageDto create(ImageCreateDto imageCreateDto) {
-        Image newImage = imageConverter.toEntity(imageCreateDto);
-        imageService.create(newImage);
-        return imageConverter.toImageDto(newImage);
-    }
-
-    @Override
     public Optional<ImageDto> getById(Long id) {
         return dao.getById(id);
     }
