@@ -10,7 +10,7 @@ public interface AudioDtoDao {
 
     List<AudioDto> getAudioOfAuthor(String author);
 
-    Optional<AudioDto> getAudioOfName(String name);
+    List<AudioDto> getAudioOfName(String name);
 
 
     Audios getAudioOfId(Long id);

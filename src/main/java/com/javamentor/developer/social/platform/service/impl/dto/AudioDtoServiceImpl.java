@@ -25,8 +25,8 @@ public class AudioDtoServiceImpl implements AudioDtoService {
     }
 
     @Override
-    public AudioDto getAudioOfName(String name) {
-        return audioDtoDao.getAudioOfName(name).orElseThrow(() -> new IllegalArgumentException("Invalid parameters"));
+    public List<AudioDto> getAudioOfName(String name) {
+        return audioDtoDao.getAudioOfName(name);
     }
 
     @Override
