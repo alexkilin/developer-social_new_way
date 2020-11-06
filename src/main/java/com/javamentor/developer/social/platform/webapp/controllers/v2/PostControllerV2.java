@@ -103,7 +103,7 @@ public class PostControllerV2 {
     public ResponseEntity<?> deletePost(@ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
         Optional<Post> result = postService.getById(id);
 
-        if (Objects.nonNull(result) && result.isPresent()) {
+        if (result.isPresent()) {
 
             Post post = result.get();
 
