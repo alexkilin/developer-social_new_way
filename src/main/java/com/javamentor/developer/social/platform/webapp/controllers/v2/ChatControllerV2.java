@@ -95,12 +95,14 @@ public class ChatControllerV2 {
     public ResponseEntity<?> editGroupChatTitle(
             @ApiParam(value = "Объект чата") @RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto) {
         Long chatId = chatEditTitleDto.getId();
-        if (!groupChatService.existById(chatId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Chat id %s not found", chatId));
+
+        Optional<GroupChat> result = groupChatService.getById(chatId);
+
+        if (result.isPresent()) {
+            GroupChat groupChat = result.get();
+            groupChat.setTitle(chatEditTitleDto.getTitle());
+            groupChatService.update(groupChat);
         }
-        GroupChat groupChat = groupChatService.getById(chatId).get();
-        groupChat.setTitle(chatEditTitleDto.getTitle());
-        groupChatService.update(groupChat);
         return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));
     }
 
