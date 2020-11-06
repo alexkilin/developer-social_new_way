@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Validated
@@ -98,7 +97,8 @@ public class ChatControllerV2 {
         Long chatId = chatEditTitleDto.getId();
 
         Optional<GroupChat> result = groupChatService.getById(chatId);
-        if (Objects.nonNull(result) && result.isPresent()) {
+
+        if (result.isPresent()) {
             GroupChat groupChat = result.get();
             groupChat.setTitle(chatEditTitleDto.getTitle());
             groupChatService.update(groupChat);
