@@ -4,6 +4,7 @@ import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
+import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDtoService;
@@ -57,16 +58,16 @@ public class ImageController {
         this.mediaService = mediaService;
     }
 
-    @ApiOperation(value = "Создать изображение")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Изображение создано", response = ImageDto.class)})
-    @PostMapping(value = "")
-    @Validated(OnCreate.class)
-    public ResponseEntity<?> createImage(@ApiParam(value = "объект изображения") @RequestBody @Valid ImageCreateDto imageCreateDto) {
-        ImageDto imageDto = imageDTOService.create(imageCreateDto);
-        logger.info(String.format("Изображение %s создано", imageDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(imageDto);
-    }
+//    @ApiOperation(value = "Создать изображение")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 201, message = "Изображение создано", response = ImageDto.class)})
+//    @PostMapping(value = "")
+//    @Validated(OnCreate.class)
+//    public ResponseEntity<?> createImage(@ApiParam(value = "объект изображения") @RequestBody @Valid ImageCreateDto imageCreateDto) {
+//        ImageDto imageDto = imageDTOService.create(imageCreateDto);
+//        logger.info(String.format("Изображение %s создано", imageDto.getId()));
+//        return ResponseEntity.status(HttpStatus.CREATED).body(imageDto);
+//    }
 
     @ApiOperation(value = "Удалить изображение")
     @ApiResponses(value = {
@@ -116,16 +117,16 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK).body(imageDtoList);
     }
 
-    @ApiOperation(value = "Создать фотоальбом")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Альбом создан", response = AlbumDto.class)})
-    @Validated(OnCreate.class)
-    @PostMapping(value = "/albums")
-    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект альбома") @Valid @NotNull @RequestBody AlbumCreateDto albumCreateDto) {
-        AlbumDto albumDto = albumDtoService.createAlbumImage(albumCreateDto);
-        logger.info(String.format("Фотоальбом %s создан", albumDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(albumDto);
-    }
+//    @ApiOperation(value = "Создать фотоальбом")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 201, message = "Альбом создан", response = AlbumDto.class)})
+//    @Validated(OnCreate.class)
+//    @PostMapping(value = "/albums")
+//    public ResponseEntity<?> createAlbum(@ApiParam(value = "объект альбома") @Valid @NotNull @RequestBody AlbumCreateDto albumCreateDto) {
+//        AlbumDto albumDto = albumDtoService.createAlbumImage(albumCreateDto);
+//        logger.info(String.format("Фотоальбом %s создан", albumDto.getId()));
+//        return ResponseEntity.status(HttpStatus.CREATED).body(albumDto);
+//    }
 
     @ApiOperation(value = "Удалить фотоальбом")
     @ApiResponses(value = {
@@ -233,7 +234,7 @@ public class ImageController {
         if(!userService.existById(userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
-        List<AlbumDto> albumDtoList = albumDtoService.getAllByUserId(userId);
+        List<AlbumDto> albumDtoList = albumDtoService.getAllByTypeAndUserId(MediaType.IMAGE, userId);
         if(albumDtoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No albums for user id %s", userId));
         }
