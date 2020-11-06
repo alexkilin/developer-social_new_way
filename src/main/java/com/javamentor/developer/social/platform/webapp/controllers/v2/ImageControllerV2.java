@@ -179,16 +179,16 @@ public class ImageControllerV2 {
                                              @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId) {
 
         Optional<AlbumImage> optionalAlbumImage = albumImageService.getById(albumId);
-        Optional<Image> imageOptional = imageService.getById(imageId);
+        Optional<Image> optionalImage = imageService.getById(imageId);
         Optional<Media> optionalMedia = mediaService.getById(imageId);
 
         if (!optionalAlbumImage.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
-        if (!imageOptional.isPresent()) {
+        if (!optionalImage.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
-        if (Objects.nonNull(optionalMedia) && optionalMedia.isPresent()) {
+        if (optionalMedia.isPresent()) {
             Media media = optionalMedia.get();
 
             if (Objects.nonNull(media.getAlbum())) {
