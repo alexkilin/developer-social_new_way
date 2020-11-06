@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 
 @RestController
@@ -96,9 +98,11 @@ public class PostControllerV2 {
     })
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deletePost(@ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
-        if (postService.existById(id)) {
+        Optional<Post> result = postService.getById(id);
 
-            Post post = postService.getById(id).get();
+        if (result.isPresent()) {
+
+            Post post = result.get();
 
             userTabsService.deletePost(post);
 

@@ -211,6 +211,21 @@ public class UserControllerV2 {
         }
         return ResponseEntity.badRequest().body("Incorrect password");
     }
+
+    @ApiOperation(value = "Получение авторизованного пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь получен", response = UserDto.class),
+            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)
+    })
+    @GetMapping("/principal")
+    public ResponseEntity<?> getPrincipal(){
+        User userPrincipal = userService.getPrincipal();
+        if(userPrincipal != null){
+            return ResponseEntity.status(HttpStatus.OK).body(userConverter.toDto(userPrincipal));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Авторизованный пользователь не найден"));
+
+    }
 }
 
 
