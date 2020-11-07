@@ -159,22 +159,34 @@ public class ImageControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Изображение добавлено", response = String.class),
             @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class),
-            @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
+            @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)
+    })
     @PutMapping(value = "/albums/{albumId}/images")
     public ResponseEntity<?> addImageToAlbum(
-            @ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId,
-            @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId) {
-        if (!albumImageService.existById(albumId)) {
+            @ApiParam(value = "Id альбома", example = "11")
+            @PathVariable @NotNull Long albumId,
+            @ApiParam(value = "Id изображения", example = "31")
+            @RequestParam(value = "id") @NotNull Long imageId) {
+
+        Optional<AlbumImage> optionalAlbumImage = albumImageService.getById(albumId);
+        Optional<Image> optionalImage = imageService.getById(imageId);
+        Optional<Media> optionalMedia = mediaService.getById(imageId);
+        Optional<Album> optionalAlbum = albumService.getById(albumId);
+
+        if (!optionalAlbumImage.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
-        if (!imageService.existById(imageId)) {
+        if (!optionalImage.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
-        Album album = albumService.getById(albumId).get();
-        Media media = mediaService.getById(imageId).get();
-        media.setAlbum(album);
-        mediaService.update(media);
-        logger.info(String.format("Изображение %s добавлено в фотоальбом %s", imageId, albumId));
+        if (optionalMedia.isPresent() && optionalAlbum.isPresent()) {
+            Album album = optionalAlbum.get();
+            Media media = optionalMedia.get();
+            media.setAlbum(album);
+            mediaService.update(media);
+            logger.info(String.format("Изображение %s добавлено в фотоальбом %s", imageId, albumId));
+        }
+
         return ResponseEntity.ok().body(String.format("Image %s added to album %s", imageId, albumId));
     }
 
