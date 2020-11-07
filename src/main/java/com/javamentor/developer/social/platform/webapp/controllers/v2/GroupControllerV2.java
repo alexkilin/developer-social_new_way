@@ -47,7 +47,7 @@ public class GroupControllerV2 {
             @ApiResponse(code = 200, message = "Инфа обо всех группах получена", responseContainer = "List", response = GroupInfoDto.class),
             @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)
     })
-    @GetMapping(value = "", params = {"page", "size"})
+    @GetMapping(params = {"page", "size"})
     public ResponseEntity<List<GroupInfoDto>> getAllGroups(
             @ApiParam(value = "Текущая страница", example = "0") @RequestParam("page") int page,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
@@ -125,22 +125,19 @@ public class GroupControllerV2 {
             @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
                 buildAndExpand().toUri();
-        if (!userService.existById(userId)) {
-            return ResponseEntity.badRequest().body(String.format("User with id = %s is not exist", userId));
-        }
         if (groupHasUserService.verificationUserInGroup(groupId,userId)) {
-            String msg = String.format("Пользователь с id: %d уже есть в группе с id: %s", userId, groupId);
-            return ResponseEntity.badRequest().body(msg);
+            return ResponseEntity.badRequest()
+                    .body(String.format("Пользователь с id: %d уже есть в группе с id: %s", userId, groupId));
         }
-        if (userService.existById(userId) & groupService.existById(groupId)) {
+        if (userService.existById(userId) && groupService.existById(groupId)) {
             User user = userService.getById(userId).get();
             Group group = groupService.getById(groupId).get();
             groupHasUserService.setUserIntoGroup(user, group);
-            String msg = String.format("Пользователь с id: %d добавлен в группу с id: %s", userId, groupId);
-            return ResponseEntity.created(location).body(msg);
+            return ResponseEntity.created(location)
+                    .body(String.format("Пользователь с id: %d добавлен в группу с id: %s", userId, groupId));
         } else {
-            //String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId));
         }
     }
 
@@ -153,11 +150,9 @@ public class GroupControllerV2 {
     public ResponseEntity<?> groupHasUser(
             @ApiParam(value = "Идентификатор группы", example = "1") @PathVariable("groupId") @NonNull Long groupId,
             @ApiParam(value = "Идентификатор пользователя", example = "1") @RequestParam("userId") @NonNull Long userId) {
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/add").
-                buildAndExpand().toUri();
-        if (!(userService.existById(userId) & groupService.existById(groupId))) {
-            String msg = String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(msg);
+        if (!(userService.existById(userId) && groupService.existById(groupId))) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId));
         }
         return ResponseEntity.ok(groupHasUserService.returnGroupHasUserInfoDto(groupId, groupHasUserService.verificationUserInGroup(groupId,userId)));
     }
@@ -173,10 +168,11 @@ public class GroupControllerV2 {
             @ApiParam(value = "Идентификатор юзера", example = "1") @RequestParam("userId") @NonNull Long userId){
         if (groupHasUserService.verificationUserInGroup(groupId, userId)) {
             groupHasUserService.deleteUserById(groupId, userId);
-            String msg = String.format("Пользователь с id: %d удален из группы с id: %s", userId, groupId);
-            return ResponseEntity.ok().body(msg);
+            return ResponseEntity.ok()
+                    .body(String.format("Пользователь с id: %d удален из группы с id: %s", userId, groupId));
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("Пользователь с id %s не состоит в группе", userId));
         }
     }
 

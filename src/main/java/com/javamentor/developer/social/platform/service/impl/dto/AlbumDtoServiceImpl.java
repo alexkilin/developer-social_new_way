@@ -1,9 +1,8 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumDtoDao;
-import com.javamentor.developer.social.platform.models.dto.AlbumCreateDto;
 import com.javamentor.developer.social.platform.models.dto.AlbumDto;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
+import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
@@ -18,28 +17,15 @@ import java.util.Optional;
 public class AlbumDtoServiceImpl implements AlbumDtoService {
 
     private final AlbumDtoDao albumDtoDao;
-    private final UserService userService;
-    private final AlbumConverter albumConverter;
-    private final AlbumImageService albumImageService;
 
     @Autowired
-    public AlbumDtoServiceImpl(AlbumDtoDao albumDtoDao, UserService userService, AlbumConverter albumConverter, AlbumImageService albumImageService) {
+    public AlbumDtoServiceImpl(AlbumDtoDao albumDtoDao) {
         this.albumDtoDao = albumDtoDao;
-        this.userService = userService;
-        this.albumConverter = albumConverter;
-        this.albumImageService = albumImageService;
     }
 
     @Override
-    public List<AlbumDto> getAllByUserId(Long id) {
-        return albumDtoDao.getAllByUserId(id);
-    }
-
-    @Override
-    public AlbumDto createAlbumImage(AlbumCreateDto albumCreateDto) {
-        AlbumImage newAlbumImage = albumConverter.toAlbumImage(albumCreateDto);
-        albumImageService.create(newAlbumImage);
-        return albumConverter.toAlbumDto(newAlbumImage);
+    public List<AlbumDto> getAllByTypeAndUserId(MediaType type, Long userId) {
+        return albumDtoDao.getAllByTypeAndUserId(type, userId);
     }
 
     @Override

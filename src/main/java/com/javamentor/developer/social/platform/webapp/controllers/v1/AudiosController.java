@@ -203,8 +203,8 @@ public class AudiosController {
     })
     @GetMapping(value = "/getAllAlbumsFromUser")
     public ResponseEntity<List<AlbumDto>> getAllAlbums() {
-        logger.info(String.format("Получение всех альбомов пользователя с id %s", 60L));
-        return ResponseEntity.ok().body(albumDtoService.getAllByUserId(60L));
+        logger.info(String.format("Получение всех альбомов пользователя с id %s", userService.getPrincipal().getUserId()));
+        return ResponseEntity.ok().body(albumDtoService.getAllByTypeAndUserId(MediaType.AUDIO, userService.getPrincipal().getUserId()));
     }
 
 
