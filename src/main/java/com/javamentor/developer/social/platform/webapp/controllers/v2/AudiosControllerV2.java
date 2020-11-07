@@ -244,7 +244,11 @@ public class AudiosControllerV2 {
     @PostMapping(value = "/user/{userId}/playlists")
     public ResponseEntity<?> createPlaylist(@ApiParam(value = "Объект нового плейлиста") @RequestBody @NotNull @Valid PlaylistCreateDto playlistCreateDto,
                                             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
+
+        logger.info(String.format("+++++++++User id is %s", userId));
+        logger.info(String.format("+++++++++playlistCreateDto is %s", playlistCreateDto.getOwnerUserId()));
         playlistCreateDto.setOwnerUserId(userId);
+        logger.info(String.format("+++++++++playlistCreateDto after adding id is %s", playlistCreateDto.getOwnerUserId()));
         PlaylistGetDto playlistGetDto = playlistDtoService.create(playlistCreateDto);
         logger.info(String.format("Плейлист id %s для пользователя %s создан", playlistGetDto.getId(), userId));
         return ResponseEntity.ok().body(playlistGetDto);
@@ -272,9 +276,6 @@ public class AudiosControllerV2 {
     @GetMapping(value = "/user/{userId}/playlists")
     public ResponseEntity<?> getPlaylistsOfUser(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         List<PlaylistGetDto> playlistGetDtoList = playlistDtoService.getAllByUserId(userId);
-        if (playlistGetDtoList.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlists exist for user %s", userId));
-        }
         logger.info(String.format("Плейлисты пользователя %s отправлены", userId));
         return ResponseEntity.ok().body(playlistGetDtoList);
     }
