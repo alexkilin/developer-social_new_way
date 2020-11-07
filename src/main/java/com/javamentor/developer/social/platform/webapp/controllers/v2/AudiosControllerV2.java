@@ -271,8 +271,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение списка плейлистов пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Плейлисты получены", response = PlaylistGetDto.class, responseContainer = "List"),
-            @ApiResponse(code = 404, message = "У текущего пользователя нет плейлистов")})
+            @ApiResponse(code = 200, message = "Плейлисты получены", response = PlaylistGetDto.class, responseContainer = "List")})
     @GetMapping(value = "/user/{userId}/playlists")
     public ResponseEntity<?> getPlaylistsOfUser(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         List<PlaylistGetDto> playlistGetDtoList = playlistDtoService.getAllByUserId(userId);
