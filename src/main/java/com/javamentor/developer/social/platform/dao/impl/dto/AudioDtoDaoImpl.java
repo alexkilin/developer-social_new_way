@@ -77,8 +77,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.album, " +
                         "c.length " +
                         "FROM Audios c " +
-                        "WHERE c.name " +
-                        "LIKE :name ")
+                        "WHERE upper(c.name) " +
+                        "LIKE upper(:name) ")
                 .setParameter("name", "%" + name + "%")
                 .getResultList();
     }
