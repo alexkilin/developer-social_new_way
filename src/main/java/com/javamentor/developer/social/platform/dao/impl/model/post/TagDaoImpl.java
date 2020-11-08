@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +24,15 @@ public class TagDaoImpl extends GenericDaoAbstract<Tag, Long> implements TagDao 
                                              .setParameter("text", text);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
+
+    @Override
+    public Optional<List<Tag>> getTagsByText(List<String> texts) {
+        List<Tag> tags = entityManager.createQuery(
+                "SELECT t FROM Tag t WHERE t.text IN (:texts)", Tag.class)
+                .setParameter("texts", texts)
+                .getResultList();
+
+        return Optional.of(tags);
+    }
+
 }

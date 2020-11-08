@@ -6,7 +6,9 @@ import com.javamentor.developer.social.platform.service.abstracts.model.post.Tag
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,5 +25,11 @@ public class TagServiceImpl extends GenericServiceAbstract<Tag, Long> implements
     @Override
     public Optional<Tag> getTagByText(String text) {
         return this.dao.getTagByText(text);
+    }
+
+    @Override
+    @Transactional
+    public Optional<List<Tag>> getTagsByText(List<String> texts) {
+        return dao.getTagsByText(texts);
     }
 }

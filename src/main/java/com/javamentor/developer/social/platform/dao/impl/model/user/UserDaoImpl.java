@@ -83,4 +83,15 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
         query.executeUpdate();
 
     }
+
+    @Override
+    public Optional<List<User>> getUsers(List<Long> ids) {
+        List<User> users = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.userId IN (:ids)", User.class)
+                .setParameter("ids", ids)
+                .getResultList();
+
+        return Optional.of(users);
+    }
+
 }

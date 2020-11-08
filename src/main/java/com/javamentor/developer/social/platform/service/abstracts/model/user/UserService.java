@@ -23,4 +23,6 @@ public interface UserService extends GenericService<User, Long> {
 
     User getPrincipal();
 
+    Optional<List<User>> getUsers(List<Long> ids);
+
 }

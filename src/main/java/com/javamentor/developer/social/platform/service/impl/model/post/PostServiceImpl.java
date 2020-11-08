@@ -13,9 +13,8 @@ import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implements PostService {
@@ -36,39 +35,9 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
 
     @Override
     public void create(Post entity) {
-        Set<Media> mediaSet = new HashSet<>();
 
-        if (entity.getMedia() != null) {
-            for (Media media : entity.getMedia()) {
-
-                Optional<User> userOptional = userService.getById(media.getUser().getUserId());
-                if (userOptional.isPresent()) {
-                    User user = userOptional.get();
-                    media.setUser(user);
-                    mediaSet.add(media);
-                    mediaService.create(media);
-                }
-            }
-        }
-
-        if (entity.getTags() != null) {
-            Set<Tag> tagSet = new HashSet<>();
-
-            for (Tag tag : entity.getTags()) {
-                tag.setText(tag.getText().toLowerCase());
-                Optional<Tag> tagFromDB = tagService.getTagByText(tag.getText());
-
-                if (!tagFromDB.isPresent()) {
-                    tagService.create(tag);
-                    tagSet.add(tag);
-                } else {
-                    tagSet.add(tagFromDB.get());
-                }
-            }
-
-            entity.setTags(tagSet);
-        }
-
+        Set<Media> mediaSet = createMedia(entity);
+        createTag(entity);
 
         Optional<User> userOptional = userService.getById(entity.getUser().getUserId());
         if (userOptional.isPresent()) {
@@ -77,12 +46,63 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
             entity.setMedia(mediaSet);
             super.create(entity);
         }
-
-        Optional<User> user = userService.getById(entity.getUser().getUserId());
-        entity.setUser(user.get());
-        entity.setMedia(mediaSet);
-        super.create(entity);
     }
 
+    private Set<Media> createMedia(Post entity) {
+        Set<Media> entityMedia = entity.getMedia();
 
+        if (Objects.nonNull(entityMedia)) {
+
+            List<Long> ids = entityMedia.stream()
+                    .map(Media::getUser)
+                    .map(User::getUserId)
+                    .collect(Collectors.toList());
+
+            Optional<List<User>> optionalUsers = userService.getUsers(ids);
+
+            if (optionalUsers.isPresent()) {
+                List<User> users = optionalUsers.get();
+                int i = 0;
+                for (Media media : entityMedia) {
+                    media.setUser(users.get(i++));
+                    mediaService.create(media);
+                }
+            }
+        }
+        return new HashSet<>(entityMedia);
+    }
+
+    private void createTag(Post entity) {
+        Set<Tag> entityTags = entity.getTags();
+        Set<Tag> tagSet = new HashSet<>();
+
+        if (Objects.nonNull(entityTags)) {
+
+            List<String> textOfTags = entityTags.stream()
+                    .map(Tag::getText)
+                    .collect(Collectors.toList());
+
+            Optional<List<Tag>> optionalTags = tagService.getTagsByText(textOfTags);
+
+            if (optionalTags.isPresent()) {
+                List<Tag> tags = optionalTags.get();
+                for (Tag eTag : entityTags) {
+                    for (Tag oTag : tags) {
+                        if (eTag.getText().equals(oTag.getText())) {
+                            eTag.setId(oTag.getId());
+                        }
+                    }
+                }
+            }
+
+            for (Tag tag : entityTags) {
+                if (Objects.isNull(tag.getId())) {
+                    tagService.create(tag);
+                }
+                tagSet.add(tag);
+            }
+            entity.setTags(tagSet);
+        }
+    }
 }
+

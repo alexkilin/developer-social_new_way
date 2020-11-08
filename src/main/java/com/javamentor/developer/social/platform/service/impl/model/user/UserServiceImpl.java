@@ -1,10 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.model.user;
 
 import com.javamentor.developer.social.platform.dao.abstracts.model.user.UserDao;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.dto.UserResetPasswordDto;
-import com.javamentor.developer.social.platform.models.entity.user.Active;
-import com.javamentor.developer.social.platform.models.entity.user.Role;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
@@ -13,9 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,4 +92,11 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
             return null;
         }
     }
+
+    @Override
+    @Transactional
+    public Optional<List<User>> getUsers(List<Long> ids) {
+        return userDAO.getUsers(ids);
+    }
+
 }
