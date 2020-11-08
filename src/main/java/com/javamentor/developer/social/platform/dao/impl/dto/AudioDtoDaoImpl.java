@@ -65,42 +65,22 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<AudioDto> getAudioOfName(String name) {
-        return SingleResultUtil.getSingleResultOrNull(entityManager.createQuery("SELECT " +
-                "c.id, " +
-                "c.icon, " +
-                "c.name, " +
-                "c.author, " +
-                "c.media.url, " +
-                "c.media.persistDateTime, " +
-                "c.album, " +
-                "c.length " +
-                "FROM Audios as c WHERE c.name = :name")
-                .setParameter("name", name)
-                .unwrap(Query.class)
-                .setResultTransformer(
-                        new ResultTransformer() {
-                            @Override
-                            public Object transformTuple(
-                                    Object[] objects, String[] strings) {
-                                return AudioDto.builder()
-                                        .id(((Number) objects[0]).longValue())
-                                        .icon((String) objects[1])
-                                        .name((String) objects[2])
-                                        .author((String) objects[3])
-                                        .url((String) objects[4])
-                                        .persistDateTime((LocalDateTime) objects[5])
-                                        .album((String) objects[6])
-                                        .length((Integer) objects[7])
-                                        .build();
-                            }
-
-                            @Override
-                            public List transformList(List list) {
-                                return list;
-                            }
-                        })
-        );
+    public List<AudioDto> getAudioOfName(String name) {
+        return entityManager.createQuery(
+                "SELECT " +
+                        "c.id, " +
+                        "c.icon, " +
+                        "c.name, " +
+                        "c.author, " +
+                        "c.media.url, " +
+                        "c.media.persistDateTime, " +
+                        "c.album, " +
+                        "c.length " +
+                        "FROM Audios c " +
+                        "WHERE upper(c.name) " +
+                        "LIKE upper(:name) ")
+                .setParameter("name", "%" + name + "%")
+                .getResultList();
     }
 
     @Override

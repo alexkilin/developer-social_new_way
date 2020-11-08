@@ -96,7 +96,7 @@ public class AudiosControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио по названию получено", response = AudioDto.class)})
     @GetMapping(value = "/name/{name}")
-    public ResponseEntity<AudioDto> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2") @PathVariable @NotNull String name) {
+    public ResponseEntity<List<AudioDto>> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2") @PathVariable @NotNull String name) {
         logger.info(String.format("Отправка аудио %s", name));
         return ResponseEntity.ok().body(audioDtoService.getAudioOfName(name));
     }
