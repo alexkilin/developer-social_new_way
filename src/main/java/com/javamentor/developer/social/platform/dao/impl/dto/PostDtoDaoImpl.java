@@ -6,6 +6,10 @@ import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
+import com.javamentor.developer.social.platform.models.entity.like.Like;
+import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
+import com.javamentor.developer.social.platform.models.entity.post.Post;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Repository
@@ -23,9 +26,12 @@ public class PostDtoDaoImpl implements PostDtoDao {
     final
     EntityManager entityManager;
 
+    final UserService userService;
+
     @Autowired
-    public PostDtoDaoImpl(EntityManager entityManager) {
+    public PostDtoDaoImpl(EntityManager entityManager, UserService userService) {
         this.entityManager = entityManager;
+        this.userService = userService;
     }
 
     @Override
@@ -77,6 +83,9 @@ public class PostDtoDaoImpl implements PostDtoDao {
         postDtoList.forEach(postDto -> {
             postDto.setMedia(getMediasByPostId(postDto.getId()));
             postDto.setTags(getTagsByPostId(postDto.getId()));
+            postDto.setIsLiked(isLikedByUser(postDto.getId()));
+            postDto.setIsBookmarked(isBookmarkedByUser(postDto.getId()));
+            postDto.setIsShared(isSharedByUser(postDto.getId()));
         });
         return postDtoList;
     }
@@ -283,7 +292,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
             @Override
             public Object transformTuple(Object[] objects, String[] strings) {
-                if (objects[0] != null || objects[1] != null || objects[2] != null){
+                if (objects[0] != null || objects[1] != null || objects[2] != null) {
                     return MediaPostDto.builder()
                             .url((String) objects[1])
                             .mediaType(objects[0] == null ? null : objects[0].toString())
@@ -294,7 +303,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
             @Override
             public List transformList(List list) {
-                if (list.contains(null)){
+                if (list.contains(null)) {
                     return new ArrayList();
                 } else return list;
             }
@@ -326,10 +335,56 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
             @Override
             public List transformList(List list) {
-                if (list.contains(null)){
+                if (list.contains(null)) {
                     return new ArrayList();
-                } else  return list;
+                } else return list;
             }
         }).getResultList();
     }
+
+    @Override
+    public Boolean isLikedByUser(Long id) {
+        List<Like> usersLike = entityManager.createQuery(
+                "SELECT pl.like " +
+                        "FROM PostLike AS pl " +
+                        "WHERE pl.like.user.userId = :userId " +
+                        "AND pl.post.id = :postId",
+                Like.class
+        ).setParameter("userId", userService.getPrincipal().getUserId())
+                .setParameter("postId", id)
+                .getResultList();
+        if (!usersLike.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean isBookmarkedByUser(Long id) {
+        List<Bookmark> usersBookmark = entityManager.createQuery(
+                "SELECT bm FROM Bookmark AS bm " +
+                        "WHERE bm.user.userId = :userId " +
+                        "AND bm.post.id=:postId",
+                Bookmark.class
+        ).setParameter("userId", userService.getPrincipal().getUserId())
+                .setParameter("postId", id)
+                .getResultList();
+
+        if (!usersBookmark.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean isSharedByUser(Long id) {
+        Post post = entityManager.find(Post.class, id);
+        if (post.getRepostPerson().contains(userService.getPrincipal())) {
+            return true;
+        }
+        return false;
+    }
 }
+
+
+

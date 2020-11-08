@@ -19,4 +19,10 @@ public interface PostDtoDao {
     List<TagDto> getTagsByPostId(Long id);
 
     List<PostDto> getPostsByUserId(Long id);
+
+    Boolean isLikedByUser(Long id);
+
+    Boolean isBookmarkedByUser(Long id);
+
+    Boolean isSharedByUser(Long id);
 }
