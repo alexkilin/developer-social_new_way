@@ -184,8 +184,9 @@ public class GroupControllerV2 {
     @PutMapping(value = "/update")
     public ResponseEntity<?> updateGroup(@ApiParam(value = "Группа с обновленными данными")
                                              @Valid @RequestBody GroupUpdateInfoDto groupUpdateInfoDto) {
-        if (!groupService.getById(groupUpdateInfoDto.getId()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Группа с id %s не найдена", groupUpdateInfoDto.getId()));
+        if (!groupService.existById(groupUpdateInfoDto.getId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("Группа с id %s не найдена", groupUpdateInfoDto.getId()));
         }
         Group group = groupConverter.groupUpdateInfoDtoToGroup(groupUpdateInfoDto);
         groupService.updateInfo(group);
