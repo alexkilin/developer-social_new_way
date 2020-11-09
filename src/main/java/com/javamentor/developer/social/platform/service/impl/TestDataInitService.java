@@ -623,12 +623,17 @@ public class TestDataInitService {
 
         if (userOptional.isPresent()) {
             User owner = userOptional.get();
-            HashSet<Audios> audios = new HashSet<>(audiosService.getAll());
-            Playlist playlist = Playlist.builder()
-                    .ownerUser(owner)
-                    .playlistContent(audios)
-                    .build();
-            playlistService.create(playlist);
+            for (int i = 1; i <= 5; i++) {
+                HashSet<Audios> audios = new HashSet<>(audiosService.getPart(i, 3));
+
+                Playlist playlist = Playlist.builder()
+                        .image("image" + i)
+                        .name("playlistName" + i)
+                        .ownerUser(owner)
+                        .playlistContent(audios)
+                        .build();
+                playlistService.create(playlist);
+            }
         }
     }
 

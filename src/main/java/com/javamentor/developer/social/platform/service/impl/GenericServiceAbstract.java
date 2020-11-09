@@ -21,6 +21,12 @@ public abstract class GenericServiceAbstract<T, PK extends Serializable> impleme
         dao.create(entity);
     }
 
+    @Transactional
+    @Override
+    public List<T> getPart(int currentPage, int itemsOnPage) {
+        return dao.getPartAudio(currentPage, itemsOnPage);
+    }
+
     @Override
     @Transactional
     public List<T> getAll(){

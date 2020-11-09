@@ -7,6 +7,8 @@ public interface GenericService<T, PK> {
 
     List<T> getAll();
 
+    List<T> getPart(int currentPage, int itemsOnPage);
+
     void create(T entity);
 
     void update(T entity);
