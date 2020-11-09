@@ -1,8 +1,8 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistCreateDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistGetDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import com.javamentor.developer.social.platform.models.entity.user.User;

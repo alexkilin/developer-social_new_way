@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
-import com.javamentor.developer.social.platform.models.dto.AlbumImageDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;

@@ -4,7 +4,7 @@ import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Repository

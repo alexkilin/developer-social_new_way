@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.VideoDtoDao;
-import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
 import org.springframework.stereotype.Service;
 

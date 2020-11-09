@@ -1,6 +1,7 @@
-package com.javamentor.developer.social.platform.models.dto;
+package com.javamentor.developer.social.platform.models.dto.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.javamentor.developer.social.platform.models.dto.LanguageDto;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;

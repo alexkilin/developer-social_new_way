@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.models.dto.comment;
 
-import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 

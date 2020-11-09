@@ -1,9 +1,9 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
-import com.javamentor.developer.social.platform.models.dto.AlbumDto;
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistCreateDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistGetDto;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;

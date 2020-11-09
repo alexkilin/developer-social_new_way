@@ -1,9 +1,9 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
-import com.javamentor.developer.social.platform.models.dto.AlbumCreateDto;
-import com.javamentor.developer.social.platform.models.dto.AlbumDto;
-import com.javamentor.developer.social.platform.models.dto.ImageCreateDto;
-import com.javamentor.developer.social.platform.models.dto.ImageDto;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.ImageCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.Image;

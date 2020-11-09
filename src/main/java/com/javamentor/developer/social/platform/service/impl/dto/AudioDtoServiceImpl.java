@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

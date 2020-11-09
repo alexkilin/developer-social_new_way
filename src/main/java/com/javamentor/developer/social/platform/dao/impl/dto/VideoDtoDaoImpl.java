@@ -2,7 +2,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.VideoDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
-import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -19,7 +19,7 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     @Override
     public List<VideoDto> getVideoOfAuthor(String author) {
         return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
                         " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
                         " FROM Videos as v JOIN Media as m ON v.media.id = m.id WHERE v.author = :author", VideoDto.class)
                 .setParameter("author", author).getResultList();
@@ -28,7 +28,7 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     @Override
     public Optional<VideoDto> getVideoOfName(String name) {
         return SingleResultUtil.getSingleResultOrNull(entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
                 " m.url, v.name, v.icon, v.author, m.persistDateTime)" +
                         " FROM Videos as v JOIN Media as m ON v.media.id = m.id WHERE v.name = :name", VideoDto.class)
                 .setParameter("name", name));
@@ -42,7 +42,7 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     @Override
     public List<VideoDto> getVideoOfUser(Long userId) {
         return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
                         " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
                         " FROM Videos as v WHERE v.media.mediaType = 2 AND v.media.user.userId = :userId", VideoDto.class)
                 .setParameter("userId", userId).getResultList();
@@ -51,7 +51,7 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     @Override
     public List<VideoDto> getPartVideoOfUser(Long userId, int currentPage, int itemsOnPage) {
         return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
                         " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
                         " FROM Videos as v WHERE v.media.mediaType = 2 AND v.media.user.userId = :userId", VideoDto.class)
                 .setParameter("userId", userId)
@@ -62,7 +62,7 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     @Override
     public List<VideoDto> getAuthorVideoOfUser(Long userId, String author) {
         return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
                         " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
                         " FROM User u join u.videos v where u.userId =:userId and v.author =:author", VideoDto.class)
                 .setParameter("userId", userId)
@@ -73,7 +73,7 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     @Override
     public List<VideoDto> getAlbumVideoOfUser(Long userId, String album) {
         return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
                         " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
                         " FROM AlbumVideo av JOIN av.videos as v WHERE av.album.name =:album " +
                         "AND av.album.userOwnerId.userId = :userId", VideoDto.class)
@@ -89,7 +89,7 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     @Override
     public List<VideoDto> getVideoFromAlbumOfUser(Long albumId) {
         return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
                         " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
                         " FROM AlbumVideo av JOIN av.videos as v WHERE av.album.id =:albumId", VideoDto.class)
                 .setParameter("albumId", albumId).getResultList();
@@ -98,7 +98,7 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     @Override
     public List<VideoDto> getPart(int currentPage, int itemsOnPage) {
         return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.VideoDto(v.id," +
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
                         "v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
                         "FROM Videos as v WHERE v.media.mediaType = 2", VideoDto.class)
                 .setFirstResult(currentPage * itemsOnPage)

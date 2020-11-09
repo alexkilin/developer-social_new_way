@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.models.dto;
+package com.javamentor.developer.social.platform.models.dto.users;
 
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
