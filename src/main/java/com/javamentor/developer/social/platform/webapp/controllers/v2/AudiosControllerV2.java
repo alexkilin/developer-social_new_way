@@ -72,14 +72,13 @@ public class AudiosControllerV2 {
         this.playlistConverter = playlistConverter;
     }
 
-    @ApiOperation(value = "Получение всего аудио постранично")
+    @ApiOperation(value = "Получение всего аудио")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио получено", responseContainer = "List", response = AudioDto.class)})
-    @GetMapping(value = "", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<List<AudioDto>> getPartAudios(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                        @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
-        logger.info(String.format("Аудио начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(audiosService.getPart(currentPage, itemsOnPage).stream().map(audioConverter::toDto).collect(Collectors.toList()));
+    @GetMapping(value = "")
+    public ResponseEntity<List<AudioDto>> getAllAudios() {
+        logger.info("Все аудио отправлены");
+        return ResponseEntity.ok().body(audiosService.getAll().stream().map(audioConverter::toDto).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение аудио по автору")

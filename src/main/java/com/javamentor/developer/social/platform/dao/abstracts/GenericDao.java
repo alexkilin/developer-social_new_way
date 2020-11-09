@@ -18,7 +18,4 @@ public interface GenericDao<T, PK extends Serializable> {
     boolean existById(PK id);
 
     List<T> getAll();
-
-    List<T> getPartAudio(int currentPage, int itemsOnPage);
-
 }

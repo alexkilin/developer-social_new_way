@@ -63,14 +63,13 @@ public class VideosControllerV2 {
         this.albumDtoService = albumDtoService;
     }
 
-    @ApiOperation(value = "Получение некоторого количества видео")
+    @ApiOperation(value = "Получение всего видео")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Несколько видео получено", responseContainer = "List", response = VideoDto.class)})
-    @GetMapping(value = "", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<List<VideoDto>> getPartVideos(@ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
-                                                        @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
-        logger.info(String.format("Видео начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(videosService.getPart(currentPage, itemsOnPage).stream().map(videoConverter::toDto).collect(Collectors.toList()));
+            @ApiResponse(code = 200, message = "Все видео получены", responseContainer = "List", response = VideoDto.class)})
+    @GetMapping(value = "")
+    public ResponseEntity<List<VideoDto>> getAllVideos() {
+        logger.info("Все видео отправлены");
+        return ResponseEntity.ok().body(videosService.getAll().stream().map(videoConverter::toDto).collect(Collectors.toList()));
     }
 
     @ApiOperation(value = "Получение видео по названию")

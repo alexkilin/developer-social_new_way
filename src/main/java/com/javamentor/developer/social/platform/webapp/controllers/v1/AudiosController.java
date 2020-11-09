@@ -82,16 +82,6 @@ public class AudiosController {
         return ResponseEntity.ok().body(audiosService.getAll().stream().map(audioConverter::toDto).collect(Collectors.toList()));
     }
 
-    @ApiOperation(value = "Получение некоторого количества аудио")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Несколько аудио получено",responseContainer = "List",response = AudioDto.class)})
-    @GetMapping(value = "/getPart", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<List<AudioDto>> getPartAudios(@ApiParam(value = "Текущая страница", example = "1")@RequestParam("currentPage") int currentPage,
-                                                        @ApiParam(value = "Количество данных на страницу", example = "15")@RequestParam("itemsOnPage") int itemsOnPage) {
-        logger.info(String.format("Аудио начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(audiosService.getPart(currentPage, itemsOnPage).stream().map(audioConverter::toDto).collect(Collectors.toList()));
-    }
-
     @ApiOperation(value = "Получение всего аудио одного автора")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Все аудио одного автора получено",response = AudioDto.class, responseContainer = "List")})
@@ -100,7 +90,6 @@ public class AudiosController {
         logger.info(String.format("Отправка всего аудио автора %s", author));
         return ResponseEntity.ok().body(audioDtoService.getAudioOfAuthor(author));
     }
-
 
     @ApiOperation(value = "Получение  аудио по названию")
     @ApiResponses(value = {
