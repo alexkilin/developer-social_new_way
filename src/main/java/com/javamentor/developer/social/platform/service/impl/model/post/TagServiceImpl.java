@@ -29,7 +29,7 @@ public class TagServiceImpl extends GenericServiceAbstract<Tag, Long> implements
 
     @Override
     @Transactional
-    public Optional<List<Tag>> getTagsByText(List<String> texts) {
+    public List<Tag> getTagsByText(List<String> texts) {
         return dao.getTagsByText(texts);
     }
 }

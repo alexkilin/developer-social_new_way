@@ -36,63 +36,52 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
     @Override
     public void create(Post entity) {
 
-        Set<Media> mediaSet = createMedia(entity);
-        createTag(entity);
-
         Optional<User> userOptional = userService.getById(entity.getUser().getUserId());
         if (userOptional.isPresent()) {
+
             User user = userOptional.get();
+            Set<Media> mediaSet = createMedia(entity.getMedia(), user);
+            Set<Tag> tagSet = createTag(entity.getTags());
             entity.setUser(user);
             entity.setMedia(mediaSet);
+            entity.setTags(tagSet);
             super.create(entity);
         }
     }
 
-    private Set<Media> createMedia(Post entity) {
-        Set<Media> entityMedia = entity.getMedia();
+    private Set<Media> createMedia(Set<Media> entityMedia, User user) {
 
-        if (Objects.nonNull(entityMedia)) {
-
-            List<Long> ids = entityMedia.stream()
-                    .map(Media::getUser)
-                    .map(User::getUserId)
-                    .collect(Collectors.toList());
-
-            Optional<List<User>> optionalUsers = userService.getUsers(ids);
-
-            if (optionalUsers.isPresent()) {
-                List<User> users = optionalUsers.get();
-                int i = 0;
-                for (Media media : entityMedia) {
-                    media.setUser(users.get(i++));
-                    mediaService.create(media);
-                }
+        if (Objects.nonNull(entityMedia) && !entityMedia.isEmpty()) {
+            for (Media media : entityMedia) {
+                media.setUser(user);
+                mediaService.create(media);
             }
         }
         return new HashSet<>(entityMedia);
     }
 
-    private void createTag(Post entity) {
-        Set<Tag> entityTags = entity.getTags();
+    private Set<Tag> createTag(Set<Tag> entityTags) {
+
         Set<Tag> tagSet = new HashSet<>();
 
-        if (Objects.nonNull(entityTags)) {
+        if (Objects.nonNull(entityTags) && !entityTags.isEmpty()) {
 
             List<String> textOfTags = entityTags.stream()
                     .map(Tag::getText)
                     .collect(Collectors.toList());
 
-            Optional<List<Tag>> optionalTags = tagService.getTagsByText(textOfTags);
+            List<Tag> tagList = tagService.getTagsByText(textOfTags);
 
-            if (optionalTags.isPresent()) {
-                List<Tag> tags = optionalTags.get();
+            if (Objects.nonNull(tagList) && !tagList.isEmpty()) {
                 for (Tag eTag : entityTags) {
-                    for (Tag oTag : tags) {
-                        if (eTag.getText().equals(oTag.getText())) {
-                            eTag.setId(oTag.getId());
+                    for (Tag tList : tagList) {
+                        if (eTag.getText().equals(tList.getText())) {
+                            eTag.setId(tList.getId());
                         }
                     }
                 }
+            } else {
+                return tagSet;
             }
 
             for (Tag tag : entityTags) {
@@ -101,8 +90,8 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
                 }
                 tagSet.add(tag);
             }
-            entity.setTags(tagSet);
         }
+        return tagSet;
     }
 }
 

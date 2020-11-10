@@ -10,5 +10,5 @@ public interface TagService extends GenericService<Tag, Long> {
 
     Optional<Tag> getTagByText(String text);
 
-    Optional<List<Tag>> getTagsByText(List<String> texts);
+    List<Tag> getTagsByText(List<String> texts);
 }

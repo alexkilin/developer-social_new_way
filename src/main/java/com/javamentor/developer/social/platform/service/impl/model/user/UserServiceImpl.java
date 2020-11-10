@@ -93,10 +93,4 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
         }
     }
 
-    @Override
-    @Transactional
-    public Optional<List<User>> getUsers(List<Long> ids) {
-        return userDAO.getUsers(ids);
-    }
-
 }

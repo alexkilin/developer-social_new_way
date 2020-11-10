@@ -26,13 +26,13 @@ public class TagDaoImpl extends GenericDaoAbstract<Tag, Long> implements TagDao 
     }
 
     @Override
-    public Optional<List<Tag>> getTagsByText(List<String> texts) {
+    public List<Tag> getTagsByText(List<String> texts) {
         List<Tag> tags = entityManager.createQuery(
                 "SELECT t FROM Tag t WHERE t.text IN (:texts)", Tag.class)
                 .setParameter("texts", texts)
                 .getResultList();
 
-        return Optional.of(tags);
+        return tags;
     }
 
 }
