@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.dto.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.VideoDto;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -372,4 +373,49 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                 .setMaxResults(limit);
         return query.getResultList();
     }
+
+    @Override
+    public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
+        return entityManager.createQuery(
+                "SELECT new com.javamentor.developer.social.platform.models.dto.AudioDto(" +
+                        "a.id," +
+                        "a.media.url, " +
+                        "a.icon, " +
+                        "a.name, " +
+                        "a.author, " +
+                        "a.album," +
+                        "a.length," +
+                        "a.media.persistDateTime)" +
+                        "FROM Audios as a WHERE a.media.mediaType = 1", AudioDto.class)
+                .setFirstResult(currentPage * itemsOnPage)
+                .setMaxResults(itemsOnPage)
+                .getResultList();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

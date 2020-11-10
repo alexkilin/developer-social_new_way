@@ -17,8 +17,8 @@ public class VideoDtoServiceImpl implements VideoDtoService {
     }
 
     @Override
-    public List<VideoDto> getPart(int currentPage, int itemsOnPage) {
-        return this.videoDtoDao.getPart(currentPage, itemsOnPage);
+    public List<VideoDto> getPartVideo(int currentPage, int itemsOnPage) {
+        return this.videoDtoDao.getPartVideo(currentPage, itemsOnPage);
     }
 
     @Override
