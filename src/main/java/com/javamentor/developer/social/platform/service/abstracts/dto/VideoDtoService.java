@@ -22,5 +22,5 @@ public interface VideoDtoService {
 
     List<VideoDto> getVideoFromAlbumOfUser(Long albumId);
 
-    List<VideoDto> getPart(int currentPage, int itemsOnPage);
+    List<VideoDto> getPartVideo(int currentPage, int itemsOnPage);
 }

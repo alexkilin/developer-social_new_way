@@ -28,4 +28,6 @@ public interface AudioDtoDao {
     List<AudioDto> getAudioFromAlbumOfUser(Long albumId);
 
     List<AudioDto> getAudioFromPlaylist(Long playlistId, int offset, int limit);
+
+    List<AudioDto> getPartAudio(int currentPage, int itemsOnPage);
 }

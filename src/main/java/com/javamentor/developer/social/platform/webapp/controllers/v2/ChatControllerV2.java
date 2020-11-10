@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Validated
@@ -137,7 +138,12 @@ public class ChatControllerV2 {
     @Validated(OnCreate.class)
     public ResponseEntity<?> createGroupChat(@RequestBody @NotNull @Valid ChatDto chatDto) {
 
-        GroupChat groupChat = groupChatConverter.chatToGroupChat(chatDto, 3L);
+        User user = userService.getPrincipal();
+        if (Objects.isNull(user)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        GroupChat groupChat = groupChatConverter.chatToGroupChat(chatDto, user.getUserId());
         groupChatService.create(groupChat);
         ChatDto outputChatDto = groupChatConverter.groupChatToChatDto(groupChat);
         return ResponseEntity.ok(outputChatDto);
