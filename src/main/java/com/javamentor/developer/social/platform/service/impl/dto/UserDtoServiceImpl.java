@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
 import com.javamentor.developer.social.platform.models.dto.LanguageDto;
 import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.UserFriendDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,10 @@ public class UserDtoServiceImpl implements UserDtoService {
         }
 
         return userDto;
+    }
+
+    @Override
+    public List<UserFriendDto> getUserFriendsDtoById(Long id, int currentPage, int itemsOnPage) {
+        return userDtoDao.getUserFriendsDtoById(id, currentPage, itemsOnPage);
     }
 }
