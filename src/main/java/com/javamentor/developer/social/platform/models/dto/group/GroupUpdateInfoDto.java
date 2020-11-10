@@ -43,8 +43,4 @@ public class GroupUpdateInfoDto {
     @ApiModelProperty(notes = "Адрес аватарки группы.")
     private String addressImageGroup;
 
-    @ApiModelProperty(notes = "Количество подписчиков группы. Не должно быть пустым.")
-    @NotNull(groups = OnCreate.class, message = "Поле subscribers не должно быть Null при создании")
-    @NotNull(groups = OnUpdate.class, message = "Поле subscribers не должно быть Null при обновлении")
-    private Long subscribers;
 }

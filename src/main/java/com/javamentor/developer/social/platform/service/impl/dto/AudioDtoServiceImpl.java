@@ -63,4 +63,10 @@ public class AudioDtoServiceImpl implements AudioDtoService {
     public List<AudioDto> getAudioFromPlaylist(Long playlistId, int offset, int limit) {
         return audioDtoDao.getAudioFromPlaylist(playlistId, offset, limit);
     }
+
+    @Override
+    public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
+        return audioDtoDao.getPartAudio(currentPage, itemsOnPage);
+    }
+
 }
