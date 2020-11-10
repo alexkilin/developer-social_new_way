@@ -35,13 +35,13 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
 
     @Override
     public void create(Post entity) {
-
         Optional<User> userOptional = userService.getById(entity.getUser().getUserId());
+
         if (userOptional.isPresent()) {
 
             User user = userOptional.get();
             Set<Media> mediaSet = createMedia(entity.getMedia(), user);
-            Set<Tag> tagSet = createTag(entity.getTags());
+            Set<Tag> tagSet = updateAndGetEntityTags(entity.getTags());
             entity.setUser(user);
             entity.setMedia(mediaSet);
             entity.setTags(tagSet);
@@ -50,7 +50,6 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
     }
 
     private Set<Media> createMedia(Set<Media> entityMedia, User user) {
-
         if (Objects.nonNull(entityMedia) && !entityMedia.isEmpty()) {
             for (Media media : entityMedia) {
                 media.setUser(user);
@@ -60,38 +59,44 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
         return new HashSet<>(entityMedia);
     }
 
-    private Set<Tag> createTag(Set<Tag> entityTags) {
-
+    private Set<Tag> updateAndGetEntityTags(Set<Tag> entityTags) {
         Set<Tag> tagSet = new HashSet<>();
 
         if (Objects.nonNull(entityTags) && !entityTags.isEmpty()) {
-
             List<String> textOfTags = entityTags.stream()
                     .map(Tag::getText)
                     .collect(Collectors.toList());
 
             List<Tag> tagList = tagService.getTagsByText(textOfTags);
 
-            if (Objects.nonNull(tagList) && !tagList.isEmpty()) {
-                for (Tag eTag : entityTags) {
-                    for (Tag tList : tagList) {
-                        if (eTag.getText().equals(tList.getText())) {
-                            eTag.setId(tList.getId());
-                        }
-                    }
-                }
-            } else {
-                return tagSet;
-            }
+            searchAndAddTagId(entityTags, tagList);
 
-            for (Tag tag : entityTags) {
-                if (Objects.isNull(tag.getId())) {
-                    tagService.create(tag);
-                }
-                tagSet.add(tag);
-            }
+            createTag(entityTags, tagSet);
+
         }
         return tagSet;
     }
+
+    private void createTag(Set<Tag> entityTags, Set<Tag> tagSet) {
+        for (Tag tag : entityTags) {
+            if (Objects.isNull(tag.getId())) {
+                tagService.create(tag);
+            }
+            tagSet.add(tag);
+        }
+    }
+
+    private void searchAndAddTagId(Set<Tag> entityTags, List<Tag> tagList) {
+        if (Objects.nonNull(tagList) && !tagList.isEmpty()) {
+            for (Tag eTag : entityTags) {
+                for (Tag tList : tagList) {
+                    if (eTag.getText().equals(tList.getText())) {
+                        eTag.setId(tList.getId());
+                    }
+                }
+            }
+        }
+    }
+
 }
 
