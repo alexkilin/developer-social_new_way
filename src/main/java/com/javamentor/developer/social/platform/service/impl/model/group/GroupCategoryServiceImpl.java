@@ -7,11 +7,20 @@ import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GroupCategoryServiceImpl extends GenericServiceAbstract<GroupCategory, Long> implements GroupCategoryService {
+    private final GroupCategoryDao groupCategoryDao;
 
     @Autowired
     public GroupCategoryServiceImpl(GroupCategoryDao dao) {
         super(dao);
+        this.groupCategoryDao = dao;
+    }
+
+    @Override
+    public Optional<GroupCategory> getByCategory(String category) {
+        return groupCategoryDao.getByCategory(category);
     }
 }
