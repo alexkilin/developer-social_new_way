@@ -20,9 +20,4 @@ public interface PostDtoDao {
 
     List<PostDto> getPostsByUserId(Long id);
 
-    Boolean isLikedByUser(Long id);
-
-    Boolean isBookmarkedByUser(Long id);
-
-    Boolean isSharedByUser(Long id);
 }
