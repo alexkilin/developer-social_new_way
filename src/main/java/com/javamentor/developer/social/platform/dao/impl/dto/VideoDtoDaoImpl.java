@@ -96,7 +96,7 @@ public class VideoDtoDaoImpl implements VideoDtoDao {
     }
 
     @Override
-    public List<VideoDto> getPart(int currentPage, int itemsOnPage) {
+    public List<VideoDto> getPartVideo(int currentPage, int itemsOnPage) {
         return entityManager.createQuery(
                 "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
                         "v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
