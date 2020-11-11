@@ -83,4 +83,5 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
         query.executeUpdate();
 
     }
+
 }
