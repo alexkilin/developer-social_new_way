@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
 import com.javamentor.developer.social.platform.models.dto.LanguageDto;
+import com.javamentor.developer.social.platform.models.dto.UserFriendDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -169,6 +170,52 @@ class UserDtoDaoImpl implements UserDtoDao {
 
          return userLanguageDto;
      }
+
+    @Override
+    public List<UserFriendDto> getUserFriendsDtoById(Long id, int currentPage, int itemsOnPage) {
+        List<UserFriendDto> userFriends = new ArrayList<>();
+
+        try {
+            userFriends = entityManager.createQuery(
+                        "select " +
+                                "f.friend.userId, " +
+                                "f.friend.firstName, " +
+                                "f.friend.avatar, " +
+                                "f.friend.education, " +
+                                "f.friend.profession, " +
+                                "f.friend.status " +
+                        "from Friend f " +
+                        "where f.user.userId = :id")
+                    .setParameter("id", id)
+                    .setFirstResult(currentPage * itemsOnPage)
+                    .setMaxResults(itemsOnPage)
+                    .unwrap(Query.class)
+                    .setResultTransformer(new ResultTransformer() {
+                        @Override
+                        public Object transformTuple(Object[] objects, String[] strings) {
+                            return UserFriendDto.builder()
+                                    .id((Long) objects[0])
+                                    .fullName((String) objects[1])
+                                    .avatar((String) objects[2])
+                                    .education((String) objects[3])
+                                    .profession((String) objects[4])
+                                    .status((String) objects[5])
+                                    .build();
+                        }
+
+                        @Override
+                        public List transformList(List list) {
+                            return list;
+                        }
+                    })
+                    .getResultList();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        return userFriends;
+    }
 
 }
 

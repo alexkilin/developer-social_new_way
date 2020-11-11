@@ -9,11 +9,12 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class FriendDto {
+public class UserFriendDto {
 
     Long id;
-
-    Long userId;
-
-    Long friendId;
+    String fullName;
+    String avatar;
+    String education;
+    String profession;
+    String status;
 }
