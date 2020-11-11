@@ -2,8 +2,8 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
-import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class AudioDtoDaoImpl implements AudioDtoDao {
@@ -355,7 +354,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
     @Override
     public List<AudioDto> getAudioFromPlaylist(Long playlistId, int offset, int limit) {
         Query<AudioDto> query = (Query<AudioDto>) entityManager.createQuery(
-                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AudioDto( " +
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.music.AudioDto( " +
                         "au.id, " +
                         "au.media.url, " +
                         "au.icon, " +
@@ -377,7 +376,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
     @Override
     public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
         return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.AudioDto(" +
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.music.AudioDto(" +
                         "a.id," +
                         "a.media.url, " +
                         "a.icon, " +

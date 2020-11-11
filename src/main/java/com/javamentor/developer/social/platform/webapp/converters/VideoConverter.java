@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
-import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import com.javamentor.developer.social.platform.models.entity.user.User;

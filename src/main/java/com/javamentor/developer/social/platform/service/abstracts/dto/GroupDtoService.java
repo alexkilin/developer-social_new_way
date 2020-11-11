@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto;
 
-import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;

@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.service.abstracts.model.user;
 
-import com.javamentor.developer.social.platform.models.dto.UserResetPasswordDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.GenericService;
 

@@ -1,6 +1,9 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
 import com.javamentor.developer.social.platform.models.dto.*;
+import com.javamentor.developer.social.platform.models.dto.users.UserAuthorizationDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;

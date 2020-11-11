@@ -2,8 +2,11 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
 import com.javamentor.developer.social.platform.models.dto.LanguageDto;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
+<<<<<<< src/main/java/com/javamentor/developer/social/platform/service/impl/dto/UserDtoServiceImpl.java
 import com.javamentor.developer.social.platform.models.dto.UserFriendDto;
+=======
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
+>>>>>>> src/main/java/com/javamentor/developer/social/platform/service/impl/dto/UserDtoServiceImpl.java
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
