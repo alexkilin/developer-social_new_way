@@ -2,15 +2,9 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
-import com.javamentor.developer.social.platform.models.dto.AlbumDto;
-import com.javamentor.developer.social.platform.models.entity.album.Album;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
-import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
-import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -24,23 +18,12 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
     @PersistenceContext
     protected EntityManager entityManager;
 
-    private final AlbumAudioService albumAudioService;
-    private final AlbumService albumService;
-    private final UserService userService;
-    private final AlbumConverter albumConverter;
-
-    @Autowired
-    public AlbumDtoDaoImpl(AlbumAudioService albumAudioService, AlbumService albumService, UserService userService, AlbumConverter albumConverter) {
-        this.albumAudioService = albumAudioService;
-        this.albumService = albumService;
-        this.userService = userService;
-        this.albumConverter = albumConverter;
-    }
+    public AlbumDtoDaoImpl() {}
 
     @Override
     public List<AlbumDto> getAllByTypeAndUserId(MediaType type, Long userId) {
         return entityManager.createQuery(
-                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AlbumDto(" +
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.AlbumDto(" +
                         "a.id, " +
                         "a.name, " +
                         "a.icon) " +
@@ -57,7 +40,7 @@ public class AlbumDtoDaoImpl implements AlbumDtoDao {
     @Override
     public Optional<AlbumDto> getById(Long id) {
         Query<AlbumDto> query = (Query<AlbumDto>) entityManager.createQuery(
-                "SELECT NEW com.javamentor.developer.social.platform.models.dto.AlbumDto(" +
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.AlbumDto(" +
                 "album.id, " +
                 "album.name, " +
                 "album.icon) " +

@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.model.user;
 
 import com.javamentor.developer.social.platform.dao.abstracts.model.user.UserDao;
-import com.javamentor.developer.social.platform.models.dto.UserResetPasswordDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
@@ -92,5 +92,4 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
             return null;
         }
     }
-
 }

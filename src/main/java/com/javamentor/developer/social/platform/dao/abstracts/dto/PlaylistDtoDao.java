@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.dao.abstracts.dto;
 
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistGetDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 
 import java.util.List;
 import java.util.Optional;

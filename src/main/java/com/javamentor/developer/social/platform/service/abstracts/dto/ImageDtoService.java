@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto;
 
-import com.javamentor.developer.social.platform.models.dto.ImageCreateDto;
-import com.javamentor.developer.social.platform.models.dto.ImageDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 
 import java.util.List;
 import java.util.Optional;
