@@ -5,11 +5,16 @@ import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
+import com.javamentor.developer.social.platform.models.entity.like.PostLike;
+import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.comment.PostCommentService;
+import com.javamentor.developer.social.platform.service.abstracts.model.like.PostLikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.BookmarkService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
@@ -31,7 +36,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping(value = "/api/v2/posts", produces = "application/json")
+@RequestMapping(value = "/api/v2", produces = "application/json")
 @Api(value = "PostApi-v2", description = "Операции над постами пользователя")
 @Validated
 public class PostControllerV2 {
@@ -42,9 +47,21 @@ public class PostControllerV2 {
     private final UserTabsService userTabsService;
     private final PostCommentConverter postCommentConverter;
     private final PostCommentService postCommentService;
+    private final PostLikeService postLikeService;
+    private final BookmarkService bookmarkService;
 
     @Autowired
-    public PostControllerV2(PostDtoService postDtoService, PostConverter postConverter, PostService postService, UserService userService, MediaService mediaService, UserTabsService userTabsService, PostCommentConverter postCommentConverter, PostCommentService postCommentService) {
+    public PostControllerV2(PostDtoService postDtoService,
+                            PostConverter postConverter,
+                            PostService postService,
+                            UserService userService,
+                            MediaService mediaService,
+                            UserTabsService userTabsService,
+                            PostCommentConverter postCommentConverter,
+                            PostCommentService postCommentService,
+                            PostLikeService postLikeService,
+                            BookmarkService bookmarkService) {
+
         this.postDtoService = postDtoService;
         this.postConverter = postConverter;
         this.postService = postService;
@@ -52,6 +69,8 @@ public class PostControllerV2 {
         this.userTabsService = userTabsService;
         this.postCommentConverter = postCommentConverter;
         this.postCommentService = postCommentService;
+        this.postLikeService = postLikeService;
+        this.bookmarkService = bookmarkService;
     }
 
 
@@ -66,7 +85,7 @@ public class PostControllerV2 {
     @ApiOperation(value = "Получение поста по тэгу")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
-    @GetMapping("/{tag}")
+    @GetMapping("/posts/{tag}")
     public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("tag") String tag) {
         return ResponseEntity.ok(postDtoService.getPostsByTag(tag));
     }
@@ -74,7 +93,7 @@ public class PostControllerV2 {
     @ApiOperation(value = "Получение списка постов пользователя по его ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
-    @GetMapping("/user/{id}")
+    @GetMapping("/posts/user/{id}")
     public ResponseEntity<List<PostDto>> getPostsByUserId(@ApiParam(value = "ID пользователя", example = "60") @PathVariable Long id) {
         return ResponseEntity.ok(postDtoService.getPostsByUserId(id));
     }
@@ -96,7 +115,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Пост удалён", response = String.class),
             @ApiResponse(code = 400, message = "Пост не может быть удалён", response = String.class)
     })
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/posts/{id}")
     public ResponseEntity<?> deletePost(@ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
         Optional<Post> result = postService.getById(id);
 
@@ -116,7 +135,7 @@ public class PostControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Комментарии получены", responseContainer = "List",
                     response = CommentDto.class)})
-    @GetMapping("/{id}/comments")
+    @GetMapping("/posts/{id}/comments")
     public ResponseEntity<List<CommentDto>> showPostComments(@ApiParam(value = "ID поста", example = "20") @PathVariable Long id) {
         return new ResponseEntity<>(postDtoService.getCommentsByPostId(id), HttpStatus.OK);
     }
@@ -126,7 +145,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 201, message = "Комментарий добавлен"),
             @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
     })
-    @PostMapping("/{postId}/comment")
+    @PostMapping("/posts/{postId}/comment")
     public ResponseEntity<String> addCommentToPost(@ApiParam(value = "Объект комментария к посту") @RequestBody CommentDto commentDto,
                                                    @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
         if (!userService.existById(commentDto.getUserDto().getUserId())) {
@@ -143,4 +162,128 @@ public class PostControllerV2 {
         String msg = String.format("Пользователь с id: %d добавил комментарий в пост с id: %s", commentDto.getUserDto().getUserId(), postId);
         return new ResponseEntity<>(msg, HttpStatus.CREATED);
     }
+
+    @ApiOperation(value = "Добавление лайка посту авторизованным пользователем")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Лайк добавлен в пост"),
+            @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
+    })
+    @PostMapping("/post/{postId}/like")
+    public ResponseEntity<String> addLikeToPost(
+            @ApiParam(value = "Id поста", example = "1")
+            @PathVariable @NonNull Long postId) {
+
+        PostAndUserUtil util = new PostAndUserUtil(postId);
+        if (util.nonFoundPostOrUser) {
+            return util.wrong;
+        }
+
+        PostLike newPostLike = new PostLike(util.user);
+        newPostLike.setPost(util.post);
+        postLikeService.create(newPostLike);
+        return new ResponseEntity<>(String.format("Пользователь с id: %d добавил лайк в пост с id: %d",
+                util.user.getUserId(), postId), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Удаление лайка из поста авторизованным пользователем")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Лайк удален из пост"),
+            @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
+    })
+    @DeleteMapping("/post/{postId}/like")
+    public ResponseEntity<String> deleteLikeFromPost(
+            @ApiParam(value = "Id поста", example = "1")
+            @PathVariable @NonNull Long postId) {
+
+        PostAndUserUtil util = new PostAndUserUtil(postId);
+        if (util.nonFoundPostOrUser) {
+            return util.wrong;
+        }
+
+        for (PostLike postLike : util.post.getPostLikes()) {
+            if (postLike.getLike().getUser().getUserId().equals(util.user.getUserId())) {
+                postLikeService.delete(postLike);
+            }
+        }
+        return new ResponseEntity<>(String.format("Пользователь с id: %d удалил лайк из поста с id: %d",
+                util.user.getUserId(), postId), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Добавление поста в закладки авторизованного пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Пост добавлен в закладки"),
+            @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
+    })
+    @PostMapping("/post/{postId}/bookmark")
+    public ResponseEntity<String> addPostToBookmark(
+            @ApiParam(value = "Id поста", example = "1")
+            @PathVariable @NonNull Long postId) {
+
+        PostAndUserUtil util = new PostAndUserUtil(postId);
+        if (util.nonFoundPostOrUser) {
+            return util.wrong;
+        }
+
+        Bookmark bookmark = new Bookmark();
+        bookmark.setUser(util.user);
+        bookmark.setPost(util.post);
+        bookmarkService.create(bookmark);
+        return new ResponseEntity<>(String.format("Пользователь с id: %d добавил пост с id: %d в закладки",
+                util.user.getUserId(), postId), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Удаление поста из закладок авторизованным пользователем")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Пост из закладок удален"),
+            @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
+    })
+    @DeleteMapping("/post/{postId}/bookmark")
+    public ResponseEntity<String> deletePostFromBookmark(
+            @ApiParam(value = "Id поста", example = "1")
+            @PathVariable @NonNull Long postId) {
+
+        PostAndUserUtil util = new PostAndUserUtil(postId);
+        if (util.nonFoundPostOrUser) {
+            return util.wrong;
+        }
+
+        for (Bookmark bookmark : util.post.getBookmarks()) {
+            if (bookmark.getUser().getUserId().equals(util.user.getUserId())) {
+                bookmarkService.delete(bookmark);
+            }
+        }
+        return new ResponseEntity<>(String.format("Пользователь с id: %d удалил пост с id: %d из закладок",
+                util.user.getUserId(), postId), HttpStatus.CREATED);
+    }
+
+    private class PostAndUserUtil {
+
+        private Post post;
+        private User user;
+        private boolean nonFoundPostOrUser;
+        private final ResponseEntity<String> wrong;
+        private final Long postId;
+
+        public PostAndUserUtil(Long postId) {
+            this.postId = postId;
+            this.wrong = checkForUserAndPost();
+        }
+
+        public ResponseEntity<String> checkForUserAndPost() {
+            this.user = userService.getPrincipal();
+            if (Objects.isNull(user)) {
+                this.nonFoundPostOrUser = true;
+                return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
+            }
+            Optional<Post> optionalPost = postService.getById(postId);
+            if (!optionalPost.isPresent()) {
+                this.nonFoundPostOrUser = true;
+                return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
+            } else {
+                this.post = optionalPost.get();
+            }
+            return null;
+        }
+    }
+
 }
