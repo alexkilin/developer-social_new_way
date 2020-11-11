@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.dao.abstracts.dto;
 
-import com.javamentor.developer.social.platform.models.dto.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 
 import java.util.List;

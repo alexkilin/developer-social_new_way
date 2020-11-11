@@ -1,8 +1,8 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
-import com.javamentor.developer.social.platform.models.dto.UserDto;
-import com.javamentor.developer.social.platform.models.dto.UserRegisterDto;
-import com.javamentor.developer.social.platform.models.dto.UserUpdateInfoDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserRegisterDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
 import com.javamentor.developer.social.platform.models.entity.user.Active;
 import com.javamentor.developer.social.platform.models.entity.user.Role;
 import com.javamentor.developer.social.platform.models.entity.user.User;

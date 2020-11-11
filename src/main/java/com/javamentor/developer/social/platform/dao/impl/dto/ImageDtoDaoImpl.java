@@ -2,7 +2,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.ImageDtoDao;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
-import com.javamentor.developer.social.platform.models.dto.ImageDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,7 +25,7 @@ public class ImageDtoDaoImpl implements ImageDtoDao {
     @Override
     public List<ImageDto> getAllByUserId(int offset, int limit, Long id) {
         Query<ImageDto> query = (Query<ImageDto>) entityManager.createQuery(
-                "SELECT NEW com.javamentor.developer.social.platform.models.dto.ImageDto(" +
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.image.ImageDto(" +
                         "im.id, " +
                         "im.media.url, " +
                         "im.description, " +
@@ -42,7 +42,7 @@ public class ImageDtoDaoImpl implements ImageDtoDao {
     @Override
     public List<ImageDto> getAllByAlbumId(int offset, int limit, Long id) {
         Query<ImageDto> query = (Query<ImageDto>) entityManager.createQuery(
-                "SELECT NEW com.javamentor.developer.social.platform.models.dto.ImageDto(" +
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.image.ImageDto(" +
                         "im.id, " +
                         "im.media.url, " +
                         "im.description, " +
@@ -59,7 +59,7 @@ public class ImageDtoDaoImpl implements ImageDtoDao {
     @Override
     public Optional<ImageDto> getById(Long id) {
         Query<ImageDto> query = (Query<ImageDto>) entityManager.createQuery(
-                "SELECT NEW com.javamentor.developer.social.platform.models.dto.ImageDto(" +
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.image.ImageDto(" +
                         "im.id, " +
                         "im.media.url, " +
                         "im.description, " +
