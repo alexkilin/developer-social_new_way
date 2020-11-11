@@ -2,8 +2,8 @@ package com.javamentor.developer.social.platform.dao.abstracts.dto;
 
 
 import com.javamentor.developer.social.platform.models.dto.LanguageDto;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
 import com.javamentor.developer.social.platform.models.dto.UserFriendDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 
 import java.util.List;
 import java.util.Optional;

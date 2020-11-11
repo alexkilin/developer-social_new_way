@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
-import com.javamentor.developer.social.platform.models.dto.ImageCreateDto;
-import com.javamentor.developer.social.platform.models.dto.ImageDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.ImageCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.media.Image;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;

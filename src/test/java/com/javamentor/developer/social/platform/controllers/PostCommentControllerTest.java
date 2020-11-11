@@ -3,7 +3,7 @@ package com.javamentor.developer.social.platform.controllers;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.AbstractIntegrationTest;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

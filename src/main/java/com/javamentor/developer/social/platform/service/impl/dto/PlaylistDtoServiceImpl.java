@@ -1,8 +1,8 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.PlaylistDtoDao;
-import com.javamentor.developer.social.platform.models.dto.PlaylistCreateDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistGetDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PlaylistDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.PlaylistService;

@@ -1,16 +1,15 @@
-package com.javamentor.developer.social.platform.models.dto;
+package com.javamentor.developer.social.platform.models.dto.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.javamentor.developer.social.platform.models.dto.LanguageDto;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +18,8 @@ import java.util.Date;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class UserUpdateInfoDto {
+public class UserDto {
+
     @ApiModelProperty(notes = "Автоматически генерируемый ID пользователя. Не указывать при создании, " +
             "обязательно указывать при изменении учетной записи", position = 1, example = "null")
     @Null(groups = OnCreate.class, message = "Поле id должно принимать null значение при создании")
@@ -62,6 +62,14 @@ public class UserUpdateInfoDto {
             message = "Email должен быть корректным")
     private String email;
 
+    @ApiModelProperty(notes = "Должен содержать минимум 8 символов, 1 заглавную букву и 1 цифру",
+            required = true, example = "Qwerty12", position = 3)
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Поле password не должно быть null")
+    @Pattern(groups = {OnCreate.class, OnUpdate.class}, regexp = "^(?=.*\\d)(?=.*[A-Z])[a-zA-Z0-9]+$",
+            message = "Поле password должен содержать 1 цифру, 1 заглавную букву.")
+    @Size(groups = OnCreate.class, min = 8, message = "Поле password должен быть не мение 8 символов.")
+    private String password;
+
     @ApiModelProperty(notes = "Город пользователя", example = "Moscow", position = 11)
     private String city;
 
@@ -70,5 +78,26 @@ public class UserUpdateInfoDto {
 
     @ApiModelProperty(notes = "Профессия пользователя", example = "Plumber", position = 13)
     private String profession;
+
+    @ApiModelProperty(notes = "Автоматически назначается при создании всем пользователям, явно указывать не нужно",
+            example = "не указывать", hidden = true)
+    @Null(groups = OnCreate.class, message = " 'role' автоматически назначается при создании всем пользователям, " +
+            "явно указывать не нужно")
+    @NotNull(groups = OnUpdate.class, message = "Поле roleName не должно быть null при обновлении")
+    private String roleName;
+
+    @ApiModelProperty(notes = "Статус пользователя, придуманный пользователем",
+            example = "free", position = 12)
+    private String status;
+
+    @ApiModelProperty(notes = "Показатель активности на сайте",
+            example = "Active", position = 14)
+    @NotNull(groups = OnCreate.class, message = "Поле activeName не должно принимать null значение при создании")
+    private String activeName;
+
+    @ApiModelProperty(notes = "не обязательное поле", example = "Russian", hidden = true)
+    private List<LanguageDto> languages;
+
+
 
 }

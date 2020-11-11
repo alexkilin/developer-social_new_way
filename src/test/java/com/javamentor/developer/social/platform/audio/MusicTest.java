@@ -4,7 +4,7 @@ package com.javamentor.developer.social.platform.audio;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.AbstractIntegrationTest;
-import com.javamentor.developer.social.platform.models.dto.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
