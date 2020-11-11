@@ -1,9 +1,9 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
-import com.javamentor.developer.social.platform.models.dto.AlbumCreateDto;
-import com.javamentor.developer.social.platform.models.dto.AlbumDto;
-import com.javamentor.developer.social.platform.models.dto.ImageCreateDto;
-import com.javamentor.developer.social.platform.models.dto.ImageDto;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.ImageCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.Image;
@@ -112,21 +112,16 @@ public class ImageControllerV2 {
     @ApiOperation(value = "Получить все изображения по Id пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Изображения получены", response = ImageDto.class, responseContainer = "List"),
-            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class),
-            @ApiResponse(code = 404, message = "Изображения не найдены", response = String.class)})
-    @GetMapping
-    public ResponseEntity<?> getAllImagesOfUser(
-            @ApiParam(value = "Id пользователя", example = "60")
-            @RequestParam("userId") @NotNull Long userId,
-            @ApiParam(value = "Отступ", example = "0")
-            @RequestParam(value = "offset", defaultValue = "0", required = false) @NotNull Integer offset,
-            @ApiParam(value = "Количество данных на страницу", example = "5")
-            @RequestParam(value = "limit", defaultValue = "20",  required = false) @NotNull Integer limit) {
+            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)})
+    @GetMapping(value = "")
+    public ResponseEntity<?> getAllImagesOfUser(@ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
+                                                @ApiParam(value = "Отступ", example = "0") @RequestParam(value = "offset", defaultValue = "0", required = false) @NotNull Integer offset,
+                                                @ApiParam(value = "Количество данных на страницу", example = "5") @RequestParam(value = "limit", defaultValue = "20",  required = false) @NotNull Integer limit) {
         if(!userService.existById(userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
         List<ImageDto> imageDtoList = imageDTOService.getAllByUserId(offset, limit, userId);
-        logger.info(String.format("Изображения пользователя %s отправлены", userId));
+        logger.info(String.format("Отправлен список пустой или с изображениями пользователя с id: %s", userId));
         return ResponseEntity.status(HttpStatus.OK).body(imageDtoList);
     }
 
@@ -260,7 +255,7 @@ public class ImageControllerV2 {
     @ApiOperation(value = "Получить все фотоальбомы пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Фотоальбомы получены", response = AlbumDto.class, responseContainer = "List"),
-            @ApiResponse(code = 404, message = "Фотоальбомы не найдены", response = String.class)})
+            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)})
     @GetMapping(value = "/albums")
     public ResponseEntity<?> getAllImageAlbumsOfUser(
             @ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
@@ -270,7 +265,7 @@ public class ImageControllerV2 {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
         List<AlbumDto> albumDtoList = albumDtoService.getAllByTypeAndUserId(MediaType.IMAGE, userId);
-        logger.info(String.format("Фотоальбомы пользователя %s отправлены", userId));
+        logger.info(String.format("Отправлен список пустой или с альбомами пользователя с id: %s", userId));
         return ResponseEntity.status(HttpStatus.OK).body(albumDtoList);
     }
 

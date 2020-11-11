@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.VideoDtoDao;
-import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +17,8 @@ public class VideoDtoServiceImpl implements VideoDtoService {
     }
 
     @Override
-    public List<VideoDto> getPart(int currentPage, int itemsOnPage) {
-        return this.videoDtoDao.getPart(currentPage, itemsOnPage);
+    public List<VideoDto> getPartVideo(int currentPage, int itemsOnPage) {
+        return this.videoDtoDao.getPartVideo(currentPage, itemsOnPage);
     }
 
     @Override

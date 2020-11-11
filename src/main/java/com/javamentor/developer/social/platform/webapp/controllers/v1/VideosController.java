@@ -1,8 +1,8 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
-import com.javamentor.developer.social.platform.models.dto.AlbumDto;
-import com.javamentor.developer.social.platform.models.dto.AlbumVideoDto;
-import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
+import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
@@ -82,7 +82,7 @@ public class VideosController {
                                                         @ApiParam(value = "Количество данных на страницу", example = "15")
                                                         @RequestParam @NotNull Integer itemsOnPage) {
         logger.info(String.format("Видео начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(videoDtoService.getPart(currentPage, itemsOnPage));
+        return ResponseEntity.ok().body(videoDtoService.getPartVideo(currentPage, itemsOnPage));
     }
 
     @ApiOperation(value = "Получение видео по названию")

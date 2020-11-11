@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto;
 
-import com.javamentor.developer.social.platform.models.dto.PlaylistCreateDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistGetDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 
 import java.util.List;
 import java.util.Optional;

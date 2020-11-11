@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,8 @@ public class AudioDtoServiceImpl implements AudioDtoService {
     }
 
     @Override
-    public AudioDto getAudioOfName(String name) {
-        return audioDtoDao.getAudioOfName(name).orElseThrow(() -> new IllegalArgumentException("Invalid parameters"));
+    public List<AudioDto> getAudioOfName(String name) {
+        return audioDtoDao.getAudioOfName(name);
     }
 
     @Override
@@ -63,4 +63,10 @@ public class AudioDtoServiceImpl implements AudioDtoService {
     public List<AudioDto> getAudioFromPlaylist(Long playlistId, int offset, int limit) {
         return audioDtoDao.getAudioFromPlaylist(playlistId, offset, limit);
     }
+
+    @Override
+    public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
+        return audioDtoDao.getPartAudio(currentPage, itemsOnPage);
+    }
+
 }

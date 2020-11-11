@@ -1,9 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.ImageDtoDao;
-import com.javamentor.developer.social.platform.models.dto.ImageCreateDto;
-import com.javamentor.developer.social.platform.models.dto.ImageDto;
-import com.javamentor.developer.social.platform.models.entity.media.Image;
+import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
 import com.javamentor.developer.social.platform.webapp.converters.ImageConverter;

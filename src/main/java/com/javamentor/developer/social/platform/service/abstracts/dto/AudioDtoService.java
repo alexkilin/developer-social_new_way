@@ -1,13 +1,13 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto;
 
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 
 import java.util.List;
 
 public interface AudioDtoService {
 
     List<AudioDto> getAudioOfAuthor(String author);
-    AudioDto getAudioOfName(String name);
+    List<AudioDto> getAudioOfName(String name);
 
     List<AudioDto> getAudioOfAlbum(String album);
 
@@ -22,4 +22,6 @@ public interface AudioDtoService {
     List<AudioDto> getAudioFromAlbumOfUser(Long albumId);
 
     List<AudioDto> getAudioFromPlaylist(Long playlistId, int offset, int limit);
+
+    List<AudioDto> getPartAudio(int currentPage, int itemsOnPage);
 }

@@ -1,10 +1,12 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
 import com.javamentor.developer.social.platform.models.dto.*;
+import com.javamentor.developer.social.platform.models.dto.users.UserAuthorizationDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
-import com.javamentor.developer.social.platform.service.abstracts.dto.FriendsDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.RoleService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
@@ -31,7 +33,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserDtoService userDtoService;
-    private final FriendsDtoService friendsDtoService;
     private final UserService userService;
     private final UserConverter userConverter;
     private final RoleService roleService;
@@ -39,9 +40,8 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserController(UserDtoService userDtoService, FriendsDtoService friendsDtoService, UserService userService, UserConverter userConverter, RoleService roleService) {
+    public UserController(UserDtoService userDtoService, UserService userService, UserConverter userConverter, RoleService roleService) {
         this.userDtoService = userDtoService;
-        this.friendsDtoService = friendsDtoService;
         this.userService = userService;
         this.userConverter = userConverter;
         this.roleService = roleService;
@@ -136,13 +136,16 @@ public class UserController {
 
     @ApiOperation(value = "Получение списка друзей пользователя по id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = FriendDto.class),
+            @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = UserFriendDto.class),
             @ApiResponse(code = 400, message = "Пользователя с таким id не существует", response = String.class)
     })
     @GetMapping("/getFriends/{id}")
-    public ResponseEntity<?> getUserFriends(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
+    public ResponseEntity<?> getUserFriends(
+            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
+            @ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
         if (userService.existById(id)) {
-            List<FriendDto> userFriends = friendsDtoService.getUserFriendsDtoById(id);
+            List<UserFriendDto> userFriends = userDtoService.getUserFriendsDtoById(id, currentPage, itemsOnPage);
             logger.info("Получен список друзей пользователя");
             return ResponseEntity.ok(userFriends);
         } else {

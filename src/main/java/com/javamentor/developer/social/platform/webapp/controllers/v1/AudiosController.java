@@ -1,9 +1,9 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
-import com.javamentor.developer.social.platform.models.dto.AlbumDto;
-import com.javamentor.developer.social.platform.models.dto.AudioDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistCreateDto;
-import com.javamentor.developer.social.platform.models.dto.PlaylistGetDto;
+import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
@@ -89,7 +89,7 @@ public class AudiosController {
     public ResponseEntity<List<AudioDto>> getPartAudios(@ApiParam(value = "Текущая страница", example = "1")@RequestParam("currentPage") int currentPage,
                                                         @ApiParam(value = "Количество данных на страницу", example = "15")@RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Аудио начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(audiosService.getPart(currentPage, itemsOnPage).stream().map(audioConverter::toDto).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(audioDtoService.getPartAudio(currentPage, itemsOnPage));
     }
 
     @ApiOperation(value = "Получение всего аудио одного автора")
@@ -106,7 +106,7 @@ public class AudiosController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "все аудио по названию получено",response = AudioDto.class)})
     @GetMapping(value = "/name/{name}")
-    public ResponseEntity<AudioDto> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2")@PathVariable @NotNull String name) {
+    public ResponseEntity<List<AudioDto>> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2")@PathVariable @NotNull String name) {
         logger.info(String.format("Отправка всего аудио автора %s", name));
         return ResponseEntity.ok().body(audioDtoService.getAudioOfName(name));
     }

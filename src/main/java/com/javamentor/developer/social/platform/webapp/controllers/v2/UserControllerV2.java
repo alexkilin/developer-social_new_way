@@ -1,15 +1,16 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.*;
+import com.javamentor.developer.social.platform.models.dto.users.*;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
-import com.javamentor.developer.social.platform.service.abstracts.dto.FriendsDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
+import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+@ToString
 @Validated
 @RestController
 @RequestMapping(value = "/api/v2/users", produces = "application/json")
@@ -31,16 +33,14 @@ import java.util.Optional;
 public class UserControllerV2 {
 
     private final UserDtoService userDtoService;
-    private final FriendsDtoService friendsDtoService;
     private final UserService userService;
     private final UserConverter userConverter;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserControllerV2(UserDtoService userDtoService, FriendsDtoService friendsDtoService, UserService userService, UserConverter userConverter) {
+    public UserControllerV2(UserDtoService userDtoService, UserService userService, UserConverter userConverter) {
         this.userDtoService = userDtoService;
-        this.friendsDtoService = friendsDtoService;
         this.userService = userService;
         this.userConverter = userConverter;
     }
@@ -158,13 +158,16 @@ public class UserControllerV2 {
 
     @ApiOperation(value = "Получение списка друзей пользователя по id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = FriendDto.class),
+            @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = UserFriendDto.class),
             @ApiResponse(code = 400, message = "Пользователя с таким id не существует", response = String.class)
     })
     @GetMapping("/{id}/friends")
-    public ResponseEntity<?> getUserFriends(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
+    public ResponseEntity<?> getUserFriends(
+            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
+            @ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
         if (userService.existById(id)) {
-            List<FriendDto> userFriends = friendsDtoService.getUserFriendsDtoById(id);
+            List<UserFriendDto> userFriends = userDtoService.getUserFriendsDtoById(id, currentPage, itemsOnPage);
             logger.info("Получен список друзей пользователя");
             return ResponseEntity.ok(userFriends);
         } else {

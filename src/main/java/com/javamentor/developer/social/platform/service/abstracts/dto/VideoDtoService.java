@@ -1,6 +1,6 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto;
 
-import com.javamentor.developer.social.platform.models.dto.VideoDto;
+import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 
 import java.util.List;
 
@@ -22,5 +22,5 @@ public interface VideoDtoService {
 
     List<VideoDto> getVideoFromAlbumOfUser(Long albumId);
 
-    List<VideoDto> getPart(int currentPage, int itemsOnPage);
+    List<VideoDto> getPartVideo(int currentPage, int itemsOnPage);
 }
