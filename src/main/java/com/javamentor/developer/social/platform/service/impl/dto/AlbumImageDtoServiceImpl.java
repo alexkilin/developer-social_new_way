@@ -27,8 +27,4 @@ public class AlbumImageDtoServiceImpl implements AlbumImageDtoService {
         return albumImageDtoDao.getAllByUserId(userId);
     }
 
-    @Override
-    public Optional<AlbumDto> getById(Long id) {
-        return albumImageDtoDao.getById(id);
-    }
 }

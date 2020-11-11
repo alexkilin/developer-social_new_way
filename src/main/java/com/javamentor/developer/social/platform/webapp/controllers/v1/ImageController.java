@@ -1,13 +1,13 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
-import com.javamentor.developer.social.platform.models.entity.media.MediaType;
-import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumImageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
@@ -37,7 +37,7 @@ public class ImageController {
 
     private ImageDtoService imageDTOService;
     private ImageService imageService;
-    private AlbumDtoService albumDtoService;
+    private AlbumImageDtoService albumImageDtoService;
     private AlbumImageService albumImageService;
     private UserService userService;
     private AlbumConverter albumConverter;
@@ -47,10 +47,10 @@ public class ImageController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public ImageController(ImageDtoService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
+    public ImageController(ImageDtoService imageDTOService, ImageService imageService, AlbumImageDtoService albumImageDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
         this.imageDTOService = imageDTOService;
         this.imageService = imageService;
-        this.albumDtoService = albumDtoService;
+        this.albumImageDtoService = albumImageDtoService;
         this.albumImageService = albumImageService;
         this.userService = userService;
         this.albumConverter = albumConverter;
@@ -234,7 +234,7 @@ public class ImageController {
         if(!userService.existById(userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
-        List<AlbumDto> albumDtoList = albumDtoService.getAllByTypeAndUserId(MediaType.IMAGE, userId);
+        List<AlbumImageDto> albumDtoList = albumImageDtoService.getAllByUserId(userId);
         if(albumDtoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No albums for user id %s", userId));
         }

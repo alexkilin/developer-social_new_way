@@ -9,5 +9,4 @@ import java.util.Optional;
 public interface AlbumVideoDtoDao {
 
     List<AlbumVideoDto> getAllByUserId(Long userId);
-    Optional<AlbumDto> getById(Long id);
 }
