@@ -287,22 +287,4 @@ public class PostControllerV2 {
         return new ResponseEntity<>(String.format("Пользователь с id: %d сделал репост поста с id: %d ",
                 user.getUserId(), postId), HttpStatus.CREATED);
     }
-
-    @GetMapping(path = "/post/{id}")
-    public ResponseEntity<String> getPostById(@PathVariable @NotNull Long id) {
-        Optional<Post> optionalPost = postService.getById(id);
-        if (optionalPost.isPresent()) {
-            System.out.println("++++++++++++++++++++POST");
-            System.out.println("postId: " + optionalPost.get().getId());
-            System.out.println("user: "+optionalPost.get().getUser().getUserId());
-            System.out.println("media: "+optionalPost.get().getMedia().size());
-            System.out.println("tags: "+optionalPost.get().getTags().size());
-            System.out.println("repost: "+optionalPost.get().getReposts().size());
-            System.out.println("bookmarks: "+optionalPost.get().getBookmarks().size());
-            System.out.println("comments: "+optionalPost.get().getPostComments().size());
-            System.out.println("tabs: "+optionalPost.get().getUserTabs().size());
-            System.out.println("likes: "+optionalPost.get().getPostLikes().size());
-        }
-        return ResponseEntity.ok("post");
-    }
 }
