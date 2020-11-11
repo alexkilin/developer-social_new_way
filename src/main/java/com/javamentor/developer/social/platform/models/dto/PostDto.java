@@ -72,4 +72,13 @@ public class PostDto {
 
     @ApiModelProperty(notes = "Количество репостов", example = "0")
     private Long shareAmount;
+
+    @ApiModelProperty(notes = "Лайк авторизованого юзера")
+    private Boolean isLiked;
+
+    @ApiModelProperty(notes = "Находится в закладках авторизованного юзера")
+    private Boolean isBookmarked;
+
+    @ApiModelProperty(notes = "\"Репостнуто\" авторизованным юзером")
+    private Boolean isShared;
 }

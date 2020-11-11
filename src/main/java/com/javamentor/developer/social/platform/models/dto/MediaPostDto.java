@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 @ToString
 @Builder
 public class MediaPostDto {
+    @ApiModelProperty(notes = "Айди медиа", example = "1")
+    @NotNull
+    private Long Id;
 
     @ApiModelProperty(notes = "Айди пользователя, загрузившего медиа", example = "1")
     @NotNull
@@ -25,4 +28,6 @@ public class MediaPostDto {
     @ApiModelProperty(notes = "Ссылка на контент")
     @NotNull
     private String url;
+
+
 }
