@@ -2,7 +2,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
 import com.javamentor.developer.social.platform.models.dto.LanguageDto;
-import com.javamentor.developer.social.platform.models.dto.UserDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
