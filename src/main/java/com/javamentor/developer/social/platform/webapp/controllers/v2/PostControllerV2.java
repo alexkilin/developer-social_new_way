@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 
@@ -165,125 +164,99 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Добавление лайка посту авторизованным пользователем")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Лайк добавлен в пост"),
-            @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
+            @ApiResponse(code = 201, message = "Лайк добавлен в пост")
     })
     @PostMapping("/post/{postId}/like")
     public ResponseEntity<String> addLikeToPost(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
 
-        PostAndUserUtil util = new PostAndUserUtil(postId);
-        if (util.nonFoundPostOrUser) {
-            return util.wrong;
+        Optional<Post> optionalPost = postService.getById(postId);
+        User user = userService.getPrincipal();
+
+        if (!optionalPost.isPresent()) {
+            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
         }
 
-        PostLike newPostLike = new PostLike(util.user);
-        newPostLike.setPost(util.post);
+        PostLike newPostLike = new PostLike(user);
+        newPostLike.setPost(optionalPost.get());
         postLikeService.create(newPostLike);
         return new ResponseEntity<>(String.format("Пользователь с id: %d добавил лайк в пост с id: %d",
-                util.user.getUserId(), postId), HttpStatus.CREATED);
+                user.getUserId(), postId), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Удаление лайка из поста авторизованным пользователем")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Лайк удален из пост"),
-            @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
+            @ApiResponse(code = 201, message = "Лайк удален из пост")
     })
     @DeleteMapping("/post/{postId}/like")
     public ResponseEntity<String> deleteLikeFromPost(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
 
-        PostAndUserUtil util = new PostAndUserUtil(postId);
-        if (util.nonFoundPostOrUser) {
-            return util.wrong;
+        Optional<Post> optionalPost = postService.getById(postId);
+        User user = userService.getPrincipal();
+
+        if (!optionalPost.isPresent()) {
+            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
         }
 
-        for (PostLike postLike : util.post.getPostLikes()) {
-            if (postLike.getLike().getUser().getUserId().equals(util.user.getUserId())) {
+        for (PostLike postLike : optionalPost.get().getPostLikes()) {
+            if (postLike.getLike().getUser().getUserId().equals(user.getUserId())) {
                 postLikeService.delete(postLike);
             }
         }
         return new ResponseEntity<>(String.format("Пользователь с id: %d удалил лайк из поста с id: %d",
-                util.user.getUserId(), postId), HttpStatus.CREATED);
+                user.getUserId(), postId), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Добавление поста в закладки авторизованного пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Пост добавлен в закладки"),
-            @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
+            @ApiResponse(code = 201, message = "Пост добавлен в закладки")
     })
     @PostMapping("/post/{postId}/bookmark")
     public ResponseEntity<String> addPostToBookmark(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
 
-        PostAndUserUtil util = new PostAndUserUtil(postId);
-        if (util.nonFoundPostOrUser) {
-            return util.wrong;
+        Optional<Post> optionalPost = postService.getById(postId);
+        User user = userService.getPrincipal();
+
+        if (!optionalPost.isPresent()) {
+            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
         }
 
         Bookmark bookmark = new Bookmark();
-        bookmark.setUser(util.user);
-        bookmark.setPost(util.post);
+        bookmark.setUser(user);
+        bookmark.setPost(optionalPost.get());
         bookmarkService.create(bookmark);
         return new ResponseEntity<>(String.format("Пользователь с id: %d добавил пост с id: %d в закладки",
-                util.user.getUserId(), postId), HttpStatus.CREATED);
+                user.getUserId(), postId), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Удаление поста из закладок авторизованным пользователем")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Пост из закладок удален"),
-            @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
+            @ApiResponse(code = 201, message = "Пост из закладок удален")
     })
     @DeleteMapping("/post/{postId}/bookmark")
     public ResponseEntity<String> deletePostFromBookmark(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
 
-        PostAndUserUtil util = new PostAndUserUtil(postId);
-        if (util.nonFoundPostOrUser) {
-            return util.wrong;
+        Optional<Post> optionalPost = postService.getById(postId);
+        User user = userService.getPrincipal();
+
+        if (!optionalPost.isPresent()) {
+            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
         }
 
-        for (Bookmark bookmark : util.post.getBookmarks()) {
-            if (bookmark.getUser().getUserId().equals(util.user.getUserId())) {
+        for (Bookmark bookmark : optionalPost.get().getBookmarks()) {
+            if (bookmark.getUser().getUserId().equals(user.getUserId())) {
                 bookmarkService.delete(bookmark);
             }
         }
         return new ResponseEntity<>(String.format("Пользователь с id: %d удалил пост с id: %d из закладок",
-                util.user.getUserId(), postId), HttpStatus.CREATED);
-    }
-
-    private class PostAndUserUtil {
-
-        private Post post;
-        private User user;
-        private boolean nonFoundPostOrUser;
-        private final ResponseEntity<String> wrong;
-        private final Long postId;
-
-        public PostAndUserUtil(Long postId) {
-            this.postId = postId;
-            this.wrong = checkForUserAndPost();
-        }
-
-        public ResponseEntity<String> checkForUserAndPost() {
-            this.user = userService.getPrincipal();
-            if (Objects.isNull(user)) {
-                this.nonFoundPostOrUser = true;
-                return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
-            }
-            Optional<Post> optionalPost = postService.getById(postId);
-            if (!optionalPost.isPresent()) {
-                this.nonFoundPostOrUser = true;
-                return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
-            } else {
-                this.post = optionalPost.get();
-            }
-            return null;
-        }
+                user.getUserId(), postId), HttpStatus.CREATED);
     }
 
 }
