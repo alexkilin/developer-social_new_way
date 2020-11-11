@@ -76,7 +76,7 @@ public class PostControllerV2 {
     @ApiOperation(value = "Получение списка всех постов")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PostDto.class)})
-    @GetMapping
+    @GetMapping("/posts")
     public ResponseEntity<List<PostDto>> getPosts() {
         return ResponseEntity.ok().body(postDtoService.getAllPosts());
     }
@@ -101,7 +101,7 @@ public class PostControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пост добавлен", response = PostDto.class)
     })
-    @PostMapping
+    @PostMapping("/post")
     @Validated(OnCreate.class)
     public ResponseEntity<PostDto> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostCreateDto postCreateDto) {
         Post post = postConverter.toEntity(postCreateDto);
@@ -114,7 +114,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Пост удалён", response = String.class),
             @ApiResponse(code = 400, message = "Пост не может быть удалён", response = String.class)
     })
-    @DeleteMapping(path = "/posts/{id}")
+    @DeleteMapping(path = "/post/{id}")
     public ResponseEntity<?> deletePost(@ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
         Optional<Post> result = postService.getById(id);
 
@@ -134,7 +134,7 @@ public class PostControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Комментарии получены", responseContainer = "List",
                     response = CommentDto.class)})
-    @GetMapping("/posts/{id}/comments")
+    @GetMapping("/post/{id}/comments")
     public ResponseEntity<List<CommentDto>> showPostComments(@ApiParam(value = "ID поста", example = "20") @PathVariable Long id) {
         return new ResponseEntity<>(postDtoService.getCommentsByPostId(id), HttpStatus.OK);
     }
@@ -144,7 +144,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 201, message = "Комментарий добавлен"),
             @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
     })
-    @PostMapping("/posts/{postId}/comment")
+    @PostMapping("/post/{postId}/comment")
     public ResponseEntity<String> addCommentToPost(@ApiParam(value = "Объект комментария к посту") @RequestBody CommentDto commentDto,
                                                    @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
         if (!userService.existById(commentDto.getUserDto().getUserId())) {
