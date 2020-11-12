@@ -20,13 +20,18 @@ public class PostDtoServiceImpl implements PostDtoService {
     }
 
     @Override
-    public List<PostDto> getPostsByTag(String text) {
-        return postDtoDao.getPostsByTag(text);
+    public List<PostDto> getPostsByTag(String text, Long userPrincipalId) {
+        return postDtoDao.getPostsByTag(text, userPrincipalId);
     }
 
     @Override
-    public List<PostDto> getPostsByUserId(Long id) {
-        return postDtoDao.getPostsByUserId(id);
+    public List<PostDto> getPostsByUserId(Long id, Long userPrincipalId) {
+        return postDtoDao.getPostsByUserId(id, userPrincipalId);
+    }
+
+    @Override
+    public List<PostDto> getAllBookmarkedPosts(Long userPrincipalId) {
+        return postDtoDao.getAllBookmarkedPosts(userPrincipalId);
     }
 
     @Override
@@ -35,8 +40,8 @@ public class PostDtoServiceImpl implements PostDtoService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<PostDto> postDtoList = postDtoDao.getAllPosts();
+    public List<PostDto> getAllPosts(Long userPrincipalId) {
+        List<PostDto> postDtoList = postDtoDao.getAllPosts(userPrincipalId);
         return postDtoList;
     }
 }

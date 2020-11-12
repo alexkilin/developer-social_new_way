@@ -7,11 +7,13 @@ import java.util.List;
 
 public interface PostDtoService {
 
-    List<PostDto> getAllPosts();
+    List<PostDto> getAllPosts(Long userPrincipalId);
 
-    List<PostDto> getPostsByTag(String text);
+    List<PostDto> getPostsByTag(String text, Long userPrincipalId);
 
     List<CommentDto> getCommentsByPostId(Long id);
     
-    List<PostDto> getPostsByUserId(Long id);
+    List<PostDto> getPostsByUserId(Long id, Long userPrincipalId);
+
+    List <PostDto> getAllBookmarkedPosts(Long userPrincipalId);
 }
