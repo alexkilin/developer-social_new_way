@@ -35,7 +35,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Validated
 @RestController
@@ -239,19 +238,27 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Создание нового плейлиста для пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Плейлист успешно создан", response = PlaylistGetDto.class)})
+            @ApiResponse(code = 201, message = "Плейлист успешно создан", response = PlaylistGetDto.class),
+            @ApiResponse(code = 302, message = "Плейлист с таким названием уже существует", response = PlaylistGetDto.class),
+            @ApiResponse(code = 404, message = "The user does not exist")})
     @Validated(OnCreate.class)
     @PostMapping(value = "/user/{userId}/playlists")
     public ResponseEntity<?> createPlaylist(@ApiParam(value = "Объект нового плейлиста") @RequestBody @NotNull @Valid PlaylistCreateDto playlistCreateDto,
                                             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
+        if (!userService.getById(userId).isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user does not exist");
+        }
 
-        logger.info(String.format("+++++++++User id is %s", userId));
-        logger.info(String.format("+++++++++playlistCreateDto is %s", playlistCreateDto.getOwnerUserId()));
+        String playlistName = playlistCreateDto.getName();
+        Optional<Playlist> optionalPlaylist = playlistService.getPlaylistByNameAndUserID(userId, playlistName);
+        if (optionalPlaylist.isPresent()){
+            return ResponseEntity.status(HttpStatus.FOUND).body(playlistConverter.toPlaylistGetDto(optionalPlaylist.get()));
+        }
+
         playlistCreateDto.setOwnerUserId(userId);
-        logger.info(String.format("+++++++++playlistCreateDto after adding id is %s", playlistCreateDto.getOwnerUserId()));
-        PlaylistGetDto playlistGetDto = playlistDtoService.create(playlistCreateDto);
-        logger.info(String.format("Плейлист id %s для пользователя %s создан", playlistGetDto.getId(), userId));
-        return ResponseEntity.ok().body(playlistGetDto);
+        Playlist newPlaylist = playlistConverter.toEntity(playlistCreateDto);
+        playlistService.create(newPlaylist);
+        return ResponseEntity.status(HttpStatus.CREATED).body(playlistConverter.toPlaylistGetDto(newPlaylist));
     }
 
     @ApiOperation(value = "Удаление плейлиста по Id для пользователя")
