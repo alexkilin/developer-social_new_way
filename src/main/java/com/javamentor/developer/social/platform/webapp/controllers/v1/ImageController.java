@@ -15,6 +15,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.media.Im
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
+import com.javamentor.developer.social.platform.webapp.converters.AlbumImageConverter;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,20 +41,22 @@ public class ImageController {
     private AlbumImageDtoService albumImageDtoService;
     private AlbumImageService albumImageService;
     private UserService userService;
-    private AlbumConverter albumConverter;
+    private AlbumImageConverter albumImageConverter;
     private AlbumService albumService;
     private MediaService mediaService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public ImageController(ImageDtoService imageDTOService, ImageService imageService, AlbumImageDtoService albumImageDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
+    public ImageController(ImageDtoService imageDTOService, ImageService imageService, AlbumImageDtoService albumImageDtoService,
+                           AlbumImageService albumImageService, UserService userService, AlbumImageConverter albumImageConverter,
+                           AlbumService albumService, MediaService mediaService) {
         this.imageDTOService = imageDTOService;
         this.imageService = imageService;
         this.albumImageDtoService = albumImageDtoService;
         this.albumImageService = albumImageService;
         this.userService = userService;
-        this.albumConverter = albumConverter;
+        this.albumImageConverter = albumImageConverter;
         this.albumService = albumService;
         this.mediaService = mediaService;
     }
@@ -219,7 +222,7 @@ public class ImageController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
         logger.info(String.format("Фотоальбом %s отправлен", albumId));
-        return ResponseEntity.ok(albumConverter.toAlbumDto(optionalAlbum.get()));
+        return ResponseEntity.ok(albumImageConverter.toAlbumImageDto(optionalAlbum.get()));
     }
 
     @ApiOperation(value = "Получить все фотоальбомы пользователя")
