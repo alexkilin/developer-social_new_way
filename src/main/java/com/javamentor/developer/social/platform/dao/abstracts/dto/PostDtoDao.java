@@ -18,6 +18,8 @@ public interface PostDtoDao {
 
     List<TagDto> getTagsByPostId(Long id);
 
+    List<TagDto> getAllTags();
+
     List<PostDto> getPostsByUserId(Long id);
 
 }

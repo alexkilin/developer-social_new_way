@@ -457,6 +457,36 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
+    public List<TagDto> getAllTags() {
+        return entityManager.createQuery(
+                "SELECT " +
+                        "id," +
+                        "text" +
+                        " FROM Tag")
+                .unwrap(Query.class)
+                .setResultTransformer(new ResultTransformer() {
+
+                    @Override
+                    public Object transformTuple(Object[] objects, String[] strings) {
+                        if (objects[0] != null && objects[1] != null) {
+                            return TagDto.builder()
+                                    .id((Long) objects[0])
+                                    .text((String) objects[1])
+                                    .build();
+                        } else return null;
+                    }
+
+                    @Override
+                    public List transformList(List list) {
+                        if (list.contains(null)) {
+                            return new ArrayList();
+                        } else return list;
+                    }
+                }).getResultList();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<TagDto> getTagsByPostId(Long id) {
         Query queryTagsForPost = (Query) entityManager.createQuery(
                 "SELECT " +
