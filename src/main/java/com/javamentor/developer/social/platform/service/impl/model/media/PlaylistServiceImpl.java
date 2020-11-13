@@ -20,16 +20,19 @@ public class PlaylistServiceImpl extends GenericServiceAbstract<Playlist, Long> 
         this.playlistDao = dao;
     }
 
+    @Transactional
     @Override
     public boolean userHasPlaylist(Long userId, Long playlistId) {
         return playlistDao.userHasPlaylist(userId, playlistId);
     }
 
+    @Transactional
     @Override
     public Optional<Playlist> getOptionalById(Long id) {
         return getById(id);
     }
 
+    @Transactional
     @Override
     public Optional<Playlist> getPlaylistByNameAndUserID (long userID, String playlistName) {
         return playlistDao.getPlaylistByNameAndUserID(userID, playlistName);
