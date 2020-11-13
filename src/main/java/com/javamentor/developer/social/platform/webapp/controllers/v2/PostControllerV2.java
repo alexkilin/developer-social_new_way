@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
+import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
@@ -93,6 +94,15 @@ public class PostControllerV2 {
     public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("tag") String tag) {
         return ResponseEntity.ok(postDtoService.getPostsByTag(tag));
     }
+
+    @ApiOperation(value = "Получение всех существующих тегов")
+    @ApiResponses(value =  {
+            @ApiResponse(code = 200, message = "Теги получены", responseContainer = "List", response = TagDto.class)})
+    @GetMapping("/posts/tags")
+    public ResponseEntity<List<TagDto>> getAllTags() {
+        return ResponseEntity.ok(postDtoService.getAllTags());
+    }
+
 
     @ApiOperation(value = "Получение списка постов пользователя по его ID")
     @ApiResponses(value = {

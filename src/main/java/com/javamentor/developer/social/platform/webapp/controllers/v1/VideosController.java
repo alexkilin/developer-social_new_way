@@ -8,7 +8,7 @@ import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
-import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumVideoDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumVideoService;
@@ -46,13 +46,13 @@ public class VideosController {
     private final AlbumService albumService;
     private final AlbumVideoService albumVideoService;
     private final AlbumConverter albumConverter;
-    private final AlbumDtoService albumDtoService;
+    private final AlbumVideoDtoService albumVideoDtoService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public VideosController(VideosService videosService, VideoConverter videoConverter, VideoDtoService videoDtoService,
                             UserService userService, AlbumService albumService, AlbumVideoService albumVideoService,
-                            AlbumConverter albumConverter, AlbumDtoService albumDtoService){
+                            AlbumConverter albumConverter, AlbumVideoDtoService albumVideoDtoService){
         this.videosService =  videosService;
         this.videoConverter = videoConverter;
         this.videoDtoService = videoDtoService;
@@ -60,7 +60,7 @@ public class VideosController {
         this.albumService = albumService;
         this.albumVideoService = albumVideoService;
         this.albumConverter = albumConverter;
-        this.albumDtoService = albumDtoService;
+        this.albumVideoDtoService = albumVideoDtoService;
     }
 
     @ApiOperation(value = "Получение всего видео")
@@ -178,9 +178,9 @@ public class VideosController {
             @ApiResponse(code = 404, message = "Альбомы не найдены")
     })
     @GetMapping(value = "/getAllAlbumsFromUser")
-    public ResponseEntity<List<AlbumDto>> getAllAlbums() {
+    public ResponseEntity<List<AlbumVideoDto>> getAllAlbums() {
         logger.info(String.format("Получение всех альбомов пользователя с id %s", userService.getPrincipal().getUserId()));
-        return ResponseEntity.ok().body(albumDtoService.getAllByTypeAndUserId(MediaType.VIDEO, userService.getPrincipal().getUserId()));
+        return ResponseEntity.ok().body(albumVideoDtoService.getAllByUserId(userService.getPrincipal().getUserId()));
     }
 
     @ApiOperation(value = "Получение всех видео из альбома пользователя")
