@@ -26,7 +26,7 @@ import java.util.Set;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(length = 50)
@@ -60,9 +60,8 @@ public class Post {
     @JoinTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
     private Set<Tag> tags;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "reposts", joinColumns = @JoinColumn(name = "post_id"))
-    private Set<User> repostPerson;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<Repost> reposts;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
     private Set<Bookmark> bookmarks;

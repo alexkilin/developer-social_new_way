@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
+import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
@@ -10,7 +11,7 @@ import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
-import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumAudioDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PlaylistDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
@@ -18,6 +19,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.PlaylistService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.webapp.converters.AlbumAudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.PlaylistConverter;
@@ -35,7 +37,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Validated
 @RestController
@@ -45,12 +46,12 @@ import java.util.stream.Collectors;
 public class AudiosControllerV2 {
 
     private final AudioConverter audioConverter;
-    private final AlbumConverter albumConverter;
+    private final AlbumAudioConverter albumAudioConverter;
     private final AudioDtoService audioDtoService;
     private final AudiosService audiosService;
     private final UserService userService;
     private final AlbumService albumService;
-    private final AlbumDtoService albumDtoService;
+    private final AlbumAudioDtoService albumAudioDtoService;
     private final AlbumAudioService albumAudioService;
     private final PlaylistDtoService playlistDtoService;
     private final PlaylistService playlistService;
@@ -58,14 +59,18 @@ public class AudiosControllerV2 {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public AudiosControllerV2(AudioConverter audioConverter, AlbumConverter albumConverter, AudioDtoService audioDtoService, AudiosService audiosService, UserService userService, AlbumService albumService, AlbumDtoService albumDtoService, AlbumAudioService albumAudioService, PlaylistDtoService playlistDtoService, PlaylistService playlistService, PlaylistConverter playlistConverter) {
+    public AudiosControllerV2(AudioConverter audioConverter, AlbumAudioConverter albumAudioConverter, AudioDtoService audioDtoService,
+                              AudiosService audiosService, UserService userService, AlbumService albumService,
+                              AlbumAudioDtoService albumAudioDtoService, AlbumAudioService albumAudioService,
+                              PlaylistDtoService playlistDtoService, PlaylistService playlistService,
+                              PlaylistConverter playlistConverter) {
         this.audioConverter = audioConverter;
-        this.albumConverter = albumConverter;
+        this.albumAudioConverter = albumAudioConverter;
         this.audioDtoService = audioDtoService;
         this.audiosService = audiosService;
         this.userService = userService;
         this.albumService = albumService;
-        this.albumDtoService = albumDtoService;
+        this.albumAudioDtoService = albumAudioDtoService;
         this.albumAudioService = albumAudioService;
         this.playlistDtoService = playlistDtoService;
         this.playlistService = playlistService;
@@ -186,9 +191,9 @@ public class AudiosControllerV2 {
             @ApiResponse(code = 404, message = "Альбомы не найдены")
     })
     @GetMapping(value = "/user/{userId}/album")
-    public ResponseEntity<List<AlbumDto>> getAllAlbums(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
+    public ResponseEntity<List<AlbumAudioDto>> getAllAlbums(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         logger.info(String.format("Получение всех альбомов пользователя с id %s", userId));
-        return ResponseEntity.ok().body(albumDtoService.getAllByTypeAndUserId(MediaType.AUDIO, userId));
+        return ResponseEntity.ok().body(albumAudioDtoService.getAllByUserId(userId));
     }
 
     @ApiOperation(value = "Добавить существующее аудио в альбом")
@@ -223,9 +228,9 @@ public class AudiosControllerV2 {
                     .body(String.format("Audio album with name '%s' already exists", albumDto.getName()));
         }
         AlbumAudios albumAudios = albumAudioService.createAlbumAudiosWithOwner(
-                albumConverter.toAlbumAudios(albumDto, userService.getById(userId).get()));
+                albumAudioConverter.toAlbumAudios(albumDto, userService.getById(userId).get()));
         logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
-        return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumAudios));
+        return ResponseEntity.ok().body(albumAudioConverter.toAlbumAudioDto(albumAudios));
     }
 
     @ApiOperation(value = "Получение всех аудио из альбома")
