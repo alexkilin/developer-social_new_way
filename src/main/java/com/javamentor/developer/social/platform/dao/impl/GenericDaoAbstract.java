@@ -61,9 +61,8 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     public void deleteById(PK id) {
-        T entity = getById(id).get();
-        entityManager.remove(entity);
-    }
+            entityManager.remove(entityManager.find(clazz, id));
+        }
 
     @Override
     public Optional<T> getById(PK id) {
