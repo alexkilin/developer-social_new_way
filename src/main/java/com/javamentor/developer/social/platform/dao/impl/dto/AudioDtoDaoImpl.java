@@ -66,7 +66,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<AudioDto> getAudioOfName(String name) {
-        return entityManager.createQuery(
+        List<AudioDto> audios = entityManager.createQuery(
                 "SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -80,7 +80,30 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "WHERE upper(c.name) " +
                         "LIKE upper(:name) ")
                 .setParameter("name", "%" + name + "%")
-                .getResultList();
+                .unwrap(Query.class)
+                .setResultTransformer(
+                        new ResultTransformer(){
+                            @Override
+                            public Object transformTuple(Object[] objects, String[] strings) {
+                                return AudioDto.builder()
+                                        .id(((Number) objects[0]).longValue())
+                                        .icon((String) objects[1])
+                                        .name((String) objects[2])
+                                        .author((String) objects[3])
+                                        .url((String) objects[4])
+                                        .persistDateTime((LocalDateTime) objects[5])
+                                        .album((String) objects[6])
+                                        .length((Integer) objects[7])
+                                        .build();
+                            }
+
+                            @Override
+                            public List transformList(List list) {
+                                return list;
+                            }
+                        }
+                ).getResultList();
+        return audios;
     }
 
     @Override
