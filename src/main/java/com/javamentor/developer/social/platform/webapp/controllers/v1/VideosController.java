@@ -15,6 +15,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
+import com.javamentor.developer.social.platform.webapp.converters.AlbumVideoConverter;
 import com.javamentor.developer.social.platform.webapp.converters.VideoConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
@@ -45,21 +46,21 @@ public class VideosController {
     private final UserService userService;
     private final AlbumService albumService;
     private final AlbumVideoService albumVideoService;
-    private final AlbumConverter albumConverter;
+    private final AlbumVideoConverter albumVideoConverter;
     private final AlbumVideoDtoService albumVideoDtoService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public VideosController(VideosService videosService, VideoConverter videoConverter, VideoDtoService videoDtoService,
                             UserService userService, AlbumService albumService, AlbumVideoService albumVideoService,
-                            AlbumConverter albumConverter, AlbumVideoDtoService albumVideoDtoService){
+                            AlbumVideoConverter albumVideoConverter, AlbumVideoDtoService albumVideoDtoService){
         this.videosService =  videosService;
         this.videoConverter = videoConverter;
         this.videoDtoService = videoDtoService;
         this.userService = userService;
         this.albumService = albumService;
         this.albumVideoService = albumVideoService;
-        this.albumConverter = albumConverter;
+        this.albumVideoConverter = albumVideoConverter;
         this.albumVideoDtoService = albumVideoDtoService;
     }
 
@@ -141,9 +142,9 @@ public class VideosController {
                     .body(String.format("Video album with name '%s' already exists", albumDto.getName()));
         }
         AlbumVideo albumVideo = albumVideoService.createAlbumVideosWithOwner(
-                albumConverter.toAlbumVideo(albumDto, userService.getById(60L).get()));
+                albumVideoConverter.toAlbumVideo(albumDto, userService.getById(60L).get()));
         logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
-        return ResponseEntity.ok().body(albumConverter.toAlbumDto(albumVideo));
+        return ResponseEntity.ok().body(albumVideoConverter.toAlbumVideoDto(albumVideo));
     }
 
     @ApiOperation(value = "Добавить видео в альбом")

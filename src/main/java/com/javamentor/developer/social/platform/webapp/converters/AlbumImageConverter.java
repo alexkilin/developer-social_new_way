@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
+import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
@@ -23,6 +24,14 @@ public abstract class AlbumImageConverter {
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
+
+    @Mappings({
+            @Mapping(target = "album.mediaType", expression = "java( MediaType.IMAGE)"),
+            @Mapping(target = "album.name", source = "albumCreateDto.name"),
+            @Mapping(target = "album.icon", source = "albumCreateDto.icon"),
+            @Mapping(target = "album.userOwnerId", source = "albumCreateDto.userId", qualifiedByName = "userSetter")
+    })
+    public abstract AlbumImage toAlbumImage(AlbumCreateDto albumCreateDto);
 
     @Mappings({
             @Mapping(source = "albumImageDto.id", target = "id"),
