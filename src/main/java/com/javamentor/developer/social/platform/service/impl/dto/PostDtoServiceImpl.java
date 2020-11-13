@@ -43,7 +43,11 @@ public class PostDtoServiceImpl implements PostDtoService {
 
     @Override
     public List<PostDto> getAllPosts() {
-        List<PostDto> postDtoList = postDtoDao.getAllPosts();
-        return postDtoList;
+        return postDtoDao.getAllPosts();
+    }
+
+    @Override
+    public List<PostDto> getPostById(Long postId) {
+        return postDtoDao.getPostById(postId);
     }
 }

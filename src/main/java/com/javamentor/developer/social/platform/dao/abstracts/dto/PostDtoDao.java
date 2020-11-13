@@ -10,6 +10,8 @@ import java.util.List;
 public interface PostDtoDao {
     List<PostDto> getAllPosts();
 
+    List<PostDto> getPostById(Long postId);
+
     List<PostDto> getPostsByTag(String text);
 
     List<CommentDto> getCommentsByPostId(Long id);

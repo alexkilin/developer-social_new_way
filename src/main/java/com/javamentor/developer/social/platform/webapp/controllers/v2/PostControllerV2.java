@@ -182,7 +182,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 201, message = "Лайк добавлен в пост")
     })
     @PostMapping("/post/{postId}/like")
-    public ResponseEntity<String> addLikeToPost(
+    public ResponseEntity<?> addLikeToPost(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
 
@@ -196,8 +196,8 @@ public class PostControllerV2 {
         PostLike newPostLike = new PostLike(user);
         newPostLike.setPost(optionalPost.get());
         postLikeService.create(newPostLike);
-        return new ResponseEntity<>(String.format("Пользователь с id: %d добавил лайк в пост с id: %d",
-                user.getUserId(), postId), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postDtoService.getPostById(postId));
     }
 
     @ApiOperation(value = "Удаление лайка из поста авторизованным пользователем")
@@ -205,7 +205,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 201, message = "Лайк удален из пост")
     })
     @DeleteMapping("/post/{postId}/like")
-    public ResponseEntity<String> deleteLikeFromPost(
+    public ResponseEntity<?> deleteLikeFromPost(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
 
@@ -221,8 +221,8 @@ public class PostControllerV2 {
                 postLikeService.delete(postLike);
             }
         }
-        return new ResponseEntity<>(String.format("Пользователь с id: %d удалил лайк из поста с id: %d",
-                user.getUserId(), postId), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postDtoService.getPostById(postId));
     }
 
     @ApiOperation(value = "Добавление поста в закладки авторизованного пользователя")
@@ -230,7 +230,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 201, message = "Пост добавлен в закладки")
     })
     @PostMapping("/post/{postId}/bookmark")
-    public ResponseEntity<String> addPostToBookmark(
+    public ResponseEntity<?> addPostToBookmark(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
 
@@ -245,8 +245,8 @@ public class PostControllerV2 {
         bookmark.setUser(user);
         bookmark.setPost(optionalPost.get());
         bookmarkService.create(bookmark);
-        return new ResponseEntity<>(String.format("Пользователь с id: %d добавил пост с id: %d в закладки",
-                user.getUserId(), postId), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postDtoService.getPostById(postId));
     }
 
     @ApiOperation(value = "Удаление поста из закладок авторизованным пользователем")
@@ -254,7 +254,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 201, message = "Пост из закладок удален")
     })
     @DeleteMapping("/post/{postId}/bookmark")
-    public ResponseEntity<String> deletePostFromBookmark(
+    public ResponseEntity<?> deletePostFromBookmark(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
 
@@ -270,8 +270,8 @@ public class PostControllerV2 {
                 bookmarkService.delete(bookmark);
             }
         }
-        return new ResponseEntity<>(String.format("Пользователь с id: %d удалил пост с id: %d из закладок",
-                user.getUserId(), postId), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postDtoService.getPostById(postId));
     }
 
     @ApiOperation(value = "Репост поста авторизованным пользователем")
@@ -279,7 +279,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 201, message = "Репост добавлен в пост")
     })
     @PostMapping("/post/{postId}/repost")
-    public ResponseEntity<String> addRepostToPost(
+    public ResponseEntity<?> addRepostToPost(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
 
@@ -294,7 +294,8 @@ public class PostControllerV2 {
         repost.setUser(user);
         repost.setPost(optionalPost.get());
         repostService.create(repost);
-        return new ResponseEntity<>(String.format("Пользователь с id: %d сделал репост поста с id: %d ",
-                user.getUserId(), postId), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postDtoService.getPostById(postId));
     }
+
 }
