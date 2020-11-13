@@ -8,6 +8,7 @@ import com.javamentor.developer.social.platform.models.entity.comment.PostCommen
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
+import com.javamentor.developer.social.platform.models.entity.post.Repost;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
@@ -16,6 +17,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.like.Pos
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.BookmarkService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.RepostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.PostCommentConverter;
@@ -48,6 +50,7 @@ public class PostControllerV2 {
     private final PostCommentService postCommentService;
     private final PostLikeService postLikeService;
     private final BookmarkService bookmarkService;
+    private final RepostService repostService;
 
     @Autowired
     public PostControllerV2(PostDtoService postDtoService,
@@ -59,7 +62,8 @@ public class PostControllerV2 {
                             PostCommentConverter postCommentConverter,
                             PostCommentService postCommentService,
                             PostLikeService postLikeService,
-                            BookmarkService bookmarkService) {
+                            BookmarkService bookmarkService,
+                            RepostService repostService) {
 
         this.postDtoService = postDtoService;
         this.postConverter = postConverter;
@@ -70,6 +74,7 @@ public class PostControllerV2 {
         this.postCommentService = postCommentService;
         this.postLikeService = postLikeService;
         this.bookmarkService = bookmarkService;
+        this.repostService = repostService;
     }
 
 
@@ -259,4 +264,27 @@ public class PostControllerV2 {
                 user.getUserId(), postId), HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Репост поста авторизованным пользователем")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Репост добавлен в пост")
+    })
+    @PostMapping("/post/{postId}/repost")
+    public ResponseEntity<String> addRepostToPost(
+            @ApiParam(value = "Id поста", example = "1")
+            @PathVariable @NonNull Long postId) {
+
+        Optional<Post> optionalPost = postService.getById(postId);
+        User user = userService.getPrincipal();
+
+        if (!optionalPost.isPresent()) {
+            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
+        }
+
+        Repost repost = new Repost();
+        repost.setUser(user);
+        repost.setPost(optionalPost.get());
+        repostService.create(repost);
+        return new ResponseEntity<>(String.format("Пользователь с id: %d сделал репост поста с id: %d ",
+                user.getUserId(), postId), HttpStatus.CREATED);
+    }
 }
