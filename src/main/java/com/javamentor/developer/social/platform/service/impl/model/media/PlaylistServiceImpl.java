@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.media.Pl
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,19 +21,19 @@ public class PlaylistServiceImpl extends GenericServiceAbstract<Playlist, Long> 
         this.playlistDao = dao;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public boolean userHasPlaylist(Long userId, Long playlistId) {
         return playlistDao.userHasPlaylist(userId, playlistId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<Playlist> getOptionalById(Long id) {
         return getById(id);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<Playlist> getPlaylistByNameAndUserID (long userID, String playlistName) {
         return playlistDao.getPlaylistByNameAndUserID(userID, playlistName);
