@@ -21,7 +21,8 @@ import java.util.*;
 @Repository
 public class PostDtoDaoImpl implements PostDtoDao {
 
-    final EntityManager entityManager;
+    final
+    EntityManager entityManager;
 
     final UserService userService;
 
@@ -48,7 +49,6 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +     //9
                 "(select count(l.id) from PostLike as l where l.post.id = p.id), " +        //10
                 "(select count(c.id) from PostComment as c where c.post.id = p.id), " +     //11
-                "(select count(r.id) from Repost as r where r.post.id = p.id), " +
                 "t.id," +                     //12
                 "t.text," +                   //13
                 "m.id," +                     //14
@@ -66,10 +66,11 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "else false " +
                 "end," +
                 "case when exists " +                //20
-                "(select rp from Repost as rp where rp.user.userId = :userPrincipalId and rp.post.id = p.id)" +
+                "(select rp from p.repostPerson as rp where rp.userId = :userPrincipalId)" +
                 "then true " +
                 "else false " +
-                "end " +
+                "end," +
+                "p.repostPerson.size " +      //21
                 "from Post as p " +
                 "join p.user as u " +
                 "left join p.tags as t " +
@@ -80,22 +81,22 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings){
                         List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
-                        if (objects[15] != null) {
+                        if (objects[14] != null) {
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
-                                    .Id((Long) objects[15])
-                                    .userId((Long) objects[16])
-                                    .mediaType(objects[17] == null ? "null" : objects[17].toString())
-                                    .url((String) objects[18])
+                                    .id((Long) objects[14])
+                                    .userId((Long) objects[15])
+                                    .mediaType(objects[16] == null ? "null" : objects[16].toString())
+                                    .url((String) objects[17])
                                     .build();
                             mediaPostDtoList.add(mediaPostDto);
                         }
 
 
                         List<TagDto> tagDtoList = new ArrayList<>();
-                        if (objects[13] != null){
+                        if (objects[12] != null){
                             TagDto tagDto = TagDto.builder()
-                                    .id((Long) objects[13])
-                                    .text(objects[14] == null ? "null" : (String) objects[14])
+                                    .id((Long) objects[12])
+                                    .text(objects[13] == null ? "null" : (String) objects[13])
                                     .build();
                             tagDtoList.add(tagDto);
                         }
@@ -113,125 +114,12 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                 .bookmarkAmount((Long) objects[9])
                                 .likeAmount((Long) objects[10])
                                 .commentAmount((Long) objects[11])
-                                .shareAmount((Long) objects[12])
                                 .media(mediaPostDtoList)
                                 .tags(tagDtoList)
-                                .isLiked((Boolean) objects[19])
-                                .isBookmarked((Boolean) objects[20])
-                                .isShared((Boolean) objects[21])
-                                .build();
-                    }
-
-                    @Override
-                    public List transformList(List list) {
-                        Map<Long, PostDto> result = new TreeMap<>(Comparator.reverseOrder());
-                        for (Object obj : list) {
-                            PostDto postDto = (PostDto) obj;
-                            if (result.containsKey(postDto.getId())) {
-                                result.get(postDto.getId()).getMedia().removeAll(postDto.getMedia());
-                                result.get(postDto.getId()).getMedia().addAll(postDto.getMedia());
-                                result.get(postDto.getId()).getTags().removeAll(postDto.getTags());
-                                result.get(postDto.getId()).getTags().addAll(postDto.getTags());
-                            } else {
-                                result.put(postDto.getId(), postDto);
-                            }
-                        }
-                        return new ArrayList<>(result.values());
-                    }
-                })
-                .getResultList();
-        return postDtoList;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<PostDto> getPostById(Long postId) {
-        User userPrincipal = userService.getPrincipal();
-        List<PostDto> postDtoList = entityManager.createQuery("select " +
-                "p.id, " +                      //0
-                "p.title, " +                   //1
-                "p.text, " +                    //2
-                "p.persistDate, " +             //3
-                "p.lastRedactionDate, " +       //4
-                "u.userId, " +                  //5
-                "u.firstName, " +               //6
-                "u.lastName, " +                //7
-                "u.avatar, " +                  //8
-                "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +     //9
-                "(select count(l.id) from PostLike as l where l.post.id = p.id), " +        //10
-                "(select count(c.id) from PostComment as c where c.post.id = p.id), " +     //11
-                "(select count(r.id) from Repost as r where r.post.id = p.id), " +
-                "t.id," +                     //12
-                "t.text," +                   //13
-                "m.id," +                     //14
-                "m.user.userId," +            //15
-                "m.mediaType," +              //16
-                "m.url," +                    //17
-                "case when exists " +                //18
-                "(select pl from PostLike as pl where pl.like.user.userId = :userPrincipalId and pl.post.id = p.id)" +
-                "then true " +
-                "else false " +
-                "end," +
-                "case when exists " +                //19
-                "(select bm from Bookmark as bm where bm.user.userId = :userPrincipalId and bm.post.id = p.id)" +
-                "then true " +
-                "else false " +
-                "end," +
-                "case when exists " +                //20
-                "(select rp from Repost as rp where rp.user.userId = :userPrincipalId and rp.post.id = p.id)" +
-                "then true " +
-                "else false " +
-                "end " +
-                "from Post as p " +
-                "join p.user as u " +
-                "left join p.tags as t " +
-                "left join p.media as m where p.id = :postId")
-                .setParameter("userPrincipalId", userPrincipal.getUserId())
-                .setParameter("postId", postId)
-                .unwrap(Query.class)
-                .setResultTransformer(new ResultTransformer() {
-                    @Override
-                    public Object transformTuple(Object[] objects, String[] strings){
-                        List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
-                        if (objects[15] != null) {
-                            MediaPostDto mediaPostDto = MediaPostDto.builder()
-                                    .Id((Long) objects[15])
-                                    .userId((Long) objects[16])
-                                    .mediaType(objects[17] == null ? "null" : objects[17].toString())
-                                    .url((String) objects[18])
-                                    .build();
-                            mediaPostDtoList.add(mediaPostDto);
-                        }
-
-
-                        List<TagDto> tagDtoList = new ArrayList<>();
-                        if (objects[13] != null){
-                            TagDto tagDto = TagDto.builder()
-                                    .id((Long) objects[13])
-                                    .text(objects[14] == null ? "null" : (String) objects[14])
-                                    .build();
-                            tagDtoList.add(tagDto);
-                        }
-
-                        return PostDto.builder()
-                                .id((Long) objects[0])
-                                .title((String) objects[1])
-                                .text((String) objects[2])
-                                .userId((Long) objects[5])
-                                .firstName((String) objects[6])
-                                .lastName((String) objects[7])
-                                .avatar((String) objects[8])
-                                .persistDate((LocalDateTime) objects[3])
-                                .lastRedactionDate((LocalDateTime) objects[4])
-                                .bookmarkAmount((Long) objects[9])
-                                .likeAmount((Long) objects[10])
-                                .commentAmount((Long) objects[11])
-                                .shareAmount((Long) objects[12])
-                                .media(mediaPostDtoList)
-                                .tags(tagDtoList)
-                                .isLiked((Boolean) objects[19])
-                                .isBookmarked((Boolean) objects[20])
-                                .isShared((Boolean) objects[21])
+                                .isLiked((Boolean) objects[18])
+                                .isBookmarked((Boolean) objects[19])
+                                .isShared((Boolean) objects[20])
+                                .shareAmount(Long.valueOf((Integer) objects[21]))
                                 .build();
                     }
 
@@ -273,7 +161,6 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +     //9
                 "(select count(l.id) from PostLike as l where l.post.id = p.id), " +        //10
                 "(select count(c.id) from PostComment as c where c.post.id = p.id), " +     //11
-                "(select count(r.id) from Repost as r where r.post.id = p.id), " +
                 "t.id," +                     //12
                 "t.text," +                   //13
                 "m.id," +                     //14
@@ -291,10 +178,11 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "else false " +
                 "end," +
                 "case when exists " +                //20
-                "(select rp from Repost as rp where rp.user.userId = :userPrincipalId and rp.post.id = p.id)" +
+                "(select rp from p.repostPerson as rp where rp.userId = :userPrincipalId)" +
                 "then true " +
                 "else false " +
-                "end " +
+                "end," +
+                "p.repostPerson.size " +      //21
                 "from Post as p " +
                 "join p.user as u " +
                 "left join p.tags as t " +
@@ -306,22 +194,22 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings){
                         List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
-                        if (objects[15] != null) {
+                        if (objects[14] != null) {
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
-                                    .Id((Long) objects[15])
-                                    .userId((Long) objects[16])
-                                    .mediaType(objects[17] == null ? "null" : objects[17].toString())
-                                    .url((String) objects[18])
+                                    .id((Long) objects[14])
+                                    .userId((Long) objects[15])
+                                    .mediaType(objects[16] == null ? "null" : objects[16].toString())
+                                    .url((String) objects[17])
                                     .build();
                             mediaPostDtoList.add(mediaPostDto);
                         }
 
 
                         List<TagDto> tagDtoList = new ArrayList<>();
-                        if (objects[13] != null){
+                        if (objects[12] != null){
                             TagDto tagDto = TagDto.builder()
-                                    .id((Long) objects[13])
-                                    .text(objects[14] == null ? "null" : (String) objects[14])
+                                    .id((Long) objects[12])
+                                    .text(objects[13] == null ? "null" : (String) objects[13])
                                     .build();
                             tagDtoList.add(tagDto);
                         }
@@ -339,12 +227,12 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                 .bookmarkAmount((Long) objects[9])
                                 .likeAmount((Long) objects[10])
                                 .commentAmount((Long) objects[11])
-                                .shareAmount((Long) objects[12])
                                 .media(mediaPostDtoList)
                                 .tags(tagDtoList)
-                                .isLiked((Boolean) objects[19])
-                                .isBookmarked((Boolean) objects[20])
-                                .isShared((Boolean) objects[21])
+                                .isLiked((Boolean) objects[18])
+                                .isBookmarked((Boolean) objects[19])
+                                .isShared((Boolean) objects[20])
+                                .shareAmount(Long.valueOf((Integer) objects[21]))
                                 .build();
                     }
 
@@ -386,7 +274,6 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +     //9
                 "(select count(l.id) from PostLike as l where l.post.id = p.id), " +        //10
                 "(select count(c.id) from PostComment as c where c.post.id = p.id), " +     //11
-                "(select count(r.id) from Repost as r where r.post.id = p.id), " +
                 "t.id," +                     //12
                 "t.text," +                   //13
                 "m.id," +                     //14
@@ -404,10 +291,11 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "else false " +
                 "end," +
                 "case when exists " +                //20
-                "(select rp from Repost as rp where rp.user.userId = :userPrincipalId and rp.post.id = p.id)" +
+                "(select rp from p.repostPerson as rp where rp.userId = :userPrincipalId)" +
                 "then true " +
                 "else false " +
-                "end " +
+                "end," +
+                "p.repostPerson.size " +      //21
                 "from Post as p " +
                 "join p.user as u " +
                 "left join p.tags as t " +
@@ -419,22 +307,22 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings){
                         List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
-                        if (objects[15] != null) {
+                        if (objects[14] != null) {
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
-                                    .Id((Long) objects[15])
-                                    .userId((Long) objects[16])
-                                    .mediaType(objects[17] == null ? "null" : objects[17].toString())
-                                    .url((String) objects[18])
+                                    .id((Long) objects[14])
+                                    .userId((Long) objects[15])
+                                    .mediaType(objects[16] == null ? "null" : objects[16].toString())
+                                    .url((String) objects[17])
                                     .build();
                             mediaPostDtoList.add(mediaPostDto);
                         }
 
 
                         List<TagDto> tagDtoList = new ArrayList<>();
-                        if (objects[13] != null){
+                        if (objects[12] != null){
                             TagDto tagDto = TagDto.builder()
-                                    .id((Long) objects[13])
-                                    .text(objects[14] == null ? "null" : (String) objects[14])
+                                    .id((Long) objects[12])
+                                    .text(objects[13] == null ? "null" : (String) objects[13])
                                     .build();
                         tagDtoList.add(tagDto);
                         }
@@ -452,12 +340,12 @@ public class PostDtoDaoImpl implements PostDtoDao {
                                 .bookmarkAmount((Long) objects[9])
                                 .likeAmount((Long) objects[10])
                                 .commentAmount((Long) objects[11])
-                                .shareAmount((Long) objects[12])
                                 .media(mediaPostDtoList)
                                 .tags(tagDtoList)
-                                .isLiked((Boolean) objects[19])
-                                .isBookmarked((Boolean) objects[20])
-                                .isShared((Boolean) objects[21])
+                                .isLiked((Boolean) objects[18])
+                                .isBookmarked((Boolean) objects[19])
+                                .isShared((Boolean) objects[20])
+                                .shareAmount(Long.valueOf((Integer) objects[21]))
                                 .build();
                     }
 
@@ -628,7 +516,6 @@ public class PostDtoDaoImpl implements PostDtoDao {
             }
         }).getResultList();
     }
-
 }
 
 
