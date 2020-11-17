@@ -274,27 +274,13 @@ public class PostControllerV2 {
                 user.getUserId(), postId), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Репост поста авторизованным пользователем")
+    @ApiOperation(value = "Получение закладоу авторизованного пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Репост добавлен в пост")
+            @ApiResponse(code = 200, message = "Все посты получены")
     })
-    @PostMapping("/post/{postId}/repost")
-    public ResponseEntity<String> addRepostToPost(
-            @ApiParam(value = "Id поста", example = "1")
-            @PathVariable @NonNull Long postId) {
-
-        Optional<Post> optionalPost = postService.getById(postId);
-        User user = userService.getPrincipal();
-
-        if (!optionalPost.isPresent()) {
-            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
-        }
-
-        Repost repost = new Repost();
-        repost.setUser(user);
-        repost.setPost(optionalPost.get());
-        repostService.create(repost);
-        return new ResponseEntity<>(String.format("Пользователь с id: %d сделал репост поста с id: %d ",
-                user.getUserId(), postId), HttpStatus.CREATED);
+    @GetMapping("/posts/bookmarks")
+    public ResponseEntity <List<PostDto>> getAllBookmarkedPosts(){
+        return ResponseEntity.ok().body(postDtoService.getAllBookmarkedPosts());
     }
+
 }
