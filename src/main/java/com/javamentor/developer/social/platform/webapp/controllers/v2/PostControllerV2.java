@@ -2,12 +2,14 @@ package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
+import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
+import com.javamentor.developer.social.platform.models.entity.post.Repost;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
@@ -16,6 +18,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.like.Pos
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.BookmarkService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.RepostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.PostCommentConverter;
@@ -48,6 +51,7 @@ public class PostControllerV2 {
     private final PostCommentService postCommentService;
     private final PostLikeService postLikeService;
     private final BookmarkService bookmarkService;
+    private final RepostService repostService;
 
     @Autowired
     public PostControllerV2(PostDtoService postDtoService,
@@ -59,7 +63,8 @@ public class PostControllerV2 {
                             PostCommentConverter postCommentConverter,
                             PostCommentService postCommentService,
                             PostLikeService postLikeService,
-                            BookmarkService bookmarkService) {
+                            BookmarkService bookmarkService,
+                            RepostService repostService) {
 
         this.postDtoService = postDtoService;
         this.postConverter = postConverter;
@@ -70,6 +75,7 @@ public class PostControllerV2 {
         this.postCommentService = postCommentService;
         this.postLikeService = postLikeService;
         this.bookmarkService = bookmarkService;
+        this.repostService = repostService;
     }
 
 
@@ -88,6 +94,15 @@ public class PostControllerV2 {
     public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("tag") String tag) {
         return ResponseEntity.ok(postDtoService.getPostsByTag(tag));
     }
+
+    @ApiOperation(value = "Получение всех существующих тегов")
+    @ApiResponses(value =  {
+            @ApiResponse(code = 200, message = "Теги получены", responseContainer = "List", response = TagDto.class)})
+    @GetMapping("/posts/tags")
+    public ResponseEntity<List<TagDto>> getAllTags() {
+        return ResponseEntity.ok(postDtoService.getAllTags());
+    }
+
 
     @ApiOperation(value = "Получение списка постов пользователя по его ID")
     @ApiResponses(value = {
@@ -257,6 +272,15 @@ public class PostControllerV2 {
         }
         return new ResponseEntity<>(String.format("Пользователь с id: %d удалил пост с id: %d из закладок",
                 user.getUserId(), postId), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Получение закладоу авторизованного пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Все посты получены")
+    })
+    @GetMapping("/posts/bookmarks")
+    public ResponseEntity <List<PostDto>> getAllBookmarkedPosts(){
+        return ResponseEntity.ok().body(postDtoService.getAllBookmarkedPosts());
     }
 
 }

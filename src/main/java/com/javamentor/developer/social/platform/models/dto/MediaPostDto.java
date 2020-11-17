@@ -1,9 +1,12 @@
 package com.javamentor.developer.social.platform.models.dto;
 
+import com.javamentor.developer.social.platform.models.util.OnCreate;
+import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,8 +17,9 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class MediaPostDto {
     @ApiModelProperty(notes = "Айди медиа", example = "1")
-    @NotNull
-    private Long Id;
+    @NotNull(groups = OnUpdate.class)
+    @Null(groups = OnCreate.class)
+    private Long id;
 
     @ApiModelProperty(notes = "Айди пользователя, загрузившего медиа", example = "1")
     @NotNull

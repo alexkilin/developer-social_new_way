@@ -1,13 +1,13 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v1;
 
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
-import com.javamentor.developer.social.platform.models.entity.media.MediaType;
-import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumImageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
@@ -15,6 +15,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.media.Im
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
+import com.javamentor.developer.social.platform.webapp.converters.AlbumImageConverter;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,23 +38,25 @@ public class ImageController {
 
     private ImageDtoService imageDTOService;
     private ImageService imageService;
-    private AlbumDtoService albumDtoService;
+    private AlbumImageDtoService albumImageDtoService;
     private AlbumImageService albumImageService;
     private UserService userService;
-    private AlbumConverter albumConverter;
+    private AlbumImageConverter albumImageConverter;
     private AlbumService albumService;
     private MediaService mediaService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public ImageController(ImageDtoService imageDTOService, ImageService imageService, AlbumDtoService albumDtoService, AlbumImageService albumImageService, UserService userService, AlbumConverter albumConverter, AlbumService albumService, MediaService mediaService) {
+    public ImageController(ImageDtoService imageDTOService, ImageService imageService, AlbumImageDtoService albumImageDtoService,
+                           AlbumImageService albumImageService, UserService userService, AlbumImageConverter albumImageConverter,
+                           AlbumService albumService, MediaService mediaService) {
         this.imageDTOService = imageDTOService;
         this.imageService = imageService;
-        this.albumDtoService = albumDtoService;
+        this.albumImageDtoService = albumImageDtoService;
         this.albumImageService = albumImageService;
         this.userService = userService;
-        this.albumConverter = albumConverter;
+        this.albumImageConverter = albumImageConverter;
         this.albumService = albumService;
         this.mediaService = mediaService;
     }
@@ -219,7 +222,7 @@ public class ImageController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
         logger.info(String.format("Фотоальбом %s отправлен", albumId));
-        return ResponseEntity.ok(albumConverter.toAlbumDto(optionalAlbum.get()));
+        return ResponseEntity.ok(albumImageConverter.toAlbumImageDto(optionalAlbum.get()));
     }
 
     @ApiOperation(value = "Получить все фотоальбомы пользователя")
@@ -234,7 +237,7 @@ public class ImageController {
         if(!userService.existById(userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
-        List<AlbumDto> albumDtoList = albumDtoService.getAllByTypeAndUserId(MediaType.IMAGE, userId);
+        List<AlbumImageDto> albumDtoList = albumImageDtoService.getAllByUserId(userId);
         if(albumDtoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No albums for user id %s", userId));
         }
