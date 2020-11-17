@@ -6,7 +6,7 @@ groups:
     name: "JAVA IS 0"
     persist_date: "2020-08-13 11:46:35.493000"
     group_category_id: 1
-    owner_id: 1
+    owner_id: 6
 
   - id: 2
     description: "This is a description of the group #1"

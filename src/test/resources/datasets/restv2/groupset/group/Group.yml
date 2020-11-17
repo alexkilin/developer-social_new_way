@@ -1,5 +1,6 @@
 groups:
   - id: 1
+    address_image_group: "www.image.com"
     description: "This is a description of the group #0"
     last_redaction_date: "2020-08-13 11:46:35.493000"
     link_site: "www.groupsite0.ru"
@@ -9,6 +10,7 @@ groups:
     owner_id: 1
 
   - id: 2
+    address_image_group: "www.image.com"
     description: "This is a description of the group #1"
     last_redaction_date: "2020-08-13 11:46:35.493000"
     link_site: "www.groupsite1.ru"
@@ -18,6 +20,7 @@ groups:
     owner_id: 2
 
   - id: 3
+    address_image_group: "www.image.com"
     description: "This is a description of the group #2"
     last_redaction_date: "2020-08-13 11:46:35.493000"
     link_site: "www.groupsite2.ru"
@@ -27,6 +30,7 @@ groups:
     owner_id: 3
 
   - id: 4
+    address_image_group: "www.image.com"
     description: "This is a description of the group #3"
     last_redaction_date: "2020-08-13 11:46:35.493000"
     link_site: "www.groupsite3.ru"
@@ -36,6 +40,7 @@ groups:
     owner_id: 4
 
   - id: 5
+    address_image_group: "www.image.com"
     description: "This is a description of the group #4"
     last_redaction_date: "2020-08-13 11:46:35.493000"
     link_site: "www.groupsite4.ru"

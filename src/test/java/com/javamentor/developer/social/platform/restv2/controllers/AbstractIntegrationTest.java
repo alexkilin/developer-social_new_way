@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform;
+package com.javamentor.developer.social.platform.restv2.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

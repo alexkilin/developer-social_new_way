@@ -1,8 +1,7 @@
-package com.javamentor.developer.social.platform.restv2;
+package com.javamentor.developer.social.platform.restv2.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.google.gson.Gson;
-import com.javamentor.developer.social.platform.AbstractIntegrationTest;
 import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.users.UserRegisterDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
@@ -22,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @DataSet(value = {
+        "datasets/user/language.yml",
+        "datasets/user/user_languages.yml",
         "datasets/restv2/user/active.yml",
         "datasets/restv2/user/role.yml",
         "datasets/restv2/user/userFriends.yml",
@@ -217,7 +218,9 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     void getFriendsOfUserById() throws Exception {
-        mockMvc.perform(get(apiUrl + "/{userId}/friends", 2L))
+        mockMvc.perform(get(apiUrl + "/{userId}/friends", 2L)
+                .param("currentPage", "0")
+                .param("itemsOnPage", "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

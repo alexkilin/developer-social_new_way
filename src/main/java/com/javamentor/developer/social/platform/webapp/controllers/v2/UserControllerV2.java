@@ -159,7 +159,7 @@ public class UserControllerV2 {
     @ApiOperation(value = "Получение списка друзей пользователя по id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = UserFriendDto.class),
-            @ApiResponse(code = 400, message = "Пользователя с таким id не существует", response = String.class)
+            @ApiResponse(code = 404, message = "Пользователя с таким id не существует", response = String.class)
     })
     @GetMapping("/{id}/friends")
     public ResponseEntity<?> getUserFriends(

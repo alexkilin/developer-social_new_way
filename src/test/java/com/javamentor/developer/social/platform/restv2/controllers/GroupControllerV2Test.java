@@ -1,7 +1,6 @@
-package com.javamentor.developer.social.platform.restv2;
+package com.javamentor.developer.social.platform.restv2.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
-import com.javamentor.developer.social.platform.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -12,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DataSet(value = {
         "datasets/restv2/groupset/user/User.yml",
+        "datasets/restv2/groupset/user/userFriends.yml",
         "datasets/restv2/groupset/user/Active.yml",
         "datasets/restv2/groupset/user/Role.yml",
         "datasets/restv2/groupset/group/Group.yml",
@@ -30,7 +30,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     public void getAllGroups() throws Exception {
-        mockMvc.perform(get("/api/v2/groups?page=1&size=3"))
+        mockMvc.perform(get("/api/v2/groups?page=0&size=3"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3));

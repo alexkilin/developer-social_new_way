@@ -5,6 +5,8 @@ user_languages:
     language_id: 1
   - user_id: 5
     language_id: 2
+  - user_id: 2
+    language_id: 2
 
 
 
