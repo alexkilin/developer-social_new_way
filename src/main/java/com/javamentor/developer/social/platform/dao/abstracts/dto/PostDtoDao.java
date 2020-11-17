@@ -22,4 +22,6 @@ public interface PostDtoDao {
 
     List <PostDto> getAllBookmarkedPosts(Long userPrincipalId);
 
+    List <TagDto> getAllTags ();
+
 }

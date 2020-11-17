@@ -84,7 +84,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PostDto.class)})
     @GetMapping("/posts")
     public ResponseEntity<List<PostDto>> getPosts() {
-        return ResponseEntity.ok().body(postDtoService.getAllPosts(userService.getPrincipal().getUserId()));
+        return ResponseEntity.ok().body(postDtoService.getAllPosts());
     }
 
     @ApiOperation(value = "Получение поста по тэгу")
@@ -92,7 +92,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
     @GetMapping("/posts/{tag}")
     public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("tag") String tag) {
-        return ResponseEntity.ok(postDtoService.getPostsByTag(tag, userService.getPrincipal().getUserId()));
+        return ResponseEntity.ok(postDtoService.getPostsByTag(tag));
     }
 
     @ApiOperation(value = "Получение всех существующих тегов")
@@ -109,7 +109,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
     @GetMapping("/posts/user/{id}")
     public ResponseEntity<List<PostDto>> getPostsByUserId(@ApiParam(value = "ID пользователя", example = "60") @PathVariable Long id) {
-        return ResponseEntity.ok(postDtoService.getPostsByUserId(id, userService.getPrincipal().getUserId()));
+        return ResponseEntity.ok(postDtoService.getPostsByUserId(id));
     }
 
     @ApiOperation(value = "Добавление поста")
@@ -280,7 +280,7 @@ public class PostControllerV2 {
     })
     @GetMapping("/posts/bookmarks")
     public ResponseEntity <List<PostDto>> getAllBookmarkedPosts(){
-        return ResponseEntity.ok().body(postDtoService.getAllBookmarkedPosts(userService.getPrincipal().getUserId()));
+        return ResponseEntity.ok().body(postDtoService.getAllBookmarkedPosts());
     }
 
 }
