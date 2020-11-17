@@ -4,8 +4,9 @@ import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
-import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
+import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
+import com.javamentor.developer.social.platform.models.entity.like.Like;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
@@ -13,15 +14,15 @@ import com.javamentor.developer.social.platform.models.entity.post.Repost;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.model.comment.CommentService;
 import com.javamentor.developer.social.platform.service.abstracts.model.comment.PostCommentService;
+import com.javamentor.developer.social.platform.service.abstracts.model.like.LikeService;
 import com.javamentor.developer.social.platform.service.abstracts.model.like.PostLikeService;
-import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.BookmarkService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.RepostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.webapp.converters.PostCommentConverter;
 import com.javamentor.developer.social.platform.webapp.converters.PostConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
@@ -47,35 +48,37 @@ public class PostControllerV2 {
     private final PostService postService;
     private final UserService userService;
     private final UserTabsService userTabsService;
-    private final PostCommentConverter postCommentConverter;
     private final PostCommentService postCommentService;
     private final PostLikeService postLikeService;
     private final BookmarkService bookmarkService;
     private final RepostService repostService;
+    private final CommentService commentService;
+    private final LikeService likeService;
 
     @Autowired
     public PostControllerV2(PostDtoService postDtoService,
                             PostConverter postConverter,
                             PostService postService,
                             UserService userService,
-                            MediaService mediaService,
                             UserTabsService userTabsService,
-                            PostCommentConverter postCommentConverter,
                             PostCommentService postCommentService,
                             PostLikeService postLikeService,
                             BookmarkService bookmarkService,
-                            RepostService repostService) {
+                            RepostService repostService,
+                            CommentService commentService,
+                            LikeService likeService) {
 
         this.postDtoService = postDtoService;
         this.postConverter = postConverter;
         this.postService = postService;
         this.userService = userService;
         this.userTabsService = userTabsService;
-        this.postCommentConverter = postCommentConverter;
         this.postCommentService = postCommentService;
         this.postLikeService = postLikeService;
         this.bookmarkService = bookmarkService;
         this.repostService = repostService;
+        this.commentService = commentService;
+        this.likeService = likeService;
     }
 
 
@@ -91,7 +94,9 @@ public class PostControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
     @GetMapping("/posts/{tag}")
-    public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("tag") String tag) {
+    public ResponseEntity<List<PostDto>> getPostsByTag(
+            @ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("tag") String tag) {
+
         return ResponseEntity.ok(postDtoService.getPostsByTag(tag));
     }
 
@@ -108,7 +113,9 @@ public class PostControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
     @GetMapping("/posts/user/{id}")
-    public ResponseEntity<List<PostDto>> getPostsByUserId(@ApiParam(value = "ID пользователя", example = "60") @PathVariable Long id) {
+    public ResponseEntity<List<PostDto>> getPostsByUserId(
+            @ApiParam(value = "ID пользователя", example = "60") @PathVariable Long id) {
+
         return ResponseEntity.ok(postDtoService.getPostsByUserId(id));
     }
 
@@ -118,7 +125,9 @@ public class PostControllerV2 {
     })
     @PostMapping("/post")
     @Validated(OnCreate.class)
-    public ResponseEntity<PostDto> addPost(@ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostCreateDto postCreateDto) {
+    public ResponseEntity<PostDto> addPost(
+            @ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostCreateDto postCreateDto) {
+
         Post post = postConverter.toEntity(postCreateDto);
         postService.create(post);
         return ResponseEntity.ok().body(postConverter.toDto(post));
@@ -130,15 +139,14 @@ public class PostControllerV2 {
             @ApiResponse(code = 400, message = "Пост не может быть удалён", response = String.class)
     })
     @DeleteMapping(path = "/post/{id}")
-    public ResponseEntity<?> deletePost(@ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
+    public ResponseEntity<?> deletePost(
+            @ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
+
         Optional<Post> result = postService.getById(id);
 
         if (result.isPresent()) {
-
             Post post = result.get();
-
             userTabsService.deletePost(post);
-
             return ResponseEntity.ok().body(String.format("Deleted Post with ID %d, is successful", id));
         } else {
             return ResponseEntity.badRequest().body(String.format("Can't find Post with ID %d", id));
@@ -150,7 +158,9 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Комментарии получены", responseContainer = "List",
                     response = CommentDto.class)})
     @GetMapping("/post/{id}/comments")
-    public ResponseEntity<List<CommentDto>> showPostComments(@ApiParam(value = "ID поста", example = "20") @PathVariable Long id) {
+    public ResponseEntity<List<CommentDto>> showPostComments(
+            @ApiParam(value = "ID поста", example = "20") @PathVariable Long id) {
+
         return new ResponseEntity<>(postDtoService.getCommentsByPostId(id), HttpStatus.OK);
     }
 
@@ -160,21 +170,22 @@ public class PostControllerV2 {
             @ApiResponse(code = 404, message = "Пользователь или пост не найдены")
     })
     @PostMapping("/post/{postId}/comment")
-    public ResponseEntity<String> addCommentToPost(@ApiParam(value = "Объект комментария к посту") @RequestBody CommentDto commentDto,
-                                                   @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
-        if (!userService.existById(commentDto.getUserDto().getUserId())) {
-            String msg = String.format("Пользователь с id: %d не найден", commentDto.getUserDto().getUserId());
-            return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
-        }
-        if (!postService.existById(postId)) {
-            String msg = String.format("Пост с id: %d не найден", postId);
-            return new ResponseEntity<>(msg, HttpStatus.NOT_FOUND);
-        }
-        PostComment postComment = postCommentConverter.toPostCommentEntity(commentDto, postId);
-        postComment.getComment().setCommentType(CommentType.POST);
+    public ResponseEntity<?> addCommentToPost(
+            @ApiParam(value = "Комментарий к посту") @RequestBody String comment,
+            @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
+
+        User user = userService.getPrincipal();
+
+        PostComment postComment = new PostComment(comment, user);
+        Comment newComment = commentService.createComment(postComment.getComment());
+
+        Post post = Post.builder().id(postId).build();
+        postComment.setComment(newComment);
+        postComment.setPost(post);
         postCommentService.create(postComment);
-        String msg = String.format("Пользователь с id: %d добавил комментарий в пост с id: %s", commentDto.getUserDto().getUserId(), postId);
-        return new ResponseEntity<>(msg, HttpStatus.CREATED);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postDtoService.getPostById(postId));
     }
 
     @ApiOperation(value = "Добавление лайка посту авторизованным пользователем")
@@ -183,19 +194,18 @@ public class PostControllerV2 {
     })
     @PostMapping("/post/{postId}/like")
     public ResponseEntity<?> addLikeToPost(
-            @ApiParam(value = "Id поста", example = "1")
-            @PathVariable @NonNull Long postId) {
+            @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
 
-        Optional<Post> optionalPost = postService.getById(postId);
         User user = userService.getPrincipal();
+        Post post = Post.builder().id(postId).build();
 
-        if (!optionalPost.isPresent()) {
-            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
-        }
+        PostLike postLike = new PostLike(user);
+        Like like = likeService.createLike(postLike.getLike());
 
-        PostLike newPostLike = new PostLike(user);
-        newPostLike.setPost(optionalPost.get());
-        postLikeService.create(newPostLike);
+        postLike.setLike(like);
+        postLike.setPost(post);
+        postLikeService.create(postLike);
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId));
     }
@@ -208,19 +218,13 @@ public class PostControllerV2 {
     public ResponseEntity<?> deleteLikeFromPost(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
-
-        Optional<Post> optionalPost = postService.getById(postId);
         User user = userService.getPrincipal();
-
-        if (!optionalPost.isPresent()) {
-            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
+        List<PostLike> postLikes = postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
+        if (postLikes.isEmpty()) {
+            return new ResponseEntity<>("The Like has already been deleted", HttpStatus.NOT_FOUND);
         }
-
-        for (PostLike postLike : optionalPost.get().getPostLikes()) {
-            if (postLike.getLike().getUser().getUserId().equals(user.getUserId())) {
-                postLikeService.delete(postLike);
-            }
-        }
+        PostLike postLike = postLikes.get(0);
+        postLikeService.delete(postLike);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId));
     }
@@ -231,19 +235,12 @@ public class PostControllerV2 {
     })
     @PostMapping("/post/{postId}/bookmark")
     public ResponseEntity<?> addPostToBookmark(
-            @ApiParam(value = "Id поста", example = "1")
-            @PathVariable @NonNull Long postId) {
+            @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
 
-        Optional<Post> optionalPost = postService.getById(postId);
         User user = userService.getPrincipal();
+        Post post = Post.builder().id(postId).build();
 
-        if (!optionalPost.isPresent()) {
-            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
-        }
-
-        Bookmark bookmark = new Bookmark();
-        bookmark.setUser(user);
-        bookmark.setPost(optionalPost.get());
+        Bookmark bookmark = Bookmark.builder().user(user).post(post).build();
         bookmarkService.create(bookmark);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId));
@@ -255,21 +252,12 @@ public class PostControllerV2 {
     })
     @DeleteMapping("/post/{postId}/bookmark")
     public ResponseEntity<?> deletePostFromBookmark(
-            @ApiParam(value = "Id поста", example = "1")
-            @PathVariable @NonNull Long postId) {
+            @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
 
-        Optional<Post> optionalPost = postService.getById(postId);
         User user = userService.getPrincipal();
 
-        if (!optionalPost.isPresent()) {
-            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
-        }
+        bookmarkService.deleteBookmarkByPostIdAndUserId(postId, user.getUserId());
 
-        for (Bookmark bookmark : optionalPost.get().getBookmarks()) {
-            if (bookmark.getUser().getUserId().equals(user.getUserId())) {
-                bookmarkService.delete(bookmark);
-            }
-        }
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId));
     }
@@ -280,19 +268,12 @@ public class PostControllerV2 {
     })
     @PostMapping("/post/{postId}/repost")
     public ResponseEntity<?> addRepostToPost(
-            @ApiParam(value = "Id поста", example = "1")
-            @PathVariable @NonNull Long postId) {
+            @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
 
-        Optional<Post> optionalPost = postService.getById(postId);
         User user = userService.getPrincipal();
+        Post post = Post.builder().id(postId).build();
 
-        if (!optionalPost.isPresent()) {
-            return new ResponseEntity<>(String.format("Пост с id: %d не найден", postId), HttpStatus.NOT_FOUND);
-        }
-
-        Repost repost = new Repost();
-        repost.setUser(user);
-        repost.setPost(optionalPost.get());
+        Repost repost = Repost.builder().user(user).post(post).build();
         repostService.create(repost);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId));
