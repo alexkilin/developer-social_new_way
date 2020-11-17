@@ -45,31 +45,6 @@ public class PostController {
         this.userTabsService = userTabsService;
     }
 
-
-    @ApiOperation(value = "Получение списка всех постов")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PostDto.class)})
-    @GetMapping
-    public ResponseEntity<List<PostDto>> getPosts() {
-        return ResponseEntity.ok().body(postDtoService.getAllPosts());
-    }
-
-    @ApiOperation(value = "Получение поста по тэгу")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
-    @GetMapping("/{text}")
-    public ResponseEntity<List<PostDto>> getPostsByTag(@ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("text") String text) {
-        return ResponseEntity.ok(postDtoService.getPostsByTag(text));
-    }
-
-    @ApiOperation(value = "Получение списка постов пользователя по его ID")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
-    @GetMapping("/user/{id}")
-    public ResponseEntity<List<PostDto>> getPostsByUserId(@ApiParam(value = "ID пользователя", example = "20") @PathVariable Long id) {
-        return ResponseEntity.ok(postDtoService.getPostsByUserId(id));
-    }
-
     @ApiOperation(value = "Добавление поста")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пост добавлен", response = PostDto.class)

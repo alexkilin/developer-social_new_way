@@ -5,6 +5,7 @@ import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.entity.comment.Comment;
+import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
 import com.javamentor.developer.social.platform.models.entity.like.Like;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
@@ -262,9 +263,9 @@ public class PostControllerV2 {
                 .body(postDtoService.getPostById(postId));
     }
 
-    @ApiOperation(value = "Репост поста авторизованным пользователем")
+    @ApiOperation(value = "Получение закладоу авторизованного пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Репост добавлен в пост")
+            @ApiResponse(code = 200, message = "Все посты получены")
     })
     @PostMapping("/post/{postId}/repost")
     public ResponseEntity<?> addRepostToPost(
@@ -277,6 +278,15 @@ public class PostControllerV2 {
         repostService.create(repost);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId));
+    }
+
+    @ApiOperation(value = "Получение закладок авторизованного пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Все посты получены")
+    })
+    @GetMapping("/posts/bookmarks")
+    public ResponseEntity <List<PostDto>> getAllBookmarkedPosts(){
+        return ResponseEntity.ok().body(postDtoService.getAllBookmarkedPosts());
     }
 
 }

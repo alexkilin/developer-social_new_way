@@ -19,4 +19,6 @@ public interface PostDtoService {
     List<TagDto> getAllTags();
     
     List<PostDto> getPostsByUserId(Long id);
+
+    List <PostDto> getAllBookmarkedPosts();
 }
