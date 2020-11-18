@@ -262,11 +262,11 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 "else false " +
                 "end," +
                 "case when exists " +                //20
-                "(select rp from p.repostPerson as rp where rp.userId = :userPrincipalId)" +
+                "(select rp from Repost as rp where rp.user.userId = :userPrincipalId)" +
                 "then true " +
                 "else false " +
                 "end," +
-                "p.repostPerson.size " +      //21
+                "p.reposts.size " +      //21
                 "from Bookmark as bm " +
                 "join bm.user as u " +
                 "join bm.post as p " +
