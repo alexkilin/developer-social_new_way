@@ -262,9 +262,9 @@ public class PostControllerV2 {
                 .body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
-    @ApiOperation(value = "Получение закладоу авторизованного пользователя")
+    @ApiOperation(value = "Репост поста авторизованным пользователем")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Все посты получены")
+            @ApiResponse(code = 201, message = "Репост добавлен в пост")
     })
     @PostMapping("/post/{postId}/repost")
     public ResponseEntity<?> addRepostToPost(
