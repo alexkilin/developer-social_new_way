@@ -16,7 +16,6 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @PersistenceContext
     private EntityManager entityManager;
-
     private Class<T> clazz;
 
     @SuppressWarnings("unchecked")
@@ -36,7 +35,6 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
                 .setMaxResults(itemsOnPage)
                 .getResultList();
     }
-
 
     @Override
     @SuppressWarnings("unchecked")

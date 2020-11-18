@@ -78,7 +78,6 @@ public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
                 .setResultTransformer(new ResultTransformer() {
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
-
                         AudioDto audioDto = AudioDto.builder()
                                 .id((Long) objects[5])
                                 .url((String) objects[6])
