@@ -5,7 +5,6 @@ import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.entity.comment.Comment;
-import com.javamentor.developer.social.platform.models.entity.comment.CommentType;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
 import com.javamentor.developer.social.platform.models.entity.like.Like;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
@@ -40,7 +39,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping(value = "/api/v2", produces = "application/json")
+@RequestMapping(value = "/api/v2", produces = "application/json;charset=UTF-8")
 @Api(value = "PostApi-v2", description = "Операции над постами пользователя")
 @Validated
 public class PostControllerV2 {
@@ -186,7 +185,7 @@ public class PostControllerV2 {
         postCommentService.create(postComment);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId));
+                .body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Добавление лайка посту авторизованным пользователем")
@@ -208,7 +207,7 @@ public class PostControllerV2 {
         postLikeService.create(postLike);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId));
+                .body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Удаление лайка из поста авторизованным пользователем")
@@ -227,7 +226,7 @@ public class PostControllerV2 {
         PostLike postLike = postLikes.get(0);
         postLikeService.delete(postLike);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId));
+                .body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Добавление поста в закладки авторизованного пользователя")
@@ -244,7 +243,7 @@ public class PostControllerV2 {
         Bookmark bookmark = Bookmark.builder().user(user).post(post).build();
         bookmarkService.create(bookmark);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId));
+                .body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Удаление поста из закладок авторизованным пользователем")
@@ -260,7 +259,7 @@ public class PostControllerV2 {
         bookmarkService.deleteBookmarkByPostIdAndUserId(postId, user.getUserId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId));
+                .body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Получение закладоу авторизованного пользователя")
@@ -277,7 +276,7 @@ public class PostControllerV2 {
         Repost repost = Repost.builder().user(user).post(post).build();
         repostService.create(repost);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId));
+                .body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Получение закладок авторизованного пользователя")

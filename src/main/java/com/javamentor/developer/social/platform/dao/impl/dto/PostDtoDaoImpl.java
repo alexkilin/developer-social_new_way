@@ -42,6 +42,19 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
+    public List<PostDto> getPostById(Long postId, Long userPrincipalId) {
+        List<PostDto> postDtoList = entityManager.createQuery( GET_ALL_POSTS_QUERY +
+                " where p.id = :postId")
+                .setParameter("userPrincipalId", userPrincipalId)
+                .setParameter("postId", postId)
+                .unwrap(Query.class)
+                .setResultTransformer(getResultTransformer())
+                .getResultList();
+        return postDtoList;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<PostDto> getPostsByTag(String text, Long userPrincipalId) {
         List<PostDto> postDtoList = entityManager.createQuery(GET_ALL_POSTS_QUERY +
                 " where t.text = :tText")

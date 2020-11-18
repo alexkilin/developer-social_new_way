@@ -30,6 +30,11 @@ public class PostDtoServiceImpl implements PostDtoService {
     }
 
     @Override
+    public List<PostDto> getPostById(Long postId, Long userPrincipalId) {
+        return postDtoDao.getPostById(postId, userPrincipalId);
+    }
+
+    @Override
     public List<PostDto> getPostsByUserId(Long id) {
         Long userPrincipalId = userService.getPrincipal().getUserId();
         return postDtoDao.getPostsByUserId(id, userPrincipalId);
