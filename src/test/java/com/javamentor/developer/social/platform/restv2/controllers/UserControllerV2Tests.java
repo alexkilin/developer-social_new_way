@@ -21,8 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @DataSet(value = {
-        "datasets/user/language.yml",
-        "datasets/user/user_languages.yml",
+        "datasets/restv2/user/language.yml",
+        "datasets/restv2/user/user_languages.yml",
         "datasets/restv2/user/active.yml",
         "datasets/restv2/user/role.yml",
         "datasets/restv2/user/userFriends.yml",
@@ -226,7 +226,9 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(4));
 
-        mockMvc.perform(get(apiUrl + "/{userId}/friends", 222L))
+        mockMvc.perform(get(apiUrl + "/{userId}/friends", 222L)
+                .param("currentPage", "0")
+                .param("itemsOnPage", "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
