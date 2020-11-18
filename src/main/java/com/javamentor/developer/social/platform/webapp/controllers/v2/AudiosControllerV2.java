@@ -313,11 +313,11 @@ public class AudiosControllerV2 {
     @PutMapping(value = "/playlists/{playlistId}/audio")
     public ResponseEntity<?> addAudioToPlaylist(@ApiParam(value = "Id плейлиста", example = "2") @PathVariable @NotNull Long playlistId,
                                                 @ApiParam(value = "Id аудио", example = "11") @RequestParam("audioId") @NotNull Long audioId) {
-        Optional<Playlist> playlistOptional = playlistService.getOptionalById(playlistId);
+        Optional<Playlist> playlistOptional = playlistService.getById(playlistId);
         if (!playlistOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s", playlistId));
         }
-        Optional<Audios> audiosOptional = audiosService.getOptionalById(audioId);
+        Optional<Audios> audiosOptional = audiosService.getById(audioId);
         if (!audiosOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No audio with id %s found", audioId));
         }
@@ -338,11 +338,11 @@ public class AudiosControllerV2 {
     @DeleteMapping(value = "/playlists/{playlistId}/audio/{audioId}")
     public ResponseEntity<?> removeAudioFromPlaylist(@ApiParam(value = "Id плейлиста", example = "2") @PathVariable @NotNull Long playlistId,
                                                      @ApiParam(value = "Id аудио", example = "10") @PathVariable @NotNull Long audioId) {
-        Optional<Playlist> playlistOptional = playlistService.getOptionalById(playlistId);
+        Optional<Playlist> playlistOptional = playlistService.getById(playlistId);
         if (!playlistOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s for current user", playlistId));
         }
-        Optional<Audios> audiosOptional = audiosService.getOptionalById(audioId);
+        Optional<Audios> audiosOptional = audiosService.getById(audioId);
         if (!audiosOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No audio with id %s found", audioId));
         }

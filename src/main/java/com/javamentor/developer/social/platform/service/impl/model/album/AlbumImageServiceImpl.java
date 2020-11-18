@@ -20,9 +20,4 @@ public class AlbumImageServiceImpl extends GenericServiceAbstract<AlbumImage, Lo
         this.albumImageDAO = dao;
     }
 
-    @Override
-    public Optional<AlbumImage> getOptionalById(Long id) {
-        return getById(id);
-    }
-
 }

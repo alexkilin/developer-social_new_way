@@ -16,19 +16,11 @@ public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> impl
 
     private AudiosDao audiosDao;
 
-
     @Autowired
     public AudiosServiceImpl(AudiosDao dao) {
         super(dao);
         this.audiosDao = dao;
     }
-
-
-    @Override
-    public Optional<Audios> getOptionalById(Long id) {
-        return getById(id);
-    }
-
 
     @Override
     public boolean addAudioInCollectionsOfUser(User user, Long audioId) {
