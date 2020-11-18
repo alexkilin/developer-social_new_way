@@ -32,7 +32,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<PostDto> getAllPosts(Long userPrincipalId) {
-        List<PostDto> postDtoList = entityManager.createQuery(GET_ALL_POSTS_QUERY)
+        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST)
                 .setParameter("userPrincipalId", userPrincipalId)
                 .unwrap(Query.class)
                 .setResultTransformer(getResultTransformer())
@@ -43,8 +43,8 @@ public class PostDtoDaoImpl implements PostDtoDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<PostDto> getPostById(Long postId, Long userPrincipalId) {
-        List<PostDto> postDtoList = entityManager.createQuery( GET_ALL_POSTS_QUERY +
-                " where p.id = :postId")
+        List<PostDto> postDtoList = entityManager.createQuery( SELECT_ALL_POSTS + FROM_POST +
+                "where p.id = :postId")
                 .setParameter("userPrincipalId", userPrincipalId)
                 .setParameter("postId", postId)
                 .unwrap(Query.class)
@@ -56,7 +56,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<PostDto> getPostsByTag(String text, Long userPrincipalId) {
-        List<PostDto> postDtoList = entityManager.createQuery(GET_ALL_POSTS_QUERY +
+        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST +
                 " where t.text = :tText")
                 .setParameter("userPrincipalId", userPrincipalId)
                 .setParameter("tText", text)
@@ -69,7 +69,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
     @Override
     @SuppressWarnings("unchecked")
 	public List<PostDto> getPostsByUserId(Long userId, Long userPrincipalId) {
-        List<PostDto> postDtoList = entityManager.createQuery(GET_ALL_POSTS_QUERY +
+        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST +
                 " where u.userId = :userId")
                 .setParameter("userPrincipalId", userPrincipalId)
                 .setParameter("userId", userId)
@@ -232,105 +232,16 @@ public class PostDtoDaoImpl implements PostDtoDao {
     @Override
 	@SuppressWarnings("unchecked")
     public List <PostDto> getAllBookmarkedPosts(Long userPrincipalId){
-        List<PostDto> postDtoList = entityManager.createQuery("select " +
-                "p.id, " +                      //0
-                "p.title, " +                   //1
-                "p.text, " +                    //2
-                "p.persistDate, " +             //3
-                "p.lastRedactionDate, " +       //4
-                "u.userId, " +                  //5
-                "u.firstName, " +               //6
-                "u.lastName, " +                //7
-                "u.avatar, " +                  //8
-                "(select count(bm.id) from Bookmark as bm where bm.post.id = p.id), " +     //9
-                "(select count(l.id) from PostLike as l where l.post.id = p.id), " +        //10
-                "(select count(c.id) from PostComment as c where c.post.id = p.id), " +     //11
-                "t.id," +                     //12
-                "t.text," +                   //13
-                "m.id," +                     //14
-                "m.user.userId," +            //15
-                "m.mediaType," +              //16
-                "m.url," +                    //17
-                "case when exists " +                //18
-                "(select pl from PostLike as pl where pl.like.user.userId = :userPrincipalId and pl.post.id = p.id)" +
-                "then true " +
-                "else false " +
-                "end," +
-                "case when exists " +                //19
-                "(select bm from Bookmark as bm where bm.user.userId = :userPrincipalId and bm.post.id = p.id)" +
-                "then true " +
-                "else false " +
-                "end," +
-                "case when exists " +                //20
-                "(select rp from Repost as rp where rp.user.userId = :userPrincipalId)" +
-                "then true " +
-                "else false " +
-                "end," +
-                "p.reposts.size " +      //21
-                "from Bookmark as bm " +
-                "join bm.user as u " +
-                "join bm.post as p " +
-                "left join p.tags as t " +
-                "left join p.media as m " +
+        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_BOOKMARK +
                 "where u.userId = :userPrincipalId")
                 .setParameter("userPrincipalId", userPrincipalId)
                 .unwrap(Query.class)
-                .setResultTransformer(new ResultTransformer() {
-                    @Override
-                    public Object transformTuple(Object[] objects, String[] strings){
-                        List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
-                        if (objects[14] != null) {
-                            MediaPostDto mediaPostDto = MediaPostDto.builder()
-                                    .id((Long) objects[14])
-                                    .userId((Long) objects[15])
-                                    .mediaType(objects[16] == null ? "null" : objects[16].toString())
-                                    .url((String) objects[17])
-                                    .build();
-                            mediaPostDtoList.add(mediaPostDto);
-                        }
-
-
-                        List<TagDto> tagDtoList = new ArrayList<>();
-                        if (objects[12] != null){
-                            TagDto tagDto = TagDto.builder()
-                                    .id((Long) objects[12])
-                                    .text(objects[13] == null ? "null" : (String) objects[13])
-                                    .build();
-                            tagDtoList.add(tagDto);
-                        }
-
-                        return PostDto.builder()
-                                .id((Long) objects[0])
-                                .title((String) objects[1])
-                                .text((String) objects[2])
-                                .userId((Long) objects[5])
-                                .firstName((String) objects[6])
-                                .lastName((String) objects[7])
-                                .avatar((String) objects[8])
-                                .persistDate((LocalDateTime) objects[3])
-                                .lastRedactionDate((LocalDateTime) objects[4])
-                                .bookmarkAmount((Long) objects[9])
-                                .likeAmount((Long) objects[10])
-                                .commentAmount((Long) objects[11])
-                                .media(mediaPostDtoList)
-                                .tags(tagDtoList)
-                                .isLiked((Boolean) objects[18])
-                                .isBookmarked((Boolean) objects[19])
-                                .isShared((Boolean) objects[20])
-                                .shareAmount(Long.valueOf((Integer) objects[21]))
-                                .build();
-                    }
-
-                    @Override
-                    public List transformList(List list) {
-                        return getTransformList(list);
-                    }
-                })
+                .setResultTransformer(getResultTransformer())
                 .getResultList();
         return postDtoList;
     }
 
-    private static final String GET_ALL_POSTS_QUERY = "select " +
+    private static final String SELECT_ALL_POSTS = "select " +
             "p.id, " +
             "p.title, " +
             "p.text, " +
@@ -358,11 +269,21 @@ public class PostDtoDaoImpl implements PostDtoDao {
             "then true else false end," +
             "case when exists " +
             "(select rp from Repost as rp where rp.user.userId = :userPrincipalId and rp.post.id = p.id)" +
-            "then true else false end " +
+            "then true else false end ";
+
+    private static final String FROM_POST =
             "from Post as p " +
             "join p.user as u " +
             "left join p.tags as t " +
             "left join p.media as m ";
+
+    private static final String FROM_BOOKMARK =
+            "from Bookmark as bm " +
+            "join bm.user as u " +
+            "join bm.post as p " +
+            "left join p.tags as t " +
+            "left join p.media as m ";
+
 
     private ResultTransformer getResultTransformer() {
         return new ResultTransformer() {

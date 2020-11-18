@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostLikeServiceImpl extends GenericServiceAbstract<PostLike, Long> implements PostLikeService {
@@ -16,14 +16,14 @@ public class PostLikeServiceImpl extends GenericServiceAbstract<PostLike, Long> 
     private final PostLikeDao postLikeDao;
 
     @Autowired
-    public PostLikeServiceImpl(PostLikeDao postLikeDao) {
-        super(postLikeDao);
-        this.postLikeDao = postLikeDao;
+    public PostLikeServiceImpl(PostLikeDao dao) {
+        super(dao);
+        this.postLikeDao = dao;
     }
 
     @Override
     @Transactional
-    public List<PostLike> getPostLikeByPostIdAndUserId(Long postId, Long userId) {
+    public Optional<PostLike> getPostLikeByPostIdAndUserId(Long postId, Long userId) {
         return postLikeDao.getPostLikeByPostIdAndUserId(postId, userId);
     }
 }

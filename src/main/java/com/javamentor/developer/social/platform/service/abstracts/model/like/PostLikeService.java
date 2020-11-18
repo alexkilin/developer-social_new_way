@@ -3,9 +3,9 @@ package com.javamentor.developer.social.platform.service.abstracts.model.like;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.service.abstracts.GenericService;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface PostLikeService extends GenericService<PostLike, Long> {
 
-    List<PostLike> getPostLikeByPostIdAndUserId(Long postId, Long userId);
+    Optional<PostLike> getPostLikeByPostIdAndUserId(Long postId, Long userId);
 }

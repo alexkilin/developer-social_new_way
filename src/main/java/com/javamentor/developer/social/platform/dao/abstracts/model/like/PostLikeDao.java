@@ -3,9 +3,9 @@ package com.javamentor.developer.social.platform.dao.abstracts.model.like;
 import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface PostLikeDao extends GenericDao<PostLike, Long> {
 
-    List<PostLike> getPostLikeByPostIdAndUserId(Long postId, Long userId);
+    Optional<PostLike> getPostLikeByPostIdAndUserId(Long postId, Long userId);
 }

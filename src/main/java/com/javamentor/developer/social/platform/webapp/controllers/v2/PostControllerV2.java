@@ -4,9 +4,7 @@ import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
-import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
-import com.javamentor.developer.social.platform.models.entity.like.Like;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
@@ -96,7 +94,6 @@ public class PostControllerV2 {
     @GetMapping("/posts/{tag}")
     public ResponseEntity<List<PostDto>> getPostsByTag(
             @ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("tag") String tag) {
-
         return ResponseEntity.ok(postDtoService.getPostsByTag(tag));
     }
 
@@ -115,7 +112,6 @@ public class PostControllerV2 {
     @GetMapping("/posts/user/{id}")
     public ResponseEntity<List<PostDto>> getPostsByUserId(
             @ApiParam(value = "ID пользователя", example = "60") @PathVariable Long id) {
-
         return ResponseEntity.ok(postDtoService.getPostsByUserId(id));
     }
 
@@ -127,7 +123,6 @@ public class PostControllerV2 {
     @Validated(OnCreate.class)
     public ResponseEntity<PostDto> addPost(
             @ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostCreateDto postCreateDto) {
-
         Post post = postConverter.toEntity(postCreateDto);
         postService.create(post);
         return ResponseEntity.ok().body(postConverter.toDto(post));
@@ -141,9 +136,7 @@ public class PostControllerV2 {
     @DeleteMapping(path = "/post/{id}")
     public ResponseEntity<?> deletePost(
             @ApiParam(value = "ID поста", example = "20") @PathVariable @NotNull Long id) {
-
         Optional<Post> result = postService.getById(id);
-
         if (result.isPresent()) {
             Post post = result.get();
             userTabsService.deletePost(post);
@@ -160,8 +153,7 @@ public class PostControllerV2 {
     @GetMapping("/post/{id}/comments")
     public ResponseEntity<List<CommentDto>> showPostComments(
             @ApiParam(value = "ID поста", example = "20") @PathVariable Long id) {
-
-        return new ResponseEntity<>(postDtoService.getCommentsByPostId(id), HttpStatus.OK);
+        return ResponseEntity.ok(postDtoService.getCommentsByPostId(id));
     }
 
     @ApiOperation(value = "Добавление комментария к посту")
@@ -173,17 +165,12 @@ public class PostControllerV2 {
     public ResponseEntity<?> addCommentToPost(
             @ApiParam(value = "Комментарий к посту") @RequestBody String comment,
             @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
-
         User user = userService.getPrincipal();
-
         PostComment postComment = new PostComment(comment, user);
-        Comment newComment = commentService.createComment(postComment.getComment());
-
+        commentService.create(postComment.getComment());
         Post post = Post.builder().id(postId).build();
-        postComment.setComment(newComment);
         postComment.setPost(post);
         postCommentService.create(postComment);
-
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId, user.getUserId()));
     }
@@ -195,17 +182,12 @@ public class PostControllerV2 {
     @PostMapping("/post/{postId}/like")
     public ResponseEntity<?> addLikeToPost(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
-
         User user = userService.getPrincipal();
         Post post = Post.builder().id(postId).build();
-
         PostLike postLike = new PostLike(user);
-        Like like = likeService.createLike(postLike.getLike());
-
-        postLike.setLike(like);
+        likeService.create(postLike.getLike());
         postLike.setPost(post);
         postLikeService.create(postLike);
-
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId, user.getUserId()));
     }
@@ -219,11 +201,12 @@ public class PostControllerV2 {
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
         User user = userService.getPrincipal();
-        List<PostLike> postLikes = postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
-        if (postLikes.isEmpty()) {
-            return new ResponseEntity<>("The Like has already been deleted", HttpStatus.NOT_FOUND);
+        Optional<PostLike> optionalLike =
+                postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
+        if(!optionalLike.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The Like has already been deleted");
         }
-        PostLike postLike = postLikes.get(0);
+        PostLike postLike = optionalLike.get();
         postLikeService.delete(postLike);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId, user.getUserId()));
@@ -236,10 +219,8 @@ public class PostControllerV2 {
     @PostMapping("/post/{postId}/bookmark")
     public ResponseEntity<?> addPostToBookmark(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
-
         User user = userService.getPrincipal();
         Post post = Post.builder().id(postId).build();
-
         Bookmark bookmark = Bookmark.builder().user(user).post(post).build();
         bookmarkService.create(bookmark);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -253,11 +234,8 @@ public class PostControllerV2 {
     @DeleteMapping("/post/{postId}/bookmark")
     public ResponseEntity<?> deletePostFromBookmark(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
-
         User user = userService.getPrincipal();
-
         bookmarkService.deleteBookmarkByPostIdAndUserId(postId, user.getUserId());
-
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId, user.getUserId()));
     }
@@ -269,10 +247,8 @@ public class PostControllerV2 {
     @PostMapping("/post/{postId}/repost")
     public ResponseEntity<?> addRepostToPost(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
-
         User user = userService.getPrincipal();
         Post post = Post.builder().id(postId).build();
-
         Repost repost = Repost.builder().user(user).post(post).build();
         repostService.create(repost);
         return ResponseEntity.status(HttpStatus.CREATED)
