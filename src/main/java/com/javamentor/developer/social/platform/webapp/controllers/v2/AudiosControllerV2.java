@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
-import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
@@ -20,7 +20,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.media.Au
 import com.javamentor.developer.social.platform.service.abstracts.model.media.PlaylistService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumAudioConverter;
-import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.PlaylistConverter;
 import io.swagger.annotations.*;
@@ -245,20 +244,20 @@ public class AudiosControllerV2 {
     @ApiOperation(value = "Создание нового плейлиста для пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Плейлист успешно создан", response = PlaylistGetDto.class),
-            @ApiResponse(code = 302, message = "Плейлист с таким названием уже существует", response = PlaylistGetDto.class),
-            @ApiResponse(code = 404, message = "The user does not exist")})
+            @ApiResponse(code = 200, message = "Плейлист с таким названием уже существует", response = PlaylistGetDto.class),
+            @ApiResponse(code = 400, message = "Такого пользователя не существует")})
     @Validated(OnCreate.class)
     @PostMapping(value = "/user/{userId}/playlists")
     public ResponseEntity<?> createPlaylist(@ApiParam(value = "Объект нового плейлиста") @RequestBody @NotNull @Valid PlaylistCreateDto playlistCreateDto,
                                             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         if (!userService.getById(userId).isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user does not exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user does not exist");
         }
 
         String playlistName = playlistCreateDto.getName();
-        Optional<Playlist> optionalPlaylist = playlistService.getPlaylistByNameAndUserID(userId, playlistName);
+        Optional<Playlist> optionalPlaylist = playlistService.getPlaylistByNameAndUserId(userId, playlistName);
         if (optionalPlaylist.isPresent()){
-            return ResponseEntity.status(HttpStatus.FOUND).body(playlistConverter.toPlaylistGetDto(optionalPlaylist.get()));
+            return ResponseEntity.ok("The playlist already exists");
         }
 
         playlistCreateDto.setOwnerUserId(userId);

@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface PlaylistService extends GenericService<Playlist, Long> {
     boolean userHasPlaylist(Long userId, Long playlistId);
     Optional<Playlist> getOptionalById(Long id);
-    Optional<Playlist> getPlaylistByNameAndUserID (long userID, String playlistName);
+    Optional<Playlist> getPlaylistByNameAndUserId (long userID, String playlistName);
 }

@@ -565,7 +565,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         List<MediaPostDto> mediaPostDtoList = new ArrayList<>();
                         if (objects[14] != null) {
                             MediaPostDto mediaPostDto = MediaPostDto.builder()
-                                    .Id((Long) objects[14])
+                                    .id((Long) objects[14])
                                     .userId((Long) objects[15])
                                     .mediaType(objects[16] == null ? "null" : objects[16].toString())
                                     .url((String) objects[17])

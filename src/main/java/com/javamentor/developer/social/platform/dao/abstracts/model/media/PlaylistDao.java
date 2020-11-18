@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface PlaylistDao extends GenericDao<Playlist, Long> {
     boolean userHasPlaylist(Long userId, Long playlistId);
-    Optional<Playlist> getPlaylistByNameAndUserID (long userID, String playlistName);
+    Optional<Playlist> getPlaylistByNameAndUserId (long userID, String playlistName);
 }

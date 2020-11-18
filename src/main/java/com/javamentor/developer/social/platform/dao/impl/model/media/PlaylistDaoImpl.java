@@ -2,11 +2,13 @@ package com.javamentor.developer.social.platform.dao.impl.model.media;
 
 import com.javamentor.developer.social.platform.dao.abstracts.model.media.PlaylistDao;
 import com.javamentor.developer.social.platform.dao.impl.GenericDaoAbstract;
+import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 @Repository
@@ -28,18 +30,14 @@ public class PlaylistDaoImpl extends GenericDaoAbstract<Playlist, Long> implemen
     }
 
     @Override
-    public Optional<Playlist> getPlaylistByNameAndUserID (long userId, String playlistName) {
-        Playlist opt;
-        try {
-            opt = entityManager.createQuery("SELECT p FROM Playlist p " +
+    public Optional<Playlist> getPlaylistByNameAndUserId (long userId, String playlistName) {
+
+            TypedQuery<Playlist> query = entityManager.createQuery("SELECT p FROM Playlist p " +
                     "WHERE p.name = :playlistName " +
                     "AND p.ownerUser.userId = :userId", Playlist.class)
                     .setParameter("playlistName", playlistName)
-                    .setParameter("userId", userId)
-                    .getSingleResult();
-        } catch (RuntimeException e) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(opt);
+                    .setParameter("userId", userId);
+
+        return SingleResultUtil.getSingleResultOrNull(query);
     }
 }
