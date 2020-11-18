@@ -247,7 +247,7 @@ public class ImageControllerV2 {
     @GetMapping(value = "/albums/{albumId}")
     public ResponseEntity<?> getImageAlbumById(@ApiParam(value = "Id альбома", example = "11")
                                                    @PathVariable @NotNull Long albumId) {
-        Optional<AlbumImage> optionalAlbum = albumImageService.getOptionalById(albumId);
+        Optional<AlbumImage> optionalAlbum = albumImageService.getById(albumId);
         if(!optionalAlbum.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }

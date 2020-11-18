@@ -19,9 +19,4 @@ public class ImageServiceImpl extends GenericServiceAbstract<Image, Long> implem
         super(dao);
         this.imageDAO = dao;
     }
-
-    @Override
-    public Optional<Image> getOptionalById(Long id) {
-        return super.getById(id);
-    }
 }

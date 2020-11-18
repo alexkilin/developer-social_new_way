@@ -28,12 +28,6 @@ public class PlaylistServiceImpl extends GenericServiceAbstract<Playlist, Long> 
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Playlist> getOptionalById(Long id) {
-        return getById(id);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public Optional<Playlist> getPlaylistByNameAndUserId (long userID, String playlistName) {
         return playlistDao.getPlaylistByNameAndUserId(userID, playlistName);
     }
