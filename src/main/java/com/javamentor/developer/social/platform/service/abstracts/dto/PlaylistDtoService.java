@@ -9,5 +9,4 @@ import java.util.Optional;
 public interface PlaylistDtoService {
     Optional<PlaylistGetDto> getById(Long id);
     List<PlaylistGetDto> getAllByUserId(Long userId);
-    PlaylistGetDto create(PlaylistCreateDto playlistCreateDto);
 }

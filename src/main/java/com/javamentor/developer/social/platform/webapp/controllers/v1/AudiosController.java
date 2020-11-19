@@ -270,9 +270,9 @@ public class AudiosController {
     @PostMapping(value = "/playlists")
     public ResponseEntity<?> createPlaylist(@ApiParam(value = "Объект нового плейлиста") @RequestBody @NotNull @Valid PlaylistCreateDto playlistCreateDto) {
         playlistCreateDto.setOwnerUserId(60L);
-        PlaylistGetDto playlistGetDto = playlistDtoService.create(playlistCreateDto);
-        logger.info(String.format("Плейлист id %s для пользователя %s создан", playlistGetDto.getId(), 60L));
-        return ResponseEntity.ok().body(playlistGetDto);
+        Playlist newPlaylist = playlistConverter.toEntity(playlistCreateDto);
+        playlistService.create(newPlaylist);
+        return ResponseEntity.status(HttpStatus.CREATED).body(playlistConverter.toPlaylistGetDto(newPlaylist));
     }
 
     @ApiOperation(value = "Удаление плейлиста по Id для текущего пользователя")
