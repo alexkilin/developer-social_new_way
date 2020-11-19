@@ -4,4 +4,6 @@ import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 
 public interface GroupDao extends GenericDao<Group, Long> {
+
+    void updateInfo(Group group);
 }
