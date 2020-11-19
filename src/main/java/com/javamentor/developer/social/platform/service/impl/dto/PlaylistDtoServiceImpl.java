@@ -17,16 +17,10 @@ import java.util.Optional;
 public class PlaylistDtoServiceImpl implements PlaylistDtoService {
 
     private PlaylistDtoDao playlistDtoDao;
-    private PlaylistService playlistService;
-    private PlaylistConverter playlistConverter;
 
     @Autowired
-    public PlaylistDtoServiceImpl(PlaylistDtoDao playlistDtoDao,
-                                  PlaylistService playlistService,
-                                  PlaylistConverter playlistConverter) {
+    public PlaylistDtoServiceImpl(PlaylistDtoDao playlistDtoDao) {
         this.playlistDtoDao = playlistDtoDao;
-        this.playlistService = playlistService;
-        this.playlistConverter = playlistConverter;
     }
 
     @Override
@@ -43,12 +37,5 @@ public class PlaylistDtoServiceImpl implements PlaylistDtoService {
     @Override
     public List<PlaylistGetDto> getAllByUserId(Long userId) {
         return playlistDtoDao.getByUserId(userId);
-    }
-
-    @Override
-    public PlaylistGetDto create(PlaylistCreateDto playlistCreateDto) {
-        Playlist newPlaylist = playlistConverter.toEntity(playlistCreateDto);
-        playlistService.create(newPlaylist);
-        return playlistConverter.toPlaylistGetDto(newPlaylist);
     }
 }
