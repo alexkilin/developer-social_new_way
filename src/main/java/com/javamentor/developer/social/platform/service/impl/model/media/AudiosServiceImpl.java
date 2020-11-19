@@ -4,10 +4,12 @@ import com.javamentor.developer.social.platform.dao.abstracts.model.media.Audios
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -15,23 +17,24 @@ import java.util.Set;
 public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> implements AudiosService {
 
     private AudiosDao audiosDao;
+    private UserService userService;
 
     @Autowired
-    public AudiosServiceImpl(AudiosDao dao) {
+    public AudiosServiceImpl(AudiosDao dao, UserService userService) {
         super(dao);
         this.audiosDao = dao;
+        this.userService = userService;
     }
 
     @Override
-    public boolean addAudioInCollectionsOfUser(User user, Long audioId) {
-       Optional<Audios> audios = audiosDao.getById(audioId);
-       if(!audios.isPresent()){
-           return false;
-       }
+    public void addAudioInCollectionsOfUser(User user, Long audioId) {
+        Optional<Audios> audios = audiosDao.getById(audioId);
+        if(!audios.isPresent()){
+            throw new EntityNotFoundException();
+        }
         Set<Audios> set = user.getAudios();
         set.add(audios.get());
         user.setAudios(set);
-        return true;
-
+        userService.update(user);
     }
 }

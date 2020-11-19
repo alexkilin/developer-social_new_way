@@ -31,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -149,20 +150,18 @@ public class AudiosControllerV2 {
     @ApiOperation(value = "Добавление аудио в коллекцию пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио успешно добавлено")})
-    @PutMapping(value = "/user/{userId}/audio", params = {"audioId"})
-    public ResponseEntity<?> addAudioInCollectionsOfUser(@ApiParam(value = "Id аудио", example = "71") @RequestParam("audioId") Long audioId,
-                                                         @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
-        //User user = userService.getById(userId);
-        Optional<User> user = userService.getById(userId);
-        if (!user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User id %s not found", userId));
+    @PutMapping(value = "/user/audio", params = {"audioId"})
+    public ResponseEntity<?> addAudioInCollectionsOfUser(@ApiParam(value = "Id аудио", example = "71") @RequestParam("audioId") Long audioId) {
+
+        User user = userService.getPrincipal();
+        try {
+            audiosService.addAudioInCollectionsOfUser(user, audioId);
+            userService.update(user);
+            logger.info(String.format("Аудио id %s добавлено в коллекцию пользователя id %s", audioId, user.getUserId()));
+            return ResponseEntity.ok().body(String.format("Audio id %s added to collection of user id %s", audioId, user.getUserId()));
         }
-        if (audiosService.addAudioInCollectionsOfUser(user.get(), audioId)) {
-            userService.update(user.get());
-            logger.info(String.format("Аудио id %s добавлено в коллекцию пользователя id %s", audioId, userId));
-            return ResponseEntity.ok().body(String.format("Audio id %s added to collection of user id %s", audioId, userId));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Audio id %s not found", audioId));
+        catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Audio id %s not found", audioId));
         }
     }
 
@@ -250,13 +249,13 @@ public class AudiosControllerV2 {
     @PostMapping(value = "/user/{userId}/playlists")
     public ResponseEntity<?> createPlaylist(@ApiParam(value = "Объект нового плейлиста") @RequestBody @NotNull @Valid PlaylistCreateDto playlistCreateDto,
                                             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
-        if (!userService.getById(userId).isPresent()){
+        if (!userService.getById(userId).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user does not exist");
         }
 
         String playlistName = playlistCreateDto.getName();
         Optional<Playlist> optionalPlaylist = playlistService.getPlaylistByNameAndUserId(userId, playlistName);
-        if (optionalPlaylist.isPresent()){
+        if (optionalPlaylist.isPresent()) {
             return ResponseEntity.ok("The playlist already exists");
         }
 
