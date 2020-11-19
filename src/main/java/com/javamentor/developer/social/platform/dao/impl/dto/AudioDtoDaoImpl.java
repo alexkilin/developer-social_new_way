@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -22,7 +23,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAudioOfAuthor(String author) {
+    public List<AudioDto> getAudioOfAuthor(String author, int currentPage, int itemsOnPage) {
         List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
@@ -35,6 +36,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.length " +
                         "FROM Audios as c WHERE c.author = :author")
                 .setParameter("author", author)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {
@@ -65,7 +68,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAudioOfName(String name) {
+    public List<AudioDto> getAudioOfName(String name, int currentPage, int itemsOnPage) {
         List<AudioDto> audios = entityManager.createQuery(
                 "SELECT " +
                         "c.id, " +

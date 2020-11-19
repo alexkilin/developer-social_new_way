@@ -1,10 +1,12 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
+import com.javamentor.developer.social.platform.dao.impl.dto.page.PageDtoGetAudioOfAuthorDaoImpl;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
@@ -19,6 +21,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.PlaylistService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.service.impl.dto.PageDtoService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumAudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.PlaylistConverter;
@@ -26,6 +29,7 @@ import io.swagger.annotations.*;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,9 +37,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Validated
 @RestController
@@ -55,14 +57,16 @@ public class AudiosControllerV2 {
     private final PlaylistDtoService playlistDtoService;
     private final PlaylistService playlistService;
     private final PlaylistConverter playlistConverter;
+    private final PageDtoService pageDtoService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
     public AudiosControllerV2(AudioConverter audioConverter, AlbumAudioConverter albumAudioConverter, AudioDtoService audioDtoService,
                               AudiosService audiosService, UserService userService, AlbumService albumService,
                               AlbumAudioDtoService albumAudioDtoService, AlbumAudioService albumAudioService,
                               PlaylistDtoService playlistDtoService, PlaylistService playlistService,
-                              PlaylistConverter playlistConverter) {
+                              PlaylistConverter playlistConverter, PageDtoService pageDtoService) {
         this.audioConverter = audioConverter;
         this.albumAudioConverter = albumAudioConverter;
         this.audioDtoService = audioDtoService;
@@ -74,6 +78,7 @@ public class AudiosControllerV2 {
         this.playlistDtoService = playlistDtoService;
         this.playlistService = playlistService;
         this.playlistConverter = playlistConverter;
+        this.pageDtoService = pageDtoService;
     }
 
     @ApiOperation(value = "Получение всего аудио постранично")
@@ -90,9 +95,13 @@ public class AudiosControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио по автору получено", response = AudioDto.class, responseContainer = "List")})
     @GetMapping(value = "/author/{author}")
-    public ResponseEntity<List<AudioDto>> getAudioOfAuthor(@ApiParam(value = "Имя исполнителя", example = "Blur") @PathVariable @NotNull String author) {
+    public ResponseEntity<PageDto> getAudioOfAuthor(@ApiParam(value = "Имя исполнителя", example = "Blur") @PathVariable @NotNull String author,
+                                                    @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                    @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Отправка всего аудио автора %s", author));
-        return ResponseEntity.ok().body(audioDtoService.getAudioOfAuthor(author));
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("author", author);
+        return ResponseEntity.ok().body(pageDtoService.getPageDto(PageDtoGetAudioOfAuthorDaoImpl.class, parameters, currentPage, itemsOnPage));
     }
 
 
@@ -100,9 +109,13 @@ public class AudiosControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио по названию получено", response = AudioDto.class)})
     @GetMapping(value = "/name/{name}")
-    public ResponseEntity<List<AudioDto>> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2") @PathVariable @NotNull String name) {
+    public ResponseEntity<List<AudioDto>> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2") @PathVariable @NotNull String name,
+                                                         @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                         @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Отправка аудио %s", name));
-        return ResponseEntity.ok().body(audioDtoService.getAudioOfName(name));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("name", name);
+        return ResponseEntity.ok().body(pageDtoService.getPageDto());
     }
 
     @ApiOperation(value = "Получение аудио по альбому")

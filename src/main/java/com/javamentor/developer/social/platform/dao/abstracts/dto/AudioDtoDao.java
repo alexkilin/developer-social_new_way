@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface AudioDtoDao {
 
-    List<AudioDto> getAudioOfAuthor(String author);
+    List<AudioDto> getAudioOfAuthor(String author, int currentPage, int itemsOnPage);
 
-    List<AudioDto> getAudioOfName(String name);
+    List<AudioDto> getAudioOfName(String name, int currentPage, int itemsOnPage);
 
 
     Audios getAudioOfId(Long id);
