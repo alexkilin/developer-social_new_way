@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface ImageDtoService {
 
     List<ImageDto> getAllByUserId(int offset, int limit, Long id);
+
     List<ImageDto> getAllByAlbumId(int offset, int limit, Long id);
+
     Optional<ImageDto> getById(Long id);
-
-
 }

@@ -4,4 +4,5 @@ import com.javamentor.developer.social.platform.models.entity.comment.MediaComme
 import com.javamentor.developer.social.platform.service.abstracts.GenericService;
 
 public interface MediaCommentService extends GenericService<MediaComment, Long> {
+
 }

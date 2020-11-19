@@ -15,35 +15,36 @@ import java.time.LocalDateTime;
 
 @Service
 public class GroupHasUserServiceImpl extends GenericServiceAbstract<GroupHasUser, Long> implements GroupHasUserService {
-    public final GroupHasUserDao groupHasUserDAO;
+
+    private final GroupHasUserDao groupHasUserDao;
 
     @Autowired
-    public GroupHasUserServiceImpl(GroupHasUserDao dao, GroupHasUserDao groupHasUserDAO) {
+    public GroupHasUserServiceImpl(GroupHasUserDao dao) {
         super(dao);
-        this.groupHasUserDAO = groupHasUserDAO;
+        this.groupHasUserDao = dao;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void setUserIntoGroup(User user, Group group) {
-
         GroupHasUser groupHasUser = GroupHasUser.builder()
                 .user(user)
                 .group(group)
                 .persistDate(LocalDateTime.now())
                 .build();
-        groupHasUserDAO.create(groupHasUser);
+        groupHasUserDao.create(groupHasUser);
     }
 
     @Override
-    public boolean verificationUserInGroup(Long groupId, Long userId) {
-        return groupHasUserDAO.verificationUserInGroup(groupId, userId);
-    }
-
     @Transactional
+    public boolean verificationUserInGroup(Long groupId, Long userId) {
+        return groupHasUserDao.verificationUserInGroup(groupId, userId);
+    }
+
     @Override
+    @Transactional
     public void deleteUserById(Long groupId, Long userId) {
-        groupHasUserDAO.deleteUserById(groupId, userId);
+        groupHasUserDao.deleteUserById(groupId, userId);
     }
 
     @Override

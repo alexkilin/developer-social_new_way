@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,22 +23,24 @@ public class UserDtoServiceImpl implements UserDtoService {
     }
 
     @Override
+    @Transactional
     public List<UserDto> getAllUserDto() {
         return userDtoDao.getUserDtoList();
     }
 
     @Override
+    @Transactional
     public Optional<UserDto> getUserDtoById(Long id) {
         Optional<UserDto> userDto = userDtoDao.getUserDtoById(id);
         if (userDto.isPresent()) {
             List<LanguageDto> languages = userDtoDao.getUserLanguageDtoById(id);
             userDto.get().setLanguages(languages);
         }
-
         return userDto;
     }
 
     @Override
+    @Transactional
     public List<UserFriendDto> getUserFriendsDtoById(Long id, int currentPage, int itemsOnPage) {
         return userDtoDao.getUserFriendsDtoById(id, currentPage, itemsOnPage);
     }

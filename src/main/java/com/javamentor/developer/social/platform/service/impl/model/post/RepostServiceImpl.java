@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RepostServiceImpl extends GenericServiceAbstract<Repost, Long> implements RepostService {
+
     public RepostServiceImpl(GenericDao<Repost, Long> dao) {
         super(dao);
     }
