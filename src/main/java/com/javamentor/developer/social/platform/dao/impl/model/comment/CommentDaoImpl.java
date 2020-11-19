@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CommentDaoImpl extends GenericDaoAbstract<Comment, Long> implements CommentDao {
+
 }
