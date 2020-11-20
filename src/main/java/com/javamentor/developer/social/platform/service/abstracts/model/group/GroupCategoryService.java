@@ -6,5 +6,6 @@ import com.javamentor.developer.social.platform.service.abstracts.GenericService
 import java.util.Optional;
 
 public interface GroupCategoryService extends GenericService<GroupCategory, Long> {
+
     Optional <GroupCategory> getByCategory(String category);
 }

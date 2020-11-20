@@ -5,6 +5,7 @@ import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVide
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumVideoDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class AlbumVideoDtoServiceImpl implements AlbumVideoDtoService {
     }
 
     @Override
+    @Transactional
     public List<AlbumVideoDto> getAllByUserId(Long userId) {
         return albumVideoDtoDao.getAllByUserId(userId);
     }

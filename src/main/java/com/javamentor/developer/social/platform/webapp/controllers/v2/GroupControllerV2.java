@@ -9,6 +9,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.group.Gr
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.GroupConverter;
+import com.javamentor.developer.social.platform.webapp.converters.GroupHasUserConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +31,16 @@ public class GroupControllerV2 {
     private final UserService userService;
     private final GroupService groupService;
     private final GroupConverter groupConverter;
+    private final GroupHasUserConverter groupHasUserConverter;
 
     @Autowired
-    public GroupControllerV2(GroupDtoService groupDtoService, GroupHasUserService groupHasUserService, UserService userService, GroupService groupService, GroupConverter groupConverter) {
+    public GroupControllerV2(GroupDtoService groupDtoService, GroupHasUserService groupHasUserService, UserService userService, GroupService groupService, GroupConverter groupConverter, GroupHasUserConverter groupHasUserConverter) {
         this.groupDtoService = groupDtoService;
         this.groupHasUserService = groupHasUserService;
         this.userService = userService;
         this.groupService = groupService;
         this.groupConverter = groupConverter;
+        this.groupHasUserConverter = groupHasUserConverter;
     }
 
     @ApiOperation(value = "Получение информации обо всех группах")
@@ -55,14 +58,14 @@ public class GroupControllerV2 {
     @ApiOperation(value = "Получение информации об одной группе")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Информация о группе получена", response = GroupDto.class),
-            @ApiResponse(code = 404, message = "Группа с данным id не найдена", response = String.class)
+            @ApiResponse(code = 400, message = "Группа с данным id не найдена", response = String.class)
     })
     @GetMapping("/{groupId}")
     public ResponseEntity<?> showGroup(@ApiParam(value = "Идентификатор группы", example = "1")
                                            @PathVariable @NonNull Long groupId) {
         Optional<GroupDto> groupDtoOptional = groupDtoService.getGroupById(groupId);
         if (!groupDtoOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Group id %s not found", groupId));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Group id %s not found", groupId));
         }
         return ResponseEntity.ok().body(groupDtoOptional.get());
     }
@@ -84,14 +87,14 @@ public class GroupControllerV2 {
     @ApiOperation(value = "Получение группы по наименованию группы")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Группа найдена", response = GroupInfoDto.class),
-            @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
+            @ApiResponse(code = 400, message = "Группа не найдена", response = String.class)
     })
     @GetMapping(value = "/name", params = "name")
     public ResponseEntity<?> findGroupByName(@ApiParam(value = "Наименование группы", example = "JAVA IS 1")
                                                  @RequestParam("name") String name) {
         Optional<GroupDto> groupInfoDto = groupDtoService.getGroupByName(name);
         if (!groupInfoDto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Group name %s not found", name));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Group name %s not found", name));
         }
         return ResponseEntity.ok().body(groupInfoDto.get());
     }
@@ -99,7 +102,7 @@ public class GroupControllerV2 {
     @ApiOperation(value = "Получение всех юзеров, входящих в группу")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Юзеры группы получены", responseContainer = "List", response = UserDto.class),
-            @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
+            @ApiResponse(code = 400, message = "Группа не найдена", response = String.class)
     })
     @GetMapping(value = "/{groupId}/users", params = {"page", "size"})
     public ResponseEntity<?> getUsersFromTheGroup(@ApiParam(value = "Идентификатор группы", example = "1")
@@ -117,9 +120,9 @@ public class GroupControllerV2 {
 
     @ApiOperation(value = "Вступление в группу пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Пользователь вступил в группу"),
-            @ApiResponse(code = 400, message = "Пользователь уже есть в данной группе"),
-            @ApiResponse(code = 404, message = "Пользователь или группа не найдены")
+            @ApiResponse(code = 200, message = "Пользователь вступил в группу"),
+            @ApiResponse(code = 200, message = "Пользователь уже есть в данной группе"),
+            @ApiResponse(code = 400, message = "Пользователь или группа не найдены")
     })
     @PutMapping(value = "/{groupId}/users", params = "userId")
     public ResponseEntity<String> userJoinGroup(@ApiParam(value = "Идентификатор группы", example = "1")
@@ -127,7 +130,7 @@ public class GroupControllerV2 {
                                                 @ApiParam(value = "Идентификатор пользователя", example = "1")
                                                     @RequestParam("userId") @NonNull Long userId) {
         if (groupHasUserService.verificationUserInGroup(groupId,userId)) {
-            return ResponseEntity.badRequest()
+            return ResponseEntity.ok()
                     .body(String.format("User with id: %d already a member of the group with id: %s", userId, groupId));
         }
         Optional <User> user = userService.getById(userId);
@@ -136,14 +139,14 @@ public class GroupControllerV2 {
             groupHasUserService.setUserIntoGroup(user.get(), group.get());
             return ResponseEntity.ok().body(String.format("User with id: %d added to the group with id: %s", userId, groupId));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(String.format("User with id: %d or/and group with id: %s not found", userId, groupId));
     }
 
     @ApiOperation(value = "Есть ли пользователь в группе")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Поиск пользователя в группе", response = GroupHasUserInfoDto.class),
-            @ApiResponse(code = 404, message = "Пользователь и/или группа не найдены", response = String.class)
+            @ApiResponse(code = 400, message = "Пользователь и/или группа не найдены", response = String.class)
     })
     @GetMapping(value = "/{groupId}/users", params = "userId")
     public ResponseEntity<?> groupHasUser(@ApiParam(value = "Идентификатор группы", example = "1")
@@ -151,16 +154,16 @@ public class GroupControllerV2 {
                                           @ApiParam(value = "Идентификатор пользователя", example = "1")
                                               @RequestParam("userId") @NonNull Long userId) {
         if (!(userService.existById(userId) && groupService.existById(groupId))) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(String.format("User with id: %d or/and group with id: %s not found", userId, groupId));
         }
-        return ResponseEntity.ok(groupHasUserService.returnGroupHasUserInfoDto(groupId, groupHasUserService.verificationUserInGroup(groupId,userId)));
+        return ResponseEntity.ok(groupHasUserConverter.toGroupHasUserInfoDto(groupId, groupHasUserService.verificationUserInGroup(groupId,userId)));
     }
 
     @ApiOperation(value = "Удаление пользователя из группы")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Пользователь удален из группы", response = String.class),
-            @ApiResponse(code = 404, message = "Пользователь или группа не найдены")
+            @ApiResponse(code = 200, message = "Пользователь удален из группы", response = String.class),
+            @ApiResponse(code = 400, message = "Пользователь или группа не найдены")
     })
     @DeleteMapping(value = "/{groupId}/users", params = "userId")
     public ResponseEntity<?> deleteUserById(@ApiParam(value = "Идентификатор группы", example = "10")
@@ -171,20 +174,20 @@ public class GroupControllerV2 {
             groupHasUserService.deleteUserById(groupId, userId);
             return ResponseEntity.ok().body(String.format("User with id: %d is no longer a member of the group with id: %s", userId, groupId));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(String.format("User with id %s is not a member of a group", userId));
     }
 
     @ApiOperation(value = "Изменение группы")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Группа изменена", response = GroupDto.class),
-            @ApiResponse(code = 404, message = "Группа не найдена", response = String.class)
+            @ApiResponse(code = 400, message = "Группа не найдена", response = String.class)
     })
     @PutMapping(value = "/update")
     public ResponseEntity<?> updateGroup(@ApiParam(value = "Группа с обновленными данными")
                                              @Valid @RequestBody GroupUpdateInfoDto groupUpdateInfoDto) {
         if (!groupService.existById(groupUpdateInfoDto.getId())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(String.format("Group with id %s not found", groupUpdateInfoDto.getId()));
         }
         Group group = groupConverter.groupUpdateInfoDtoToGroup(groupUpdateInfoDto);

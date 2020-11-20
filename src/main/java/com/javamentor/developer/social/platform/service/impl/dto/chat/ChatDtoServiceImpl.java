@@ -12,8 +12,12 @@ import java.util.List;
 @Service
 public class ChatDtoServiceImpl implements ChatDtoService {
 
+    private final ChatDtoDao dao;
+
     @Autowired
-    private ChatDtoDao dao;
+    public ChatDtoServiceImpl(ChatDtoDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     @Transactional
@@ -22,9 +26,9 @@ public class ChatDtoServiceImpl implements ChatDtoService {
     }
 
     @Override
+    @Transactional
     public ChatDto getChatDtoByGroupChatId(Long chatId) {
         return dao.getChatDtoByGroupChatId(chatId);
     }
-
 
 }

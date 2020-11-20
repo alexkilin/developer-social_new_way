@@ -13,5 +13,4 @@ public interface UserDtoService {
     Optional<UserDto> getUserDtoById(Long id);
 
     List<UserFriendDto> getUserFriendsDtoById(Long id, int currentPage, int itemsOnPage);
-
 }

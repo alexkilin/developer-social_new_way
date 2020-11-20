@@ -7,6 +7,7 @@ import java.util.List;
 public interface AudioDtoService {
 
     List<AudioDto> getAudioOfAuthor(String author);
+
     List<AudioDto> getAudioOfName(String name);
 
     List<AudioDto> getAudioOfAlbum(String album);

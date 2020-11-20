@@ -12,8 +12,12 @@ import java.util.List;
 @Service
 public class MessageDtoServiceImpl implements MessageDtoService {
 
+    private final MessageDtoDao dao;
+
     @Autowired
-    private MessageDtoDao dao;
+    public MessageDtoServiceImpl(MessageDtoDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     @Transactional

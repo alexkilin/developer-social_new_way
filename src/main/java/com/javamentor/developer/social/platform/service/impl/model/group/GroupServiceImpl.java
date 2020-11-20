@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class GroupServiceImpl extends GenericServiceAbstract<Group, Long> implements GroupService {
 
@@ -21,15 +19,9 @@ public class GroupServiceImpl extends GenericServiceAbstract<Group, Long> implem
         this.groupDao = groupDao;
     }
 
+    @Override
     @Transactional
     public void updateInfo(Group group) {
-        Optional<Group> groupOld = groupDao.getById(group.getId());
-        if (groupOld.isPresent()) {
-            group.setPersistDate(groupOld.get().getPersistDate());
-            group.setLastRedactionDate(groupOld.get().getLastRedactionDate());
-            group.setPosts(groupOld.get().getPosts());
-            group.setOwner(groupOld.get().getOwner());
-            groupDao.update(group);
-        }
+        groupDao.updateInfo(group);
     }
 }

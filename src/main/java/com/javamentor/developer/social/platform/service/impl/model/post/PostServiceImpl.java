@@ -8,10 +8,10 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.TagService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,34 +19,24 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implements PostService {
 
-
-    private final UserService userService;
     private final MediaService mediaService;
     private final TagService tagService;
 
-
     @Autowired
-    public PostServiceImpl(PostDao dao, UserService userService, MediaService mediaService, TagService tagService) {
+    public PostServiceImpl(PostDao dao, MediaService mediaService, TagService tagService) {
         super(dao);
-        this.userService = userService;
         this.mediaService = mediaService;
         this.tagService = tagService;
     }
 
     @Override
+    @Transactional
     public void create(Post entity) {
-        Optional<User> userOptional = userService.getById(entity.getUser().getUserId());
-
-        if (userOptional.isPresent()) {
-
-            User user = userOptional.get();
-            Set<Media> mediaSet = createMedia(entity.getMedia(), user);
-            Set<Tag> tagSet = updateAndGetEntityTags(entity.getTags());
-            entity.setUser(user);
-            entity.setMedia(mediaSet);
-            entity.setTags(tagSet);
-            super.create(entity);
-        }
+        Set<Media> mediaSet = createMedia(entity.getMedia(), entity.getUser());
+        Set<Tag> tagSet = updateAndGetEntityTags(entity.getTags());
+        entity.setMedia(mediaSet);
+        entity.setTags(tagSet);
+        super.create(entity);
     }
 
     private Set<Media> createMedia(Set<Media> entityMedia, User user) {

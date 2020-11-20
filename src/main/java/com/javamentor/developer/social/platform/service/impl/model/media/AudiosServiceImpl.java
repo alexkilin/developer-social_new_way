@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.media.Au
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Service
 public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> implements AudiosService {
 
-    private AudiosDao audiosDao;
+    private final AudiosDao audiosDao;
 
     @Autowired
     public AudiosServiceImpl(AudiosDao dao) {
@@ -23,15 +24,15 @@ public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> impl
     }
 
     @Override
+    @Transactional
     public boolean addAudioInCollectionsOfUser(User user, Long audioId) {
-       Optional<Audios> audios = audiosDao.getById(audioId);
-       if(!audios.isPresent()){
-           return false;
-       }
+        Optional<Audios> audios = audiosDao.getById(audioId);
+        if (!audios.isPresent()) {
+            return false;
+        }
         Set<Audios> set = user.getAudios();
         set.add(audios.get());
         user.setAudios(set);
         return true;
-
     }
 }
