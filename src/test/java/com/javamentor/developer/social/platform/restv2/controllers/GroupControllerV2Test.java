@@ -10,18 +10,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DataSet(value = {
-        "datasets/restv2/groupset/user/User.yml",
-        "datasets/restv2/groupset/user/Active.yml",
-        "datasets/restv2/groupset/user/Role.yml",
+        "datasets/restv2/user/User.yml",
+        "datasets/restv2/user/Active.yml",
+        "datasets/restv2/user/Role.yml",
         "datasets/restv2/groupset/group/Group.yml",
         "datasets/restv2/groupset/group/GroupHasUser.yml",
         "datasets/restv2/groupset/group/GroupWal.yml",
         "datasets/restv2/groupset/group/GroupCategory.yml",
-        "datasets/restv2/groupset/post/media.yml",
-        "datasets/restv2/groupset/post/post_media.yml",
-        "datasets/restv2/groupset/post/post_tags.yml",
-        "datasets/restv2/groupset/post/posts.yml",
-        "datasets/restv2/groupset/post/tags.yml"}, cleanBefore = true, cleanAfter = true)
+        "datasets/restv2/post/media.yml",
+        "datasets/restv2/post/post_media.yml",
+        "datasets/restv2/post/post_tags.yml",
+        "datasets/restv2/post/posts.yml",
+        "datasets/restv2/post/tags.yml"}, cleanBefore = true, cleanAfter = true)
 public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Autowired
@@ -113,18 +113,18 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     void userJoinGroup() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=1", 5))
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=2", 5))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 1 added to the group with id: 5"));
+                .andExpect(content().string("User with id: 2 added to the group with id: 5"));
     }
 
     @Test
     void userJoinGroupExist() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=1", 1))
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=2", 2))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 1 already a member of the group with id: 1"));
+                .andExpect(content().string("User with id: 2 already a member of the group with id: 2"));
     }
 
 
@@ -137,10 +137,10 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     void deleteUserById() throws Exception {
-        mockMvc.perform(delete("/api/v2/groups/{groupId}/users?userId=1", 1))
+        mockMvc.perform(delete("/api/v2/groups/{groupId}/users?userId=6", 1))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 1 is no longer a member of the group with id: 1"));
+                .andExpect(content().string("User with id: 6 is no longer a member of the group with id: 1"));
     }
 
     @Test

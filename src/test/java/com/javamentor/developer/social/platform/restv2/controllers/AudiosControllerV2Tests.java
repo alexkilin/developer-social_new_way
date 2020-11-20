@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/user/Active.yml",
         "datasets/restv2/user/User.yml",
         "datasets/restv2/user/Role.yml",
-        "datasets/restv2/audio/usersAudioTest/UsersAudiosCollections.yml",
+        "datasets/restv2/audio/UsersAudiosCollections.yml",
         "datasets/restv2/audio/Media.yml",
         "datasets/restv2/audio/albumAudioTest/AudioAlbum.yml",
         "datasets/restv2/audio/albumAudioTest/Album.yml",
