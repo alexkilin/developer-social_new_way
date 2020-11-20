@@ -171,7 +171,6 @@ public class AudiosController {
         User user = userService.getPrincipal();
         try {
             audiosService.addAudioInCollectionsOfUser(user, audioId);
-            userService.update(user);
             logger.info(String.format("Аудио id %s добавлено в коллекцию пользователя id %s", audioId, user.getUserId()));
             return ResponseEntity.ok().body(String.format("Audio id %s added to collection of user id %s", audioId, user.getUserId()));
         }
