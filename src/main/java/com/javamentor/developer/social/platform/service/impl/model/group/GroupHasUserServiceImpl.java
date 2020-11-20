@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.model.group;
 
 import com.javamentor.developer.social.platform.dao.abstracts.model.group.GroupHasUserDao;
-import com.javamentor.developer.social.platform.models.dto.group.GroupHasUserInfoDto;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -10,8 +9,6 @@ import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 public class GroupHasUserServiceImpl extends GenericServiceAbstract<GroupHasUser, Long> implements GroupHasUserService {
@@ -30,7 +27,6 @@ public class GroupHasUserServiceImpl extends GenericServiceAbstract<GroupHasUser
         GroupHasUser groupHasUser = GroupHasUser.builder()
                 .user(user)
                 .group(group)
-                .persistDate(LocalDateTime.now())
                 .build();
         groupHasUserDAO.create(groupHasUser);
     }
@@ -45,13 +41,4 @@ public class GroupHasUserServiceImpl extends GenericServiceAbstract<GroupHasUser
     public void deleteUserById(Long groupId, Long userId) {
         groupHasUserDAO.deleteUserById(groupId, userId);
     }
-
-    @Override
-    public GroupHasUserInfoDto returnGroupHasUserInfoDto(Long groupId, boolean groupHasUser) {
-        return GroupHasUserInfoDto.builder()
-                .id(groupId)
-                .groupHasUser(groupHasUser)
-                .build();
-    }
-
 }
