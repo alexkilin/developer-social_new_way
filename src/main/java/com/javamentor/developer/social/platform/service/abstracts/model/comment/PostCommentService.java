@@ -4,4 +4,5 @@ import com.javamentor.developer.social.platform.models.entity.comment.PostCommen
 import com.javamentor.developer.social.platform.service.abstracts.GenericService;
 
 public interface PostCommentService extends GenericService<PostComment, Long> {
+
 }

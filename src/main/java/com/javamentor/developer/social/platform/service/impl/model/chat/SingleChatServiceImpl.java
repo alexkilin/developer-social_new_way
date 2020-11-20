@@ -19,8 +19,8 @@ public class SingleChatServiceImpl extends GenericServiceAbstract<SingleChat,Lon
         this.singleChatDAO = singleChatDAO;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public boolean deleteUserFromSingleChat(SingleChat singleChat, Long userId) {
         if (singleChat.getUserOne().getUserId().equals(userId)){
             singleChat.setUserOne(null);

@@ -7,19 +7,22 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AlbumServiceImpl extends GenericServiceAbstract<Album, Long> implements AlbumService {
 
-    AlbumDao albumDAO;
+    private final AlbumDao albumDao;
 
     @Autowired
     public AlbumServiceImpl(AlbumDao dao) {
         super(dao);
-        this.albumDAO = dao;
+        this.albumDao = dao;
     }
 
+    @Override
+    @Transactional
     public boolean existsByNameAndMediaType(String name, MediaType type) {
-        return albumDAO.existsByNameAndMediaType(name, type);
+        return albumDao.existsByNameAndMediaType(name, type);
     }
 }

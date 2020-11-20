@@ -6,20 +6,22 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AlbumVideoServiceImpl extends GenericServiceAbstract<AlbumVideo, Long> implements AlbumVideoService {
 
-    AlbumVideoDao albumVideoDAO;
+    private final AlbumVideoDao albumVideoDao;
 
     @Autowired
     public AlbumVideoServiceImpl(AlbumVideoDao dao) {
         super(dao);
-        this.albumVideoDAO = dao;
+        this.albumVideoDao = dao;
     }
 
     @Override
+    @Transactional
     public AlbumVideo createAlbumVideosWithOwner(AlbumVideo albumVideo) {
-        return albumVideoDAO.createAlbumVideoWithOwner(albumVideo);
+        return albumVideoDao.createAlbumVideoWithOwner(albumVideo);
     }
 }

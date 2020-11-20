@@ -19,10 +19,8 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implements PostService {
 
-
     private final MediaService mediaService;
     private final TagService tagService;
-
 
     @Autowired
     public PostServiceImpl(PostDao dao, MediaService mediaService, TagService tagService) {

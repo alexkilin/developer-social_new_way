@@ -16,60 +16,67 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl extends GenericServiceAbstract<User, Long> implements UserService {
 
-    private final UserDao userDAO;
+    private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDAO, PasswordEncoder passwordEncoder) {
-        super(userDAO);
-        this.userDAO = userDAO;
+    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
+        super(userDao);
+        this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
+    @Transactional
     public List<User> getAll() {
-        return userDAO.getAll();
+        return userDao.getAll();
     }
 
     @Override
+    @Transactional
     public Optional<User> getByEmail(String email) {
-        return userDAO.getByEmail(email);
+        return userDao.getByEmail(email);
     }
 
     @Override
+    @Transactional
     public boolean existByEmail(String email) {
-        return userDAO.existByEmail(email);
+        return userDao.existByEmail(email);
     }
 
+    @Override
+    @Transactional
     public boolean existsAnotherByEmail(String email, Long userId) {
-        return userDAO.existsAnotherByEmail(email, userId);
+        return userDao.existsAnotherByEmail(email, userId);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-        userDAO.deleteById(id);
+        userDao.deleteById(id);
     }
 
     @Override
+    @Transactional
     public boolean existById(Long id) {
-        return userDAO.existById(id);
+        return userDao.existById(id);
     }
 
+    @Override
     @Transactional
     public void setPassword(UserResetPasswordDto userResetPasswordDto, Long userId) {
-
-        Optional<User> user = userDAO.getById(userId);
-
+        Optional<User> user = userDao.getById(userId);
         if (user.isPresent()) {
             user.get().setPassword(passwordEncoder.encode(userResetPasswordDto.getPassword()));
-            userDAO.update(user.get());
+            userDao.update(user.get());
         }
     }
 
+    @Override
     @Transactional
     public void updateInfo(User user) {
-        Optional<User> userOld = userDAO.getById(user.getUserId());
-       userDAO.updateInfo(user);
+        Optional<User> userOld = userDao.getById(user.getUserId());
+        userDao.updateInfo(user);
         user.setPassword(userOld.get().getPassword());
         user.setRole(userOld.get().getRole());
         user.setActive(userOld.get().getActive());
@@ -78,18 +85,13 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
         user.setPersistDate(userOld.get().getPersistDate());
         user.setLastRedactionDate(userOld.get().getLastRedactionDate());
         user.setStatus(userOld.get().getStatus());
-        userDAO.update(user);
+        userDao.update(user);
     }
 
-
-
     @Override
+    @Transactional
     public User getPrincipal() {
-        Optional <User> optinalUser = userDAO.getById(65L);
-        if(optinalUser.isPresent()){
-            return optinalUser.get();
-        } else {
-            return null;
-        }
+        Optional <User> optionalUser = userDao.getById(65L);
+        return optionalUser.orElse(null);
     }
 }

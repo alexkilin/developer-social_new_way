@@ -8,6 +8,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.user.Use
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -16,8 +17,8 @@ import java.util.Set;
 @Service
 public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> implements AudiosService {
 
-    private AudiosDao audiosDao;
-    private UserService userService;
+    private final UserService userService;
+    private final AudiosDao audiosDao;
 
     @Autowired
     public AudiosServiceImpl(AudiosDao dao, UserService userService) {
