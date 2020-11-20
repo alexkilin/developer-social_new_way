@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 public class PlaylistServiceImpl extends GenericServiceAbstract<Playlist, Long> implements PlaylistService {
+
     private final PlaylistDao playlistDao;
 
     @Autowired
@@ -20,14 +21,14 @@ public class PlaylistServiceImpl extends GenericServiceAbstract<Playlist, Long> 
         this.playlistDao = dao;
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public boolean userHasPlaylist(Long userId, Long playlistId) {
         return playlistDao.userHasPlaylist(userId, playlistId);
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public Optional<Playlist> getPlaylistByNameAndUserId (long userID, String playlistName) {
         return playlistDao.getPlaylistByNameAndUserId(userID, playlistName);
     }

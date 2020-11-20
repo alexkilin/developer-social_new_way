@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GroupDtoService {
+
     List<GroupInfoDto> getAllGroups(int page, int size);
 
     Optional<GroupDto> getGroupById(Long id);

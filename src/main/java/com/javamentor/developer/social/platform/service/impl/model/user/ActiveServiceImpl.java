@@ -6,23 +6,24 @@ import com.javamentor.developer.social.platform.service.abstracts.model.user.Act
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 public class ActiveServiceImpl extends GenericServiceAbstract<Active, Long> implements ActiveService {
 
-    private final ActiveDao activeDAO;
+    private final ActiveDao activeDao;
 
     @Autowired
-    public ActiveServiceImpl(ActiveDao dao, ActiveDao activeDAO) {
+    public ActiveServiceImpl(ActiveDao dao) {
         super(dao);
-        this.activeDAO = activeDAO;
+        this.activeDao = dao;
     }
 
-
     @Override
+    @Transactional
     public Optional<Active> getByActiveName(String active) {
-        return activeDAO.getByActiveName(active);
+        return activeDao.getByActiveName(active);
     }
 }

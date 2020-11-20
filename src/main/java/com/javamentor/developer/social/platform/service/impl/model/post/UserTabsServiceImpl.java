@@ -13,17 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserTabsServiceImpl extends GenericServiceAbstract<UserTabs, Long> implements UserTabsService {
 
-    private final UserTabsDao userTabsDAO;
+    private final UserTabsDao userTabsDao;
 
     @Autowired
-    public UserTabsServiceImpl(GenericDao<UserTabs, Long> dao, UserTabsDao userTabsDAO) {
+    public UserTabsServiceImpl(GenericDao<UserTabs, Long> dao, UserTabsDao userTabsDao) {
         super(dao);
-        this.userTabsDAO = userTabsDAO;
+        this.userTabsDao = userTabsDao;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void deletePost(Post post) {
-        userTabsDAO.deletePost(post);
+        userTabsDao.deletePost(post);
     }
 }

@@ -6,5 +6,6 @@ import com.javamentor.developer.social.platform.service.abstracts.GenericService
 import java.util.Optional;
 
 public interface ActiveService extends GenericService<Active, Long> {
+
     Optional<Active> getByActiveName(String active);
 }

@@ -6,11 +6,13 @@ import com.javamentor.developer.social.platform.service.abstracts.model.group.Gr
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 public class GroupCategoryServiceImpl extends GenericServiceAbstract<GroupCategory, Long> implements GroupCategoryService {
+
     private final GroupCategoryDao groupCategoryDao;
 
     @Autowired
@@ -20,6 +22,7 @@ public class GroupCategoryServiceImpl extends GenericServiceAbstract<GroupCatego
     }
 
     @Override
+    @Transactional
     public Optional<GroupCategory> getByCategory(String category) {
         return groupCategoryDao.getByCategory(category);
     }

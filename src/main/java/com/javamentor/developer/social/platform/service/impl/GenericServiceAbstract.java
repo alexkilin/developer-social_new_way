@@ -15,14 +15,14 @@ public abstract class GenericServiceAbstract<T, PK extends Serializable> impleme
         this.dao = dao;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void create(T entity) {
         dao.create(entity);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public List<T> getPart(int currentPage, int itemsOnPage) {
         return dao.getPartAudio(currentPage, itemsOnPage);
     }
@@ -33,32 +33,32 @@ public abstract class GenericServiceAbstract<T, PK extends Serializable> impleme
       return dao.getAll();
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void update(T entity) {
         dao.update(entity);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public Optional<T> getById(PK id) {
         return dao.getById(id);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void delete(T entity) {
         dao.delete(entity);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void deleteById(PK id) {
         dao.deleteById(id);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public boolean existById(PK id) {
         return dao.existById(id);
     }

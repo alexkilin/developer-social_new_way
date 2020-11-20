@@ -5,5 +5,6 @@ import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.service.abstracts.GenericService;
 
 public interface AlbumService extends GenericService<Album, Long> {
+
     boolean existsByNameAndMediaType(String name, MediaType type);
 }
