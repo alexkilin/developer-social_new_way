@@ -120,7 +120,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "(SELECT COUNT(pc) FROM PostComment pc WHERE p.id = pc.post.id), " +
                         "(SELECT COUNT(pl) FROM PostLike pl WHERE p.id = pl.post.id), " +
                         "(SELECT COUNT(bm) FROM Bookmark bm WHERE bm.post.id = p.id), " +
-                        "(SELECT COUNT(rp) FROM p.repostPerson rp), " +
+                        "(SELECT COUNT(rp) FROM p.reposts rp), " +
                         "m.mediaType, " +
                         "m.url, " +
                         "t.id," +

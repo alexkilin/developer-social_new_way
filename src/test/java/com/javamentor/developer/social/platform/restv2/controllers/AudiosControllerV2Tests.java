@@ -13,9 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DataSet(value = {
         "datasets/restv2/user/userFriends.yml",
-        "datasets/restv2/audio/usersAudioTest/Active.yml",
+        "datasets/restv2/user/Active.yml",
         "datasets/restv2/user/User.yml",
-        "datasets/restv2/audio/usersAudioTest/Role.yml",
+        "datasets/restv2/user/Role.yml",
         "datasets/restv2/audio/usersAudioTest/UsersAudiosCollections.yml",
         "datasets/restv2/audio/Media.yml",
         "datasets/restv2/audio/albumAudioTest/AudioAlbum.yml",

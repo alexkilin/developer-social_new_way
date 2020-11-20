@@ -183,7 +183,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 //
 //        mockMvc.perform(delete(apiUrl + "/{userId}", 2L))
 //                .andDo(print())
-//                .andExpect(status().isNotFound())
+//                .andExpect(status().isBadRequest())
 //                .andExpect(content().string("User with ID: 2 does not exist."));
 //    }
 

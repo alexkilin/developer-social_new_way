@@ -54,7 +54,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void showGroupInvalidId() throws Exception {
         mockMvc.perform(get("/api/v2/groups/{groupId}", 100))
                 .andDo(print())
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string("Group id 100 not found"));
     }
 
@@ -91,7 +91,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void findGroupByInvalidName() throws Exception {
         mockMvc.perform(get("/api/v2/groups/name?name=JavaGroupTest"))
                 .andDo(print())
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string("Group name JavaGroupTest not found"));
     }
 
@@ -123,7 +123,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void userJoinGroupExist() throws Exception {
         mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=1", 1))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andExpect(content().string("User with id: 1 already a member of the group with id: 1"));
     }
 
@@ -132,7 +132,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void userJoinGroupInvalidId() throws Exception {
         mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=100", 100))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -147,7 +147,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void deleteUserByInvalidId() throws Exception {
         mockMvc.perform(delete("/api/v2/groups/{groupId}/users?userId=1", 100))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
 
