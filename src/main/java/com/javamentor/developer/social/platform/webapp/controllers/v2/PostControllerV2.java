@@ -35,7 +35,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
 @RequestMapping(value = "/api/v2", produces = "application/json;charset=UTF-8")
 @Api(value = "PostApi-v2", description = "Операции над постами пользователя")
@@ -141,9 +140,8 @@ public class PostControllerV2 {
             Post post = result.get();
             userTabsService.deletePost(post);
             return ResponseEntity.ok().body(String.format("Deleted Post with ID %d, is successful", id));
-        } else {
-            return ResponseEntity.badRequest().body(String.format("Can't find Post with ID %d", id));
         }
+        return ResponseEntity.badRequest().body(String.format("Can't find Post with ID %d", id));
     }
 
     @ApiOperation(value = "Получение всех комментариев поста по id поста")

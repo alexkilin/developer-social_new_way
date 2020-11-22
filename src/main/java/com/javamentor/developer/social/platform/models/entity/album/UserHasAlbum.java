@@ -1,7 +1,5 @@
 package com.javamentor.developer.social.platform.models.entity.album;
 
-
-
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

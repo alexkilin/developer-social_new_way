@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
-
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.user.User;

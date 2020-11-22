@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.models.dto.media.music;
 
-import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 

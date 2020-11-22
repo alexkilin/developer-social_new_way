@@ -22,7 +22,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-
 @RestController
 @RequestMapping(value = "api/posts", produces = "application/json")
 @Api(value = "PostApi", description = "Операции с постами пользователя (получение, добавление, удаление)")

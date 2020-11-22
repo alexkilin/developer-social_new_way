@@ -1,16 +1,9 @@
 package com.javamentor.developer.social.platform.webapp.converters;
 
-import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
-import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
-import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
