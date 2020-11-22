@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.model.user;
 
 import com.javamentor.developer.social.platform.dao.abstracts.model.user.UserDao;
-import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
@@ -64,12 +63,9 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
 
     @Override
     @Transactional
-    public void setPassword(UserResetPasswordDto userResetPasswordDto, Long userId) {
-        Optional<User> user = userDao.getById(userId);
-        if (user.isPresent()) {
-            user.get().setPassword(passwordEncoder.encode(userResetPasswordDto.getPassword()));
-            userDao.update(user.get());
-        }
+    public void updateUserPassword(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDao.updateUserPassword(user);
     }
 
     @Override

@@ -127,16 +127,18 @@ public class UserControllerV2 {
     public ResponseEntity<?> updateUserPassword(
             @ApiParam(value = "Id пользователя") @PathVariable Long id,
             @ApiParam(value = "Новый пароль") @Valid @RequestBody UserResetPasswordDto userResetPasswordDto) {
-        if (!userService.existById(id)) {
+        Optional<User> optionalUser = userService.getById(id);
+        if (!optionalUser.isPresent()) {
             logger.info(String.format("Пользователь с ID: %d не существует", id));
-            return ResponseEntity.status(404)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(String.format("User with ID: %d does not exist.", id));
-        } else {
-            userService.setPassword(userResetPasswordDto, id);
-            logger.info(String.format("Пароль пользователя %d изменен", id));
-            return ResponseEntity.status(200)
-                    .body(String.format("Password changed for user %d", id));
         }
+        User user = optionalUser.get();
+        user.setPassword(userResetPasswordDto.getPassword());
+        userService.updateUserPassword(user);
+        logger.info(String.format("Пароль пользователя %d изменен", id));
+        return ResponseEntity.ok()
+                .body(String.format("Password changed for user %d", id));
     }
 
     @ApiOperation(value = "Удаление пользователя по id")
