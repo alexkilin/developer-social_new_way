@@ -35,7 +35,7 @@ public class PlaylistDtoServiceImpl implements PlaylistDtoService {
     }
 
     @Override
-    public List<PlaylistGetDto> getAllByUserId(Long userId) {
-        return playlistDtoDao.getByUserId(userId);
+    public List<PlaylistGetDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
+        return playlistDtoDao.getByUserId(userId, currentPage, itemsOnPage);
     }
 }

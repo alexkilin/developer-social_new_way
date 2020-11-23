@@ -27,13 +27,13 @@ public class ImageDtoServiceImpl implements ImageDtoService {
 
 
     @Override
-    public List<ImageDto> getAllByUserId(int offset, int limit, Long id) {
-        return dao.getAllByUserId(offset, limit, id);
+    public List<ImageDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
+        return dao.getAllByUserId(userId, currentPage, itemsOnPage);
     }
 
     @Override
-    public List<ImageDto> getAllByAlbumId(int offset, int limit, Long id) {
-        return dao.getAllByAlbumId(offset, limit, id);
+    public List<ImageDto> getAllByAlbumId(Long albumId, int currentPage, int itemsOnPage) {
+        return dao.getAllByAlbumId(albumId, currentPage, itemsOnPage);
     }
 
     @Override

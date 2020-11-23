@@ -26,8 +26,8 @@ public class GroupDtoServiceImpl implements GroupDtoService {
     }
 
     @Override
-    public List<GroupInfoDto> getAllGroups(int page, int size) {
-        return groupDtoDao.getAllGroups(page, size);
+    public List<GroupInfoDto> getAllGroups(int currentPage, int itemsOnPage) {
+        return groupDtoDao.getAllGroups(currentPage, itemsOnPage);
     }
 
     @Override
@@ -36,8 +36,8 @@ public class GroupDtoServiceImpl implements GroupDtoService {
     }
 
     @Override
-    public List<GroupWallDto> getPostsByGroupId(Long id, int page, int size) {
-        return groupDtoDao.getPostsByGroupId(id, page, size);
+    public List<GroupWallDto> getPostsByGroupId(Long id, int currentPage, int itemsOnPage) {
+        return groupDtoDao.getPostsByGroupId(id, currentPage, itemsOnPage);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class GroupDtoServiceImpl implements GroupDtoService {
     }
 
     @Override
-    public List<UserDto> getUsersFromTheGroup(Long id, int page, int size) {
-        return groupDtoDao.getUsersFromTheGroup(id, page, size);
+    public List<UserDto> getUsersFromTheGroup(Long id, int currentPage, int itemsOnPage) {
+        return groupDtoDao.getUsersFromTheGroup(id, currentPage, itemsOnPage);
     }
 }

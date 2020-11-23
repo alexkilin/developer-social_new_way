@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDtoDao {
-    List<UserDto> getUserDtoList();
-    Optional<UserDto> getUserDtoById(Long id);
-    List<LanguageDto> getUserLanguageDtoById(Long id);
-    List<UserFriendDto> getUserFriendsDtoById(Long id, int currentPage, int itemsOnPage);
+    List<UserDto> getUserDtoList(int currentPage, int itemsOnPage);
+    Optional<UserDto> getUserDtoById(Long userId);
+    List<LanguageDto> getUserLanguageDtoById(Long userId);
+    List<UserFriendDto> getUserFriendsDtoById(Long userId, int currentPage, int itemsOnPage);
 }

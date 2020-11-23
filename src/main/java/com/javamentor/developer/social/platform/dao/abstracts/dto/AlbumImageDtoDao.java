@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface AlbumImageDtoDao {
 
-    List<AlbumImageDto> getAllByUserId(Long userId);
+    List<AlbumImageDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage);
 }

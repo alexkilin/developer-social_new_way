@@ -31,9 +31,11 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<PostDto> getAllPosts(Long userPrincipalId) {
+    public List<PostDto> getAllPosts(Long userPrincipalId, int currentPage, int itemsOnPage) {
         List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST)
                 .setParameter("userPrincipalId", userPrincipalId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(getResultTransformer())
                 .getResultList();
@@ -55,7 +57,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<PostDto> getPostsByTag(String text, Long userPrincipalId) {
+    public List<PostDto> getPostsByTag(String text, Long userPrincipalId, int currentPage, int itemsOnPage) {
         List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST +
                 " where t.text = :tText")
                 .setParameter("userPrincipalId", userPrincipalId)
@@ -68,7 +70,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-	public List<PostDto> getPostsByUserId(Long userId, Long userPrincipalId) {
+	public List<PostDto> getPostsByUserId(Long userId, Long userPrincipalId, int currentPage, int itemsOnPage) {
         List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST +
                 " where u.userId = :userId")
                 .setParameter("userPrincipalId", userPrincipalId)
@@ -81,7 +83,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<CommentDto> getCommentsByPostId(Long id) {
+    public List<CommentDto> getCommentsByPostId(Long postId, int currentPage, int itemsOnPage) {
         Query queryCommentsForPost = (Query) entityManager.createQuery(
                 "SELECT " +
                         "c.id, " +
@@ -95,8 +97,8 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         "FROM Post p " +
                         "LEFT JOIN PostComment pc on p.id = pc.post.id " +
                         "LEFT JOIN Comment c on pc.comment.id = c.id " +
-                        "WHERE p.id = :paramId")
-                .setParameter("paramId", id);
+                        "WHERE p.id = :postId")
+                .setParameter("postId", postId);
         return queryCommentsForPost.unwrap(Query.class)
                 .setResultTransformer(new ResultTransformer() {
 
@@ -134,16 +136,17 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<MediaPostDto> getMediasByPostId(Long id) {
+    public List<MediaPostDto> getMediasByPostId(Long postId) {
         Query queryMediasForPost = (Query) entityManager.createQuery(
                 "SELECT " +
+                        "m.id, " +
                         "m.mediaType, " +
                         "m.url, " +
                         "m.user.userId " +
                         "FROM Post p " +
                         "LEFT JOIN p.media m " +
-                        "WHERE p.id = :paramId")
-                .setParameter("paramId", id);
+                        "WHERE p.id = :postId")
+                .setParameter("postId", postId);
         return queryMediasForPost.unwrap(Query.class)
                 .setResultTransformer(new ResultTransformer() {
 
@@ -151,9 +154,10 @@ public class PostDtoDaoImpl implements PostDtoDao {
             public Object transformTuple(Object[] objects, String[] strings) {
                 if (objects[0] != null && objects[1] != null && objects[2] != null) {
                     return MediaPostDto.builder()
-                            .url((String) objects[1])
-                            .mediaType(objects[0] == null ? null : objects[0].toString())
-                            .userId((Long) objects[2])
+                            .id((Long) objects[0])
+                            .url((String) objects[2])
+                            .mediaType(objects[1] == null ? null : objects[0].toString())
+                            .userId((Long) objects[3])
                             .build();
                 } else return null;
             }
@@ -169,7 +173,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<TagDto> getAllTags() {
+    public List<TagDto> getAllTags(int currentPage, int itemsOnPage) {
         return entityManager.createQuery(
                 "SELECT " +
                         "id," +
@@ -199,15 +203,15 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<TagDto> getTagsByPostId(Long id) {
+    public List<TagDto> getTagsByPostId(Long postId) {
         Query queryTagsForPost = (Query) entityManager.createQuery(
                 "SELECT " +
                         "t.text, " +
                         "t.id " +
                         "FROM Post p " +
                         "LEFT JOIN p.tags t " +
-                        "WHERE p.id = :paramId")
-                .setParameter("paramId", id);
+                        "WHERE p.id = :postId")
+                .setParameter("postId", postId);
         return queryTagsForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
             @Override
@@ -231,7 +235,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
 	@SuppressWarnings("unchecked")
-    public List <PostDto> getAllBookmarkedPosts(Long userPrincipalId){
+    public List <PostDto> getAllBookmarkedPosts(Long userPrincipalId, int currentPage, int itemsOnPage){
         List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_BOOKMARK +
                 "where u.userId = :userPrincipalId")
                 .setParameter("userPrincipalId", userPrincipalId)

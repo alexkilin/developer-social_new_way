@@ -34,7 +34,7 @@ public class AlbumVideoDtoDaoImpl implements AlbumVideoDtoDao {
     }
 
     @Override
-    public List<AlbumVideoDto> getAllByUserId(Long userId) {
+    public List<AlbumVideoDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
         return entityManager.createQuery(
                 "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto(" +
                         "a.id, " +
@@ -46,6 +46,8 @@ public class AlbumVideoDtoDaoImpl implements AlbumVideoDtoDao {
                         "ORDER BY a.id ASC", AlbumVideoDto.class)
                 .setParameter("type", MediaType.VIDEO)
                 .setParameter("id", userId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .getResultList();
 
     }

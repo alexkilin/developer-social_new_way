@@ -8,17 +8,17 @@ import java.util.List;
 
 public interface PostDtoService {
 
-    List<PostDto> getAllPosts();
+    List<PostDto> getAllPosts(Long userPrincipalId, int currentPage, int itemsOnPage);
 
     List<PostDto> getPostById(Long postId, Long userPrincipalId);
 
-    List<PostDto> getPostsByTag(String text);
+    List<PostDto> getPostsByTag(String tagText, Long userPrincipalId, int currentPage, int itemsOnPage);
 
-    List<CommentDto> getCommentsByPostId(Long id);
+    List<CommentDto> getCommentsByPostId(Long id, int currentPage, int itemsOnPage);
 
-    List<TagDto> getAllTags();
+    List<TagDto> getAllTags(int currentPage, int itemsOnPage);
     
-    List<PostDto> getPostsByUserId(Long id);
+    List<PostDto> getPostsByUserId(Long id, Long userPrincipalId, int currentPage, int itemsOnPage);
 
-    List <PostDto> getAllBookmarkedPosts();
+    List <PostDto> getAllBookmarkedPosts(Long userPrincipalId, int currentPage, int itemsOnPage);
 }

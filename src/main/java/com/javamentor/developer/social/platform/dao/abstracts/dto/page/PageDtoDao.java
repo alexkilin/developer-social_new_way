@@ -4,6 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface PageDtoDao <T> {
-    List <T> getItems(Map<String, Object> parameters, int currentPage, int itemsOnPage);
+    List <T> getItems(Map<String, Object> parameters);
     Long getCount(Map<String, Object> parameters);
 }

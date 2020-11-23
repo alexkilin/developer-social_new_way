@@ -38,7 +38,7 @@ public class AlbumImageDtoDaoImpl implements AlbumImageDtoDao {
     }
 
     @Override
-    public List<AlbumImageDto> getAllByUserId(Long userId) {
+    public List<AlbumImageDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
         return entityManager.createQuery(
                 "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto(" +
                         "a.id, " +
@@ -52,6 +52,8 @@ public class AlbumImageDtoDaoImpl implements AlbumImageDtoDao {
                         "ORDER BY a.id ASC", AlbumImageDto.class)
                 .setParameter("type", MediaType.IMAGE)
                 .setParameter("id", userId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .getResultList();
 
     }

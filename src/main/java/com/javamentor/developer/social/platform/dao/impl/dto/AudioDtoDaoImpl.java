@@ -83,6 +83,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "WHERE upper(c.name) " +
                         "LIKE upper(:name) ")
                 .setParameter("name", "%" + name + "%")
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer(){
@@ -117,7 +119,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAudioOfAlbum(String album) {
+    public List<AudioDto> getAudioOfAlbum(String album, int currentPage, int itemsOnPage) {
         List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
@@ -130,6 +132,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.length " +
                         "FROM Audios as c WHERE c.album = :album")
                 .setParameter("album", album)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {
@@ -158,48 +162,6 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
         return audios;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<AudioDto> getAudioOfUser(Long userId) {
-        List<AudioDto> audios = entityManager
-                .createQuery("SELECT " +
-                        "c.id, " +
-                        "c.icon, " +
-                        "c.name, " +
-                        "c.author, " +
-                        "c.media.url, " +
-                        "c.media.persistDateTime, " +
-                        "c.album, " +
-                        "c.length " +
-                        "FROM User u join u.audios c where u.userId =:userId")
-                .setParameter("userId", userId)
-                .unwrap(Query.class)
-                .setResultTransformer(
-                        new ResultTransformer() {
-                            @Override
-                            public Object transformTuple(
-                                    Object[] objects, String[] strings) {
-                                return AudioDto.builder()
-                                        .id(((Number) objects[0]).longValue())
-                                        .icon((String) objects[1])
-                                        .name((String) objects[2])
-                                        .author((String) objects[3])
-                                        .url((String) objects[4])
-                                        .persistDateTime((LocalDateTime) objects[5])
-                                        .album((String) objects[6])
-                                        .length((Integer) objects[7])
-                                        .build();
-                            }
-
-                            @Override
-                            public List transformList(List list) {
-                                return list;
-                            }
-                        }
-                )
-                .getResultList();
-        return audios;
-    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -216,8 +178,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.length " +
                         "FROM User u join u.audios c where u.userId =:userId order by c.id asc")
                 .setParameter("userId", userId)
-                .setFirstResult(currentPage * itemsOnPage)
-                .setMaxResults(itemsOnPage)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {
@@ -248,7 +210,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAuthorAudioOfUser(Long userId, String author) {
+    public List<AudioDto> getAuthorAudioOfUser(Long userId, String author, int currentPage, int itemsOnPage) {
         List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
@@ -262,6 +224,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "FROM User u join u.audios c where u.userId =:userId and c.author =:author")
                 .setParameter("userId", userId)
                 .setParameter("author", author)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {
@@ -292,7 +256,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<AudioDto> getAlbumAudioOfUser(Long userId, String album) {
+    public List<AudioDto> getAlbumAudioOfUser(Long userId, String album, int currentPage, int itemsOnPage) {
         List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
@@ -306,6 +270,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "FROM User u join u.audios c where  c.album =:album and u.userId =:userId")
                 .setParameter("userId", userId)
                 .setParameter("album", album)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {
@@ -335,7 +301,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
     }
 
     @Override
-    public List<AudioDto> getAudioFromAlbumOfUser(Long albumId) {
+    public List<AudioDto> getAudioFromAlbumOfUser(Long albumId, int currentPage, int itemsOnPage) {
         List<AudioDto> audios = entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
@@ -348,6 +314,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "c.length " +
                         "FROM AlbumAudios u join u.audios as c where u.album.id =:albumId")
                 .setParameter("albumId", albumId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {
@@ -378,7 +346,7 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
 
 
     @Override
-    public List<AudioDto> getAudioFromPlaylist(Long playlistId, int offset, int limit) {
+    public List<AudioDto> getAudioFromPlaylist(Long playlistId, int currentPage, int itemsOnPage) {
         Query<AudioDto> query = (Query<AudioDto>) entityManager.createQuery(
                 "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.music.AudioDto( " +
                         "au.id, " +
@@ -394,8 +362,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "WHERE pl.id = :playlistId"
                         , AudioDto.class)
                 .setParameter("playlistId", playlistId)
-                .setFirstResult(offset)
-                .setMaxResults(limit);
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage);
         return query.getResultList();
     }
 
@@ -412,8 +380,8 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
                         "a.length," +
                         "a.media.persistDateTime)" +
                         "FROM Audios as a WHERE a.media.mediaType = 1", AudioDto.class)
-                .setFirstResult(currentPage * itemsOnPage)
-                .setMaxResults(itemsOnPage)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .getResultList();
     }
 }

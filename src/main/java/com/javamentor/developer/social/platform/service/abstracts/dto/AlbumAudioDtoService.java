@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface AlbumAudioDtoService {
 
-    List<AlbumAudioDto> getAllByUserId(Long userId);
+    List<AlbumAudioDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage);
 }

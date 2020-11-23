@@ -24,9 +24,8 @@ public class PostDtoServiceImpl implements PostDtoService {
     }
 
     @Override
-    public List<PostDto> getPostsByTag(String text) {
-        Long userPrincipalId = userService.getPrincipal().getUserId();
-        return postDtoDao.getPostsByTag(text, userPrincipalId);
+    public List<PostDto> getPostsByTag(String tagText, Long userPrincipalId, int currentPage, int itemsOnPage) {
+        return postDtoDao.getPostsByTag(tagText, userPrincipalId, currentPage, itemsOnPage);
     }
 
     @Override
@@ -35,31 +34,28 @@ public class PostDtoServiceImpl implements PostDtoService {
     }
 
     @Override
-    public List<PostDto> getPostsByUserId(Long id) {
-        Long userPrincipalId = userService.getPrincipal().getUserId();
-        return postDtoDao.getPostsByUserId(id, userPrincipalId);
+    public List<PostDto> getPostsByUserId(Long id, Long userPrincipalId, int currentPage, int itemsOnPage) {
+        return postDtoDao.getPostsByUserId(id, userPrincipalId, currentPage, itemsOnPage);
     }
 
     @Override
-    public List<PostDto> getAllBookmarkedPosts() {
-        Long userPrincipalId = userService.getPrincipal().getUserId();
-        return postDtoDao.getAllBookmarkedPosts(userPrincipalId);
+    public List<PostDto> getAllBookmarkedPosts(Long userPrincipalId, int currentPage, int itemsOnPage) {
+        return postDtoDao.getAllBookmarkedPosts(userPrincipalId, currentPage, itemsOnPage);
     }
 
     @Override
-    public List<CommentDto> getCommentsByPostId(Long id) {
-        return postDtoDao.getCommentsByPostId(id);
+    public List<CommentDto> getCommentsByPostId(Long id, int currentPage, int itemsOnPage) {
+        return postDtoDao.getCommentsByPostId(id, currentPage, itemsOnPage);
     }
 
     @Override
-    public List<TagDto> getAllTags() {
-        return postDtoDao.getAllTags();
+    public List<TagDto> getAllTags(int currentPage, int itemsOnPage) {
+        return postDtoDao.getAllTags(currentPage, itemsOnPage);
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        Long userPrincipalId = userService.getPrincipal().getUserId();
-        List<PostDto> postDtoList = postDtoDao.getAllPosts(userPrincipalId);
+    public List<PostDto> getAllPosts(Long userPrincipalId, int currentPage, int itemsOnPage) {
+        List<PostDto> postDtoList = postDtoDao.getAllPosts(userPrincipalId, currentPage, itemsOnPage);
         return postDtoList;
     }
 }

@@ -23,7 +23,7 @@ public class ImageDtoDaoImpl implements ImageDtoDao {
 
 
     @Override
-    public List<ImageDto> getAllByUserId(int offset, int limit, Long id) {
+    public List<ImageDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
         Query<ImageDto> query = (Query<ImageDto>) entityManager.createQuery(
                 "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.image.ImageDto(" +
                         "im.id, " +
@@ -33,14 +33,14 @@ public class ImageDtoDaoImpl implements ImageDtoDao {
                         "FROM Image im " +
                         "WHERE im.media.user.userId = :userId " +
                         "ORDER BY im.media.persistDateTime ASC", ImageDto.class)
-                .setParameter("userId", id)
-                .setFirstResult(offset)
-                .setMaxResults(limit);
+                .setParameter("userId", userId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage);
         return query.getResultList();
     }
 
     @Override
-    public List<ImageDto> getAllByAlbumId(int offset, int limit, Long id) {
+    public List<ImageDto> getAllByAlbumId(Long albumId, int currentPage, int itemsOnPage) {
         Query<ImageDto> query = (Query<ImageDto>) entityManager.createQuery(
                 "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.image.ImageDto(" +
                         "im.id, " +
@@ -50,9 +50,9 @@ public class ImageDtoDaoImpl implements ImageDtoDao {
                         "FROM Image im " +
                         "WHERE im.media.album.id = :albumId " +
                         "ORDER BY im.media.persistDateTime ASC", ImageDto.class)
-                .setParameter("albumId", id)
-                .setFirstResult(offset)
-                .setMaxResults(limit);
+                .setParameter("albumId", albumId)
+                .setFirstResult(currentPage)
+                .setMaxResults(currentPage * itemsOnPage);
         return query.getResultList();
     }
 

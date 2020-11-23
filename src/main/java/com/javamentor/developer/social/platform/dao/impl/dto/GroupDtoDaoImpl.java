@@ -8,6 +8,7 @@ import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
+import com.javamentor.developer.social.platform.models.entity.group.GroupCategory;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<GroupInfoDto> getAllGroups(int page, int size) {
+    public List<GroupInfoDto> getAllGroups(int currentPage, int itemsOnPage) {
         Query query = (Query) entityManager.createQuery(
                 "SELECT DISTINCT " +
                         "g.id, " +
@@ -35,8 +36,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "g.addressImageGroup " +
                     "FROM Group g JOIN GroupCategory gc ON gc.id = g.groupCategory.id " +
                         "JOIN GroupHasUser ghu ON g.id = ghu.group.id")
-                .setFirstResult((page - 1) * size)
-                .setMaxResults(size);
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage);
         return (List<GroupInfoDto>) query.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
             @Override
@@ -109,7 +110,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<GroupWallDto> getPostsByGroupId(Long id, int page, int size) {
+    public List<GroupWallDto> getPostsByGroupId(Long id, int currentPage, int itemsOnPage) {
         Query queryPostsForGroup = (Query) entityManager.createQuery(
                 "SELECT " +
                         "p.id, " +
@@ -120,7 +121,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "(SELECT COUNT(pc) FROM PostComment pc WHERE p.id = pc.post.id), " +
                         "(SELECT COUNT(pl) FROM PostLike pl WHERE p.id = pl.post.id), " +
                         "(SELECT COUNT(bm) FROM Bookmark bm WHERE bm.post.id = p.id), " +
-                        "(SELECT COUNT(rp) FROM p.repostPerson rp), " +
+                        "(SELECT COUNT(rp) FROM p.reposts rp), " +
                         "m.mediaType, " +
                         "m.url, " +
                         "t.id," +
@@ -133,8 +134,8 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "LEFT JOIN p.tags t " +
                         "WHERE g.id = :paramId")
                 .setParameter("paramId", id)
-                .setFirstResult((page - 1) * size)
-                .setMaxResults(size);
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage);
         return queryPostsForGroup.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
             @Override
@@ -257,7 +258,7 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
     }
 
     @Override
-    public List<UserDto> getUsersFromTheGroup(Long id, int page, int size) {
+    public List<UserDto> getUsersFromTheGroup(Long groupId, int currentPage, int itemsOnPage) {
         Query<UserDto> queryUsersFromTheGroup = (Query<UserDto>) entityManager.createQuery(
                 "SELECT " +
                         "u.userId, " +
@@ -274,10 +275,10 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                         "u.role.name, " +
                         "u.status, " +
                         "u.active.name" +
-                        " FROM User u join GroupHasUser g ON u.userId = g.user.userId WHERE g.group.id = :id")
-                .setParameter("id", id)
-                .setFirstResult((page - 1) * size)
-                .setMaxResults(size);
+                        " FROM User u join GroupHasUser g ON u.userId = g.user.userId WHERE g.group.id = :groupId")
+                .setParameter("groupId", groupId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage);
         return (List<UserDto>) queryUsersFromTheGroup.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
@@ -304,4 +305,5 @@ public class GroupDtoDaoImpl implements GroupDtoDao {
                     }
                 }).getResultList();
     }
+
 }

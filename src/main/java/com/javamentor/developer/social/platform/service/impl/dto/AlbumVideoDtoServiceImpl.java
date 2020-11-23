@@ -19,8 +19,8 @@ public class AlbumVideoDtoServiceImpl implements AlbumVideoDtoService {
     }
 
     @Override
-    public List<AlbumVideoDto> getAllByUserId(Long userId) {
-        return albumVideoDtoDao.getAllByUserId(userId);
+    public List<AlbumVideoDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
+        return albumVideoDtoDao.getAllByUserId(userId, currentPage, itemsOnPage);
     }
 
 }

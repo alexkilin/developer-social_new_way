@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface AlbumImageDtoService {
 
-    List<AlbumImageDto> getAllByUserId(Long userId);
+    List<AlbumImageDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage);
 }

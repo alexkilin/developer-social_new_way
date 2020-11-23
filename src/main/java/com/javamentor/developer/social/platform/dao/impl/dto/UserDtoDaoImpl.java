@@ -26,7 +26,7 @@ class UserDtoDaoImpl implements UserDtoDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<UserDto> getUserDtoList() {
+    public List<UserDto> getUserDtoList(int currentPage, int itemsOnPage) {
         List<UserDto> getAllUsers = new ArrayList<>();
 
         try {
@@ -46,6 +46,8 @@ class UserDtoDaoImpl implements UserDtoDao {
                     "u.active.name, " +
                     "u.profession " +
                     "FROM User u")
+                    .setFirstResult((currentPage - 1) * itemsOnPage)
+                    .setMaxResults(currentPage * itemsOnPage)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override
@@ -83,7 +85,7 @@ class UserDtoDaoImpl implements UserDtoDao {
     }
 
     @Override
-    public Optional<UserDto> getUserDtoById(Long id) {
+    public Optional<UserDto> getUserDtoById(Long userId) {
         Optional<UserDto> userDto = Optional.empty();
         try {
             userDto = Optional.of((UserDto) entityManager.createQuery("SELECT " +
@@ -101,8 +103,8 @@ class UserDtoDaoImpl implements UserDtoDao {
                     "u.status, " +
                     "u.profession, " +
                     "u.active.name " +
-                    "FROM User u WHERE u.userId = :paramId")
-                    .setParameter("paramId", id)
+                    "FROM User u WHERE u.userId = :userId")
+                    .setParameter("userId", userId)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override
@@ -147,8 +149,8 @@ class UserDtoDaoImpl implements UserDtoDao {
               Query query =  entityManager.createQuery("SELECT " +
                      "l.id, " +
                      "l.name " +
-                     "FROM User u left join u.languages l  where u.userId = :paramId")
-                     .setParameter("paramId", userId)
+                     "FROM User u left join u.languages l  where u.userId = :userId")
+                     .setParameter("userId", userId)
                      .unwrap(Query.class);
 
          getSingleResultOrNull(query);
@@ -172,7 +174,7 @@ class UserDtoDaoImpl implements UserDtoDao {
      }
 
     @Override
-    public List<UserFriendDto> getUserFriendsDtoById(Long id, int currentPage, int itemsOnPage) {
+    public List<UserFriendDto> getUserFriendsDtoById(Long userId, int currentPage, int itemsOnPage) {
         List<UserFriendDto> userFriends = new ArrayList<>();
 
         try {
@@ -185,10 +187,10 @@ class UserDtoDaoImpl implements UserDtoDao {
                                 "f.friend.profession, " +
                                 "f.friend.status " +
                         "from Friend f " +
-                        "where f.user.userId = :id")
-                    .setParameter("id", id)
-                    .setFirstResult(currentPage * itemsOnPage)
-                    .setMaxResults(itemsOnPage)
+                        "where f.user.userId = :userId")
+                    .setParameter("userId", userId)
+                    .setFirstResult((currentPage - 1) * itemsOnPage)
+                    .setMaxResults(currentPage * itemsOnPage)
                     .unwrap(Query.class)
                     .setResultTransformer(new ResultTransformer() {
                         @Override

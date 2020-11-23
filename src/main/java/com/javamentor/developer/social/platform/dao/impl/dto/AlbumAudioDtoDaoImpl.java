@@ -34,7 +34,7 @@ public class AlbumAudioDtoDaoImpl implements AlbumAudioDtoDao {
     }
 
     @Override
-    public List<AlbumAudioDto> getAllByUserId(Long userId) {
+    public List<AlbumAudioDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
         return entityManager.createQuery(
                 "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudioDto(" +
                         "a.id, " +
@@ -46,6 +46,8 @@ public class AlbumAudioDtoDaoImpl implements AlbumAudioDtoDao {
                         "ORDER BY a.id ASC", AlbumAudioDto.class)
                 .setParameter("type", MediaType.AUDIO)
                 .setParameter("id", userId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .getResultList();
 
     }

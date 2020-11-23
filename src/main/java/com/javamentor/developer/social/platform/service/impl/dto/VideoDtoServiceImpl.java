@@ -22,18 +22,13 @@ public class VideoDtoServiceImpl implements VideoDtoService {
     }
 
     @Override
-    public List<VideoDto> getVideoOfAuthor(String author) {
-        return videoDtoDao.getVideoOfAuthor(author);
+    public List<VideoDto> getVideoOfAuthor(String author, int currentPage, int itemsOnPage) {
+        return videoDtoDao.getVideoOfAuthor(author, currentPage, itemsOnPage);
     }
 
     @Override
     public VideoDto getVideoOfName(String name) {
         return videoDtoDao.getVideoOfName(name).orElseThrow(() -> new IllegalArgumentException("Invalid parameters"));
-    }
-
-    @Override
-    public List<VideoDto> getVideoOfAlbum(String album) {
-        return videoDtoDao.getVideoOfAlbum(album);
     }
 
     @Override
@@ -47,18 +42,18 @@ public class VideoDtoServiceImpl implements VideoDtoService {
     }
 
     @Override
-    public List<VideoDto> getAuthorVideoOfUser(Long userId, String author) {
-        return videoDtoDao.getAuthorVideoOfUser(userId, author);
+    public List<VideoDto> getAuthorVideoOfUser(Long userId, String author, int currentPage, int itemsOnPage) {
+        return videoDtoDao.getAuthorVideoOfUser(userId, author, currentPage, itemsOnPage);
     }
 
     @Override
-    public List<VideoDto> getAlbumVideoOfUser(Long userId, String album) {
-        return videoDtoDao.getAlbumVideoOfUser(userId, album);
+    public List<VideoDto> getAlbumVideoOfUser(Long userId, String album, int currentPage, int itemsOnPage) {
+        return videoDtoDao.getAlbumVideoOfUser(userId, album, currentPage, itemsOnPage);
     }
 
 
     @Override
-    public List<VideoDto> getVideoFromAlbumOfUser(Long albumId) {
-        return videoDtoDao.getVideoFromAlbumOfUser(albumId);
+    public List<VideoDto> getVideoFromAlbumOfUser(Long albumId, int currentPage, int itemsOnPage) {
+        return videoDtoDao.getVideoFromAlbumOfUser(albumId, currentPage, itemsOnPage);
     }
 }

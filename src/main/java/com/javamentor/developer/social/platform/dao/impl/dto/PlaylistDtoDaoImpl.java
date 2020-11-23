@@ -55,7 +55,7 @@ public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<PlaylistGetDto> getByUserId(Long userId) {
+    public List<PlaylistGetDto> getByUserId(Long userId, int currentPage, int itemsOnPage) {
         List<PlaylistGetDto> list = entityManager.createQuery("SELECT " +
                 "p.id," +
                 "p.name, " +
@@ -74,6 +74,8 @@ public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
                 "LEFT JOIN p.playlistContent as c " +
                 "WHERE p.ownerUser.userId = :userId")
                 .setParameter("userId", userId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(currentPage * itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(new ResultTransformer() {
                     @Override

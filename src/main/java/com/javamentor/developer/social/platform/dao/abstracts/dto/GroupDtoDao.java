@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GroupDtoDao {
-    List<GroupInfoDto> getAllGroups(int page, int size);
+    List<GroupInfoDto> getAllGroups(int currentPage, int itemsOnPage);
 
-    Optional<GroupDto> getGroupById(Long id);
+    Optional<GroupDto> getGroupById(Long groupId);
 
-    List<GroupWallDto> getPostsByGroupId(Long id, int page, int size);
+    List<GroupWallDto> getPostsByGroupId(Long groupId, int currentPage, int itemsOnPage);
 
     Optional<GroupDto> getGroupByName(String name);
 
-    List<UserDto> getUsersFromTheGroup(Long id, int page, int size);
+    List<UserDto> getUsersFromTheGroup(Long groupId, int currentPage, int itemsOnPage);
 }

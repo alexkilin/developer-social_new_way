@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface ImageDtoService {
 
-    List<ImageDto> getAllByUserId(int offset, int limit, Long id);
-    List<ImageDto> getAllByAlbumId(int offset, int limit, Long id);
+    List<ImageDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage);
+    List<ImageDto> getAllByAlbumId(Long albumId, int currentPage, int itemsOnPage);
     Optional<ImageDto> getById(Long id);
 
 

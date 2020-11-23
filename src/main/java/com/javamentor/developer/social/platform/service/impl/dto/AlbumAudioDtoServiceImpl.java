@@ -19,8 +19,8 @@ public class AlbumAudioDtoServiceImpl implements AlbumAudioDtoService {
     }
 
     @Override
-    public List<AlbumAudioDto> getAllByUserId(Long userId) {
-        return albumAudioDtoDao.getAllByUserId(userId);
+    public List<AlbumAudioDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
+        return albumAudioDtoDao.getAllByUserId(userId, currentPage, itemsOnPage);
     }
 
 }

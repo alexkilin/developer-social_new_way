@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface PlaylistDtoDao {
     Optional<PlaylistGetDto> getById(Long id);
-    List<PlaylistGetDto> getByUserId(Long userId);
+    List<PlaylistGetDto> getByUserId(Long userId, int currentPage, int itemsOnPage);
     List<AudioDto> getAudioDtoByPlaylistId(Long playlistId);
 }

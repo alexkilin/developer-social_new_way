@@ -22,8 +22,8 @@ public class UserDtoServiceImpl implements UserDtoService {
     }
 
     @Override
-    public List<UserDto> getAllUserDto() {
-        return userDtoDao.getUserDtoList();
+    public List<UserDto> getAllUserDto(int currentPage, int itemsOnPage) {
+        return userDtoDao.getUserDtoList(currentPage, itemsOnPage);
     }
 
     @Override

@@ -9,22 +9,22 @@ import java.util.List;
 
 public interface PostDtoDao {
 
-    List<PostDto> getAllPosts(Long userPrincipalId);
+    List<PostDto> getAllPosts(Long userPrincipalId, int currentPage, int itemsOnPage);
 
     List<PostDto> getPostById(Long postId, Long userPrincipalId);
 
-    List<PostDto> getPostsByTag(String text, Long userPrincipalId);
+    List<PostDto> getPostsByTag(String text, Long userPrincipalId, int currentPage, int itemsOnPage);
 
-    List<CommentDto> getCommentsByPostId(Long id);
+    List<CommentDto> getCommentsByPostId(Long postId, int currentPage, int itemsOnPage);
 
-    List<MediaPostDto> getMediasByPostId(Long id);
+    List<MediaPostDto> getMediasByPostId(Long postId);
 
-    List<TagDto> getTagsByPostId(Long id);
+    List<TagDto> getTagsByPostId(Long postId);
 
-    List<PostDto> getPostsByUserId(Long id, Long userPrincipalId);
+    List<PostDto> getPostsByUserId(Long userId, Long userPrincipalId, int currentPage, int itemsOnPage);
 
-    List <PostDto> getAllBookmarkedPosts(Long userPrincipalId);
+    List <PostDto> getAllBookmarkedPosts(Long userPrincipalId, int currentPage, int itemsOnPage);
 
-    List <TagDto> getAllTags ();
+    List <TagDto> getAllTags (int currentPage, int itemsOnPage);
 
 }

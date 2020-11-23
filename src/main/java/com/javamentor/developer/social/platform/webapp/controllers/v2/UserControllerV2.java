@@ -1,12 +1,14 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.*;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.*;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PageDtoService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
@@ -21,7 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @ToString
@@ -35,14 +38,16 @@ public class UserControllerV2 {
     private final UserDtoService userDtoService;
     private final UserService userService;
     private final UserConverter userConverter;
+    private final PageDtoService pageDtoService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserControllerV2(UserDtoService userDtoService, UserService userService, UserConverter userConverter) {
+    public UserControllerV2(UserDtoService userDtoService, UserService userService, UserConverter userConverter, PageDtoService pageDtoService) {
         this.userDtoService = userDtoService;
         this.userService = userService;
         this.userConverter = userConverter;
+        this.pageDtoService = pageDtoService;
     }
 
 
@@ -68,10 +73,15 @@ public class UserControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список пользователей получен", responseContainer = "List", response = UserDto.class)
     })
-    @GetMapping("")
-    public ResponseEntity<List<UserDto>> getAll() {
+    @GetMapping(params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<UserDto, ?>> getAllUsers(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                        @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info("Получен список пользователей");
-        return ResponseEntity.ok(userDtoService.getAllUserDto());
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("methodName", "getAllUsers");
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
     }
 
     @ApiOperation(value = "Создание пользователя")
@@ -165,15 +175,20 @@ public class UserControllerV2 {
     public ResponseEntity<?> getUserFriends(
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
-            @ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
-        if (userService.existById(id)) {
-            List<UserFriendDto> userFriends = userDtoService.getUserFriendsDtoById(id, currentPage, itemsOnPage);
+            @ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable("id") @NonNull Long userId) {
+        if (userService.existById(userId)) {
+
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("userId", userId);
+            parameters.put("methodName", "getUserFriends");
+            parameters.put("currentPage", currentPage);
+            parameters.put("itemsOnPage", itemsOnPage);
+
             logger.info("Получен список друзей пользователя");
-            return ResponseEntity.ok(userFriends);
-        } else {
-            logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
-            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", id));
+            return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
         }
+            logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
+            return ResponseEntity.status(404).body(String.format("User with ID: %d does not exist.", userId));
     }
 
     @ApiOperation(value = "Изменение статуса пользователя")
