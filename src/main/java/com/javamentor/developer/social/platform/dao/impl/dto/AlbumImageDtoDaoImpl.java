@@ -1,22 +1,18 @@
 package com.javamentor.developer.social.platform.dao.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumImageDtoDao;
-import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
-import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class AlbumImageDtoDaoImpl implements AlbumImageDtoDao {

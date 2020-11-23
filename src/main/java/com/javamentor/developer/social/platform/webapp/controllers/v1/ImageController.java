@@ -14,7 +14,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumImageConverter;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
-
 
 @RestController
 @Validated

@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.models.entity.post;
 
-
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
