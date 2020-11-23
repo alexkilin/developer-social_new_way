@@ -11,6 +11,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.group.Gr
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.service.impl.dto.page.PageDtoService;
 import com.javamentor.developer.social.platform.webapp.converters.GroupConverter;
+import com.javamentor.developer.social.platform.webapp.converters.GroupHasUserConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +35,20 @@ public class GroupControllerV2 {
     private final GroupService groupService;
     private final GroupConverter groupConverter;
     private final PageDtoService pageDtoService;
+    private final GroupHasUserConverter groupHasUserConverter;
 
     @Autowired
-    public GroupControllerV2(GroupDtoService groupDtoService, GroupHasUserService groupHasUserService, UserService userService, GroupService groupService, GroupConverter groupConverter, PageDtoService pageDtoService) {
+    public GroupControllerV2(GroupDtoService groupDtoService,
+                             GroupHasUserService groupHasUserService, UserService userService,
+                             GroupService groupService, GroupConverter groupConverter,
+                             PageDtoService pageDtoService, GroupHasUserConverter groupHasUserConverter) {
         this.groupDtoService = groupDtoService;
         this.groupHasUserService = groupHasUserService;
         this.userService = userService;
         this.groupService = groupService;
         this.groupConverter = groupConverter;
         this.pageDtoService = pageDtoService;
+        this.groupHasUserConverter = groupHasUserConverter;
     }
 
     @ApiOperation(value = "Получение информации обо всех группах")
@@ -174,7 +180,7 @@ public class GroupControllerV2 {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId));
         }
-        return ResponseEntity.ok(groupHasUserService.returnGroupHasUserInfoDto(groupId, groupHasUserService.verificationUserInGroup(groupId,userId)));
+        return ResponseEntity.ok(groupHasUserConverter.toGroupHasUserInfoDto(groupId, groupHasUserService.verificationUserInGroup(groupId,userId)));
     }
 
     @ApiOperation(value = "Удаление пользователя из группы")

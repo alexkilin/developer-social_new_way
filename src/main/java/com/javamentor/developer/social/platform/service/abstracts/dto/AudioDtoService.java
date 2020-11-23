@@ -7,10 +7,10 @@ import java.util.List;
 public interface AudioDtoService {
 
     List<AudioDto> getAudioOfAuthor(String author, int currentPage, int itemsOnPage);
+
     List<AudioDto> getAudioOfName(String name, int currentPage, int itemsOnPage);
 
     List<AudioDto> getAudioOfAlbum(String album, int currentPage, int itemsOnPage);
-
 
     List<AudioDto> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage);
 

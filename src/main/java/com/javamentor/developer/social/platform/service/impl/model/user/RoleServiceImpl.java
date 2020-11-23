@@ -6,27 +6,24 @@ import com.javamentor.developer.social.platform.service.abstracts.model.user.Rol
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 public class RoleServiceImpl extends GenericServiceAbstract<Role, Long> implements RoleService {
 
-    private final RoleDao roleDAO;
+    private final RoleDao roleDao;
 
     @Autowired
     public RoleServiceImpl(RoleDao dao) {
         super(dao);
-        roleDAO = dao;
+        this.roleDao = dao;
     }
 
     @Override
+    @Transactional
     public Optional<Role> getByRoleName(String name) {
-        return roleDAO.getByName(name);
-    }
-
-    @Override
-    public Optional<Role> getByUserId(Long userId) {
-        return roleDAO.getByUserId(userId);
+        return roleDao.getByName(name);
     }
 }

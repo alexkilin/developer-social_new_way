@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,47 +22,55 @@ public class AudioDtoServiceImpl implements AudioDtoService {
     }
 
     @Override
+    @Transactional
     public List<AudioDto> getAudioOfAuthor(String author, int currentPage, int itemsOnPage) {
-
         return audioDtoDao.getAudioOfAuthor(author, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<AudioDto> getAudioOfName(String name, int currentPage, int itemsOnPage) {
         return audioDtoDao.getAudioOfName(name, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<AudioDto> getAudioOfAlbum(String album, int currentPage, int itemsOnPage) {
         return audioDtoDao.getAudioOfAlbum(album, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<AudioDto> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage) {
         return audioDtoDao.getPartAudioOfUser(userId,currentPage,itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<AudioDto> getAuthorAudioOfUser(Long userId, String author, int currentPage, int itemsOnPage) {
         return audioDtoDao.getAuthorAudioOfUser(userId, author, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<AudioDto> getAlbumAudioOfUser(Long userId, String album, int currentPage, int itemsOnPage) {
         return audioDtoDao.getAlbumAudioOfUser(userId, album, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<AudioDto> getAudioFromAlbumOfUser(Long albumId, int currentPage, int itemsOnPage) {
         return audioDtoDao.getAudioFromAlbumOfUser(albumId, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<AudioDto> getAudioFromPlaylist(Long playlistId, int currentPage, int itemsOnPage) {
         return audioDtoDao.getAudioFromPlaylist(playlistId, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
         return audioDtoDao.getPartAudio(currentPage, itemsOnPage);
     }

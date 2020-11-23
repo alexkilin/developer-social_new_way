@@ -5,6 +5,7 @@ import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudi
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumAudioDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class AlbumAudioDtoServiceImpl implements AlbumAudioDtoService {
     }
 
     @Override
+    @Transactional
     public List<AlbumAudioDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
         return albumAudioDtoDao.getAllByUserId(userId, currentPage, itemsOnPage);
     }

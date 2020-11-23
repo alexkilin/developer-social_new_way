@@ -6,7 +6,6 @@ import com.javamentor.developer.social.platform.service.abstracts.GenericService
 import java.util.Optional;
 
 public interface RoleService extends GenericService<Role, Long> {
-    Optional<Role> getByRoleName(String role);
 
-    Optional<Role> getByUserId(Long userId);
+    Optional<Role> getByRoleName(String role);
 }

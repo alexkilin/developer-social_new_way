@@ -7,13 +7,13 @@ import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserDtoServiceImpl implements UserDtoService {
-
     private final UserDtoDao userDtoDao;
 
     @Autowired
@@ -22,11 +22,13 @@ public class UserDtoServiceImpl implements UserDtoService {
     }
 
     @Override
+    @Transactional
     public List<UserDto> getAllUserDto(int currentPage, int itemsOnPage) {
         return userDtoDao.getUserDtoList(currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public Optional<UserDto> getUserDtoById(Long id) {
         Optional<UserDto> userDto = userDtoDao.getUserDtoById(id);
         if (userDto.isPresent()) {
@@ -38,6 +40,7 @@ public class UserDtoServiceImpl implements UserDtoService {
     }
 
     @Override
+    @Transactional
     public List<UserFriendDto> getUserFriendsDtoById(Long id, int currentPage, int itemsOnPage) {
         return userDtoDao.getUserFriendsDtoById(id, currentPage, itemsOnPage);
     }

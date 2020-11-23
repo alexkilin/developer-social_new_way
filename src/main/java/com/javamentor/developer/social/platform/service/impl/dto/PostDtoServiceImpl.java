@@ -8,6 +8,7 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoSer
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,36 +25,43 @@ public class PostDtoServiceImpl implements PostDtoService {
     }
 
     @Override
+    @Transactional
     public List<PostDto> getPostsByTag(String tagText, Long userPrincipalId, int currentPage, int itemsOnPage) {
         return postDtoDao.getPostsByTag(tagText, userPrincipalId, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<PostDto> getPostById(Long postId, Long userPrincipalId) {
         return postDtoDao.getPostById(postId, userPrincipalId);
     }
 
     @Override
+    @Transactional
     public List<PostDto> getPostsByUserId(Long id, Long userPrincipalId, int currentPage, int itemsOnPage) {
         return postDtoDao.getPostsByUserId(id, userPrincipalId, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<PostDto> getAllBookmarkedPosts(Long userPrincipalId, int currentPage, int itemsOnPage) {
         return postDtoDao.getAllBookmarkedPosts(userPrincipalId, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<CommentDto> getCommentsByPostId(Long id, int currentPage, int itemsOnPage) {
         return postDtoDao.getCommentsByPostId(id, currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<TagDto> getAllTags(int currentPage, int itemsOnPage) {
         return postDtoDao.getAllTags(currentPage, itemsOnPage);
     }
 
     @Override
+    @Transactional
     public List<PostDto> getAllPosts(Long userPrincipalId, int currentPage, int itemsOnPage) {
         List<PostDto> postDtoList = postDtoDao.getAllPosts(userPrincipalId, currentPage, itemsOnPage);
         return postDtoList;

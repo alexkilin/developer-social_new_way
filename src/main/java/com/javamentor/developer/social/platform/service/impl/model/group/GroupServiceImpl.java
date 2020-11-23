@@ -8,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
 @Service
 public class GroupServiceImpl extends GenericServiceAbstract<Group, Long> implements GroupService {
 
@@ -22,6 +19,7 @@ public class GroupServiceImpl extends GenericServiceAbstract<Group, Long> implem
         this.groupDao = groupDao;
     }
 
+    @Override
     @Transactional
     public void updateInfo(Group group) {
         groupDao.updateInfo(group);
