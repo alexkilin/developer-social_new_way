@@ -17,7 +17,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumImageConverter;
 import com.javamentor.developer.social.platform.webapp.converters.ImageConverter;
 import io.swagger.annotations.*;
@@ -34,7 +33,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 
 @RestController
 @Validated
@@ -109,7 +107,7 @@ public class ImageControllerV2 {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
         logger.info(String.format("Изображение %s получено", imageId));
-        return ResponseEntity.status(HttpStatus.OK).body(optional.get());
+        return ResponseEntity.ok().body(optional.get());
     }
 
     @ApiOperation(value = "Получить все изображения по Id пользователя")
@@ -125,7 +123,7 @@ public class ImageControllerV2 {
         }
         List<ImageDto> imageDtoList = imageDTOService.getAllByUserId(offset, limit, userId);
         logger.info(String.format("Отправлен список пустой или с изображениями пользователя с id: %s", userId));
-        return ResponseEntity.status(HttpStatus.OK).body(imageDtoList);
+        return ResponseEntity.ok().body(imageDtoList);
     }
 
     @ApiOperation(value = "Создать фотоальбом")
@@ -269,7 +267,7 @@ public class ImageControllerV2 {
         }
         List<AlbumImageDto> albumDtoList = albumImageDtoService.getAllByUserId(userId);
         logger.info(String.format("Отправлен список пустой или с альбомами пользователя с id: %s", userId));
-        return ResponseEntity.status(HttpStatus.OK).body(albumDtoList);
+        return ResponseEntity.ok().body(albumDtoList);
     }
 
 }

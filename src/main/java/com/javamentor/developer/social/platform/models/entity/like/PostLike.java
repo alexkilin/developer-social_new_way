@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.models.entity.like;
 
-
 import com.javamentor.developer.social.platform.exception.ApiRequestException;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.user.User;

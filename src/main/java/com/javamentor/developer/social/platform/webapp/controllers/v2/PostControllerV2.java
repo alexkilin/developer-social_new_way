@@ -35,7 +35,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
 @RequestMapping(value = "/api/v2", produces = "application/json;charset=UTF-8")
 @Api(value = "PostApi-v2", description = "Операции над постами пользователя")
@@ -141,9 +140,8 @@ public class PostControllerV2 {
             Post post = result.get();
             userTabsService.deletePost(post);
             return ResponseEntity.ok().body(String.format("Deleted Post with ID %d, is successful", id));
-        } else {
-            return ResponseEntity.badRequest().body(String.format("Can't find Post with ID %d", id));
         }
+        return ResponseEntity.badRequest().body(String.format("Can't find Post with ID %d", id));
     }
 
     @ApiOperation(value = "Получение всех комментариев поста по id поста")
@@ -183,6 +181,12 @@ public class PostControllerV2 {
     public ResponseEntity<?> addLikeToPost(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
         User user = userService.getPrincipal();
+
+        Optional<PostLike> optionalPostLike = postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
+        if (optionalPostLike.isPresent()) {
+            return ResponseEntity.badRequest().body("The Like has already been added");
+        }
+
         Post post = Post.builder().id(postId).build();
         PostLike postLike = new PostLike(user);
         likeService.create(postLike.getLike());
@@ -203,9 +207,11 @@ public class PostControllerV2 {
         User user = userService.getPrincipal();
         Optional<PostLike> optionalLike =
                 postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
+
         if(!optionalLike.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The Like has already been deleted");
+            return ResponseEntity.badRequest().body("The Like already been removed");
         }
+
         PostLike postLike = optionalLike.get();
         postLikeService.delete(postLike);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -220,6 +226,12 @@ public class PostControllerV2 {
     public ResponseEntity<?> addPostToBookmark(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
         User user = userService.getPrincipal();
+
+        Optional<Bookmark> optionalBookmark = bookmarkService.getBookmarkByPostIdAndUserId(postId, user.getUserId());
+        if(optionalBookmark.isPresent()) {
+            return ResponseEntity.badRequest().body("The Post has already been added to the bookmark");
+        }
+
         Post post = Post.builder().id(postId).build();
         Bookmark bookmark = Bookmark.builder().user(user).post(post).build();
         bookmarkService.create(bookmark);
@@ -235,6 +247,12 @@ public class PostControllerV2 {
     public ResponseEntity<?> deletePostFromBookmark(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
         User user = userService.getPrincipal();
+
+        Optional<Bookmark> optionalBookmark = bookmarkService.getBookmarkByPostIdAndUserId(postId, user.getUserId());
+        if(!optionalBookmark.isPresent()) {
+            return ResponseEntity.badRequest().body("The Post has already been removed from the bookmark");
+        }
+
         bookmarkService.deleteBookmarkByPostIdAndUserId(postId, user.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId, user.getUserId()));

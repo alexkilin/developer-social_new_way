@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.models.entity.user;
 
-
 import lombok.*;
 
 import javax.persistence.*;

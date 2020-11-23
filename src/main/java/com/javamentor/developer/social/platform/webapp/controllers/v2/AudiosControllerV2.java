@@ -204,9 +204,13 @@ public class AudiosControllerV2 {
         if (!albumAudiosOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album id %s not found", albumId));
         }
+        Optional<Audios> audiosOptional = audiosService.getById(audioId);
+        if (!audiosOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Audio id %s not found", audioId));
+        }
         AlbumAudios albumAudios = albumAudiosOptional.get();
         Set<Audios> audiosSet = albumAudios.getAudios();
-        audiosSet.add(audiosService.getById(audioId).get());
+        audiosSet.add(audiosOptional.get());
         albumAudios.setAudios(audiosSet);
         albumAudioService.create(albumAudios);
         return ResponseEntity.ok().body(String.format("Audio id %s added to album id %s", audioId, albumId));
@@ -321,7 +325,7 @@ public class AudiosControllerV2 {
         }
         Playlist playlist = playlistOptional.get();
         if (!playlist.addAudio(audiosOptional.get())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("This playlist already contains audio with id %s", audioId));
+            return ResponseEntity.badRequest().body(String.format("This playlist already contains audio with id %s", audioId));
         }
         playlistService.update(playlist);
         logger.info(String.format("Аудио %s добавлено в плейлист %s", audioId, playlistId));
@@ -346,7 +350,7 @@ public class AudiosControllerV2 {
         }
         Playlist playlist = playlistOptional.get();
         if (!playlist.removeAudio(audiosOptional.get())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("This playlist has no audio with id %s", audioId));
+            return ResponseEntity.badRequest().body(String.format("This playlist has no audio with id %s", audioId));
         }
         playlistService.update(playlist);
         logger.info(String.format("Аудио %s удалено из плейлиста %s", audioId, playlistId));

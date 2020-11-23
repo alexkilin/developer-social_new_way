@@ -1,5 +1,5 @@
 friends:
-  - id: 1
+  - id: 5
     user_user_id: 2
     friend_user_id: 6
 
