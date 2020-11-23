@@ -154,14 +154,9 @@ public class AudiosControllerV2 {
     public ResponseEntity<?> addAudioInCollectionsOfUser(@ApiParam(value = "Id аудио", example = "71") @RequestParam("audioId") Long audioId) {
 
         User user = userService.getPrincipal();
-        try {
-            audiosService.addAudioInCollectionsOfUser(user, audioId);
-            logger.info(String.format("Аудио id %s добавлено в коллекцию пользователя id %s", audioId, user.getUserId()));
-            return ResponseEntity.ok().body(String.format("Audio id %s added to collection of user id %s", audioId, user.getUserId()));
-        }
-        catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Audio id %s not found", audioId));
-        }
+        audiosService.addAudioInCollectionsOfUser(user, audioId);
+        logger.info(String.format("Аудио id %s добавлено в коллекцию пользователя id %s", audioId, user.getUserId()));
+        return ResponseEntity.ok().body(String.format("Audio id %s added to collection of user id %s", audioId, user.getUserId()));
     }
 
 

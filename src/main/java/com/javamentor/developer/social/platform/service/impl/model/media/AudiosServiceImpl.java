@@ -31,7 +31,7 @@ public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> impl
     public void addAudioInCollectionsOfUser(User user, Long audioId) {
         Optional<Audios> audios = audiosDao.getById(audioId);
         if(!audios.isPresent()){
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Audio with id " + audioId + " not found");
         }
         Set<Audios> set = user.getAudios();
         set.add(audios.get());
