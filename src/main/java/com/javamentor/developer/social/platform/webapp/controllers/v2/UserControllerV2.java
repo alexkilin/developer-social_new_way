@@ -124,12 +124,15 @@ public class UserControllerV2 {
     public ResponseEntity<?> updateUserPassword(
             @ApiParam(value = "Id пользователя") @PathVariable Long id,
             @ApiParam(value = "Новый пароль") @Valid @RequestBody UserResetPasswordDto userResetPasswordDto) {
-        if (!userService.existById(id)) {
+        Optional<User> optionalUser = userService.getById(id);
+        if (!optionalUser.isPresent()) {
             logger.info(String.format("Пользователь с ID: %d не существует", id));
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(String.format("User with ID: %d does not exist.", id));
         }
-        userService.setPassword(userResetPasswordDto, id);
+        User user = optionalUser.get();
+        user.setPassword(userResetPasswordDto.getPassword());
+        userService.updateUserPassword(user);
         logger.info(String.format("Пароль пользователя %d изменен", id));
         return ResponseEntity.ok()
                 .body(String.format("Password changed for user %d", id));
@@ -154,7 +157,7 @@ public class UserControllerV2 {
     @ApiOperation(value = "Получение списка друзей пользователя по id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = UserFriendDto.class),
-            @ApiResponse(code = 400, message = "Пользователя с таким id не существует", response = String.class)
+            @ApiResponse(code = 404, message = "Пользователя с таким id не существует", response = String.class)
     })
     @GetMapping("/{id}/friends")
     public ResponseEntity<?> getUserFriends(

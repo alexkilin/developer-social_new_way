@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class BookmarkServiceImpl extends GenericServiceAbstract<Bookmark, Long> implements BookmarkService {
 
@@ -24,5 +26,10 @@ public class BookmarkServiceImpl extends GenericServiceAbstract<Bookmark, Long> 
     @Transactional
     public void deleteBookmarkByPostIdAndUserId(Long postId, Long userId) {
         bookmarkDao.deleteBookmarkByPostIdAndUserId(postId, userId);
+    }
+
+    @Override
+    public Optional<Bookmark> getBookmarkByPostIdAndUserId(Long postId, Long userId) {
+        return bookmarkDao.getBookmarkByPostIdAndUserId(postId, userId);
     }
 }

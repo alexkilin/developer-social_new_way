@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.service.abstracts.model.user;
 
-import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.GenericService;
 
@@ -15,7 +14,7 @@ public interface UserService extends GenericService<User, Long> {
 
     boolean existByEmail(String email);
 
-    void setPassword(UserResetPasswordDto userResetPasswordDto, Long userId);
+    void updateUserPassword(User user);
 
     void updateInfo(User user);
 
