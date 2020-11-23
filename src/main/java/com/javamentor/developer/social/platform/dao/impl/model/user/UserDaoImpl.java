@@ -84,4 +84,15 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
 
     }
 
+    @Override
+    public void updateUserPassword(User user) {
+        Query query = entityManager.createQuery(
+                "UPDATE User u SET " +
+                        "u.password = :password" +
+                        " WHERE u.userId = :id");
+        query.setParameter("password", user.getPassword());
+        query.setParameter("id", user.getUserId());
+        query.executeUpdate();
+    }
+
 }

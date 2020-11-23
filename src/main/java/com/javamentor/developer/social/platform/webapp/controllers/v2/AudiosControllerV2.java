@@ -202,7 +202,6 @@ public class AudiosControllerV2 {
     @PutMapping(value = "/user/{userId}/audio", params = {"audioId"})
     public ResponseEntity<?> addAudioInCollectionsOfUser(@ApiParam(value = "Id аудио", example = "71") @RequestParam("audioId") Long audioId,
                                                          @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
-        //User user = userService.getById(userId);
         Optional<User> user = userService.getById(userId);
         if (!user.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User id %s not found", userId));
@@ -211,9 +210,8 @@ public class AudiosControllerV2 {
             userService.update(user.get());
             logger.info(String.format("Аудио id %s добавлено в коллекцию пользователя id %s", audioId, userId));
             return ResponseEntity.ok().body(String.format("Audio id %s added to collection of user id %s", audioId, userId));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Audio id %s not found", audioId));
         }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Audio id %s not found", audioId));
     }
 
 
@@ -264,9 +262,13 @@ public class AudiosControllerV2 {
         if (!albumAudiosOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album id %s not found", albumId));
         }
+        Optional<Audios> audiosOptional = audiosService.getById(audioId);
+        if (!audiosOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Audio id %s not found", audioId));
+        }
         AlbumAudios albumAudios = albumAudiosOptional.get();
         Set<Audios> audiosSet = albumAudios.getAudios();
-        audiosSet.add(audiosService.getById(audioId).get());
+        audiosSet.add(audiosOptional.get());
         albumAudios.setAudios(audiosSet);
         albumAudioService.create(albumAudios);
         return ResponseEntity.ok().body(String.format("Audio id %s added to album id %s", audioId, albumId));
@@ -316,7 +318,7 @@ public class AudiosControllerV2 {
     public ResponseEntity<?> createPlaylist(@ApiParam(value = "Объект нового плейлиста") @RequestBody @NotNull @Valid PlaylistCreateDto playlistCreateDto,
                                             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         if (!userService.getById(userId).isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user does not exist");
+            return ResponseEntity.badRequest().body("The user does not exist");
         }
 
         String playlistName = playlistCreateDto.getName();
@@ -394,7 +396,7 @@ public class AudiosControllerV2 {
         }
         Playlist playlist = playlistOptional.get();
         if (!playlist.addAudio(audiosOptional.get())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("This playlist already contains audio with id %s", audioId));
+            return ResponseEntity.badRequest().body(String.format("This playlist already contains audio with id %s", audioId));
         }
         playlistService.update(playlist);
         logger.info(String.format("Аудио %s добавлено в плейлист %s", audioId, playlistId));
@@ -419,7 +421,7 @@ public class AudiosControllerV2 {
         }
         Playlist playlist = playlistOptional.get();
         if (!playlist.removeAudio(audiosOptional.get())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("This playlist has no audio with id %s", audioId));
+            return ResponseEntity.badRequest().body(String.format("This playlist has no audio with id %s", audioId));
         }
         playlistService.update(playlist);
         logger.info(String.format("Аудио %s удалено из плейлиста %s", audioId, playlistId));

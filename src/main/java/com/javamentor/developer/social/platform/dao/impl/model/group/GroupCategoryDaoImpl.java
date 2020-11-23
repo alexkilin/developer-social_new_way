@@ -4,7 +4,6 @@ import com.javamentor.developer.social.platform.dao.abstracts.model.group.GroupC
 import com.javamentor.developer.social.platform.dao.impl.GenericDaoAbstract;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.group.GroupCategory;
-import com.javamentor.developer.social.platform.models.entity.user.Role;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

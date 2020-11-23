@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
+import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
@@ -31,7 +32,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.*;
-
 
 @RestController
 @Validated
@@ -109,7 +109,7 @@ public class ImageControllerV2 {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found", imageId));
         }
         logger.info(String.format("Изображение %s получено", imageId));
-        return ResponseEntity.status(HttpStatus.OK).body(optional.get());
+        return ResponseEntity.ok().body(optional.get());
     }
 
     @ApiOperation(value = "Получить все изображения по Id пользователя")
