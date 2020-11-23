@@ -131,16 +131,16 @@ public class GroupControllerV2 {
                                                     @RequestParam("userId") @NonNull Long userId) {
         if (groupHasUserService.verificationUserInGroup(groupId,userId)) {
             return ResponseEntity.ok()
-                    .body(String.format("Пользователь с id: %d уже есть в группе с id: %s", userId, groupId));
+                    .body(String.format("User with id: %d already a member of the group with id: %s", userId, groupId));
         }
         Optional <User> user = userService.getById(userId);
         Optional <Group> group = groupService.getById(groupId);
         if (user.isPresent() && group.isPresent()) {
             groupHasUserService.setUserIntoGroup(user.get(), group.get());
-            return ResponseEntity.ok().body(String.format("Пользователь с id: %d добавлен в группу с id: %s", userId, groupId));
+            return ResponseEntity.ok().body(String.format("User with id: %d added to the group with id: %s", userId, groupId));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId));
+                .body(String.format("User with id: %d or/and group with id: %s not found", userId, groupId));
     }
 
     @ApiOperation(value = "Есть ли пользователь в группе")
@@ -155,7 +155,7 @@ public class GroupControllerV2 {
                                               @RequestParam("userId") @NonNull Long userId) {
         if (!(userService.existById(userId) && groupService.existById(groupId))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(String.format("Пользователь с id: %d и/или группа с id: %s не найдены", userId, groupId));
+                    .body(String.format("User with id: %d or/and group with id: %s not found", userId, groupId));
         }
         return ResponseEntity.ok(groupHasUserConverter.toGroupHasUserInfoDto(groupId, groupHasUserService.verificationUserInGroup(groupId,userId)));
     }
@@ -172,10 +172,10 @@ public class GroupControllerV2 {
                                                 @RequestParam("userId") @NonNull Long userId){
         if (groupHasUserService.verificationUserInGroup(groupId, userId)) {
             groupHasUserService.deleteUserById(groupId, userId);
-            return ResponseEntity.ok().body(String.format("Пользователь с id: %d удален из группы с id: %s", userId, groupId));
+            return ResponseEntity.ok().body(String.format("User with id: %d is no longer a member of the group with id: %s", userId, groupId));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(String.format("Пользователь с id %s не состоит в группе", userId));
+                .body(String.format("User with id %s is not a member of a group", userId));
     }
 
     @ApiOperation(value = "Изменение группы")
@@ -188,7 +188,7 @@ public class GroupControllerV2 {
                                              @Valid @RequestBody GroupUpdateInfoDto groupUpdateInfoDto) {
         if (!groupService.existById(groupUpdateInfoDto.getId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(String.format("Группа с id %s не найдена", groupUpdateInfoDto.getId()));
+                    .body(String.format("Group with id %s not found", groupUpdateInfoDto.getId()));
         }
         Group group = groupConverter.groupUpdateInfoDtoToGroup(groupUpdateInfoDto);
         groupService.updateInfo(group);

@@ -1,9 +1,0 @@
-album_has_video:
-  - album_id: 1
-    videos_id: 1
-
-  - album_id: 1
-    videos_id: 2
-
-  - album_id: 2
-    videos_id: 3
