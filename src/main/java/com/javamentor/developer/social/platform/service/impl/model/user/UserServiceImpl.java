@@ -9,7 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -70,17 +73,9 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
 
     @Override
     @Transactional
-    public void updateInfo(User user) {
-        Optional<User> userOld = userDao.getById(user.getUserId());
-        userDao.updateInfo(user);
-        user.setPassword(userOld.get().getPassword());
-        user.setRole(userOld.get().getRole());
-        user.setActive(userOld.get().getActive());
-        user.setIsEnable(userOld.get().getIsEnable());
-        user.setLanguages(userOld.get().getLanguages());
-        user.setPersistDate(userOld.get().getPersistDate());
-        user.setLastRedactionDate(userOld.get().getLastRedactionDate());
-        user.setStatus(userOld.get().getStatus());
+    public void updateInfo(User user, User userOld) {
+        initializingNullFieldsOfUser(user, userOld);
+        user.setLastRedactionDate(LocalDateTime.now());
         userDao.update(user);
     }
 
@@ -89,5 +84,20 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     public User getPrincipal() {
         Optional <User> optionalUser = userDao.getById(65L);
         return optionalUser.orElse(null);
+    }
+
+    private void initializingNullFieldsOfUser(User user, User userOld) {
+        try {
+            Field[] fields = Class.forName(User.class.getName()).getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                if (Objects.isNull(field.get(user))) {
+                    field.set(user, field.get(userOld));
+                }
+                field.setAccessible(false);
+            }
+        } catch (ClassNotFoundException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

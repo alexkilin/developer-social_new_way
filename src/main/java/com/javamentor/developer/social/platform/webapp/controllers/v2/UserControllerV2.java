@@ -97,16 +97,17 @@ public class UserControllerV2 {
             @ApiResponse(code = 400, message = "E-mail занят другим пользователем", response = String.class),
             @ApiResponse(code = 404, message = "Пользователь не обновлен из-за несоответствия id", response = String.class)
     })
-    @PutMapping("")
+    @PutMapping
     @Validated(OnUpdate.class)
     public ResponseEntity<?> updateUserInfo(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserUpdateInfoDto userUpdateInfoDto) {
-        if (userService.existById(userUpdateInfoDto.getUserId())) {
+        Optional<User> optionalUser = userService.getById(userUpdateInfoDto.getUserId());
+        if (optionalUser.isPresent()) {
             if (userService.existsAnotherByEmail(userUpdateInfoDto.getEmail(), userUpdateInfoDto.getUserId())) {
                 logger.info(String.format("Пользователь с email: %s уже существует", userUpdateInfoDto.getEmail()));
                 return ResponseEntity.badRequest().body(String.format("User with email: %s already exist. Email should be unique", userUpdateInfoDto.getEmail()));
             }
             User user = userConverter.toEntity(userUpdateInfoDto);
-            userService.updateInfo(user);
+            userService.updateInfo(user, optionalUser.get());
             logger.info(String.format("Пользователь с ID: %d обновлён успешно", userUpdateInfoDto.getUserId()));
             return ResponseEntity.ok(userConverter.toDto(user));
         }
