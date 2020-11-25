@@ -1,22 +1,23 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto;
 
-import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface GroupDtoService {
 
-    List<GroupInfoDto> getAllGroups(int page, int size);
+    PageDto<GroupInfoDto, ?> getAllGroups(Map<String, Object> parameters);
 
     Optional<GroupDto> getGroupById(Long id);
 
-    List<GroupWallDto> getPostsByGroupId(Long id, int page, int size);
+    PageDto<GroupWallDto, ?> getPostsByGroupId(Map<String, Object> parameters);
 
     Optional<GroupDto> getGroupByName(String name);
 
-    List<UserDto> getUsersFromTheGroup(Long id, int page, int size);
+    PageDto<UserDto, ?> getUsersFromTheGroup(Map<String, Object> parameters);
 }

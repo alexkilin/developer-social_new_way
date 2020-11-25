@@ -1,34 +1,33 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
-import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
-import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.GroupPaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class GroupDtoServiceImpl implements GroupDtoService {
+public class GroupDtoServiceImpl extends GroupPaginationService implements GroupDtoService {
     private final GroupDtoDao groupDtoDao;
-    private final PostDtoDao postDtoDao;
 
     @Autowired
-    public GroupDtoServiceImpl(GroupDtoDao groupDtoDao, PostDtoDao postDtoDao) {
+    public GroupDtoServiceImpl(GroupDtoDao groupDtoDao) {
         this.groupDtoDao = groupDtoDao;
-        this.postDtoDao = postDtoDao;
     }
 
     @Override
     @Transactional
-    public List<GroupInfoDto> getAllGroups(int currentPage, int itemsOnPage) {
-        return groupDtoDao.getAllGroups(currentPage, itemsOnPage);
+    public PageDto<GroupInfoDto, ?> getAllGroups(Map<String, Object> parameters) {
+        return super.getPageDto("getAllGroups", parameters);
     }
 
     @Override
@@ -39,8 +38,8 @@ public class GroupDtoServiceImpl implements GroupDtoService {
 
     @Override
     @Transactional
-    public List<GroupWallDto> getPostsByGroupId(Long id, int currentPage, int itemsOnPage) {
-        return groupDtoDao.getPostsByGroupId(id, currentPage, itemsOnPage);
+    public PageDto<GroupWallDto, ?> getPostsByGroupId(Map<String, Object> parameters) {
+        return super.getGroupPageDto("showGroupWall", parameters);
     }
 
     @Override
@@ -51,7 +50,7 @@ public class GroupDtoServiceImpl implements GroupDtoService {
 
     @Override
     @Transactional
-    public List<UserDto> getUsersFromTheGroup(Long id, int currentPage, int itemsOnPage) {
-        return groupDtoDao.getUsersFromTheGroup(id, currentPage, itemsOnPage);
+    public PageDto<UserDto, ?> getUsersFromTheGroup(Map<String, Object> parameters) {
+        return super.getPageDto("getUsersFromTheGroup", parameters);
     }
 }

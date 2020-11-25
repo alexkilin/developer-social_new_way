@@ -15,7 +15,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumVideoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PageDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumVideoConverter;
 import com.javamentor.developer.social.platform.webapp.converters.VideoConverter;
 import io.swagger.annotations.*;
@@ -46,14 +46,12 @@ public class VideosControllerV2 {
     private final AlbumVideoService albumVideoService;
     private final AlbumVideoConverter albumVideoConverter;
     private final AlbumVideoDtoService albumVideoDtoService;
-    private final PageDtoService pageDtoService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public VideosControllerV2(VideosService videosService, VideoConverter videoConverter, VideoDtoService videoDtoService,
                               UserService userService, AlbumService albumService, AlbumVideoService albumVideoService,
-                              AlbumVideoConverter albumVideoConverter, AlbumVideoDtoService albumVideoDtoService,
-                              PageDtoService pageDtoService) {
+                              AlbumVideoConverter albumVideoConverter, AlbumVideoDtoService albumVideoDtoService) {
         this.videosService = videosService;
         this.videoConverter = videoConverter;
         this.videoDtoService = videoDtoService;
@@ -62,7 +60,6 @@ public class VideosControllerV2 {
         this.albumVideoService = albumVideoService;
         this.albumVideoConverter = albumVideoConverter;
         this.albumVideoDtoService = albumVideoDtoService;
-        this.pageDtoService = pageDtoService;
     }
 
     @ApiOperation(value = "Получение некоторого количества видео")
@@ -72,11 +69,10 @@ public class VideosControllerV2 {
     public ResponseEntity<PageDto<VideoDto, ?>> getPartVideos(@ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
                                                            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("methodName", "getPartVideos");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Видео начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(videoDtoService.getPartVideo(parameters));
     }
 
     @ApiOperation(value = "Получение видео по названию")
@@ -100,11 +96,10 @@ public class VideosControllerV2 {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
-        parameters.put("methodName", "getPartVideoOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Видео пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(videoDtoService.getPartVideoOfUser(parameters));
     }
 
     @ApiOperation(value = "Добавление видео для пользователя")
@@ -183,11 +178,10 @@ public class VideosControllerV2 {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
-        parameters.put("methodName", "getAllVideoAlbums");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Получение всех альбомов пользователя с id %s", userId));
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(albumVideoDtoService.getAllByUserId(parameters));
     }
 
     @ApiOperation(value = "Получение всех видео из альбома ")
@@ -200,11 +194,10 @@ public class VideosControllerV2 {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("albumId", albumId);
-        parameters.put("methodName", "getVideoFromAlbumOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Все видео из альбома с id:%s отправлено", albumId));
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(videoDtoService.getVideoFromAlbumOfUser(parameters));
     }
 
     @ApiOperation(value = "Получение видео пользователя по альбому")
@@ -219,10 +212,9 @@ public class VideosControllerV2 {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
         parameters.put("album", album);
-        parameters.put("methodName", "getAlbumVideoOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Отправка избранного видео пользователя c id %s альбома %s", userId, album));
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(videoDtoService.getAlbumVideoOfUser(parameters));
     }
 }

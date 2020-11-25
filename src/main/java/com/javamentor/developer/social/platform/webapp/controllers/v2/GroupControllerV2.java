@@ -9,7 +9,7 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoSe
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupHasUserService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PageDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.GroupConverter;
 import com.javamentor.developer.social.platform.webapp.converters.GroupHasUserConverter;
 import io.swagger.annotations.*;
@@ -34,20 +34,18 @@ public class GroupControllerV2 {
     private final UserService userService;
     private final GroupService groupService;
     private final GroupConverter groupConverter;
-    private final PageDtoService pageDtoService;
     private final GroupHasUserConverter groupHasUserConverter;
 
     @Autowired
     public GroupControllerV2(GroupDtoService groupDtoService,
                              GroupHasUserService groupHasUserService, UserService userService,
                              GroupService groupService, GroupConverter groupConverter,
-                             PageDtoService pageDtoService, GroupHasUserConverter groupHasUserConverter) {
+                             GroupHasUserConverter groupHasUserConverter) {
         this.groupDtoService = groupDtoService;
         this.groupHasUserService = groupHasUserService;
         this.userService = userService;
         this.groupService = groupService;
         this.groupConverter = groupConverter;
-        this.pageDtoService = pageDtoService;
         this.groupHasUserConverter = groupHasUserConverter;
     }
 
@@ -61,10 +59,9 @@ public class GroupControllerV2 {
             @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("methodName", "getAllGroups");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(groupDtoService.getAllGroups(parameters));
     }
 
     @ApiOperation(value = "Получение информации об одной группе")
@@ -95,10 +92,9 @@ public class GroupControllerV2 {
                                                                 @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("groupId", groupId);
-        parameters.put("methodName", "showGroupWall");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(groupDtoService.getPostsByGroupId(parameters));
     }
 
     @ApiOperation(value = "Получение группы по наименованию группы")
@@ -134,11 +130,10 @@ public class GroupControllerV2 {
         }
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("groupId", groupId);
-        parameters.put("methodName", "getUsersFromTheGroup");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
 
-        return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok(groupDtoService.getUsersFromTheGroup(parameters));
     }
 
     @ApiOperation(value = "Вступление в группу пользователя")

@@ -17,9 +17,9 @@ public interface PostDtoDao {
 
     List<CommentDto> getCommentsByPostId(Long postId, int currentPage, int itemsOnPage);
 
-    List<MediaPostDto> getMediasByPostId(Long postId);
+    List<MediaPostDto> getMediasByPostId(List<Long> postId);
 
-    List<TagDto> getTagsByPostId(Long postId);
+    List<TagDto> getTagsByPostId(List<Long> postId);
 
     List<PostDto> getPostsByUserId(Long userId, Long userPrincipalId, int currentPage, int itemsOnPage);
 

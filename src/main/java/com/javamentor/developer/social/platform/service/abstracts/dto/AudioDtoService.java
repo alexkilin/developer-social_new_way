@@ -1,26 +1,28 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto;
 
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AudioDtoService {
 
-    List<AudioDto> getAudioOfAuthor(String author, int currentPage, int itemsOnPage);
+    PageDto<AudioDto, ?> getAudioOfAuthor(Map<String, Object> parameters);
 
-    List<AudioDto> getAudioOfName(String name, int currentPage, int itemsOnPage);
+    PageDto<AudioDto, ?> getAudioOfName(Map<String, Object> parameters);
 
-    List<AudioDto> getAudioOfAlbum(String album, int currentPage, int itemsOnPage);
+    PageDto<AudioDto, ?> getAudioOfAlbum(Map<String, Object> parameters);
 
-    List<AudioDto> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage);
+    PageDto<AudioDto, ?> getPartAudioOfUser(Map<String, Object> parameters);
 
-    List<AudioDto> getAuthorAudioOfUser(Long userId, String author, int currentPage, int itemsOnPage);
+    PageDto<AudioDto, ?> getAuthorAudioOfUser(Map<String, Object> parameters);
 
-    List<AudioDto> getAlbumAudioOfUser(Long userId, String album, int currentPage, int itemsOnPage);
+    PageDto<AudioDto, ?> getAlbumAudioOfUser(Map<String, Object> parameters);
 
-    List<AudioDto> getAudioFromAlbumOfUser(Long albumId, int currentPage, int itemsOnPage);
+    PageDto<AudioDto, ?> getAudioFromAlbumOfUser(Map<String, Object> parameters);
 
-    List<AudioDto> getAudioFromPlaylist(Long playlistId, int currentPage, int itemsOnPage);
+    PageDto<AudioDto, ?> getAudioFromPlaylist(Map<String, Object> parameters);
 
-    List<AudioDto> getPartAudio(int currentPage, int itemsOnPage);
+    PageDto<AudioDto, ?> getPartAudio(Map<String, Object> parameters);
 }

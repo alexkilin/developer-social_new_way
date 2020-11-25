@@ -2,15 +2,17 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumImageDtoDao;
 import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumImageDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Map;
 
 @Service
-public class AlbumImageDtoServiceImpl implements AlbumImageDtoService {
+public class AlbumImageDtoServiceImpl extends PaginationService implements AlbumImageDtoService {
 
     private final AlbumImageDtoDao albumImageDtoDao;
 
@@ -21,8 +23,8 @@ public class AlbumImageDtoServiceImpl implements AlbumImageDtoService {
 
     @Override
     @Transactional
-    public List<AlbumImageDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
-        return albumImageDtoDao.getAllByUserId(userId, currentPage, itemsOnPage);
+    public PageDto<AlbumImageDto, ?> getAllByUserId(Map<String, Object> parameters) {
+        return super.getPageDto("getAllImageAlbumsOfUser", parameters);
     }
 
 }

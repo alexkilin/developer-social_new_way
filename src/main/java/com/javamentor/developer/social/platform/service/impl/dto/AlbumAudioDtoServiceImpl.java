@@ -2,15 +2,17 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumAudioDtoDao;
 import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudioDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumAudioDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Map;
 
 @Service
-public class AlbumAudioDtoServiceImpl implements AlbumAudioDtoService {
+public class AlbumAudioDtoServiceImpl extends PaginationService implements AlbumAudioDtoService {
 
     private final AlbumAudioDtoDao albumAudioDtoDao;
 
@@ -21,8 +23,8 @@ public class AlbumAudioDtoServiceImpl implements AlbumAudioDtoService {
 
     @Override
     @Transactional
-    public List<AlbumAudioDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
-        return albumAudioDtoDao.getAllByUserId(userId, currentPage, itemsOnPage);
+    public PageDto<AlbumAudioDto, ?> getAllByUserId(Map<String, Object> parameters) {
+        return super.getPageDto("getAllAlbumAudio", parameters);
     }
 
 }

@@ -8,7 +8,7 @@ import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PageDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
@@ -38,16 +38,15 @@ public class UserControllerV2 {
     private final UserDtoService userDtoService;
     private final UserService userService;
     private final UserConverter userConverter;
-    private final PageDtoService pageDtoService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserControllerV2(UserDtoService userDtoService, UserService userService, UserConverter userConverter, PageDtoService pageDtoService) {
+    public UserControllerV2(UserDtoService userDtoService, UserService userService,
+                            UserConverter userConverter) {
         this.userDtoService = userDtoService;
         this.userService = userService;
         this.userConverter = userConverter;
-        this.pageDtoService = pageDtoService;
     }
 
 
@@ -77,10 +76,9 @@ public class UserControllerV2 {
                                                         @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info("Получен список пользователей");
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("methodName", "getAllUsers");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok(userDtoService.getAllUserDto(parameters));
     }
 
     @ApiOperation(value = "Создание пользователя")
@@ -88,7 +86,7 @@ public class UserControllerV2 {
             @ApiResponse(code = 200, message = "Пользователь создан", response = UserRegisterDto.class),
             @ApiResponse(code = 400, message = "Пользователь с данным email существует. Email должен быть уникальным", response = String.class)
     })
-    @PostMapping("")
+    @PostMapping
     @Validated(OnCreate.class)
     public ResponseEntity<?> createUser(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserRegisterDto userRegisterDto) {
         if (userService.existByEmail(userRegisterDto.getEmail())) {
@@ -107,7 +105,7 @@ public class UserControllerV2 {
             @ApiResponse(code = 400, message = "E-mail занят другим пользователем", response = String.class),
             @ApiResponse(code = 404, message = "Пользователь не обновлен из-за несоответствия id", response = String.class)
     })
-    @PutMapping("")
+    @PutMapping
     @Validated(OnUpdate.class)
     public ResponseEntity<?> updateUserInfo(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserUpdateInfoDto userUpdateInfoDto) {
         if (userService.existById(userUpdateInfoDto.getUserId())) {
@@ -178,12 +176,11 @@ public class UserControllerV2 {
 
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("userId", userId);
-            parameters.put("methodName", "getUserFriends");
             parameters.put("currentPage", currentPage);
             parameters.put("itemsOnPage", itemsOnPage);
 
             logger.info("Получен список друзей пользователя");
-            return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
+            return ResponseEntity.ok(userDtoService.getUserFriendsDtoById(parameters));
         }
             logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));

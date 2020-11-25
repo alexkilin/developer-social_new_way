@@ -4,16 +4,19 @@ import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PostPaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class PostDtoServiceImpl implements PostDtoService {
+public class PostDtoServiceImpl extends PostPaginationService implements PostDtoService {
 
     private final PostDtoDao postDtoDao;
     private final UserService userService;
@@ -26,8 +29,8 @@ public class PostDtoServiceImpl implements PostDtoService {
 
     @Override
     @Transactional
-    public List<PostDto> getPostsByTag(String tagText, Long userPrincipalId, int currentPage, int itemsOnPage) {
-        return postDtoDao.getPostsByTag(tagText, userPrincipalId, currentPage, itemsOnPage);
+    public PageDto<PostDto, ?> getPostsByTag(Map<String, Object> parameters) {
+        return super.getPostPageDto("getPostsByTag", parameters);
     }
 
     @Override
@@ -38,32 +41,31 @@ public class PostDtoServiceImpl implements PostDtoService {
 
     @Override
     @Transactional
-    public List<PostDto> getPostsByUserId(Long id, Long userPrincipalId, int currentPage, int itemsOnPage) {
-        return postDtoDao.getPostsByUserId(id, userPrincipalId, currentPage, itemsOnPage);
+    public PageDto<PostDto, ?> getPostsByUserId(Map<String, Object> parameters) {
+        return super.getPostPageDto("getPostsByUserId", parameters);
     }
 
     @Override
     @Transactional
-    public List<PostDto> getAllBookmarkedPosts(Long userPrincipalId, int currentPage, int itemsOnPage) {
-        return postDtoDao.getAllBookmarkedPosts(userPrincipalId, currentPage, itemsOnPage);
+    public PageDto<PostDto, ?> getAllBookmarkedPosts(Map<String, Object> parameters) {
+        return super.getPostPageDto("getAllBookmarkedPosts", parameters);
     }
 
     @Override
     @Transactional
-    public List<CommentDto> getCommentsByPostId(Long id, int currentPage, int itemsOnPage) {
-        return postDtoDao.getCommentsByPostId(id, currentPage, itemsOnPage);
+    public PageDto<CommentDto, ?> getCommentsByPostId(Map<String, Object> parameters) {
+        return super.getPageDto("showPostComments", parameters);
     }
 
     @Override
     @Transactional
-    public List<TagDto> getAllTags(int currentPage, int itemsOnPage) {
-        return postDtoDao.getAllTags(currentPage, itemsOnPage);
+    public PageDto<TagDto, ?> getAllTags(Map<String, Object> parameters) {
+        return super.getPageDto("getAllTags", parameters);
     }
 
     @Override
     @Transactional
-    public List<PostDto> getAllPosts(Long userPrincipalId, int currentPage, int itemsOnPage) {
-        List<PostDto> postDtoList = postDtoDao.getAllPosts(userPrincipalId, currentPage, itemsOnPage);
-        return postDtoList;
+    public PageDto<PostDto, ?> getAllPosts(Map<String, Object> parameters) {
+        return super.getPostPageDto("getAllPosts", parameters);
     }
 }

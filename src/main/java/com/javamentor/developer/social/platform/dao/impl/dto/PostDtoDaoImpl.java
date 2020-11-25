@@ -136,16 +136,17 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<MediaPostDto> getMediasByPostId(Long postId) {
+    public List<MediaPostDto> getMediasByPostId(List<Long> postId) {
         Query queryMediasForPost = (Query) entityManager.createQuery(
                 "SELECT " +
                         "m.id, " +
                         "m.mediaType, " +
                         "m.url, " +
-                        "m.user.userId " +
+                        "m.user.userId," +
+                        "p.id " +
                         "FROM Post p " +
                         "LEFT JOIN p.media m " +
-                        "WHERE p.id = :postId")
+                        "WHERE p.id in (:postId)")
                 .setParameter("postId", postId);
         return queryMediasForPost.unwrap(Query.class)
                 .setResultTransformer(new ResultTransformer() {
@@ -158,15 +159,14 @@ public class PostDtoDaoImpl implements PostDtoDao {
                             .url((String) objects[2])
                             .mediaType(objects[1] == null ? null : objects[0].toString())
                             .userId((Long) objects[3])
+                            .postId(objects[4] == null ? null : (Long) objects[4])
                             .build();
                 } else return null;
             }
 
             @Override
             public List transformList(List list) {
-                if (list.contains(null)) {
-                    return new ArrayList();
-                } else return list;
+                return list;
             }
         }).getResultList();
     }
@@ -203,14 +203,15 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<TagDto> getTagsByPostId(Long postId) {
+    public List<TagDto> getTagsByPostId(List<Long> postId) {
         Query queryTagsForPost = (Query) entityManager.createQuery(
                 "SELECT " +
                         "t.text, " +
-                        "t.id " +
+                        "t.id, " +
+                        "p.id " +
                         "FROM Post p " +
                         "LEFT JOIN p.tags t " +
-                        "WHERE p.id = :postId")
+                        "WHERE p.id in (:postId)")
                 .setParameter("postId", postId);
         return queryTagsForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
@@ -220,15 +221,14 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     return TagDto.builder()
                             .id((Long) objects[1])
                             .text((String) objects[0])
+                            .postId(objects[2] == null ? null : (Long)objects[2])
                             .build();
                 } else return null;
             }
 
             @Override
             public List transformList(List list) {
-                if (list.contains(null)) {
-                    return new ArrayList();
-                } else return list;
+                return list;
             }
         }).getResultList();
     }

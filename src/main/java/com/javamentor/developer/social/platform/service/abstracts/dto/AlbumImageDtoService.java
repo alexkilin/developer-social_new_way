@@ -1,10 +1,12 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto;
 
 import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AlbumImageDtoService {
 
-    List<AlbumImageDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage);
+    PageDto<AlbumImageDto, ?> getAllByUserId(Map<String, Object> parameters);
 }

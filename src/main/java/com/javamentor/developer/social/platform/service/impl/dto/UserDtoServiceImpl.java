@@ -3,17 +3,20 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
 import com.javamentor.developer.social.platform.models.dto.LanguageDto;
 import com.javamentor.developer.social.platform.models.dto.UserFriendDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class UserDtoServiceImpl implements UserDtoService {
+public class UserDtoServiceImpl extends PaginationService implements UserDtoService {
     private final UserDtoDao userDtoDao;
 
     @Autowired
@@ -23,8 +26,8 @@ public class UserDtoServiceImpl implements UserDtoService {
 
     @Override
     @Transactional
-    public List<UserDto> getAllUserDto(int currentPage, int itemsOnPage) {
-        return userDtoDao.getUserDtoList(currentPage, itemsOnPage);
+    public PageDto<UserDto, ?> getAllUserDto(Map<String, Object> parameters) {
+        return super.getPageDto("getAllUsers", parameters);
     }
 
     @Override
@@ -41,7 +44,7 @@ public class UserDtoServiceImpl implements UserDtoService {
 
     @Override
     @Transactional
-    public List<UserFriendDto> getUserFriendsDtoById(Long id, int currentPage, int itemsOnPage) {
-        return userDtoDao.getUserFriendsDtoById(id, currentPage, itemsOnPage);
+    public PageDto<UserFriendDto, ?> getUserFriendsDtoById(Map<String, Object> parameters) {
+        return super.getPageDto("getUserFriends", parameters);
     }
 }

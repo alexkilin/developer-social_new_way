@@ -1,17 +1,18 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
-import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PageDtoDao;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Map;
 
 @Service
-public class AudioDtoServiceImpl implements AudioDtoService {
+public class AudioDtoServiceImpl extends PaginationService implements AudioDtoService {
 
     private final AudioDtoDao audioDtoDao;
 
@@ -22,56 +23,56 @@ public class AudioDtoServiceImpl implements AudioDtoService {
 
     @Override
     @Transactional
-    public List<AudioDto> getAudioOfAuthor(String author, int currentPage, int itemsOnPage) {
-        return audioDtoDao.getAudioOfAuthor(author, currentPage, itemsOnPage);
+    public PageDto<AudioDto, ?> getAudioOfAuthor(Map<String, Object> parameters) {
+        return super.getPageDto("getAudioOfAuthor", parameters);
     }
 
     @Override
     @Transactional
-    public List<AudioDto> getAudioOfName(String name, int currentPage, int itemsOnPage) {
-        return audioDtoDao.getAudioOfName(name, currentPage, itemsOnPage);
+    public PageDto<AudioDto, ?> getAudioOfName(Map<String, Object> parameters) {
+        return super.getPageDto("getAudioOfName", parameters);
     }
 
     @Override
     @Transactional
-    public List<AudioDto> getAudioOfAlbum(String album, int currentPage, int itemsOnPage) {
-        return audioDtoDao.getAudioOfAlbum(album, currentPage, itemsOnPage);
+    public PageDto<AudioDto, ?> getAudioOfAlbum(Map<String, Object> parameters) {
+        return super.getPageDto("getAudioOfAlbum", parameters);
     }
 
     @Override
     @Transactional
-    public List<AudioDto> getPartAudioOfUser(Long userId, int currentPage, int itemsOnPage) {
-        return audioDtoDao.getPartAudioOfUser(userId,currentPage,itemsOnPage);
+    public PageDto<AudioDto, ?> getPartAudioOfUser(Map<String, Object> parameters) {
+        return super.getPageDto("getPartAudioOfUser", parameters);
     }
 
     @Override
     @Transactional
-    public List<AudioDto> getAuthorAudioOfUser(Long userId, String author, int currentPage, int itemsOnPage) {
-        return audioDtoDao.getAuthorAudioOfUser(userId, author, currentPage, itemsOnPage);
+    public PageDto<AudioDto, ?> getAuthorAudioOfUser(Map<String, Object> parameters) {
+        return super.getPageDto("getAuthorAudioOfUser", parameters);
     }
 
     @Override
     @Transactional
-    public List<AudioDto> getAlbumAudioOfUser(Long userId, String album, int currentPage, int itemsOnPage) {
-        return audioDtoDao.getAlbumAudioOfUser(userId, album, currentPage, itemsOnPage);
+    public PageDto<AudioDto, ?> getAlbumAudioOfUser(Map<String, Object> parameters) {
+        return super.getPageDto("getAlbumAudioOfUser", parameters);
     }
 
     @Override
     @Transactional
-    public List<AudioDto> getAudioFromAlbumOfUser(Long albumId, int currentPage, int itemsOnPage) {
-        return audioDtoDao.getAudioFromAlbumOfUser(albumId, currentPage, itemsOnPage);
+    public PageDto<AudioDto, ?> getAudioFromAlbumOfUser(Map<String, Object> parameters) {
+        return super.getPageDto("getFromAlbumOfUser", parameters);
     }
 
     @Override
     @Transactional
-    public List<AudioDto> getAudioFromPlaylist(Long playlistId, int currentPage, int itemsOnPage) {
-        return audioDtoDao.getAudioFromPlaylist(playlistId, currentPage, itemsOnPage);
+    public PageDto<AudioDto, ?> getAudioFromPlaylist(Map<String, Object> parameters) {
+        return super.getPageDto("getAudioFromPlaylist", parameters);
     }
 
     @Override
     @Transactional
-    public List<AudioDto> getPartAudio(int currentPage, int itemsOnPage) {
-        return audioDtoDao.getPartAudio(currentPage, itemsOnPage);
+    public PageDto<AudioDto, ?> getPartAudio(Map<String, Object> parameters) {
+        return super.getPageDto("getPartAudios", parameters);
     }
 
 }

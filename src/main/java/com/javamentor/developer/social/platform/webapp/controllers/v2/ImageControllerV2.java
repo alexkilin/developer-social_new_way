@@ -2,7 +2,6 @@ package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
-import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
@@ -17,7 +16,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PageDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumImageConverter;
 import com.javamentor.developer.social.platform.webapp.converters.ImageConverter;
 import io.swagger.annotations.*;
@@ -49,15 +48,13 @@ public class ImageControllerV2 {
     private final AlbumService albumService;
     private final MediaService mediaService;
     private final ImageConverter imageConverter;
-    private final PageDtoService pageDtoService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public ImageControllerV2(ImageDtoService imageDTOService, ImageService imageService, AlbumImageDtoService albumImageDtoService,
                              AlbumImageService albumImageService, UserService userService, AlbumImageConverter albumImageConverter,
-                             AlbumService albumService, MediaService mediaService, ImageConverter imageConverter,
-                             PageDtoService pageDtoService) {
+                             AlbumService albumService, MediaService mediaService, ImageConverter imageConverter) {
         this.imageDTOService = imageDTOService;
         this.imageService = imageService;
         this.albumImageDtoService = albumImageDtoService;
@@ -67,7 +64,6 @@ public class ImageControllerV2 {
         this.albumService = albumService;
         this.mediaService = mediaService;
         this.imageConverter = imageConverter;
-        this.pageDtoService = pageDtoService;
     }
 
     @ApiOperation(value = "Создать изображение")
@@ -127,11 +123,10 @@ public class ImageControllerV2 {
         }
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
-        parameters.put("methodName", "getAllImagesOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Отправлен список пустой или с изображениями пользователя с id: %s", userId));
-        return ResponseEntity.status(HttpStatus.OK).body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.status(HttpStatus.OK).body(imageDTOService.getAllByUserId(parameters));
     }
 
     @ApiOperation(value = "Создать фотоальбом")
@@ -243,11 +238,10 @@ public class ImageControllerV2 {
         }
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("albumId", albumId);
-        parameters.put("methodName", "getImagesFromAlbumById");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Изображения из фотоальбома %s отправлены", albumId));
-        return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok(imageDTOService.getAllByAlbumId(parameters));
     }
 
     @ApiOperation(value = "Получить фотоальбом по Id")
@@ -279,11 +273,10 @@ public class ImageControllerV2 {
         }
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
-        parameters.put("methodName", "getAllImageAlbumsOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Отправлен список пустой или с альбомами пользователя с id: %s", userId));
-        return ResponseEntity.status(HttpStatus.OK).body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.status(HttpStatus.OK).body(albumImageDtoService.getAllByUserId(parameters));
     }
 
 }

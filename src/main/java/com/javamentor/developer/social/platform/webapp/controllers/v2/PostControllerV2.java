@@ -22,7 +22,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.post.Pos
 import com.javamentor.developer.social.platform.service.abstracts.model.post.RepostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PageDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.PostConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
@@ -54,7 +54,6 @@ public class PostControllerV2 {
     private final RepostService repostService;
     private final CommentService commentService;
     private final LikeService likeService;
-    private final PageDtoService pageDtoService;
 
     @Autowired
     public PostControllerV2(PostDtoService postDtoService,
@@ -67,8 +66,7 @@ public class PostControllerV2 {
                             BookmarkService bookmarkService,
                             RepostService repostService,
                             CommentService commentService,
-                            LikeService likeService,
-                            PageDtoService pageDtoService) {
+                            LikeService likeService) {
 
         this.postDtoService = postDtoService;
         this.postConverter = postConverter;
@@ -81,7 +79,6 @@ public class PostControllerV2 {
         this.repostService = repostService;
         this.commentService = commentService;
         this.likeService = likeService;
-        this.pageDtoService = pageDtoService;
     }
 
 
@@ -94,10 +91,9 @@ public class PostControllerV2 {
         Long userPrincipalId = userService.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
-        parameters.put("methodName", "getAllPosts");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(postDtoService.getAllPosts(parameters));
     }
 
     @ApiOperation(value = "Получение поста по тэгу")
@@ -112,10 +108,9 @@ public class PostControllerV2 {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
         parameters.put("tagText", tagText);
-        parameters.put("methodName", "getPostsByTag");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok(postDtoService.getPostsByTag(parameters));
     }
 
     @ApiOperation(value = "Получение всех существующих тегов")
@@ -125,10 +120,9 @@ public class PostControllerV2 {
     public ResponseEntity<PageDto<TagDto, ?>> getAllTags(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                    @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("methodName", "getAllTags");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok(postDtoService.getAllTags(parameters));
     }
 
 
@@ -145,10 +139,9 @@ public class PostControllerV2 {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
         parameters.put("userId", userId);
-        parameters.put("methodName", "getPostsByUserId");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok(postDtoService.getPostsByUserId(parameters));
     }
 
     @ApiOperation(value = "Добавление поста")
@@ -192,10 +185,9 @@ public class PostControllerV2 {
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("postId", postId);
-        parameters.put("methodName", "showPostComments");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok(postDtoService.getCommentsByPostId(parameters));
     }
 
     @ApiOperation(value = "Добавление комментария к посту")
@@ -327,10 +319,9 @@ public class PostControllerV2 {
         Long userPrincipalId = userService.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
-        parameters.put("methodName", "getAllBookmarkedPosts");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(postDtoService.getAllBookmarkedPosts(parameters));
     }
 
 }

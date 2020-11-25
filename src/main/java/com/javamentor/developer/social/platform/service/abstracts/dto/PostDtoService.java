@@ -3,22 +3,24 @@ package com.javamentor.developer.social.platform.service.abstracts.dto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PostDtoService {
 
-    List<PostDto> getAllPosts(Long userPrincipalId, int currentPage, int itemsOnPage);
+    PageDto<PostDto, ?> getAllPosts(Map<String, Object> parameters);
 
     List<PostDto> getPostById(Long postId, Long userPrincipalId);
 
-    List<PostDto> getPostsByTag(String tagText, Long userPrincipalId, int currentPage, int itemsOnPage);
+    PageDto<PostDto, ?> getPostsByTag(Map<String, Object> parameters);
 
-    List<CommentDto> getCommentsByPostId(Long id, int currentPage, int itemsOnPage);
+    PageDto<CommentDto, ?> getCommentsByPostId(Map<String, Object> parameters);
 
-    List<TagDto> getAllTags(int currentPage, int itemsOnPage);
-    
-    List<PostDto> getPostsByUserId(Long id, Long userPrincipalId, int currentPage, int itemsOnPage);
+    PageDto<TagDto, ?> getAllTags(Map<String, Object> parameters);
 
-    List <PostDto> getAllBookmarkedPosts(Long userPrincipalId, int currentPage, int itemsOnPage);
+    PageDto<PostDto, ?> getPostsByUserId(Map<String, Object> parameters);
+
+    PageDto <PostDto, ?> getAllBookmarkedPosts(Map<String, Object> parameters);
 }

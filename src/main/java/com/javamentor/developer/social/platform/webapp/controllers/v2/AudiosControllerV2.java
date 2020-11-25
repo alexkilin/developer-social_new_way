@@ -20,7 +20,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.PlaylistService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PageDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumAudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.PlaylistConverter;
@@ -56,7 +56,6 @@ public class AudiosControllerV2 {
     private final PlaylistDtoService playlistDtoService;
     private final PlaylistService playlistService;
     private final PlaylistConverter playlistConverter;
-    private final PageDtoService pageDtoService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -65,7 +64,7 @@ public class AudiosControllerV2 {
                               AudiosService audiosService, UserService userService, AlbumService albumService,
                               AlbumAudioDtoService albumAudioDtoService, AlbumAudioService albumAudioService,
                               PlaylistDtoService playlistDtoService, PlaylistService playlistService,
-                              PlaylistConverter playlistConverter, PageDtoService pageDtoService) {
+                              PlaylistConverter playlistConverter) {
         this.audioConverter = audioConverter;
         this.albumAudioConverter = albumAudioConverter;
         this.audioDtoService = audioDtoService;
@@ -77,7 +76,6 @@ public class AudiosControllerV2 {
         this.playlistDtoService = playlistDtoService;
         this.playlistService = playlistService;
         this.playlistConverter = playlistConverter;
-        this.pageDtoService = pageDtoService;
     }
 
     @ApiOperation(value = "Получение всего аудио постранично")
@@ -88,10 +86,9 @@ public class AudiosControllerV2 {
                                                         @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Аудио начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("methodName", "getPartAudios");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(audioDtoService.getPartAudio(parameters));
     }
 
     @ApiOperation(value = "Получение аудио по автору")
@@ -104,10 +101,9 @@ public class AudiosControllerV2 {
         logger.info(String.format("Отправка всего аудио автора %s", author));
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("author", author);
-        parameters.put("methodName", "getAudioOfAuthor");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(audioDtoService.getAudioOfAuthor(parameters));
     }
 
 
@@ -121,10 +117,9 @@ public class AudiosControllerV2 {
         logger.info(String.format("Отправка аудио %s", name));
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("name", name);
-        parameters.put("methodName", "getAudioOfName");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(audioDtoService.getAudioOfName(parameters));
     }
 
     @ApiOperation(value = "Получение аудио по альбому")
@@ -137,10 +132,9 @@ public class AudiosControllerV2 {
         logger.info(String.format("Отправка всего аудио альбома %s", album));
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("album", album);
-        parameters.put("methodName", "getAudioOfAlbum");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(audioDtoService.getAudioOfAlbum(parameters));
     }
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя постранично")
@@ -154,10 +148,9 @@ public class AudiosControllerV2 {
         logger.info(String.format("Аудио пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
-        parameters.put("methodName", "getPartAudioOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(audioDtoService.getPartAudioOfUser(parameters));
     }
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя по автору")
@@ -172,10 +165,9 @@ public class AudiosControllerV2 {
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
         parameters.put("author", author);
-        parameters.put("methodName", "getAuthorAudioOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(audioDtoService.getAuthorAudioOfUser(parameters));
     }
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя по альбому")
@@ -190,10 +182,9 @@ public class AudiosControllerV2 {
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
         parameters.put("album", album);
-        parameters.put("methodName", "getAlbumAudioOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(audioDtoService.getAlbumAudioOfUser(parameters));
     }
 
     @ApiOperation(value = "Добавление аудио в коллекцию пользователя")
@@ -244,11 +235,10 @@ public class AudiosControllerV2 {
         logger.info(String.format("Получение всех альбомов пользователя с id %s", userId));
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
-        parameters.put("methodName", "getAllAlbumAudio");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
 
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(albumAudioDtoService.getAllByUserId(parameters));
     }
 
     @ApiOperation(value = "Добавить существующее аудио в альбом")
@@ -302,10 +292,9 @@ public class AudiosControllerV2 {
         logger.info(String.format("Все аудио из альбома с id:%s отправлено", albumId));
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("albumId", albumId);
-        parameters.put("methodName", "getFromAlbumOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(audioDtoService.getAudioFromAlbumOfUser(parameters));
     }
 
     @ApiOperation(value = "Создание нового плейлиста для пользователя")
@@ -357,11 +346,10 @@ public class AudiosControllerV2 {
                                                 @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
-        parameters.put("methodName", "getPlaylistsOfUser");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Плейлисты пользователя %s отправлены", userId));
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(playlistDtoService.getAllByUserId(parameters));
     }
 
     @ApiOperation(value = "Получение плейлиста по Id")
@@ -443,10 +431,9 @@ public class AudiosControllerV2 {
 
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("playlistId", playlistId);
-        parameters.put("methodName", "getAudioFromPlaylistById");
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        return ResponseEntity.ok().body(pageDtoService.getPageDto(parameters));
+        return ResponseEntity.ok().body(audioDtoService.getAudioFromPlaylist(parameters));
     }
 
 }

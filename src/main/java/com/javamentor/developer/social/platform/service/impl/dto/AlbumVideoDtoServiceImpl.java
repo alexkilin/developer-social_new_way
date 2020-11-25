@@ -2,15 +2,17 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumVideoDtoDao;
 import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumVideoDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Map;
 
 @Service
-public class AlbumVideoDtoServiceImpl implements AlbumVideoDtoService {
+public class AlbumVideoDtoServiceImpl extends PaginationService implements AlbumVideoDtoService {
 
     private final AlbumVideoDtoDao albumVideoDtoDao;
 
@@ -21,8 +23,8 @@ public class AlbumVideoDtoServiceImpl implements AlbumVideoDtoService {
 
     @Override
     @Transactional
-    public List<AlbumVideoDto> getAllByUserId(Long userId, int currentPage, int itemsOnPage) {
-        return albumVideoDtoDao.getAllByUserId(userId, currentPage, itemsOnPage);
+    public PageDto<AlbumVideoDto, ?> getAllByUserId(Map<String, Object> parameters) {
+        return super.getPageDto("getAllVideoAlbums", parameters);
     }
 
 }
