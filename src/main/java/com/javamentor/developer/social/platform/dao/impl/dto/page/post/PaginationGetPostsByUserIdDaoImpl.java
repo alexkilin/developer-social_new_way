@@ -1,11 +1,9 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.page.post;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -18,18 +16,17 @@ import java.util.Map;
 public class PaginationGetPostsByUserIdDaoImpl implements PaginationDao<PostDto> {
     @PersistenceContext
     private EntityManager entityManager;
-    private final PostDtoDao postDtoDao;
 
-    @Autowired
-    public PaginationGetPostsByUserIdDaoImpl(PostDtoDao postDtoDao) {
-        this.postDtoDao = postDtoDao;
+    public PaginationGetPostsByUserIdDaoImpl() {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<PostDto> getItems(Map<String, Object> parameters) {
         int currentPage = (int) parameters.get("currentPage");
         int itemsOnPage = (int) parameters.get("itemsOnPage");
-        List<PostDto> postDtoList = entityManager.createQuery(
+
+        return (List<PostDto>) entityManager.createQuery(
                 "select p.id, " +
                         "p.title, " +
                         "p.text, " +
@@ -58,7 +55,7 @@ public class PaginationGetPostsByUserIdDaoImpl implements PaginationDao<PostDto>
                 .setParameter("userPrincipalId", parameters.get("userPrincipalId"))
                 .setParameter("userId", parameters.get("userId"))
                 .setFirstResult((currentPage - 1) * itemsOnPage)
-                .setMaxResults(currentPage * itemsOnPage)
+                .setMaxResults(itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {
@@ -90,7 +87,6 @@ public class PaginationGetPostsByUserIdDaoImpl implements PaginationDao<PostDto>
                                 return list;
                             }
                         }).getResultList();
-        return postDtoList;
 
 
     }

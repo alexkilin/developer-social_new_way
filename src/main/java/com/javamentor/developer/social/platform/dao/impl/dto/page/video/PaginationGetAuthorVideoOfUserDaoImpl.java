@@ -15,19 +15,27 @@ import java.util.Map;
 public class PaginationGetAuthorVideoOfUserDaoImpl implements PaginationDao<VideoDto> {
     @PersistenceContext
     private EntityManager entityManager;
-    private final VideoDtoDao videoDtoDao;
 
-    @Autowired
-    public PaginationGetAuthorVideoOfUserDaoImpl(VideoDtoDao videoDtoDao) {
-        this.videoDtoDao = videoDtoDao;
+    public PaginationGetAuthorVideoOfUserDaoImpl() {
+
     }
 
     @Override
     public List<VideoDto> getItems(Map<String, Object> parameters) {
-        return videoDtoDao.getAuthorVideoOfUser((Long) parameters.get("userId"),
-                (String) parameters.get("author"),
-                (int) parameters.get("currentPage"),
-                (int) parameters.get("itemsOnPage"));
+        Long userId = (Long) parameters.get("userId");
+        String author = (String) parameters.get("author");
+        int currentPage = (int) parameters.get("currentPage");
+        int itemsOnPage = (int) parameters.get("itemsOnPage");
+
+        return entityManager.createQuery(
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
+                        " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
+                        " FROM User u join u.videos v where u.userId =:userId and v.author =:author", VideoDto.class)
+                .setParameter("userId", userId)
+                .setParameter("author", author)
+                .setFirstResult((currentPage - 1)* itemsOnPage)
+                .setMaxResults(itemsOnPage)
+                .getResultList();
     }
 
     @Override

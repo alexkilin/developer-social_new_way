@@ -18,7 +18,7 @@ public class AlbumDaoImpl extends GenericDaoAbstract<Album, Long> implements Alb
     @PersistenceContext
     private EntityManager entityManager;
 
-    private AlbumConverter albumConverter;
+    private final AlbumConverter albumConverter;
 
     @Autowired
     public AlbumDaoImpl(AlbumConverter albumConverter) {

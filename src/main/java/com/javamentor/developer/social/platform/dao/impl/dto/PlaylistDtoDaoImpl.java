@@ -55,84 +55,8 @@ public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<PlaylistGetDto> getByUserId(Long userId, int currentPage, int itemsOnPage) {
-        List<PlaylistGetDto> list = entityManager.createQuery("SELECT " +
-                "p.id," +
-                "p.name, " +
-                "p.image," +
-                "p.ownerUser.userId," +
-                "p.persistDateTime, " +
-                "c.id," +
-                "c.media.url," +
-                "c.icon," +
-                "c.name," +
-                "c.author," +
-                "c.album," +
-                "c.media.persistDateTime, " +
-                "c.length " +
-                "FROM Playlist as p " +
-                "LEFT JOIN p.playlistContent as c " +
-                "WHERE p.ownerUser.userId = :userId")
-                .setParameter("userId", userId)
-                .setFirstResult((currentPage - 1) * itemsOnPage)
-                .setMaxResults(currentPage * itemsOnPage)
-                .unwrap(Query.class)
-                .setResultTransformer(new ResultTransformer() {
-                    @Override
-                    public Object transformTuple(Object[] objects, String[] strings) {
-                        AudioDto audioDto = AudioDto.builder()
-                                .id((Long) objects[5])
-                                .url((String) objects[6])
-                                .icon((String) objects[7])
-                                .name((String) objects[8])
-                                .author((String) objects[9])
-                                .album((String) objects[10])
-                                .persistDateTime((LocalDateTime) objects[11])
-                                .length((Integer) objects[12])
-                                .build();
-
-                        List<AudioDto> audioDtoList = new ArrayList<>();
-                        audioDtoList.add(audioDto);
-
-                        return PlaylistGetDto.builder()
-                                .id((Long) objects[0])
-                                .name((String) objects[1])
-                                .image((String) objects[2])
-                                .ownerUserId((Long) objects[3])
-                                .persistDateTime((LocalDateTime) objects[4])
-                                .content(audioDtoList)
-                                .build();
-                    }
-
-                    @Override
-                    public List transformList(List collection) {
-                        Map<Long, PlaylistGetDto> playlistGetDtoMap = new TreeMap<>();
-                        Map<Long, List<AudioDto>> audioDtoMap = new TreeMap<>();
-
-                        for (Object obj : collection) {
-                            PlaylistGetDto playlistGetDto = (PlaylistGetDto) obj;
-                            Long playlistGetDtoId = playlistGetDto.getId();
-
-                            List<AudioDto> audioDtoList = audioDtoMap.put(playlistGetDtoId, playlistGetDto.getContent());
-                            if (audioDtoList != null) {
-                                audioDtoList.addAll(playlistGetDto.getContent());
-                                audioDtoMap.put(playlistGetDtoId, audioDtoList);
-                            }
-                            playlistGetDto.setContent(audioDtoMap.get(playlistGetDtoId));
-
-                            playlistGetDtoMap.put(playlistGetDtoId, playlistGetDto);
-                        }
-                        return new ArrayList<>(playlistGetDtoMap.values());
-                    }
-                })
-                .getResultList();
-        return list;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<AudioDto> getAudioDtoByPlaylistId(Long playlistId) {
-        Query queryTagsForPost = (Query) entityManager.createQuery(
+    public List<AudioDto> getAudioDtoByPlaylistId(List<Long> playlistId) {
+        return  entityManager.createQuery(
                 "SELECT " +
                         "c.id," +
                         "c.media.url," +
@@ -140,32 +64,33 @@ public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
                         "c.name," +
                         "c.author," +
                         "c.album," +
-                        "c.media.persistDateTime " +
+                        "c.media.persistDateTime," +
+                        "p.id " +
                         "FROM Playlist p " +
                         "JOIN p.playlistContent c " +
-                        "WHERE p.id = :playlistId")
-                .setParameter("playlistId", playlistId);
-        return queryTagsForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
+                        "WHERE p.id in (:playlistId)")
+                .setParameter("playlistId", playlistId)
+                .unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
-            @Override
-            public Object transformTuple(Object[] objects, String[] strings) {
-                return AudioDto.builder()
-                        .id((Long) objects[0])
-                        .url((String) objects[1])
-                        .icon((String) objects[2])
-                        .name((String) objects[3])
-                        .author((String) objects[4])
-                        .album((String) objects[5])
-                        .persistDateTime((LocalDateTime) objects[6])
-                        .build();
-            }
-
-            @Override
-            public List transformList(List list) {
-                return list;
-            }
-        }).getResultList();
+                    @Override
+                    public Object transformTuple(Object[] objects, String[] strings) {
+                        if(objects[0] != null && objects[1] != null && objects[7] != null) {
+                            return AudioDto.builder()
+                                    .id((Long) objects[0])
+                                    .url((String) objects[1])
+                                    .icon((String) objects[2])
+                                    .name((String) objects[3])
+                                    .author((String) objects[4])
+                                    .album((String) objects[5])
+                                    .persistDateTime((LocalDateTime) objects[6])
+                                    .playlistId((Long) objects[7])
+                                    .build();
+                        } else return null;
+                    }
+                    @Override
+                    public List transformList(List list) {
+                        return list;
+                    }
+                }).getResultList();
     }
-
-
 }

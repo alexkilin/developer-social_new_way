@@ -50,4 +50,7 @@ public class AudioDto {
 
     @ApiModelProperty(notes = "Дата публикования медиа объекта, назначается автоматически при создании", hidden = true, example = "2020-09-14T23:24:17.900994")
     private LocalDateTime persistDateTime;
+
+    @ApiModelProperty(notes = "Id плейлиста", hidden = true)
+    private Long playlistId;
 }

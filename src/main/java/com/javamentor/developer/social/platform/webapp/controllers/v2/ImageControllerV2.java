@@ -16,7 +16,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.media.ImageService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.MediaService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumImageConverter;
 import com.javamentor.developer.social.platform.webapp.converters.ImageConverter;
 import io.swagger.annotations.*;

@@ -20,7 +20,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.PlaylistService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumAudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.PlaylistConverter;

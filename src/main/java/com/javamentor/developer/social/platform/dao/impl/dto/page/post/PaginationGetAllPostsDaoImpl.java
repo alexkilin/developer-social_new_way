@@ -1,36 +1,27 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.page.post;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
-import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
-import com.javamentor.developer.social.platform.models.dto.TagDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component("getAllPosts")
 public class PaginationGetAllPostsDaoImpl implements PaginationDao<PostDto> {
     @PersistenceContext
     private EntityManager entityManager;
-    private final PostDtoDao postDtoDao;
 
-    @Autowired
-    public PaginationGetAllPostsDaoImpl(PostDtoDao postDtoDao) {
-        this.postDtoDao = postDtoDao;
+    public PaginationGetAllPostsDaoImpl() {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<PostDto> getItems(Map<String, Object> parameters) {
         int currentPage = (int) parameters.get("currentPage");
         int itemsOnPage = (int) parameters.get("itemsOnPage");
@@ -61,7 +52,7 @@ public class PaginationGetAllPostsDaoImpl implements PaginationDao<PostDto> {
                         "join p.user as u ")
                 .setParameter("userPrincipalId", parameters.get("userPrincipalId"))
                 .setFirstResult((currentPage - 1) * itemsOnPage)
-                .setMaxResults(currentPage * itemsOnPage)
+                .setMaxResults(itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {

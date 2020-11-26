@@ -19,16 +19,12 @@ import java.util.Map;
 public class PaginationGetPostsByGroupIdDaoImpl implements PaginationDao<GroupWallDto> {
     @PersistenceContext
     private EntityManager entityManager;
-    private final GroupDtoDao groupDtoDao;
-    private final PostDtoDao postDtoDao;
 
-    @Autowired
-    public PaginationGetPostsByGroupIdDaoImpl(GroupDtoDao groupDtoDao, PostDtoDao postDtoDao) {
-        this.groupDtoDao = groupDtoDao;
-        this.postDtoDao = postDtoDao;
+    public PaginationGetPostsByGroupIdDaoImpl() {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<GroupWallDto> getItems(Map<String, Object> parameters) {
         Long groupId = (Long) parameters.get("groupId");
         int currentPage = (int) parameters.get("currentPage");
@@ -50,7 +46,7 @@ public class PaginationGetPostsByGroupIdDaoImpl implements PaginationDao<GroupWa
                         "WHERE g.id = :groupId")
                 .setParameter("groupId", groupId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
-                .setMaxResults(currentPage * itemsOnPage)
+                .setMaxResults(itemsOnPage)
                 .unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 
                     @Override

@@ -17,7 +17,7 @@ public class AlbumAudioDaoImpl extends GenericDaoAbstract<AlbumAudios, Long> imp
     @PersistenceContext
     private EntityManager entityManager;
 
-    private AlbumDao albumDAO;
+    private final AlbumDao albumDAO;
 
     @Autowired
     public AlbumAudioDaoImpl(AlbumDao albumDAO) {

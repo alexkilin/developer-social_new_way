@@ -4,8 +4,6 @@ import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
-import com.javamentor.developer.social.platform.models.dto.users.UserDto;
-import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
@@ -31,21 +29,8 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<PostDto> getAllPosts(Long userPrincipalId, int currentPage, int itemsOnPage) {
-        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST)
-                .setParameter("userPrincipalId", userPrincipalId)
-                .setFirstResult((currentPage - 1) * itemsOnPage)
-                .setMaxResults(currentPage * itemsOnPage)
-                .unwrap(Query.class)
-                .setResultTransformer(getResultTransformer())
-                .getResultList();
-        return postDtoList;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
     public List<PostDto> getPostById(Long postId, Long userPrincipalId) {
-        List<PostDto> postDtoList = entityManager.createQuery( SELECT_ALL_POSTS + FROM_POST +
+        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST +
                 "where p.id = :postId")
                 .setParameter("userPrincipalId", userPrincipalId)
                 .setParameter("postId", postId)
@@ -53,85 +38,6 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 .setResultTransformer(getResultTransformer())
                 .getResultList();
         return postDtoList;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<PostDto> getPostsByTag(String text, Long userPrincipalId, int currentPage, int itemsOnPage) {
-        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST +
-                " where t.text = :tText")
-                .setParameter("userPrincipalId", userPrincipalId)
-                .setParameter("tText", text)
-                .unwrap(Query.class)
-                .setResultTransformer(getResultTransformer())
-                .getResultList();
-        return postDtoList;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-	public List<PostDto> getPostsByUserId(Long userId, Long userPrincipalId, int currentPage, int itemsOnPage) {
-        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST +
-                " where u.userId = :userId")
-                .setParameter("userPrincipalId", userPrincipalId)
-                .setParameter("userId", userId)
-                .unwrap(Query.class)
-                .setResultTransformer(getResultTransformer())
-                .getResultList();
-        return postDtoList;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<CommentDto> getCommentsByPostId(Long postId, int currentPage, int itemsOnPage) {
-        Query queryCommentsForPost = (Query) entityManager.createQuery(
-                "SELECT " +
-                        "c.id, " +
-                        "c.persistDate, " +
-                        "c.lastRedactionDate, " +
-                        "c.comment, " +//3
-                        "(SELECT u.lastName FROM User u WHERE c.user.userId = u.userId), " +
-                        "(SELECT u.firstName FROM User u WHERE c.user.userId = u.userId), " +
-                        "(SELECT u.userId FROM User u WHERE c.user.userId = u.userId)," +
-                        "(SELECT u.avatar FROM User u WHERE c.user.userId = u.userId)" +
-                        "FROM Post p " +
-                        "LEFT JOIN PostComment pc on p.id = pc.post.id " +
-                        "LEFT JOIN Comment c on pc.comment.id = c.id " +
-                        "WHERE p.id = :postId")
-                .setParameter("postId", postId);
-        return queryCommentsForPost.unwrap(Query.class)
-                .setResultTransformer(new ResultTransformer() {
-
-            @Override
-            public Object transformTuple(Object[] objects, String[] strings) {
-                UserDto userDto = UserDto.builder()
-                        .userId((Long) objects[6])
-                        .firstName((String) objects[5])
-                        .lastName((String) objects[4])
-                        .avatar((String) objects[7])
-                        .build();
-
-                return CommentDto.builder()
-                        .userDto(userDto)
-                        .persistDate((LocalDateTime) objects[1])
-                        .lastRedactionDate((LocalDateTime) objects[2])
-                        .id((Long) objects[0])
-                        .comment((String) objects[3])
-                        .build();
-            }
-
-            @Override
-            public List transformList(List list) {
-                Map<Long, CommentDto> result = new TreeMap<>();
-                for (Object obj : list) {
-                    CommentDto commentDto = (CommentDto) obj;
-                    if (commentDto.getId() != null) {
-                        result.put(commentDto.getId(), commentDto);
-                    }
-                }
-                return new ArrayList<>(result.values());
-            }
-        }).getResultList();
     }
 
     @Override
@@ -151,52 +57,22 @@ public class PostDtoDaoImpl implements PostDtoDao {
         return queryMediasForPost.unwrap(Query.class)
                 .setResultTransformer(new ResultTransformer() {
 
-            @Override
-            public Object transformTuple(Object[] objects, String[] strings) {
-                if (objects[0] != null && objects[1] != null && objects[2] != null) {
-                    return MediaPostDto.builder()
-                            .id((Long) objects[0])
-                            .url((String) objects[2])
-                            .mediaType(objects[1] == null ? null : objects[0].toString())
-                            .userId((Long) objects[3])
-                            .postId(objects[4] == null ? null : (Long) objects[4])
-                            .build();
-                } else return null;
-            }
-
-            @Override
-            public List transformList(List list) {
-                return list;
-            }
-        }).getResultList();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<TagDto> getAllTags(int currentPage, int itemsOnPage) {
-        return entityManager.createQuery(
-                "SELECT " +
-                        "id," +
-                        "text" +
-                        " FROM Tag")
-                .unwrap(Query.class)
-                .setResultTransformer(new ResultTransformer() {
-
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
-                        if (objects[0] != null && objects[1] != null) {
-                            return TagDto.builder()
+                        if (objects[0] != null && objects[1] != null && objects[2] != null) {
+                            return MediaPostDto.builder()
                                     .id((Long) objects[0])
-                                    .text((String) objects[1])
+                                    .url((String) objects[2])
+                                    .mediaType(objects[1] == null ? null : objects[0].toString())
+                                    .userId((Long) objects[3])
+                                    .postId(objects[4] == null ? null : (Long) objects[4])
                                     .build();
                         } else return null;
                     }
 
                     @Override
                     public List transformList(List list) {
-                        if (list.contains(null)) {
-                            return new ArrayList();
-                        } else return list;
+                        return list;
                     }
                 }).getResultList();
     }
@@ -221,7 +97,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
                     return TagDto.builder()
                             .id((Long) objects[1])
                             .text((String) objects[0])
-                            .postId(objects[2] == null ? null : (Long)objects[2])
+                            .postId(objects[2] == null ? null : (Long) objects[2])
                             .build();
                 } else return null;
             }
@@ -231,18 +107,6 @@ public class PostDtoDaoImpl implements PostDtoDao {
                 return list;
             }
         }).getResultList();
-    }
-
-    @Override
-	@SuppressWarnings("unchecked")
-    public List <PostDto> getAllBookmarkedPosts(Long userPrincipalId, int currentPage, int itemsOnPage){
-        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_BOOKMARK +
-                "where u.userId = :userPrincipalId")
-                .setParameter("userPrincipalId", userPrincipalId)
-                .unwrap(Query.class)
-                .setResultTransformer(getResultTransformer())
-                .getResultList();
-        return postDtoList;
     }
 
     private static final String SELECT_ALL_POSTS = "select " +
@@ -277,22 +141,14 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     private static final String FROM_POST =
             "from Post as p " +
-            "join p.user as u " +
-            "left join p.tags as t " +
-            "left join p.media as m ";
-
-    private static final String FROM_BOOKMARK =
-            "from Bookmark as bm " +
-            "join bm.user as u " +
-            "join bm.post as p " +
-            "left join p.tags as t " +
-            "left join p.media as m ";
-
+                    "join p.user as u " +
+                    "left join p.tags as t " +
+                    "left join p.media as m ";
 
     private ResultTransformer getResultTransformer() {
         return new ResultTransformer() {
             @Override
-            public Object transformTuple(Object[] objects, String[] strings){
+            public Object transformTuple(Object[] objects, String[] strings) {
                 List<MediaPostDto> mediaPostDtoList = getMediaPostDtoList(objects);
                 List<TagDto> tagDtoList = getTagDtoList(objects);
 
@@ -322,7 +178,7 @@ public class PostDtoDaoImpl implements PostDtoDao {
 
     private List<TagDto> getTagDtoList(Object[] objects) {
         List<TagDto> tagDtoList = new ArrayList<>();
-        if (objects[13] != null){
+        if (objects[13] != null) {
             TagDto tagDto = TagDto.builder()
                     .id((Long) objects[13])
                     .text(objects[14] == null ? "null" : (String) objects[14])

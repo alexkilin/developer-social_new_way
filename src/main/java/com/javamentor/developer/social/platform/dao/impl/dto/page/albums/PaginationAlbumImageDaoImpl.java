@@ -1,10 +1,8 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.page.albums;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumImageDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -16,18 +14,32 @@ import java.util.Map;
 public class PaginationAlbumImageDaoImpl implements PaginationDao<AlbumImageDto> {
     @PersistenceContext
     private EntityManager entityManager;
-    private final AlbumImageDtoDao albumImageDtoDao;
 
-    @Autowired
-    public PaginationAlbumImageDaoImpl(AlbumImageDtoDao albumImageDtoDao) {
-        this.albumImageDtoDao = albumImageDtoDao;
+    public PaginationAlbumImageDaoImpl() {
     }
 
     @Override
     public List<AlbumImageDto> getItems(Map<String, Object> parameters) {
-        return albumImageDtoDao.getAllByUserId((Long) parameters.get("userId"),
-                (int) parameters.get("currentPage"),
-                (int) parameters.get("itemsOnPage"));
+        Long userId = (Long) parameters.get("userId");
+        int currentPage = (int) parameters.get("currentPage");
+        int itemsOnPage = (int) parameters.get("itemsOnPage");
+
+        return entityManager.createQuery(
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto(" +
+                        "a.id, " +
+                        "a.name, " +
+                        "a.icon," +
+                        "a.persistDate," +
+                        "a.lastRedactionDate) " +
+                        "FROM Album a " +
+                        "WHERE a.mediaType = :type " +
+                        "AND a.userOwnerId.userId = :id " +
+                        "ORDER BY a.id ASC", AlbumImageDto.class)
+                .setParameter("type", MediaType.IMAGE)
+                .setParameter("id", userId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(itemsOnPage)
+                .getResultList();
     }
 
     @Override

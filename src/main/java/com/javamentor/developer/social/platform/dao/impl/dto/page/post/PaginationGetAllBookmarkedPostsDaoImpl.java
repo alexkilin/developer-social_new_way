@@ -1,18 +1,14 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.page.post;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
-import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +16,8 @@ import java.util.Map;
 public class PaginationGetAllBookmarkedPostsDaoImpl implements PaginationDao<PostDto> {
     @PersistenceContext
     private EntityManager entityManager;
-    private final PostDtoDao postDtoDao;
 
-    @Autowired
-    public PaginationGetAllBookmarkedPostsDaoImpl(PostDtoDao postDtoDao) {
-        this.postDtoDao = postDtoDao;
+    public PaginationGetAllBookmarkedPostsDaoImpl() {
     }
 
     @Override
@@ -60,7 +53,7 @@ public class PaginationGetAllBookmarkedPostsDaoImpl implements PaginationDao<Pos
                         "where u.userId = :userPrincipalId")
                 .setParameter("userPrincipalId", parameters.get("userPrincipalId"))
                 .setFirstResult((currentPage - 1) * itemsOnPage)
-                .setMaxResults(currentPage * itemsOnPage)
+                .setMaxResults(itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(
                         new ResultTransformer() {

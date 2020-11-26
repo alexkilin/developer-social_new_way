@@ -15,18 +15,24 @@ import java.util.Map;
 public class PaginationGetVideoFromAlbumOfUserDaoImpl implements PaginationDao<VideoDto> {
     @PersistenceContext
     private EntityManager entityManager;
-    private final VideoDtoDao videoDtoDao;
 
-    @Autowired
-    public PaginationGetVideoFromAlbumOfUserDaoImpl(VideoDtoDao videoDtoDao) {
-        this.videoDtoDao = videoDtoDao;
+    public PaginationGetVideoFromAlbumOfUserDaoImpl() {
     }
 
     @Override
     public List<VideoDto> getItems(Map<String, Object> parameters) {
-        return videoDtoDao.getVideoFromAlbumOfUser((Long) parameters.get("albumId"),
-                (int) parameters.get("currentPage"),
-                (int) parameters.get("itemsOnPage"));
+        Long albumId = (Long) parameters.get("albumId");
+        int currentPage = (int) parameters.get("currentPage");
+        int itemsOnPage = (int) parameters.get("itemsOnPage");
+
+        return entityManager.createQuery(
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
+                        " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
+                        " FROM AlbumVideo av JOIN av.videos as v WHERE av.album.id =:albumId", VideoDto.class)
+                .setParameter("albumId", albumId)
+                .setFirstResult((currentPage - 1)* itemsOnPage)
+                .setMaxResults(itemsOnPage)
+                .getResultList();
     }
 
     @Override

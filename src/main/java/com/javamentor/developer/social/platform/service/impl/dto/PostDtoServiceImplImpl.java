@@ -7,7 +7,7 @@ import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PostPaginationService;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.PostPaginationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class PostDtoServiceImpl extends PostPaginationService implements PostDtoService {
+public class PostDtoServiceImplImpl extends PostPaginationServiceImpl implements PostDtoService {
 
     private final PostDtoDao postDtoDao;
     private final UserService userService;
 
     @Autowired
-    public PostDtoServiceImpl(PostDtoDao postDtoDao, UserService userService) {
+    public PostDtoServiceImplImpl(PostDtoDao postDtoDao, UserService userService) {
         this.postDtoDao = postDtoDao;
         this.userService = userService;
     }

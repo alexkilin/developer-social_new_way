@@ -6,7 +6,7 @@ import com.javamentor.developer.social.platform.models.dto.UserFriendDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +16,11 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class UserDtoServiceImpl extends PaginationService implements UserDtoService {
+public class UserDtoServiceImplImpl extends PaginationServiceImpl implements UserDtoService {
     private final UserDtoDao userDtoDao;
 
     @Autowired
-    public UserDtoServiceImpl(UserDtoDao userDtoDao) {
+    public UserDtoServiceImplImpl(UserDtoDao userDtoDao) {
         this.userDtoDao = userDtoDao;
     }
 

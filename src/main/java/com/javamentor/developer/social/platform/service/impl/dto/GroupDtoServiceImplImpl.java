@@ -7,7 +7,7 @@ import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.GroupPaginationService;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.GroupPaginationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +16,11 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class GroupDtoServiceImpl extends GroupPaginationService implements GroupDtoService {
+public class GroupDtoServiceImplImpl extends GroupPaginationServiceImpl implements GroupDtoService {
     private final GroupDtoDao groupDtoDao;
 
     @Autowired
-    public GroupDtoServiceImpl(GroupDtoDao groupDtoDao) {
+    public GroupDtoServiceImplImpl(GroupDtoDao groupDtoDao) {
         this.groupDtoDao = groupDtoDao;
     }
 

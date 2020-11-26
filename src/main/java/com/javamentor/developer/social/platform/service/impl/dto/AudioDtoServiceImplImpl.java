@@ -4,7 +4,7 @@ import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AudioDtoService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 
 @Service
-public class AudioDtoServiceImpl extends PaginationService implements AudioDtoService {
+public class AudioDtoServiceImplImpl extends PaginationServiceImpl implements AudioDtoService {
 
     private final AudioDtoDao audioDtoDao;
 
     @Autowired
-    public AudioDtoServiceImpl(AudioDtoDao audioDtoDao) {
+    public AudioDtoServiceImplImpl(AudioDtoDao audioDtoDao) {
         this.audioDtoDao = audioDtoDao;
     }
 
@@ -66,7 +66,7 @@ public class AudioDtoServiceImpl extends PaginationService implements AudioDtoSe
     @Override
     @Transactional
     public PageDto<AudioDto, ?> getAudioFromPlaylist(Map<String, Object> parameters) {
-        return super.getPageDto("getAudioFromPlaylist", parameters);
+        return super.getPageDto("getAudioFromPlaylistById", parameters);
     }
 
     @Override

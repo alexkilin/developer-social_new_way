@@ -9,7 +9,6 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoSe
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupHasUserService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.GroupConverter;
 import com.javamentor.developer.social.platform.webapp.converters.GroupHasUserConverter;
 import io.swagger.annotations.*;

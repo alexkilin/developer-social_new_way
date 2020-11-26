@@ -1,24 +1,18 @@
 package com.javamentor.developer.social.platform.service.impl.dto;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.AlbumAudioDtoDao;
 import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudioDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumAudioDtoService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
 @Service
-public class AlbumAudioDtoServiceImpl extends PaginationService implements AlbumAudioDtoService {
+public class AlbumAudioDtoServiceImplImpl extends PaginationServiceImpl implements AlbumAudioDtoService {
 
-    private final AlbumAudioDtoDao albumAudioDtoDao;
-
-    @Autowired
-    public AlbumAudioDtoServiceImpl(AlbumAudioDtoDao albumAudioDtoDao) {
-        this.albumAudioDtoDao = albumAudioDtoDao;
+    public AlbumAudioDtoServiceImplImpl() {
     }
 
     @Override

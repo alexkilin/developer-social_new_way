@@ -15,7 +15,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumVideoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumVideoConverter;
 import com.javamentor.developer.social.platform.webapp.converters.VideoConverter;
 import io.swagger.annotations.*;

@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.dao.impl.dto.page.image;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.ImageDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,18 +16,29 @@ import java.util.Map;
 public class PaginationGetAllByUserIdDaoImpl implements PaginationDao<ImageDto> {
     @PersistenceContext
     private EntityManager entityManager;
-    private final ImageDtoDao imageDtoDao;
 
-    @Autowired
-    public PaginationGetAllByUserIdDaoImpl(ImageDtoDao imageDtoDao) {
-        this.imageDtoDao = imageDtoDao;
+    public PaginationGetAllByUserIdDaoImpl() {
     }
 
     @Override
     public List<ImageDto> getItems(Map<String, Object> parameters) {
-        return imageDtoDao.getAllByUserId((Long) parameters.get("userId"),
-                (int) parameters.get("currentPage"),
-                (int) parameters.get("itemsOnPage"));
+        Long userId = (Long) parameters.get("userId");
+        int currentPage = (int) parameters.get("currentPage");
+        int itemsOnPage = (int) parameters.get("itemsOnPage");
+
+        Query<ImageDto> query = (Query<ImageDto>) entityManager.createQuery(
+                "SELECT NEW com.javamentor.developer.social.platform.models.dto.media.image.ImageDto(" +
+                        "im.id, " +
+                        "im.media.url, " +
+                        "im.description, " +
+                        "im.media.persistDateTime) " +
+                        "FROM Image im " +
+                        "WHERE im.media.user.userId = :userId " +
+                        "ORDER BY im.media.persistDateTime ASC", ImageDto.class)
+                .setParameter("userId", userId)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
+                .setMaxResults(itemsOnPage);
+        return query.getResultList();
     }
 
     @Override

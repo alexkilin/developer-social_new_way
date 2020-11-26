@@ -22,7 +22,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.post.Pos
 import com.javamentor.developer.social.platform.service.abstracts.model.post.RepostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
 import com.javamentor.developer.social.platform.webapp.converters.PostConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;

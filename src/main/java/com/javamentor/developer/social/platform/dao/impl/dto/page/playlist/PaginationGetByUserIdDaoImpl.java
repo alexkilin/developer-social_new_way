@@ -2,30 +2,34 @@ package com.javamentor.developer.social.platform.dao.impl.dto.page.playlist;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.PlaylistDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
+import lombok.SneakyThrows;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component("getPlaylistsOfUser")
+
 public class PaginationGetByUserIdDaoImpl implements PaginationDao<PlaylistGetDto> {
     @PersistenceContext
     private EntityManager entityManager;
-    private final PlaylistDtoDao playlistDtoDao;
 
-    @Autowired
-    public PaginationGetByUserIdDaoImpl(PlaylistDtoDao playlistDtoDao) {
-        this.playlistDtoDao = playlistDtoDao;
-    }
+    public PaginationGetByUserIdDaoImpl() {}
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<PlaylistGetDto> getItems(Map<String, Object> parameters) {
         Long userId = (Long) parameters.get("userId");
         int currentPage = (int) parameters.get("currentPage");
@@ -38,11 +42,10 @@ public class PaginationGetByUserIdDaoImpl implements PaginationDao<PlaylistGetDt
                 "p.ownerUser.userId," +
                 "p.persistDateTime " +
                 "FROM Playlist as p " +
-                "LEFT JOIN p.playlistContent as c " +
                 "WHERE p.ownerUser.userId = :userId")
                 .setParameter("userId", userId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
-                .setMaxResults(currentPage * itemsOnPage)
+                .setMaxResults(itemsOnPage)
                 .unwrap(Query.class)
                 .setResultTransformer(new ResultTransformer() {
                     @Override
@@ -63,19 +66,15 @@ public class PaginationGetByUserIdDaoImpl implements PaginationDao<PlaylistGetDt
                     }
                 })
                 .getResultList();
-
-        list.forEach(playlistGetDto -> {
-            playlistGetDto.setContent(playlistDtoDao.getAudioDtoByPlaylistId(playlistGetDto.getId()));
-        });
         return list;
     }
 
     @Override
     public Long getCount(Map<String, Object> parameters) {
         return entityManager.createQuery(
-                "select count (p) from Playlist p where p.id = :playlistId ",
+                "select count (p) from Playlist p where p.ownerUser.userId = :userId ",
                 Long.class
-        ).setParameter("playlistId", parameters.get("playlistId"))
+        ).setParameter("userId", parameters.get("userId"))
                 .getSingleResult();
     }
 }

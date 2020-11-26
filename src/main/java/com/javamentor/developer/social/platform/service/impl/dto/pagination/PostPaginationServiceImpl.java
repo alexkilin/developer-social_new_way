@@ -1,10 +1,9 @@
-package com.javamentor.developer.social.platform.service.impl.dto.page;
+package com.javamentor.developer.social.platform.service.impl.dto.pagination;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
-import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +16,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class GroupPaginationService<T, V> extends PaginationService<T, V> {
+public class PostPaginationServiceImpl<T, V> extends PaginationServiceImpl<T, V> {
 
     private PostDtoDao postDtoDao;
 
     @Autowired
-    public void GroupPaginationService(PostDtoDao postDtoDao) {
+    public void PostPaginationService(PostDtoDao postDtoDao) {
         this.postDtoDao = postDtoDao;
     }
 
-
-    @SneakyThrows
-    public PageDto<T, V> getGroupPageDto(String methodName, Map<String, Object> parameters) {
-        PageDto<GroupWallDto, ?> pageDto;
+    public PageDto<T, V> getPostPageDto(String methodName, Map<String, Object> parameters) {
+        PageDto<PostDto, ?> pageDto;
         try {
-            pageDto = (PageDto<GroupWallDto, ?>) super.getPageDto(methodName, parameters);
+            pageDto = (PageDto<PostDto, ?>) super.getPageDto(methodName, parameters);
         } catch (Exception e){
             throw new PaginationException("Invalid parameters or declared implementation");
         }
@@ -40,11 +37,9 @@ public class GroupPaginationService<T, V> extends PaginationService<T, V> {
         return (PageDto<T, V>) pageDto;
     }
 
-
-
-    public void addMediasAndTags(PageDto <GroupWallDto, ?> pageDto){
-        List<GroupWallDto> groupWallDtoList = pageDto.getItems();
-        List<Long> postId = groupWallDtoList.stream().map(GroupWallDto::getId).collect(Collectors.toList());
+    public void addMediasAndTags(PageDto <PostDto, ?> pageDto){
+        List<PostDto> postDtoList = pageDto.getItems();
+        List<Long> postId = postDtoList.stream().map(PostDto::getId).collect(Collectors.toList());
 
 
         List<MediaPostDto> mediaDtoList = postDtoDao.getMediasByPostId(postId);
@@ -62,7 +57,7 @@ public class GroupPaginationService<T, V> extends PaginationService<T, V> {
                 mediaMap.get(mediaPostDto.getPostId()).add(mediaPostDto);
             }
         });
-        groupWallDtoList.forEach(postDto -> {
+        postDtoList.forEach(postDto -> {
             postDto.setMedia(mediaMap.get(postDto.getId()));
             if(postDto.getMedia() == null){
                 postDto.setMedia(new ArrayList<>());
@@ -77,12 +72,17 @@ public class GroupPaginationService<T, V> extends PaginationService<T, V> {
                 tagMap.get(tagDto.getPostId()).add(tagDto);
             }
         });
-        groupWallDtoList.forEach(postDto -> {
+        postDtoList.forEach(postDto -> {
             postDto.setTags(tagMap.get(postDto.getId()));
             if(postDto.getTags() == null){
                 postDto.setTags(new ArrayList<>());
             }
+
+            postDto.setMedia(mediaMap.get(postDto.getId()));
+            if(postDto.getMedia() == null){
+                postDto.setMedia(new ArrayList<>());
+            }
         });
-        pageDto.setItems(groupWallDtoList);
+        pageDto.setItems(postDtoList);
     }
 }

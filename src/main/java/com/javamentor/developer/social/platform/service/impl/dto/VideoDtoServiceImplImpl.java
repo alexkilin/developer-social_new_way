@@ -4,17 +4,17 @@ import com.javamentor.developer.social.platform.dao.abstracts.dto.VideoDtoDao;
 import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
-import com.javamentor.developer.social.platform.service.impl.dto.page.PaginationService;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
 @Service
-public class VideoDtoServiceImpl extends PaginationService implements VideoDtoService {
+public class VideoDtoServiceImplImpl extends PaginationServiceImpl implements VideoDtoService {
     private final VideoDtoDao videoDtoDao;
 
-    public VideoDtoServiceImpl(VideoDtoDao videoDtoDao) {
+    public VideoDtoServiceImplImpl(VideoDtoDao videoDtoDao) {
         this.videoDtoDao = videoDtoDao;
     }
 
