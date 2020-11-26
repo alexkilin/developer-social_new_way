@@ -117,32 +117,32 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     void getUsers() throws Exception {
-        mockMvc.perform(get(apiUrl + "/"))
+        mockMvc.perform(get(apiUrl + "?currentPage=1&itemsOnPage=5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(5))
+                .andExpect(jsonPath("$.items.length()").value(5))
 
-                .andExpect(jsonPath("$[0].userId").value(2))
-                .andExpect(jsonPath("$[0].firstName").value("Admin1"))
-                .andExpect(jsonPath("$[0].lastName").value("LastNameAdmin1"))
-                .andExpect(jsonPath("$[0].dateOfBirth").value("30.05.2008"))
-                .andExpect(jsonPath("$[0].education").value("MIT University"))
-                .andExpect(jsonPath("$[0].aboutMe").value("My description about life - Admin1"))
-                .andExpect(jsonPath("$[0].avatar").value("www.myavatar0.ru/9090"))
-                .andExpect(jsonPath("$[0].email").value("admin2@user.ru"))
-                .andExpect(jsonPath("$[0].password").value("userpass0"))
-                .andExpect(jsonPath("$[0].city").value("SPb"))
-                .andExpect(jsonPath("$[0].linkSite").isEmpty())
-                .andExpect(jsonPath("$[0].profession").value("Plumber"))
-                .andExpect(jsonPath("$[0].roleName").value("USER"))
-                .andExpect(jsonPath("$[0].status").value("Pureness and perfection"))
-                .andExpect(jsonPath("$[0].activeName").value("ACTIVE"))
+                .andExpect(jsonPath("$.items[0].userId").value(2))
+                .andExpect(jsonPath("$.items[0].firstName").value("Admin1"))
+                .andExpect(jsonPath("$.items[0].lastName").value("LastNameAdmin1"))
+                .andExpect(jsonPath("$.items[0].dateOfBirth").value("30.05.2008"))
+                .andExpect(jsonPath("$.items[0].education").value("MIT University"))
+                .andExpect(jsonPath("$.items[0].aboutMe").value("My description about life - Admin1"))
+                .andExpect(jsonPath("$.items[0].avatar").value("www.myavatar0.ru/9090"))
+                .andExpect(jsonPath("$.items[0].email").value("admin2@user.ru"))
+                .andExpect(jsonPath("$.items[0].password").value("userpass0"))
+                .andExpect(jsonPath("$.items[0].city").value("SPb"))
+                .andExpect(jsonPath("$.items[0].linkSite").isEmpty())
+                .andExpect(jsonPath("$.items[0].profession").value("Plumber"))
+                .andExpect(jsonPath("$.items[0].roleName").value("USER"))
+                .andExpect(jsonPath("$.items[0].status").value("Pureness and perfection"))
+                .andExpect(jsonPath("$.items[0].activeName").value("ACTIVE"))
 
-                .andExpect(jsonPath("$[1].userId").value(3))
-                .andExpect(jsonPath("$[2].userId").value(4))
-                .andExpect(jsonPath("$[3].userId").value(5))
-                .andExpect(jsonPath("$[4].userId").value(6));
+                .andExpect(jsonPath("$.items[1].userId").value(3))
+                .andExpect(jsonPath("$.items[2].userId").value(4))
+                .andExpect(jsonPath("$.items[3].userId").value(5))
+                .andExpect(jsonPath("$.items[4].userId").value(6));
     }
 
     @Test
@@ -219,15 +219,15 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     @Test
     void getFriendsOfUserById() throws Exception {
         mockMvc.perform(get(apiUrl + "/{userId}/friends", 2L)
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(4));
+                .andExpect(jsonPath("$.items.length()").value(4));
 
         mockMvc.perform(get(apiUrl + "/{userId}/friends", 222L)
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

@@ -33,20 +33,20 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getAllAudioPaged() throws Exception {
         this.mockMvc.perform(get(apiUrl + "/")
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(4))
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].url").value("www.myaudio1.ru"))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon0"))
-                .andExpect(jsonPath("$[0].name").value("AudioTestName 0"))
-                .andExpect(jsonPath("$[0].author").value("Test Author 0"))
-                .andExpect(jsonPath("$[0].album").value("AlbumTestName 0"))
-                .andExpect(jsonPath("$[0].length").value(365))
-                .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[2].id").value(3))
-                .andExpect(jsonPath("$[3].id").value(4));
+                .andExpect(jsonPath("$.items.length()").value(4))
+                .andExpect(jsonPath("$.items[0].id").value(1))
+                .andExpect(jsonPath("$.items[0].url").value("www.myaudio1.ru"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon0"))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 0"))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 0"))
+                .andExpect(jsonPath("$.items[0].album").value("AlbumTestName 0"))
+                .andExpect(jsonPath("$.items[0].length").value(365))
+                .andExpect(jsonPath("$.items[1].id").value(2))
+                .andExpect(jsonPath("$.items[2].id").value(3))
+                .andExpect(jsonPath("$.items[3].id").value(4));
     }
 }
