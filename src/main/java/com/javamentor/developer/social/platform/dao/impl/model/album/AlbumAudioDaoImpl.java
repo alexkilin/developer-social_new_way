@@ -14,9 +14,6 @@ import javax.persistence.PersistenceContext;
 @Repository
 public class AlbumAudioDaoImpl extends GenericDaoAbstract<AlbumAudios, Long> implements AlbumAudioDao {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     private final AlbumDao albumDAO;
 
     @Autowired

@@ -3,7 +3,6 @@ package com.javamentor.developer.social.platform.service.impl.dto.pagination;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.pagination.PaginationService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

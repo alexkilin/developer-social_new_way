@@ -17,6 +17,7 @@ public class AlbumImageDtoServiceImplImpl extends PaginationServiceImpl implemen
     @Override
     @Transactional
     public PageDto<AlbumImageDto, ?> getAllByUserId(Map<String, Object> parameters) {
+        //noinspection unchecked
         return super.getPageDto("getAllImageAlbumsOfUser", parameters);
     }
 

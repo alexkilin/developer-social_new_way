@@ -1,11 +1,9 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.page.post;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;

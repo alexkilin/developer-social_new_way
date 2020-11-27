@@ -59,7 +59,7 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
 
     @Override
     public ChatDto getChatDtoByGroupChatId(Long chatId) {
-        ChatDto chatDto = (ChatDto) em.createQuery("select " +
+        return (ChatDto) em.createQuery("select " +
                 "(select max(me) from gc.messages me), " +
                 "gc.image," +
                 "gc.title," +
@@ -69,7 +69,6 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 .unwrap(Query.class)
                 .setResultTransformer(new GroupChatDtoResultTransformer())
                 .getSingleResult();
-        return chatDto;
     }
 
     private static class ChatDtoResultTransformer implements ResultTransformer {

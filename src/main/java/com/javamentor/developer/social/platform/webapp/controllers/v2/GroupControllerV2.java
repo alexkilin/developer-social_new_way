@@ -57,6 +57,7 @@ public class GroupControllerV2 {
     public ResponseEntity<PageDto<GroupInfoDto, ?>> getAllGroups(
             @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);

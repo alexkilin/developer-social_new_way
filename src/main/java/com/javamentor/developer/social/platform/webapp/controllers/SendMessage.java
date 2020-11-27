@@ -1,8 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers;
 
 import com.javamentor.developer.social.platform.models.entity.chat.Message;
-import com.javamentor.developer.social.platform.service.abstracts.model.chat.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -11,11 +9,9 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class SendMessage {
-    private final MessageService messageService;
 
-    @Autowired
-    public SendMessage(MessageService messageService) {
-        this.messageService = messageService;
+    public SendMessage() {
+
     }
 
     @MessageMapping("/chat.sendMessage")
@@ -27,7 +23,7 @@ public class SendMessage {
     @MessageMapping("/chat.yml.addUser")
     @SendTo("/topic/public")
     public Message addUser(@Payload Message message,
-                               SimpMessageHeaderAccessor headerAccessor) {
+                           SimpMessageHeaderAccessor headerAccessor) {
         headerAccessor.getSessionAttributes().put("username", message.getUserSender());
         return message;
     }

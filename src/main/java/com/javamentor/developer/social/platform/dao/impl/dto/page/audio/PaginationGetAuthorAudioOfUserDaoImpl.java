@@ -1,11 +1,9 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.page.audio;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.AudioDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -30,7 +28,7 @@ public class PaginationGetAuthorAudioOfUserDaoImpl implements PaginationDao<Audi
         int currentPage = (int)parameters.get("currentPage");
         int itemsOnPage = (int)parameters.get("itemsOnPage");
 
-        List<AudioDto> audios = entityManager
+        return (List<AudioDto>) entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -70,7 +68,6 @@ public class PaginationGetAuthorAudioOfUserDaoImpl implements PaginationDao<Audi
                         }
                 )
                 .getResultList();
-        return audios;
     }
 
     @Override

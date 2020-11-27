@@ -14,7 +14,6 @@ public class AudioDtoDaoImpl implements AudioDtoDao {
     protected EntityManager entityManager;
 
     @Override
-    @SuppressWarnings("unchecked")
     public Audios getAudioOfId(Long id) {
         return entityManager.find(Audios.class, id);
     }

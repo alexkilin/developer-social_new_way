@@ -5,7 +5,6 @@ import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,8 @@ public class PostPaginationServiceImpl<T, V> extends PaginationServiceImpl<T, V>
         try {
             pageDto = (PageDto<PostDto, ?>) super.getPageDto(methodName, parameters);
         } catch (Exception e){
-            throw new PaginationException("Invalid parameters or declared implementation");
+            throw new PaginationException("Invalid parameters or declared implementation. " +
+                    "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");
         }
         addMediasAndTags(pageDto);
 

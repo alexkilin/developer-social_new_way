@@ -103,8 +103,8 @@ public class ChatControllerV2 {
             @ApiResponse(code = 200, message = "OK", response = MessageDto.class),
             @ApiResponse(code = 404, message = "Чат с данным Id не существует", response = String.class)
     })
-    public ResponseEntity<?> editGroupChatTitle(
-            @ApiParam(value = "Объект чата") @RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto) {
+    public ResponseEntity<?> editGroupChatTitle(@ApiParam(value = "Объект чата")
+                                                    @RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto) {
         Long chatId = chatEditTitleDto.getId();
 
         Optional<GroupChat> result = groupChatService.getById(chatId);

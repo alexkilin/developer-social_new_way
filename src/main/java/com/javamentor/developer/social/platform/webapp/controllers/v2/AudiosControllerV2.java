@@ -83,6 +83,7 @@ public class AudiosControllerV2 {
     @GetMapping(params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AudioDto, ?>> getPartAudios(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                         @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
         logger.info(String.format("Аудио начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
@@ -97,6 +98,7 @@ public class AudiosControllerV2 {
     public ResponseEntity<PageDto<AudioDto, ?>> getAudioOfAuthor(@ApiParam(value = "Имя исполнителя", example = "Blur") @PathVariable @NotNull String author,
                                                     @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                     @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
         logger.info(String.format("Отправка всего аудио автора %s", author));
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("author", author);
@@ -113,6 +115,7 @@ public class AudiosControllerV2 {
     public ResponseEntity<PageDto<AudioDto, ?>> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2") @PathVariable @NotNull String name,
                                                          @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                          @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
         logger.info(String.format("Отправка аудио %s", name));
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("name", name);
@@ -128,6 +131,7 @@ public class AudiosControllerV2 {
     public ResponseEntity<PageDto<AudioDto, ?>> getAudioOfAlbum(@ApiParam(value = "Название альбома", example = "The best") @PathVariable @NotNull String album,
                                                           @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                           @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
         logger.info(String.format("Отправка всего аудио альбома %s", album));
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("album", album);
@@ -144,6 +148,7 @@ public class AudiosControllerV2 {
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
+
         logger.info(String.format("Аудио пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
@@ -427,7 +432,6 @@ public class AudiosControllerV2 {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s", playlistId));
         }
         logger.info(String.format("Аудио из плейлиста %s отправлено", playlistId));
-
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("playlistId", playlistId);
         parameters.put("currentPage", currentPage);

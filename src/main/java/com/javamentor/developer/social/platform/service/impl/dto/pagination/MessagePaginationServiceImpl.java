@@ -4,7 +4,6 @@ import com.javamentor.developer.social.platform.dao.abstracts.dto.chat.MessageDt
 import com.javamentor.developer.social.platform.models.dto.chat.MediaDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -26,7 +25,8 @@ public class MessagePaginationServiceImpl<T, V> extends PaginationServiceImpl<T,
         try {
             pageDto = (PageDto<MessageDto, ?>) super.getPageDto(methodName, parameters);
         } catch (Exception e) {
-            throw new PaginationException("Invalid parameters or declared implementation");
+            throw new PaginationException("Invalid parameters or declared implementation. " +
+                    "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");
         }
         addMedias(pageDto);
 

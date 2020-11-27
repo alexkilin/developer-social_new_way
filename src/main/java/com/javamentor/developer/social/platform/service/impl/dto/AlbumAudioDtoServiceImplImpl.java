@@ -15,6 +15,7 @@ public class AlbumAudioDtoServiceImplImpl extends PaginationServiceImpl implemen
     public AlbumAudioDtoServiceImplImpl() {
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     @Transactional
     public PageDto<AlbumAudioDto, ?> getAllByUserId(Map<String, Object> parameters) {

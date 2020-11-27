@@ -2,19 +2,13 @@ package com.javamentor.developer.social.platform.dao.impl.dto.chat;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.chat.MessageDtoDao;
 import com.javamentor.developer.social.platform.models.dto.chat.MediaDto;
-import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
-import com.javamentor.developer.social.platform.models.entity.chat.Message;
-import com.javamentor.developer.social.platform.models.entity.media.Media;
-import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository

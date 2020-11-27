@@ -2,7 +2,6 @@ package com.javamentor.developer.social.platform.dao.impl.dto.page.message;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
-import com.javamentor.developer.social.platform.models.entity.chat.Message;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.stereotype.Component;

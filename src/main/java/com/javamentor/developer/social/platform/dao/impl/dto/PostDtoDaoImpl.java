@@ -18,8 +18,8 @@ import java.util.*;
 @Repository
 public class PostDtoDaoImpl implements PostDtoDao {
 
-    final EntityManager entityManager;
-    final UserService userService;
+    private final EntityManager entityManager;
+    private final UserService userService;
 
     @Autowired
     public PostDtoDaoImpl(EntityManager entityManager, UserService userService) {
@@ -30,14 +30,13 @@ public class PostDtoDaoImpl implements PostDtoDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<PostDto> getPostById(Long postId, Long userPrincipalId) {
-        List<PostDto> postDtoList = entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST +
+        return (List<PostDto>) entityManager.createQuery(SELECT_ALL_POSTS + FROM_POST +
                 "where p.id = :postId")
                 .setParameter("userPrincipalId", userPrincipalId)
                 .setParameter("postId", postId)
                 .unwrap(Query.class)
                 .setResultTransformer(getResultTransformer())
                 .getResultList();
-        return postDtoList;
     }
 
     @Override

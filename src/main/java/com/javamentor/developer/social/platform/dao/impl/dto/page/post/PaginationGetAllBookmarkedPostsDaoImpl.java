@@ -24,7 +24,7 @@ public class PaginationGetAllBookmarkedPostsDaoImpl implements PaginationDao<Pos
     public List<PostDto> getItems(Map<String, Object> parameters) {
         int currentPage = (int) parameters.get("currentPage");
         int itemsOnPage = (int) parameters.get("itemsOnPage");
-        List<PostDto> postDtoList = entityManager.createQuery(
+        return (List<PostDto>) entityManager.createQuery(
                 "select p.id, " +
                         "p.title, " +
                         "p.text, " +
@@ -85,7 +85,6 @@ public class PaginationGetAllBookmarkedPostsDaoImpl implements PaginationDao<Pos
                                 return list;
                             }
                         }).getResultList();
-        return postDtoList;
     }
 
     @Override

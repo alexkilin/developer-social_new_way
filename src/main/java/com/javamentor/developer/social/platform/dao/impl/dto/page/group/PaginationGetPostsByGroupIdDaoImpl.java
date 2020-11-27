@@ -1,12 +1,9 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.page.group;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
-import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
 import org.hibernate.query.Query;
 import org.hibernate.transform.ResultTransformer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -30,7 +27,7 @@ public class PaginationGetPostsByGroupIdDaoImpl implements PaginationDao<GroupWa
         int currentPage = (int) parameters.get("currentPage");
         int itemsOnPage = (int) parameters.get("itemsOnPage");
 
-        List<GroupWallDto> groupWallDtoList = entityManager.createQuery(
+        return (List<GroupWallDto>) entityManager.createQuery(
                 "SELECT " +
                         "p.id, " +
                         "p.lastRedactionDate, " +
@@ -70,7 +67,6 @@ public class PaginationGetPostsByGroupIdDaoImpl implements PaginationDao<GroupWa
                         return list;
                     }
                 }).getResultList();
-        return groupWallDtoList;
     }
 
     @Override

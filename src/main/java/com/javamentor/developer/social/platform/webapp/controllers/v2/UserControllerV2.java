@@ -128,9 +128,11 @@ public class UserControllerV2 {
     })
     @PatchMapping("/{id}/password")
     @Validated(OnCreate.class)
-    public ResponseEntity<?> updateUserPassword(
-            @ApiParam(value = "Id пользователя") @PathVariable Long id,
-            @ApiParam(value = "Новый пароль") @Valid @RequestBody UserResetPasswordDto userResetPasswordDto) {
+    public ResponseEntity<?> updateUserPassword(@ApiParam(value = "Id пользователя")
+                                                @PathVariable Long id,
+                                                @ApiParam(value = "Новый пароль")
+                                                @Valid @RequestBody UserResetPasswordDto userResetPasswordDto) {
+
         Optional<User> optionalUser = userService.getById(id);
         if (!optionalUser.isPresent()) {
             logger.info(String.format("Пользователь с ID: %d не существует", id));

@@ -5,8 +5,6 @@ import com.javamentor.developer.social.platform.dao.impl.GenericDaoAbstract;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.UserHasAlbum;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
-import com.javamentor.developer.social.platform.webapp.converters.AlbumConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,11 +16,7 @@ public class AlbumDaoImpl extends GenericDaoAbstract<Album, Long> implements Alb
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final AlbumConverter albumConverter;
-
-    @Autowired
-    public AlbumDaoImpl(AlbumConverter albumConverter) {
-        this.albumConverter = albumConverter;
+    public AlbumDaoImpl() {
     }
 
     @Override

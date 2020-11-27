@@ -1,9 +1,7 @@
 package com.javamentor.developer.social.platform.dao.impl.dto.page.video;
 
-import com.javamentor.developer.social.platform.dao.abstracts.dto.VideoDtoDao;
 import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;

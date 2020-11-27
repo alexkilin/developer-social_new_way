@@ -25,7 +25,7 @@ public class PaginationGetPostsByTagDaoImpl implements PaginationDao<PostDto> {
     public List<PostDto> getItems(Map<String, Object> parameters) {
         int currentPage = (int) parameters.get("currentPage");
         int itemsOnPage = (int) parameters.get("itemsOnPage");
-        List<PostDto> postDtoList = entityManager.createQuery(
+        return (List<PostDto>) entityManager.createQuery(
                 "select p.id, " +
                         "p.title, " +
                         "p.text, " +
@@ -87,7 +87,6 @@ public class PaginationGetPostsByTagDaoImpl implements PaginationDao<PostDto> {
                                 return list;
                             }
                         }).getResultList();
-        return postDtoList;
 
 
     }

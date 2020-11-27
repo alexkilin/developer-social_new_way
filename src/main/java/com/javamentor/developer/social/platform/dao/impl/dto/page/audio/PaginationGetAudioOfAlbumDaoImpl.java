@@ -27,7 +27,7 @@ public class PaginationGetAudioOfAlbumDaoImpl implements PaginationDao<AudioDto>
         int currentPage = (int) parameters.get("currentPage");
         int itemsOnPage = (int) parameters.get("itemsOnPage");
 
-        List<AudioDto> audios = entityManager
+        return (List<AudioDto>) entityManager
                 .createQuery("SELECT " +
                         "c.id, " +
                         "c.icon, " +
@@ -66,7 +66,6 @@ public class PaginationGetAudioOfAlbumDaoImpl implements PaginationDao<AudioDto>
                         }
                 )
                 .getResultList();
-        return audios;
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.javamentor.developer.social.platform.dao.abstracts.dto.PlaylistDtoDao
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,8 @@ public class PlaylistPaginationServiceImpl<T, V> extends PaginationServiceImpl<T
         try {
             pageDto = (PageDto<PlaylistGetDto, ?>) super.getPageDto(methodName, parameters);
         } catch (Exception e) {
-            throw new PaginationException("Invalid parameters or declared implementation");
+            throw new PaginationException("Invalid parameters or declared implementation. " +
+                    "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");
         }
         addContent(pageDto);
 
