@@ -107,7 +107,7 @@ public class UserControllerV2 {
                 return ResponseEntity.badRequest().body(String.format("User with email: %s already exist. Email should be unique", userUpdateInfoDto.getEmail()));
             }
             User user = userConverter.toEntity(userUpdateInfoDto);
-            userService.updateInfo(user, optionalUser.get());
+            userService.updateInfo(user);
             logger.info(String.format("Пользователь с ID: %d обновлён успешно", userUpdateInfoDto.getUserId()));
             return ResponseEntity.ok(userConverter.toDto(user));
         }

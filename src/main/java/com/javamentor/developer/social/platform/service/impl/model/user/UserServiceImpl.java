@@ -9,10 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -73,10 +71,9 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
 
     @Override
     @Transactional
-    public void updateInfo(User user, User userOld) {
-        initializingNullFieldsOfUser(user, userOld);
+    public void updateInfo(User user) {
         user.setLastRedactionDate(LocalDateTime.now());
-        userDao.update(user);
+        userDao.updateInfo(user);
     }
 
     @Override
@@ -86,18 +83,4 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
         return optionalUser.orElse(null);
     }
 
-    private void initializingNullFieldsOfUser(User user, User userOld) {
-        try {
-            Field[] fields = Class.forName(User.class.getName()).getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                if (Objects.isNull(field.get(user))) {
-                    field.set(user, field.get(userOld));
-                }
-                field.setAccessible(false);
-            }
-        } catch (ClassNotFoundException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
 }

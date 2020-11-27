@@ -54,6 +54,38 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
     }
 
     @Override
+    public void updateInfo(User user) {
+        Query query = entityManager.createQuery(
+                "UPDATE User u SET " +
+                        "u.firstName = :firstName" +
+                        ",u.lastName =:lastName" +
+                        ",u.aboutMe = :aboutMe" +
+                        ",u.avatar = :avatar" +
+                        ",u.city = :city" +
+                        ",u.dateOfBirth = :dateOfBirth" +
+                        ",u.education = :education" +
+                        ",u.email = :email" +
+                        ",u.linkSite = :linkSite" +
+                        ",u.profession = :profession" +
+                        ",u.lastRedactionDate = :lastRedactionDate" +
+                        " WHERE u.userId = :id")
+                .setParameter("firstName", user.getFirstName())
+                .setParameter("lastName", user.getLastName())
+                .setParameter("aboutMe", user.getAboutMe())
+                .setParameter("avatar", user.getAvatar())
+                .setParameter("city", user.getCity())
+                .setParameter("dateOfBirth", user.getDateOfBirth())
+                .setParameter("education", user.getEducation())
+                .setParameter("email", user.getEmail())
+                .setParameter("linkSite", user.getLinkSite())
+                .setParameter("profession", user.getProfession())
+                .setParameter("id", user.getUserId())
+                .setParameter("lastRedactionDate", user.getLastRedactionDate());
+        query.executeUpdate();
+
+    }
+
+    @Override
     public void updateUserPassword(User user) {
         Query query = entityManager.createQuery(
                 "UPDATE User u SET " +

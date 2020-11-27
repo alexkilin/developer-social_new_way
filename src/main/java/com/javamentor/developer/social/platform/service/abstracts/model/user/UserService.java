@@ -16,7 +16,7 @@ public interface UserService extends GenericService<User, Long> {
 
     void updateUserPassword(User user);
 
-    void updateInfo(User user, User userOld);
+    void updateInfo(User user);
 
     boolean existsAnotherByEmail(String email, Long userId);
 
