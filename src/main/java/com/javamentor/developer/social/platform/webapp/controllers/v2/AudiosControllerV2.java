@@ -421,8 +421,8 @@ public class AudiosControllerV2 {
             @ApiResponse(code = 404, message = "Плейлист найден")})
     @GetMapping(value = "/playlists/{playlistId}/audio", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<?> getAudioFromPlaylist(@ApiParam(value = "Id плейлиста", example = "2") @PathVariable @NotNull Long playlistId,
-                                                  @ApiParam(value = "Отступ", example = "0") @RequestParam("offset") @NotNull int currentPage,
-                                                  @ApiParam(value = "Количество данных на страницу", example = "10") @RequestParam("limit") @NotNull int itemsOnPage) {
+                                                  @ApiParam(value = "Отступ", example = "0") @RequestParam("currentPage") @NotNull int currentPage,
+                                                  @ApiParam(value = "Количество данных на страницу", example = "10") @RequestParam("itemsOnPage") @NotNull int itemsOnPage) {
         if (!playlistService.existById(playlistId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s", playlistId));
         }
