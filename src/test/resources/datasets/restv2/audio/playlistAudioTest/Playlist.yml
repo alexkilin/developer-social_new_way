@@ -3,7 +3,7 @@ playlists:
   image: testimage0
   name: test0
   persist_date: '2020-09-15 00:08:44.271371'
-  user_id: 3
+  user_id: 2
 
 - playlist_id: 11
   image: testimage1
@@ -15,16 +15,22 @@ playlists:
   image: testimage2
   name: test2
   persist_date: '2020-09-15 00:25:04.633258'
-  user_id: 3
+  user_id: 4
 
 - playlist_id: 13
   image: testimage3
   name: test3
   persist_date: '2020-09-15 00:25:05.205605'
-  user_id: 3
+  user_id: 5
 
 - playlist_id: 14
   image: testimage4
   name: test4
+  persist_date: '2020-09-15 00:25:05.624127'
+  user_id: 6
+
+- playlist_id: 20
+  image: testimage20
+  name: test20
   persist_date: '2020-09-15 00:25:05.624127'
   user_id: 3
