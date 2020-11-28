@@ -113,15 +113,15 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     void userJoinGroup() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=20", 5))
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=20", 4))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 20 added to the group with id: 5"));
+                .andExpect(content().string("User with id: 20 added to the group with id: 4"));
     }
 
     @Test
     void userJoinGroupExist() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=2", 20))
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=20", 2))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("User with id: 20 already a member of the group with id: 2"));
