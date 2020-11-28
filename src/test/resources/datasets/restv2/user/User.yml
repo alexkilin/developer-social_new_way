@@ -18,7 +18,7 @@ users:
     profession: "Plumber"
     link_site: "www.jm.ru"
 
-  - user_id: 3
+  - user_id: 7
     first_name: "Admin2"
     last_name: "LastNameAdmin2"
     date_of_birth: "2008-05-30 15:20:12.121000"

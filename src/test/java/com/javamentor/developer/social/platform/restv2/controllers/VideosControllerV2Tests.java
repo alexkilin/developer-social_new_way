@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -103,19 +102,19 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .name("MyVideoAlbum")
                 .build();
 
+        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6000)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(albumVideoDto)))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Пользователь с 6000 id не найден"));
+
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumVideoDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("MyVideoAlbum"));
-
-        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 600)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(albumVideoDto)))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Пользователь с %d id не найден"));
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6)
                 .contentType(MediaType.APPLICATION_JSON)

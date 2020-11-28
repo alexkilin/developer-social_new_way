@@ -4,13 +4,11 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageCreateDto;
-import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
+import com.javamentor.developer.social.platform.restv2.controllers.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
