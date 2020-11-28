@@ -113,18 +113,18 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     void userJoinGroup() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=2", 5))
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=20", 5))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 2 added to the group with id: 5"));
+                .andExpect(content().string("User with id: 20 added to the group with id: 5"));
     }
 
     @Test
     void userJoinGroupExist() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=2", 2))
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=2", 20))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 2 already a member of the group with id: 2"));
+                .andExpect(content().string("User with id: 20 already a member of the group with id: 2"));
     }
 
 
@@ -137,10 +137,10 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     void deleteUserById() throws Exception {
-        mockMvc.perform(delete("/api/v2/groups/{groupId}/users?userId=6", 1))
+        mockMvc.perform(delete("/api/v2/groups/{groupId}/users?userId=60", 1))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 6 is no longer a member of the group with id: 1"));
+                .andExpect(content().string("User with id: 60 is no longer a member of the group with id: 1"));
     }
 
     @Test
