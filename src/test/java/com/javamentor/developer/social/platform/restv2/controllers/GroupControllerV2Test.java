@@ -10,9 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DataSet(value = {
-        "datasets/restv2/user/User.yml",
-        "datasets/restv2/user/Active.yml",
-        "datasets/restv2/user/Role.yml",
+        "datasets/restv2/groupset/group/usersResources/User.yml",
+        "datasets/restv2/groupset/group/usersResources/Active.yml",
+        "datasets/restv2/groupset/group/usersResources/Role.yml",
         "datasets/restv2/groupset/group/Group.yml",
         "datasets/restv2/groupset/group/GroupHasUser.yml",
         "datasets/restv2/groupset/group/GroupWal.yml",
