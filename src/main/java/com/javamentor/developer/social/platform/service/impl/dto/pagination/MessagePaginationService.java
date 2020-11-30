@@ -1,36 +1,39 @@
 package com.javamentor.developer.social.platform.service.impl.dto.pagination;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.chat.MessageDtoDao;
+import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.chat.MediaDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-public class MessagePaginationServiceImpl<T, V> extends PaginationServiceImpl<T, V> {
+@Service
+public class MessagePaginationService<T, V> extends PaginationServiceImpl<Object, Object> {
     private MessageDtoDao messageDtoDao;
 
     @Autowired
-    public void PostPaginationService(MessageDtoDao messageDtoDao) {
+    public void setMessageDtoDao(MessageDtoDao messageDtoDao) {
         this.messageDtoDao = messageDtoDao;
     }
 
-    public PageDto<T, V> getMessagePageDto(String methodName, Map<String, Object> parameters) {
-        PageDto<MessageDto, ?> pageDto;
+    @SuppressWarnings("unchecked")
+    public PageDto<? extends T, ? extends V> getMessagePageDto(String methodName, Map<String, java.lang.Object> parameters) {
+        PageDto<MessageDto, Object> pageDto;
         try {
-            pageDto = (PageDto<MessageDto, ?>) super.getPageDto(methodName, parameters);
+            pageDto = (PageDto<MessageDto, Object>) super.getPageDto(methodName, parameters);
         } catch (Exception e) {
             throw new PaginationException("Invalid parameters or declared implementation. " +
                     "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");
         }
         addMedias(pageDto);
 
-        return (PageDto<T, V>) pageDto;
+        return (PageDto<? extends T, ? extends V>) pageDto;
     }
     
     public void addMedias(PageDto<MessageDto, ?> pageDto) {

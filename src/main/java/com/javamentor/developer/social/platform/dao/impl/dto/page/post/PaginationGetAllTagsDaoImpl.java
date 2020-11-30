@@ -26,10 +26,10 @@ public class PaginationGetAllTagsDaoImpl implements PaginationDao<TagDto> {
         int currentPage = (int) parameters.get("currentPage");
         int itemsOnPage = (int) parameters.get("itemsOnPage");
         return entityManager.createQuery(
-                "SELECT " +
-                        "id," +
-                        "text" +
-                        " FROM Tag")
+                "select " +
+                        "t.id," +
+                        "t.text " +
+                        "from Tag t")
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)
                 .unwrap(Query.class)
@@ -37,19 +37,15 @@ public class PaginationGetAllTagsDaoImpl implements PaginationDao<TagDto> {
 
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
-                        if (objects[0] != null && objects[1] != null) {
                             return TagDto.builder()
                                     .id((Long) objects[0])
                                     .text((String) objects[1])
                                     .build();
-                        } else return null;
                     }
 
                     @Override
                     public List transformList(List list) {
-                        if (list.contains(null)) {
-                            return new ArrayList();
-                        } else return list;
+                        return list;
                     }
                 }).getResultList();
     }

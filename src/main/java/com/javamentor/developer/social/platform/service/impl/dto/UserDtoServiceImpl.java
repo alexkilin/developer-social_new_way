@@ -9,29 +9,27 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoSer
 import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class UserDtoServiceImplImpl extends PaginationServiceImpl implements UserDtoService {
+public class UserDtoServiceImpl extends PaginationServiceImpl<Object, Object> implements UserDtoService {
     private final UserDtoDao userDtoDao;
 
     @Autowired
-    public UserDtoServiceImplImpl(UserDtoDao userDtoDao) {
+    public UserDtoServiceImpl(UserDtoDao userDtoDao) {
         this.userDtoDao = userDtoDao;
     }
 
     @Override
-    @Transactional
-    public PageDto<UserDto, ?> getAllUserDto(Map<String, Object> parameters) {
-        return super.getPageDto("getAllUsers", parameters);
+    @SuppressWarnings("unchecked")
+    public PageDto<UserDto, Object> getAllUserDto(Map<String, Object> parameters) {
+        return (PageDto<UserDto, Object>) super.getPageDto("getAllUsers", parameters);
     }
 
     @Override
-    @Transactional
     public Optional<UserDto> getUserDtoById(Long id) {
         Optional<UserDto> userDto = userDtoDao.getUserDtoById(id);
         if (userDto.isPresent()) {
@@ -43,8 +41,8 @@ public class UserDtoServiceImplImpl extends PaginationServiceImpl implements Use
     }
 
     @Override
-    @Transactional
-    public PageDto<UserFriendDto, ?> getUserFriendsDtoById(Map<String, Object> parameters) {
-        return super.getPageDto("getUserFriends", parameters);
+    @SuppressWarnings("unchecked")
+    public PageDto<UserFriendDto, Object> getUserFriendsDtoById(Map<String, Object> parameters) {
+        return (PageDto<UserFriendDto, Object>) super.getPageDto("getUserFriends", parameters);
     }
 }

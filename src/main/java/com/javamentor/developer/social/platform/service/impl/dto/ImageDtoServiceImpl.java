@@ -7,36 +7,34 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.ImageDtoSe
 import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class ImageDtoServiceImplImpl extends PaginationServiceImpl implements ImageDtoService {
+public class ImageDtoServiceImpl extends PaginationServiceImpl<ImageDto, Object> implements ImageDtoService {
     private final ImageDtoDao dao;
 
     @Autowired
-    public ImageDtoServiceImplImpl(ImageDtoDao dao) {
+    public ImageDtoServiceImpl(ImageDtoDao dao) {
         this.dao = dao;
 
     }
 
 
     @Override
-    @Transactional
-    public PageDto<ImageDto, ?> getAllByUserId(Map<String, Object> parameters) {
-        return super.getPageDto("getAllImagesOfUser", parameters);
+    @SuppressWarnings("unchecked")
+    public PageDto<ImageDto, Object> getAllByUserId(Map<String, Object> parameters) {
+        return (PageDto<ImageDto, Object>) super.getPageDto("getAllImagesOfUser", parameters);
     }
 
     @Override
-    @Transactional
-    public PageDto<ImageDto, ?> getAllByAlbumId(Map<String, Object> parameters) {
-        return super.getPageDto("getImagesFromAlbumById", parameters);
+    @SuppressWarnings("unchecked")
+    public PageDto<ImageDto, Object> getAllByAlbumId(Map<String, Object> parameters) {
+        return (PageDto<ImageDto, Object>) super.getPageDto("getImagesFromAlbumById", parameters);
     }
 
     @Override
-    @Transactional
     public Optional<ImageDto> getById(Long id) {
         return dao.getById(id);
     }

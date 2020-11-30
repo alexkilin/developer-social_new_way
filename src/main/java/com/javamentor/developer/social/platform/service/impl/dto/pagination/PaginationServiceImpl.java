@@ -10,23 +10,24 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class PaginationServiceImpl<T, V> implements PaginationService<T, V> {
-    private Map<String, PaginationDao> pageBeans = new ConcurrentHashMap<>();
+public class PaginationServiceImpl<T, V> implements PaginationService<Object, Object> {
+    private Map<String, PaginationDao> pageBeans;
 
     @Autowired
-    public void PaginationService(Map<String, PaginationDao> pageBeans) {
+    public void setPageBeans(Map<String, PaginationDao> pageBeans) {
         this.pageBeans = pageBeans;
     }
 
     @Override
-    public PageDto<T, V> getPageDto(String methodName, Map<String, Object> parameters) {
-        if (parameters.containsKey("currentPage" )&& parameters.get("currentPage") != null
-                && parameters.containsKey("itemsOnPage") && parameters.get("itemsOnPage") != null) {
+    public PageDto<? extends T, ? extends V> getPageDto(String methodName, Map<String, Object> parameters) {
+        Object currentPage = parameters.get("currentPage");
+        Object itemsOnPage = parameters.get("itemsOnPage");
 
+        if (currentPage != null && itemsOnPage != null) {
             PaginationDao paginationDao = pageBeans.get(methodName);
             return new PageDto<T, V>(
-                    (int) parameters.get("currentPage"),
-                    (int) parameters.get("itemsOnPage"),
+                    (int) currentPage,
+                    (int) itemsOnPage,
                     paginationDao.getItems(parameters),
                     paginationDao.getCount(parameters));
 

@@ -4,10 +4,9 @@ import com.javamentor.developer.social.platform.dao.abstracts.dto.PlaylistDtoDao
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PlaylistDtoService;
-import com.javamentor.developer.social.platform.service.impl.dto.pagination.PlaylistPaginationServiceImpl;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.PlaylistPaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +14,16 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class PlaylistDtoServiceImplImpl extends PlaylistPaginationServiceImpl implements PlaylistDtoService {
+public class PlaylistDtoServiceImpl extends PlaylistPaginationService<PlaylistGetDto, Object> implements PlaylistDtoService {
 
     private final PlaylistDtoDao playlistDtoDao;
 
     @Autowired
-    public PlaylistDtoServiceImplImpl(PlaylistDtoDao playlistDtoDao) {
+    public PlaylistDtoServiceImpl(PlaylistDtoDao playlistDtoDao) {
         this.playlistDtoDao = playlistDtoDao;
     }
 
     @Override
-    @Transactional
     public Optional<PlaylistGetDto> getById(Long id) {
         Optional<PlaylistGetDto> optional = playlistDtoDao.getById(id);
         if (optional.isPresent()) {
@@ -39,8 +37,8 @@ public class PlaylistDtoServiceImplImpl extends PlaylistPaginationServiceImpl im
     }
 
     @Override
-    @Transactional
-    public PageDto<PlaylistGetDto, ?> getAllByUserId(Map<String, Object> parameters) {
-        return super.getPlaylistPageDto("getPlaylistsOfUser", parameters);
+    @SuppressWarnings("unchecked")
+    public PageDto<PlaylistGetDto, Object> getAllByUserId(Map<String, Object> parameters) {
+        return (PageDto<PlaylistGetDto, Object>) super.getPlaylistPageDto("getPlaylistsOfUser", parameters);
     }
 }

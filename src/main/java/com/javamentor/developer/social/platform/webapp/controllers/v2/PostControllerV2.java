@@ -98,9 +98,9 @@ public class PostControllerV2 {
     @ApiOperation(value = "Получение поста по тэгу")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
-    @GetMapping(value = "/posts/{tag}", params = {"currentPage", "itemsOnPage"})
+    @GetMapping(value = "/posts", params = {"tag", "currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<PostDto, ?>> getPostsByTag(
-            @ApiParam(value = "Название тэга", example = "Some tag") @PathVariable("tag") String tagText,
+            @ApiParam(value = "Название тэга", example = "Some tag") @RequestParam("tag") String tagText,
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Long userPrincipalId = userService.getPrincipal().getUserId();
@@ -115,8 +115,8 @@ public class PostControllerV2 {
     @ApiOperation(value = "Получение всех существующих тегов")
     @ApiResponses(value =  {
             @ApiResponse(code = 200, message = "Теги получены", responseContainer = "List", response = TagDto.class)})
-    @GetMapping(value = "/posts/tags", params = {"currentPage, itemsOnPage"})
-    public ResponseEntity<PageDto<TagDto, ?>> getAllTags(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+    @GetMapping(value = "/posts/tags", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<TagDto, Object>> getAllTags(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                    @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);

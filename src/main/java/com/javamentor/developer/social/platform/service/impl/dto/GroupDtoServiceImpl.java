@@ -7,50 +7,47 @@ import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
-import com.javamentor.developer.social.platform.service.impl.dto.pagination.GroupPaginationServiceImpl;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.GroupPaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class GroupDtoServiceImplImpl extends GroupPaginationServiceImpl implements GroupDtoService {
+public class GroupDtoServiceImpl extends GroupPaginationService<Object, Object> implements GroupDtoService {
     private final GroupDtoDao groupDtoDao;
 
     @Autowired
-    public GroupDtoServiceImplImpl(GroupDtoDao groupDtoDao) {
+    public GroupDtoServiceImpl(GroupDtoDao groupDtoDao) {
         this.groupDtoDao = groupDtoDao;
     }
 
     @Override
-    @Transactional
-    public PageDto<GroupInfoDto, ?> getAllGroups(Map<String, Object> parameters) {
-        return super.getPageDto("getAllGroups", parameters);
+    @SuppressWarnings("unchecked")
+    public PageDto<GroupInfoDto, Object> getAllGroups(Map<String, Object> parameters) {
+        return (PageDto<GroupInfoDto, Object>) super.getPageDto("getAllGroups", parameters);
     }
 
     @Override
-    @Transactional
     public Optional<GroupDto> getGroupById(Long id) {
         return groupDtoDao.getGroupById(id);
     }
 
     @Override
-    @Transactional
-    public PageDto<GroupWallDto, ?> getPostsByGroupId(Map<String, Object> parameters) {
-        return super.getGroupPageDto("showGroupWall", parameters);
+    @SuppressWarnings("unchecked")
+    public PageDto<GroupWallDto, Object> getPostsByGroupId(Map<String, Object> parameters) {
+        return (PageDto<GroupWallDto, Object>) super.getGroupPageDto("showGroupWall", parameters);
     }
 
     @Override
-    @Transactional
     public Optional<GroupDto> getGroupByName(String name) {
         return groupDtoDao.getGroupByName(name);
     }
 
     @Override
-    @Transactional
-    public PageDto<UserDto, ?> getUsersFromTheGroup(Map<String, Object> parameters) {
-        return super.getPageDto("getUsersFromTheGroup", parameters);
+    @SuppressWarnings("unchecked")
+    public PageDto<UserDto, Object> getUsersFromTheGroup(Map<String, Object> parameters) {
+        return (PageDto<UserDto, Object>) super.getPageDto("getUsersFromTheGroup", parameters);
     }
 }

@@ -5,20 +5,18 @@ import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.AlbumImageDtoService;
 import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
 @Service
-public class AlbumImageDtoServiceImplImpl extends PaginationServiceImpl implements AlbumImageDtoService {
-    public AlbumImageDtoServiceImplImpl() {
+public class AlbumImageDtoServiceImpl extends PaginationServiceImpl<AlbumImageDto, Object> implements AlbumImageDtoService {
+    public AlbumImageDtoServiceImpl() {
     }
 
     @Override
-    @Transactional
-    public PageDto<AlbumImageDto, ?> getAllByUserId(Map<String, Object> parameters) {
-        //noinspection unchecked
-        return super.getPageDto("getAllImageAlbumsOfUser", parameters);
+    @SuppressWarnings("unchecked")
+    public PageDto<AlbumImageDto, Object> getAllByUserId(Map<String, Object> parameters) {
+        return (PageDto<AlbumImageDto, Object>) super.getPageDto("getAllImageAlbumsOfUser", parameters);
     }
 
 }

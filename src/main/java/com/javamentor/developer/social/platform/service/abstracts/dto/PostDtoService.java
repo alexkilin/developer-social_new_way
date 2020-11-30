@@ -10,17 +10,17 @@ import java.util.Map;
 
 public interface PostDtoService {
 
-    PageDto<PostDto, ?> getAllPosts(Map<String, Object> parameters);
+    PageDto<PostDto, Object> getAllPosts(Map<String, Object> parameters);
 
     List<PostDto> getPostById(Long postId, Long userPrincipalId);
 
-    PageDto<PostDto, ?> getPostsByTag(Map<String, Object> parameters);
+    PageDto<PostDto, Object> getPostsByTag(Map<String, Object> parameters);
 
-    PageDto<CommentDto, ?> getCommentsByPostId(Map<String, Object> parameters);
+    PageDto<CommentDto, Object> getCommentsByPostId(Map<String, Object> parameters);
 
-    PageDto<TagDto, ?> getAllTags(Map<String, Object> parameters);
+    PageDto<TagDto, Object> getAllTags(Map<String, Object> parameters);
 
-    PageDto<PostDto, ?> getPostsByUserId(Map<String, Object> parameters);
+    PageDto<PostDto, Object> getPostsByUserId(Map<String, Object> parameters);
 
-    PageDto <PostDto, ?> getAllBookmarkedPosts(Map<String, Object> parameters);
+    PageDto <PostDto, Object> getAllBookmarkedPosts(Map<String, Object> parameters);
 }

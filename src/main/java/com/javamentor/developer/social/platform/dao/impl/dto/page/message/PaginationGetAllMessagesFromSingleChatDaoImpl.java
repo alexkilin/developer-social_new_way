@@ -42,7 +42,6 @@ public class PaginationGetAllMessagesFromSingleChatDaoImpl implements Pagination
 
                     @Override
                     public Object transformTuple(Object[] objects, String[] strings) {
-                        if(objects[0] != null) {
                             return MessageDto.builder()
                                     .id((Long)objects[0])
                                     .lastRedactionDate((LocalDateTime)objects[1])
@@ -50,12 +49,10 @@ public class PaginationGetAllMessagesFromSingleChatDaoImpl implements Pagination
                                     .userSenderImage((String)objects[3])
                                     .message((String)objects[4])
                                     .build();
-                        }else return null;
                     }
 
                     @Override
                     public List transformList(List list) {
-                        if(list.contains(null)) return new ArrayList();
                         return list;
                     }
                 }).getResultList();
