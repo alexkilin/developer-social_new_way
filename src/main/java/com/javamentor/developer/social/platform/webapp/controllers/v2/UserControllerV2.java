@@ -107,7 +107,8 @@ public class UserControllerV2 {
     @PutMapping
     @Validated(OnUpdate.class)
     public ResponseEntity<?> updateUserInfo(@ApiParam(value = "Пользователь с обновленными данными") @Valid @RequestBody UserUpdateInfoDto userUpdateInfoDto) {
-        if (userService.existById(userUpdateInfoDto.getUserId())) {
+        Optional<User> optionalUser = userService.getById(userUpdateInfoDto.getUserId());
+        if (optionalUser.isPresent()) {
             if (userService.existsAnotherByEmail(userUpdateInfoDto.getEmail(), userUpdateInfoDto.getUserId())) {
                 logger.info(String.format("Пользователь с email: %s уже существует", userUpdateInfoDto.getEmail()));
                 return ResponseEntity.badRequest().body(String.format("User with email: %s already exist. Email should be unique", userUpdateInfoDto.getEmail()));

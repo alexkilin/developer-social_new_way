@@ -53,7 +53,6 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
         return (count > 0);
     }
 
-
     @Override
     public void updateInfo(User user) {
         Query query = entityManager.createQuery(
@@ -68,18 +67,20 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
                         ",u.email = :email" +
                         ",u.linkSite = :linkSite" +
                         ",u.profession = :profession" +
-                        " WHERE u.userId = :id");
-        query.setParameter("firstName", user.getFirstName());
-        query.setParameter("lastName", user.getLastName());
-        query.setParameter("aboutMe", user.getAboutMe());
-        query.setParameter("avatar", user.getAvatar());
-        query.setParameter("city", user.getCity());
-        query.setParameter("dateOfBirth", user.getDateOfBirth());
-        query.setParameter("education", user.getEducation());
-        query.setParameter("email", user.getEmail());
-        query.setParameter("linkSite", user.getLinkSite());
-        query.setParameter("profession", user.getProfession());
-        query.setParameter("id", user.getUserId());
+                        ",u.lastRedactionDate = :lastRedactionDate" +
+                        " WHERE u.userId = :id")
+                .setParameter("firstName", user.getFirstName())
+                .setParameter("lastName", user.getLastName())
+                .setParameter("aboutMe", user.getAboutMe())
+                .setParameter("avatar", user.getAvatar())
+                .setParameter("city", user.getCity())
+                .setParameter("dateOfBirth", user.getDateOfBirth())
+                .setParameter("education", user.getEducation())
+                .setParameter("email", user.getEmail())
+                .setParameter("linkSite", user.getLinkSite())
+                .setParameter("profession", user.getProfession())
+                .setParameter("id", user.getUserId())
+                .setParameter("lastRedactionDate", user.getLastRedactionDate());
         query.executeUpdate();
 
     }
