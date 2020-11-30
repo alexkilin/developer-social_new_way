@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,17 +72,8 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     @Override
     @Transactional
     public void updateInfo(User user) {
-        Optional<User> userOld = userDao.getById(user.getUserId());
+        user.setLastRedactionDate(LocalDateTime.now());
         userDao.updateInfo(user);
-        user.setPassword(userOld.get().getPassword());
-        user.setRole(userOld.get().getRole());
-        user.setActive(userOld.get().getActive());
-        user.setIsEnable(userOld.get().getIsEnable());
-        user.setLanguages(userOld.get().getLanguages());
-        user.setPersistDate(userOld.get().getPersistDate());
-        user.setLastRedactionDate(userOld.get().getLastRedactionDate());
-        user.setStatus(userOld.get().getStatus());
-        userDao.update(user);
     }
 
     @Override
@@ -90,4 +82,5 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
         Optional <User> optionalUser = userDao.getById(65L);
         return optionalUser.orElse(null);
     }
+
 }
