@@ -44,7 +44,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getAllMessageDtoByGroupChatId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages", 1))
+        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages", 10))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(6))
@@ -75,7 +75,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     public void editGroupChatTitle() throws Exception {
         ChatEditTitleDto chatEditTitleDto = ChatEditTitleDto.builder()
                 .title("NewTitle")
-                .id(1l)
+                .id(10l)
                 .build();
 
         mockMvc.perform(put(apiUrl + "/group-chats/title")
@@ -116,20 +116,20 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .title("MyTitle")
                 .build();
 
-        mockMvc.perform(post(apiUrl + "/group-chats")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(chatDto)))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User not found"));
-/*
-кусок ниже не пашет по причине не возможности передать principal
- */
-
+        /*
+        кусок ниже не пашет по причине не возможности передать principal
+        */
 //        mockMvc.perform(post(apiUrl + "/group-chats")
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .content(gson.toJson(chatDto)))
 //                .andDo(print())
-//                .andExpect(status().isOk());
+//                .andExpect(status().isNotFound())
+//                .andExpect(content().string("User not found"));
+
+        mockMvc.perform(post(apiUrl + "/group-chats")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(chatDto)))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
