@@ -116,7 +116,7 @@ public class PostControllerV2 {
     @ApiResponses(value =  {
             @ApiResponse(code = 200, message = "Теги получены", responseContainer = "List", response = TagDto.class)})
     @GetMapping(value = "/posts/tags", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<PageDto<TagDto, Object>> getAllTags(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+    public ResponseEntity<PageDto<Object, Object>> getAllTags(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                    @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
@@ -178,7 +178,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Комментарии получены", responseContainer = "List",
                     response = CommentDto.class)})
     @GetMapping(value = "/post/{postId}/comments", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<PageDto<CommentDto, ?>> showPostComments(
+    public ResponseEntity<PageDto<Object, Object>> showPostComments(
             @ApiParam(value = "ID поста", example = "20") @PathVariable("postId") Long postId,
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {

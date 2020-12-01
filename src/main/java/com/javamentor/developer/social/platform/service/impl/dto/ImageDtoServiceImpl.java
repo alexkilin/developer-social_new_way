@@ -23,15 +23,13 @@ public class ImageDtoServiceImpl extends PaginationServiceImpl<ImageDto, Object>
 
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<ImageDto, Object> getAllByUserId(Map<String, Object> parameters) {
-        return (PageDto<ImageDto, Object>) super.getPageDto("getAllImagesOfUser", parameters);
+        return super.getPageDto("getAllImagesOfUser", parameters);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<ImageDto, Object> getAllByAlbumId(Map<String, Object> parameters) {
-        return (PageDto<ImageDto, Object>) super.getPageDto("getImagesFromAlbumById", parameters);
+        return super.getPageDto("getImagesFromAlbumById", parameters);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class PaginationServiceImpl<T, V> implements PaginationService<Object, Ob
     }
 
     @Override
-    public PageDto<? extends T, ? extends V> getPageDto(String methodName, Map<String, Object> parameters) {
+    public PageDto<T, V> getPageDto(String methodName, Map<String, Object> parameters) {
         Object currentPage = parameters.get("currentPage");
         Object itemsOnPage = parameters.get("itemsOnPage");
 

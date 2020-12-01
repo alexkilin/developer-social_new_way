@@ -54,7 +54,7 @@ public class GroupControllerV2 {
             @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)
     })
     @GetMapping(params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<PageDto<GroupInfoDto, ?>> getAllGroups(
+    public ResponseEntity<PageDto<Object, Object>> getAllGroups(
             @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
 

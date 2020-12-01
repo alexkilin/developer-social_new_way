@@ -2,10 +2,8 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
-import com.javamentor.developer.social.platform.models.dto.group.GroupInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
-import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
 import com.javamentor.developer.social.platform.service.impl.dto.pagination.GroupPaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,8 @@ public class GroupDtoServiceImpl extends GroupPaginationService<Object, Object> 
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public PageDto<GroupInfoDto, Object> getAllGroups(Map<String, Object> parameters) {
-        return (PageDto<GroupInfoDto, Object>) super.getPageDto("getAllGroups", parameters);
+    public PageDto<Object, Object> getAllGroups(Map<String, Object> parameters) {
+        return super.getPageDto("getAllGroups", parameters);
     }
 
     @Override
@@ -46,8 +43,7 @@ public class GroupDtoServiceImpl extends GroupPaginationService<Object, Object> 
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public PageDto<UserDto, Object> getUsersFromTheGroup(Map<String, Object> parameters) {
-        return (PageDto<UserDto, Object>) super.getPageDto("getUsersFromTheGroup", parameters);
+    public PageDto<Object, Object> getUsersFromTheGroup(Map<String, Object> parameters) {
+        return super.getPageDto("getUsersFromTheGroup", parameters);
     }
 }

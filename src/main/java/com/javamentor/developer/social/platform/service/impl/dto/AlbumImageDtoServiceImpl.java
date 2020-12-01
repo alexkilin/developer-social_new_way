@@ -14,9 +14,8 @@ public class AlbumImageDtoServiceImpl extends PaginationServiceImpl<AlbumImageDt
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<AlbumImageDto, Object> getAllByUserId(Map<String, Object> parameters) {
-        return (PageDto<AlbumImageDto, Object>) super.getPageDto("getAllImageAlbumsOfUser", parameters);
+        return super.getPageDto("getAllImageAlbumsOfUser", parameters);
     }
 
 }

@@ -15,9 +15,8 @@ public class AlbumVideoDtoServiceImpl extends PaginationServiceImpl<AlbumVideoDt
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<AlbumVideoDto, Object> getAllByUserId(Map<String, Object> parameters) {
-        return (PageDto<AlbumVideoDto, Object>) super.getPageDto("getAllVideoAlbums", parameters);
+        return super.getPageDto("getAllVideoAlbums", parameters);
     }
 
 }

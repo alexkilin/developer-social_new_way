@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 @Service
-public class MessagePaginationService<T, V> extends PaginationServiceImpl<Object, Object> {
+public class MessagePaginationService<T, V> extends PaginationServiceImpl<MessageDto, Object> {
     private MessageDtoDao messageDtoDao;
 
     @Autowired
@@ -22,11 +22,10 @@ public class MessagePaginationService<T, V> extends PaginationServiceImpl<Object
         this.messageDtoDao = messageDtoDao;
     }
 
-    @SuppressWarnings("unchecked")
     public PageDto<? extends T, ? extends V> getMessagePageDto(String methodName, Map<String, java.lang.Object> parameters) {
         PageDto<MessageDto, Object> pageDto;
         try {
-            pageDto = (PageDto<MessageDto, Object>) super.getPageDto(methodName, parameters);
+            pageDto = super.getPageDto(methodName, parameters);
         } catch (Exception e) {
             throw new PaginationException("Invalid parameters or declared implementation. " +
                     "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");

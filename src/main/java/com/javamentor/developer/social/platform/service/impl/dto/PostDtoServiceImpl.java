@@ -2,8 +2,6 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
-import com.javamentor.developer.social.platform.models.dto.TagDto;
-import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
 import com.javamentor.developer.social.platform.service.impl.dto.pagination.PostPaginationService;
@@ -47,15 +45,13 @@ public class PostDtoServiceImpl extends PostPaginationService<Object, Object> im
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public PageDto<CommentDto, Object> getCommentsByPostId(Map<String, Object> parameters) {
-        return (PageDto<CommentDto, Object>) super.getPageDto("showPostComments", parameters);
+    public PageDto<Object, Object> getCommentsByPostId(Map<String, Object> parameters) {
+        return super.getPageDto("showPostComments", parameters);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public PageDto<TagDto, Object> getAllTags(Map<String, Object> parameters) {
-        return (PageDto<TagDto, Object>) super.getPageDto("getAllTags", parameters);
+    public PageDto<Object, Object> getAllTags(Map<String, Object> parameters) {
+        return super.getPageDto("getAllTags", parameters);
     }
 
     @Override

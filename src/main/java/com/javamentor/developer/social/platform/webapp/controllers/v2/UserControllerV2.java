@@ -71,7 +71,7 @@ public class UserControllerV2 {
             @ApiResponse(code = 200, message = "Список пользователей получен", responseContainer = "List", response = UserDto.class)
     })
     @GetMapping(params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<PageDto<UserDto, ?>> getAllUsers(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+    public ResponseEntity<PageDto<Object, Object>> getAllUsers(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                         @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info("Получен список пользователей");
         Map<String, Object> parameters = new HashMap<>();

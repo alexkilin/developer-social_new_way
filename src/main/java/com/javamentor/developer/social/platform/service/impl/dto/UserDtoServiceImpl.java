@@ -2,7 +2,6 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.UserDtoDao;
 import com.javamentor.developer.social.platform.models.dto.LanguageDto;
-import com.javamentor.developer.social.platform.models.dto.UserFriendDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
@@ -24,9 +23,8 @@ public class UserDtoServiceImpl extends PaginationServiceImpl<Object, Object> im
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public PageDto<UserDto, Object> getAllUserDto(Map<String, Object> parameters) {
-        return (PageDto<UserDto, Object>) super.getPageDto("getAllUsers", parameters);
+    public PageDto<Object, Object> getAllUserDto(Map<String, Object> parameters) {
+        return super.getPageDto("getAllUsers", parameters);
     }
 
     @Override
@@ -41,8 +39,7 @@ public class UserDtoServiceImpl extends PaginationServiceImpl<Object, Object> im
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public PageDto<UserFriendDto, Object> getUserFriendsDtoById(Map<String, Object> parameters) {
-        return (PageDto<UserFriendDto, Object>) super.getPageDto("getUserFriends", parameters);
+    public PageDto<Object, Object> getUserFriendsDtoById(Map<String, Object> parameters) {
+        return super.getPageDto("getUserFriends", parameters);
     }
 }

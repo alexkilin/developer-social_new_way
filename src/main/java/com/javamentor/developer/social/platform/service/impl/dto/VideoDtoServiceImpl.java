@@ -18,15 +18,13 @@ public class VideoDtoServiceImpl extends PaginationServiceImpl<VideoDto, Object>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<VideoDto, Object> getPartVideo(Map<String, Object> parameters) {
-        return (PageDto<VideoDto, Object>) super.getPageDto("getPartVideos", parameters);
+        return super.getPageDto("getPartVideos", parameters);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<VideoDto, Object> getVideoOfAuthor(Map<String, Object> parameters) {
-        return (PageDto<VideoDto, Object>) super.getPageDto("getVideoOfAuthor", parameters);
+        return super.getPageDto("getVideoOfAuthor", parameters);
     }
 
     @Override
@@ -35,26 +33,22 @@ public class VideoDtoServiceImpl extends PaginationServiceImpl<VideoDto, Object>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<VideoDto, Object> getPartVideoOfUser(Map<String, Object> parameters) {
-        return (PageDto<VideoDto, Object>) super.getPageDto("getPartVideoOfUser", parameters);
+        return super.getPageDto("getPartVideoOfUser", parameters);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<VideoDto, Object> getAuthorVideoOfUser(Map<String, Object> parameters) {
-        return (PageDto<VideoDto, Object>) super.getPageDto("getAuthorVideoOfUser", parameters);
+        return super.getPageDto("getAuthorVideoOfUser", parameters);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<VideoDto, Object> getAlbumVideoOfUser(Map<String, Object> parameters) {
-        return (PageDto<VideoDto, Object>) super.getPageDto("getAlbumVideoOfUser", parameters);
+        return super.getPageDto("getAlbumVideoOfUser", parameters);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public PageDto<VideoDto, Object> getVideoFromAlbumOfUser(Map<String, Object> parameters) {
-        return (PageDto<VideoDto, Object>) super.getPageDto("getVideoFromAlbumOfUser", parameters);
+        return super.getPageDto("getVideoFromAlbumOfUser", parameters);
     }
 }

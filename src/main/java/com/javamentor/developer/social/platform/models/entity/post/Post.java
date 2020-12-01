@@ -66,7 +66,7 @@ public class Post {
     private Set<Bookmark> bookmarks;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-    @JoinTable(name = "group_wal", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+    @JoinTable(name = "group_wall", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Group group;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
