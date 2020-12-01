@@ -1,6 +1,18 @@
 album_has_audio:
-  - album_id: 1
-    audios_id: 1
+  - album_id: 70
+    audios_id: 70
 
-  - album_id: 1
-    audios_id: 2
+  - album_id: 20
+    audios_id: 20
+
+  - album_id: 30
+    audios_id: 30
+
+  - album_id: 40
+    audios_id: 40
+
+  - album_id: 50
+    audios_id: 50
+
+  - album_id: 60
+    audios_id: 60

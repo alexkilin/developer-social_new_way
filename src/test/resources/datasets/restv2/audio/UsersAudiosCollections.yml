@@ -1,21 +1,21 @@
 users_audios_collections:
   - user_id: 3
-    audio_id: 1
+    audio_id: 70
 
   - user_id: 3
-    audio_id: 2
+    audio_id: 20
 
   - user_id: 2
-    audio_id: 1
+    audio_id: 70
 
   - user_id: 2
-    audio_id: 3
+    audio_id: 30
 
   - user_id: 2
-    audio_id: 4
+    audio_id: 40
 
   - user_id: 4
-    audio_id: 1
+    audio_id: 70
 
   - user_id: 4
-    audio_id: 3
+    audio_id: 30

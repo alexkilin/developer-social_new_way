@@ -1,21 +1,21 @@
 playlist_has_audios:
 - playlist_id: 10
-  audios_id: 1
+  audios_id: 50
 - playlist_id: 10
-  audios_id: 2
+  audios_id: 20
 - playlist_id: 10
-  audios_id: 3
+  audios_id: 30
 
 - playlist_id: 11
-  audios_id: 2
+  audios_id: 20
 - playlist_id: 11
-  audios_id: 3
+  audios_id: 30
 - playlist_id: 11
-  audios_id: 4
+  audios_id: 40
 
 - playlist_id: 12
-  audios_id: 3
+  audios_id: 30
 - playlist_id: 12
-  audios_id: 4
+  audios_id: 40
 - playlist_id: 12
-  audios_id: 5
+  audios_id: 50

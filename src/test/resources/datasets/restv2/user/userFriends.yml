@@ -5,9 +5,9 @@ friends:
 
   - id: 2
     user_user_id: 2
-    friend_user_id: 3
+    friend_user_id: 4
 
-  - id: 3
+  - id: 6
     user_user_id: 2
     friend_user_id: 4
 
