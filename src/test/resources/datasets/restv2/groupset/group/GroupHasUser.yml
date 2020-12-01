@@ -3,27 +3,27 @@ group_has_user:
   - persist_date: "2020-08-13 11:46:35.493000"
     id: 6
     group_id: 1
-    user_user_id: 6
+    user_user_id: 60
 
   - persist_date: "2020-08-13 11:46:35.493000"
     id: 7
     group_id: 2
-    user_user_id: 2
+    user_user_id: 20
 
 
   - persist_date: "2020-08-13 11:46:35.493000"
     id: 3
     group_id: 3
-    user_user_id: 3
+    user_user_id: 30
 
 
   - persist_date: "2020-08-13 11:46:35.493000"
     id: 4
     group_id: 4
-    user_user_id: 4
+    user_user_id: 40
 
 
   - persist_date: "2020-08-13 11:46:35.493000"
     id: 5
     group_id: 5
-    user_user_id: 5
+    user_user_id: 50

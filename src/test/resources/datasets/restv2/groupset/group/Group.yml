@@ -7,7 +7,7 @@ groups:
     name: "JAVA IS 0"
     persist_date: "2020-08-13 11:46:35.493000"
     group_category_id: 1
-    owner_id: 6
+    owner_id: 60
 
   - id: 2
     address_image_group: "www.image.com"
@@ -17,7 +17,7 @@ groups:
     name: "JAVA IS 1"
     persist_date: "2020-08-13 11:46:35.493000"
     group_category_id: 1
-    owner_id: 2
+    owner_id: 20
 
   - id: 3
     address_image_group: "www.image.com"
@@ -27,7 +27,7 @@ groups:
     name: "JAVA IS 2"
     persist_date: "2020-08-13 11:46:35.493000"
     group_category_id: 2
-    owner_id: 3
+    owner_id: 30
 
   - id: 4
     address_image_group: "www.image.com"
@@ -37,7 +37,7 @@ groups:
     name: "JAVA IS 3"
     persist_date: "2020-08-13 11:46:35.493000"
     group_category_id: 1
-    owner_id: 4
+    owner_id: 40
 
   - id: 5
     address_image_group: "www.image.com"
@@ -47,4 +47,4 @@ groups:
     name: "JAVA IS 4"
     persist_date: "2020-08-13 11:46:35.493000"
     group_category_id: 2
-    owner_id: 4
+    owner_id: 50

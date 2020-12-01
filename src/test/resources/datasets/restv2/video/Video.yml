@@ -1,24 +1,30 @@
 videos:
   - icon: "TestIcon0"
+    author: "TestAuthor 0"
     name: "VideoTestName 0"
-    media_id: "1"
+    media_id: "10"
 
   - icon: "TestIcon1"
+    author: "TestAuthor 1"
     name: "VideoTestName 1"
-    media_id: "2"
+    media_id: "20"
 
   - icon: "TestIcon2"
+    author: "TestAuthor 2"
     name: "VideoTestName 2"
-    media_id: "3"
+    media_id: "30"
 
   - icon: "TestIcon3"
+    author: "TestAuthor 3"
     name: "VideoTestName 3"
-    media_id: "4"
+    media_id: "40"
 
   - icon: "TestIcon4"
+    author: "TestAuthor 4"
     name: "VideoTestName 4"
-    media_id: "5"
+    media_id: "50"
 
   - icon: "TestIcon5"
+    author: "TestAuthor 5"
     name: "VideoTestName 5"
-    media_id: "6"
+    media_id: "60"

@@ -139,7 +139,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$[0].status").value("Pureness and perfection"))
                 .andExpect(jsonPath("$[0].activeName").value("ACTIVE"))
 
-                .andExpect(jsonPath("$[1].userId").value(3))
+                .andExpect(jsonPath("$[1].userId").value(7))
                 .andExpect(jsonPath("$[2].userId").value(4))
                 .andExpect(jsonPath("$[3].userId").value(5))
                 .andExpect(jsonPath("$[4].userId").value(6));
