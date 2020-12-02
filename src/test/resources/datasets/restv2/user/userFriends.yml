@@ -1,16 +1,16 @@
 friends:
   - id: 5
-    user_user_id: 2
-    friend_user_id: 6
+    user_id: 2
+    friend_id: 6
 
   - id: 2
-    user_user_id: 2
-    friend_user_id: 4
+    user_id: 2
+    friend_id: 4
 
   - id: 6
-    user_user_id: 2
-    friend_user_id: 4
+    user_id: 2
+    friend_id: 4
 
   - id: 4
-    user_user_id: 2
-    friend_user_id: 5
+    user_id: 2
+    friend_id: 5

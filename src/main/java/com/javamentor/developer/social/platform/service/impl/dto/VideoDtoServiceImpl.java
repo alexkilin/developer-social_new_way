@@ -2,15 +2,15 @@ package com.javamentor.developer.social.platform.service.impl.dto;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.VideoDtoDao;
 import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.VideoDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Map;
 
 @Service
-public class VideoDtoServiceImpl implements VideoDtoService {
-
+public class VideoDtoServiceImpl extends PaginationServiceImpl<VideoDto, Object> implements VideoDtoService {
     private final VideoDtoDao videoDtoDao;
 
     public VideoDtoServiceImpl(VideoDtoDao videoDtoDao) {
@@ -18,40 +18,37 @@ public class VideoDtoServiceImpl implements VideoDtoService {
     }
 
     @Override
-    @Transactional
-    public List<VideoDto> getPartVideo(int currentPage, int itemsOnPage) {
-        return this.videoDtoDao.getPartVideo(currentPage, itemsOnPage);
+    public PageDto<VideoDto, Object> getPartVideo(Map<String, Object> parameters) {
+        return super.getPageDto("getPartVideos", parameters);
     }
 
     @Override
-    @Transactional
+    public PageDto<VideoDto, Object> getVideoOfAuthor(Map<String, Object> parameters) {
+        return super.getPageDto("getVideoOfAuthor", parameters);
+    }
+
+    @Override
     public VideoDto getVideoOfName(String name) {
         return videoDtoDao.getVideoOfName(name).orElseThrow(() -> new IllegalArgumentException("Invalid parameters"));
     }
 
-
     @Override
-    @Transactional
-    public List<VideoDto> getVideoOfUser(Long userId) {
-        return videoDtoDao.getVideoOfUser(userId);
+    public PageDto<VideoDto, Object> getPartVideoOfUser(Map<String, Object> parameters) {
+        return super.getPageDto("getPartVideoOfUser", parameters);
     }
 
     @Override
-    @Transactional
-    public List<VideoDto> getPartVideoOfUser(Long userId, int currentPage, int itemsOnPage) {
-        return videoDtoDao.getPartVideoOfUser(userId, currentPage, itemsOnPage);
+    public PageDto<VideoDto, Object> getAuthorVideoOfUser(Map<String, Object> parameters) {
+        return super.getPageDto("getAuthorVideoOfUser", parameters);
     }
 
     @Override
-    @Transactional
-    public List<VideoDto> getAlbumVideoOfUser(Long userId, String album) {
-        return videoDtoDao.getAlbumVideoOfUser(userId, album);
+    public PageDto<VideoDto, Object> getAlbumVideoOfUser(Map<String, Object> parameters) {
+        return super.getPageDto("getAlbumVideoOfUser", parameters);
     }
 
-
     @Override
-    @Transactional
-    public List<VideoDto> getVideoFromAlbumOfUser(Long albumId) {
-        return videoDtoDao.getVideoFromAlbumOfUser(albumId);
+    public PageDto<VideoDto, Object> getVideoFromAlbumOfUser(Map<String, Object> parameters) {
+        return super.getPageDto("getVideoFromAlbumOfUser", parameters);
     }
 }

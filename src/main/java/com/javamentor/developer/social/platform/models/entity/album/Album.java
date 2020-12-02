@@ -39,6 +39,7 @@ public class Album {
     private String icon;
 
     @ManyToOne
+    @JoinColumn(name = "user_owner_id")
     private User userOwnerId;
 
     @Enumerated

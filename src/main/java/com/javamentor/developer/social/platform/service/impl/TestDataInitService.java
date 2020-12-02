@@ -62,7 +62,7 @@ public class TestDataInitService {
     private final Date dateDateClass = new Date(1212121212121L);
 
     // You can change size of init data by variable "k"
-    private int k = 1;
+    private final int k = 1;
     private final int numOfUsers = 100 * k;
     private final int numOfMedias = 100 * k;
     private final int numOfChats = 20 * k;

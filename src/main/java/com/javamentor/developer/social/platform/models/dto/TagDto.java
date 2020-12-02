@@ -24,4 +24,7 @@ public class TagDto {
 
     @ApiModelProperty(notes = "Текст тэга")
     private String text;
+
+    @ApiModelProperty(notes = "Id поста")
+    private Long postId;
 }

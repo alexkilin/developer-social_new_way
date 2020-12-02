@@ -33,7 +33,7 @@ public class UserRegisterDto {
     private String lastName;
 
     @ApiModelProperty(notes = "Email должен быть корректным, смотрите пример",
-            required = true, example = "email@email.com", position = 0)
+            required = true, example = "email@email.com")
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Поле Email не должно быть null")
     @Email(groups = {OnCreate.class, OnUpdate.class}, regexp = "^[a-zA-Z0-9]{1,}" + "((\\.|\\_|-{0,})[a-zA-Z0-9]{1,})*" + "@" + "[a-zA-Z0-9]{1,}" +
             "((\\.|\\_|-{0,1})[a-zA-Z0-9]{1,})*" + "\\.[a-zA-Z]{2,}$",

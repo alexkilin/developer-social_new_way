@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Validated
 @RestController
@@ -65,31 +63,43 @@ public class ChatControllerV2 {
         return ResponseEntity.ok(chatDtoService.getAllChatDtoByUserId(userId));
     }
 
-    @GetMapping("/group-chats/{chatId}/messages")
+    @GetMapping(value = "/group-chats/{chatId}/messages", params = {"currentPage", "itemsOnPage"})
     @ApiOperation(value = "Список сообщений группового чата по Id чата.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = MessageDto.class),
             @ApiResponse(code = 404, message = "Чат с данным Id не существует", response = String.class)
     })
     public ResponseEntity<?> getAllMessageDtoByGroupChatId
-            (@ApiParam(value = "Id группового чата") @PathVariable Long chatId) {
+            (@ApiParam(value = "Id группового чата") @PathVariable Long chatId,
+             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         if (!groupChatService.existById(chatId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Chat id %s not found", chatId));
         }
-        return ResponseEntity.ok(messageDtoService.getAllMessageDtoFromGroupChatByChatId(chatId));
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("chatId", chatId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok(messageDtoService.getAllMessageDtoFromGroupChatByChatId(parameters));
     }
 
-    @GetMapping("/single-chats/{chatId}/messages")
+    @GetMapping(value = "/single-chats/{chatId}/messages", params = {"currentPage", "itemsOnPage"})
     @ApiOperation(value = "Список сообщений одиночного чата по Id чата.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = MessageDto.class),
             @ApiResponse(code = 404, message = "Чат с данным Id не существует", response = String.class)
     })
-    public ResponseEntity<?> getAllMessageDtoBySingleChatId(@ApiParam(value = "Id чата") @PathVariable Long chatId) {
+    public ResponseEntity<?> getAllMessageDtoBySingleChatId(@ApiParam(value = "Id чата") @PathVariable Long chatId,
+                                                            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         if (!singleChatService.existById(chatId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Chat id %s not found", chatId));
         }
-        return ResponseEntity.ok(messageDtoService.getAllMessageDtoFromSingleChatByChatId(chatId));
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("chatId", chatId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok(messageDtoService.getAllMessageDtoFromSingleChatByChatId(parameters));
     }
 
     @PutMapping("/group-chats/title")
@@ -98,8 +108,8 @@ public class ChatControllerV2 {
             @ApiResponse(code = 200, message = "OK", response = MessageDto.class),
             @ApiResponse(code = 404, message = "Чат с данным Id не существует", response = String.class)
     })
-    public ResponseEntity<?> editGroupChatTitle(
-            @ApiParam(value = "Объект чата") @RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto) {
+    public ResponseEntity<?> editGroupChatTitle(@ApiParam(value = "Объект чата")
+                                                    @RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto) {
         Long chatId = chatEditTitleDto.getId();
 
         Optional<GroupChat> result = groupChatService.getById(chatId);

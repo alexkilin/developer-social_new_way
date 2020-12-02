@@ -3,7 +3,6 @@ package com.javamentor.developer.social.platform.dao.impl.model.post;
 import com.javamentor.developer.social.platform.dao.abstracts.model.post.BookmarkDao;
 import com.javamentor.developer.social.platform.dao.impl.GenericDaoAbstract;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
-import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import org.springframework.stereotype.Repository;
 

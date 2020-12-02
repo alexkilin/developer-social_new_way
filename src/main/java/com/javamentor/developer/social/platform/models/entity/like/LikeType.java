@@ -4,4 +4,5 @@ public enum LikeType {
     MESSAGE,
     COMMENT,
     POST,
+    MEDIA
 }

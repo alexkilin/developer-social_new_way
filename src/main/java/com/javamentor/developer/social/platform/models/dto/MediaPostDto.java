@@ -33,5 +33,8 @@ public class MediaPostDto {
     @NotNull
     private String url;
 
+    @ApiModelProperty(notes = "Id поста")
+    private Long postId;
+
 
 }

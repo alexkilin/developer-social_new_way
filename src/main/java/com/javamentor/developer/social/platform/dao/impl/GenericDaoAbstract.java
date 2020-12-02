@@ -16,7 +16,7 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @PersistenceContext
     private EntityManager entityManager;
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     @SuppressWarnings("unchecked")
     public GenericDaoAbstract() {

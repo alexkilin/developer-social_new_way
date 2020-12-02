@@ -77,14 +77,14 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getAllImagesOfUser() throws Exception {
         mockMvc.perform(get(apiUrl + "/?userId=3")
-                .param("offset", "0")
-                .param("limit", "50"))
+                .param("currentPage", "1")
+                .param("itemsOnPage", "50"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         mockMvc.perform(get(apiUrl + "/?userId=500")
-                .param("offset", "0")
-                .param("limit", "50"))
+                .param("currentPage", "1")
+                .param("itemsOnPage", "50"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("No user with id 500 found"));
@@ -165,15 +165,15 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getImagesFromAlbumById() throws Exception {
         mockMvc.perform(get(apiUrl + "/albums/{albumId}/images", 23)
-                .param("offset", "0")
-                .param("limit", "50"))
+                .param("currentPage", "1")
+                .param("itemsOnPage", "50"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath("$.items.length()").value(1));
 
         mockMvc.perform(get(apiUrl + "/albums/{albumId}/images", 2300)
-                .param("offset", "0")
-                .param("limit", "50"))
+                .param("currentPage", "1")
+                .param("itemsOnPage", "50"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Album with id 2300 not found"));
@@ -196,15 +196,15 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
     public void getAllImageAlbumsOfUser() throws Exception {
         mockMvc.perform(get(apiUrl + "/albums")
                 .param("userId", "2")
-                .param("offset", "0")
-                .param("limit", "50"))
+                .param("currentPage", "1")
+                .param("itemsOnPage", "50"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         mockMvc.perform(get(apiUrl + "/albums")
                 .param("userId", "200")
-                .param("offset", "0")
-                .param("limit", "50"))
+                .param("currentPage", "1")
+                .param("itemsOnPage", "50"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("No user with id 200 found"));
