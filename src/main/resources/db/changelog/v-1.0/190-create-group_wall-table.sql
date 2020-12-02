@@ -24,3 +24,10 @@ alter table group_wall
    references posts
 
 next
+
+alter table group_wall
+   add constraint FKqkll3lqcxuse5558nxawjgmp4
+   foreign key (post_id)
+   references posts
+
+next
