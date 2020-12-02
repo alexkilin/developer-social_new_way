@@ -7,19 +7,19 @@ create table group_wall (
 next
 
 alter table group_wall
-   add constraint UK_qk3qxbrms2ns6201obdp9ap3o unique (post_id)
+   add constraint UK_k0mxoo8evldcjcq1iva6o7bvq unique (post_id)
 
 next
 
 alter table group_wall
-   add constraint FKnve304lx290f7fxpf5tcsaqaj
+   add constraint FKhde1qpuipv4ouvqw02gxruc2h
    foreign key (group_id)
    references groups
 
 next
 
 alter table group_wall
-   add constraint FKg4c2uw50umb9fwvama4poy65d
+   add constraint FKqkll3lqcxuse5558nxawjgmp4
    foreign key (post_id)
    references posts
 
