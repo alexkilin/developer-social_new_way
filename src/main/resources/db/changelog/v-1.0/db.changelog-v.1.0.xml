@@ -41,7 +41,7 @@
     <include file="170-changeset-group_chats_users-table.xml" relativeToChangelogFile="true"/>
     <include file="200-changeset-groups-table.xml" relativeToChangelogFile="true"/>
     <include file="180-changeset-group_has_user-table.xml" relativeToChangelogFile="true"/>
-    <include file="190-changeset-group_wal-table.xml" relativeToChangelogFile="true"/>
+    <include file="190-changeset-group_wall-table.xml" relativeToChangelogFile="true"/>
     <include file="250-changeset-media_comment-table.xml" relativeToChangelogFile="true"/>
     <include file="260-changeset-media_messages-table.xml" relativeToChangelogFile="true"/>
     <include file="270-changeset-message_like-table.xml" relativeToChangelogFile="true"/>

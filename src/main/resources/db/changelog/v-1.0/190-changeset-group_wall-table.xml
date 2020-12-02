@@ -12,7 +12,7 @@
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="190-create-group_wal-table.sql"/>
+                 path="190-create-group_wall-table.sql"/>
         <rollback>
             <sqlFile dbms="postgresql"
                      encoding="utf8"
@@ -20,7 +20,7 @@
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="190-drop-group_wal-table.sql"/>
+                     path="190-drop-group_wall-table.sql"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>
