@@ -23,6 +23,10 @@ public class SingleChat {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    private String title;
+
+    private String image;
+
     @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST}, targetEntity = User.class)
     @JoinColumn(name = "user_one_id")
     private User userOne;
@@ -40,7 +44,5 @@ public class SingleChat {
     @JoinTable(joinColumns = @JoinColumn(name = "chat_id"),
     inverseJoinColumns = @JoinColumn(name = "message_id"))
     private Set<Message> messages;
-
-    private String image;
 
 }

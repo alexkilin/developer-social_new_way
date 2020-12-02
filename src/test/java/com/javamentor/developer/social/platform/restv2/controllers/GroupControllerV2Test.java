@@ -29,10 +29,10 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     public void getAllGroups() throws Exception {
-        mockMvc.perform(get("/api/v2/groups?page=1&size=3"))
+        mockMvc.perform(get("/api/v2/groups?currentPage=1&itemsOnPage=3"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3));
+                .andExpect(jsonPath("$.items.length()").value(3));
     }
 
     @Test
@@ -61,19 +61,19 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void showGroupWall() throws Exception {
         mockMvc.perform(get("/api/v2/groups/{groupId}/posts", 1)
-                .param("page", "1")
-                .param("size", "2"))
+                .param("currentPage", "1")
+                .param("itemsOnPage", "2"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.items.length()").value(2));
     }
 
     @Test
     void showGroupWallInvalidId() throws Exception {
-        this.mockMvc.perform(get("/api/v2/groups/{groupId}/posts?page=1&size=2", 100))
+        this.mockMvc.perform(get("/api/v2/groups/{groupId}/posts?currentPage=1&itemsOnPage=2", 100))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath("$.items.length()").value(0));
     }
 
     @Test
@@ -97,15 +97,15 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     void getUsersFromTheGroup() throws Exception {
-        mockMvc.perform(get("/api/v2/groups/{groupId}/users?page=1&size=2", 1))
+        mockMvc.perform(get("/api/v2/groups/{groupId}/users?currentPage=1&itemsOnPage=2", 1))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath("$.items.length()").value(1));
     }
 
     @Test
     void getUsersFromTheGroupInvalidId() throws Exception {
-        mockMvc.perform(get("/api/v2/groups/{groupId}/users?page=1&size=2", 100))
+        mockMvc.perform(get("/api/v2/groups/{groupId}/users?currentPage=1&itemsOnPage=2", 100))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Group id 100 not found"));

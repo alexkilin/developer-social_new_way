@@ -6,7 +6,7 @@ albums:
     media_type: 1
     name: "audioAlbum"
     persist_date: "2020-08-07 23:35:34.817330"
-    user_owner_id_user_id: 2
+    user_owner_id: 2
 
   - id: 30
     icon: "icon 3"
@@ -14,7 +14,7 @@ albums:
     media_type: 1
     name: "audioAlbum"
     persist_date: "2020-08-07 23:35:34.817330"
-    user_owner_id_user_id: 2
+    user_owner_id: 2
 
   - id: 40
     icon: "icon 4"
@@ -22,7 +22,7 @@ albums:
     media_type: 1
     name: "audioAlbum"
     persist_date: "2020-08-07 23:35:34.817330"
-    user_owner_id_user_id: 2
+    user_owner_id: 2
 
   - id: 50
     icon: "icon 5"
@@ -30,7 +30,7 @@ albums:
     media_type: 1
     name: "audioAlbum"
     persist_date: "2020-08-07 23:35:34.817330"
-    user_owner_id_user_id: 3
+    user_owner_id: 3
 
   - id: 60
     icon: "icon 6"
@@ -38,7 +38,7 @@ albums:
     media_type: 1
     name: "audioAlbum"
     persist_date: "2020-08-07 23:35:34.817330"
-    user_owner_id_user_id: 2
+    user_owner_id: 2
 
   - id: 70
     icon: "icon 7"
@@ -46,4 +46,4 @@ albums:
     media_type: 1
     name: "audioAlbum"
     persist_date: "2020-08-07 23:35:34.817330"
-    user_owner_id_user_id: 4
+    user_owner_id: 4

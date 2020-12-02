@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class AlbumVideoDaoImpl extends GenericDaoAbstract<AlbumVideo, Long> implements AlbumVideoDao {
 
-    AlbumDao albumDAO;
+    private final AlbumDao albumDAO;
 
     @Autowired
     public AlbumVideoDaoImpl(AlbumDao albumDAO){

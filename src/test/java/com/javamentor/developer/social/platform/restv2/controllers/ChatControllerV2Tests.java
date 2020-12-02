@@ -44,13 +44,17 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getAllMessageDtoByGroupChatId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages", 10))
+        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages", 10)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(6))
-                .andExpect(jsonPath("$[0].message").value("Test init message1"));
+                .andExpect(jsonPath("$.items.length()").value(6))
+                .andExpect(jsonPath("$.items[0].message").value("Test init message1"));
 
-        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages", 4))
+        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages", 4)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Chat id 4 not found"));
@@ -58,14 +62,18 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getAllMessageDtoBySingleChatId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages", 1))
+        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages", 1)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].message").value("Test init message1"))
-                .andExpect(jsonPath("$[1].userSenderImage").value("www.myavatar1.ru/9090"));
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].message").value("Test init message1"))
+                .andExpect(jsonPath("$.items[1].userSenderImage").value("www.myavatar1.ru/9090"));
 
-        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages", 40))
+        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages", 40)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Chat id 40 not found"));

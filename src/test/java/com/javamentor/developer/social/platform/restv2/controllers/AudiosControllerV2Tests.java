@@ -155,19 +155,13 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addAudioInCollectionsOfUser() throws Exception {
-        mockMvc.perform(put(apiUrl + "/user/{userId}/audio", 6)
+        mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "40"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Audio id 40 added to collection of user id 6"));
+                .andExpect(content().string("Audio id 40 added to collection of user id 65"));
 
-        mockMvc.perform(put(apiUrl + "/user/{userId}/audio", 90)
-                .param("audioId", "40"))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User id 90 not found"));
-
-        mockMvc.perform(put(apiUrl + "/user/{userId}/audio", 6)
+        mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "500"))
                 .andDo(print())
                 .andExpect(status().isNotFound())

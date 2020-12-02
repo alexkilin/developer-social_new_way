@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.*;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.*;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @ToString
@@ -39,7 +41,8 @@ public class UserControllerV2 {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public UserControllerV2(UserDtoService userDtoService, UserService userService, UserConverter userConverter) {
+    public UserControllerV2(UserDtoService userDtoService, UserService userService,
+                            UserConverter userConverter) {
         this.userDtoService = userDtoService;
         this.userService = userService;
         this.userConverter = userConverter;
@@ -67,10 +70,14 @@ public class UserControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список пользователей получен", responseContainer = "List", response = UserDto.class)
     })
-    @GetMapping("")
-    public ResponseEntity<List<UserDto>> getAll() {
+    @GetMapping(params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<Object, Object>> getAllUsers(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                        @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info("Получен список пользователей");
-        return ResponseEntity.ok(userDtoService.getAllUserDto());
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok(userDtoService.getAllUserDto(parameters));
     }
 
     @ApiOperation(value = "Создание пользователя")
@@ -78,7 +85,7 @@ public class UserControllerV2 {
             @ApiResponse(code = 200, message = "Пользователь создан", response = UserRegisterDto.class),
             @ApiResponse(code = 400, message = "Пользователь с данным email существует. Email должен быть уникальным", response = String.class)
     })
-    @PostMapping("")
+    @PostMapping
     @Validated(OnCreate.class)
     public ResponseEntity<?> createUser(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserRegisterDto userRegisterDto) {
         if (userService.existByEmail(userRegisterDto.getEmail())) {
@@ -122,9 +129,11 @@ public class UserControllerV2 {
     })
     @PatchMapping("/{id}/password")
     @Validated(OnCreate.class)
-    public ResponseEntity<?> updateUserPassword(
-            @ApiParam(value = "Id пользователя") @PathVariable Long id,
-            @ApiParam(value = "Новый пароль") @Valid @RequestBody UserResetPasswordDto userResetPasswordDto) {
+    public ResponseEntity<?> updateUserPassword(@ApiParam(value = "Id пользователя")
+                                                @PathVariable Long id,
+                                                @ApiParam(value = "Новый пароль")
+                                                @Valid @RequestBody UserResetPasswordDto userResetPasswordDto) {
+
         Optional<User> optionalUser = userService.getById(id);
         if (!optionalUser.isPresent()) {
             logger.info(String.format("Пользователь с ID: %d не существует", id));
@@ -164,14 +173,19 @@ public class UserControllerV2 {
     public ResponseEntity<?> getUserFriends(
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
-            @ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
-        if (userService.existById(id)) {
-            List<UserFriendDto> userFriends = userDtoService.getUserFriendsDtoById(id, currentPage, itemsOnPage);
+            @ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable("id") @NonNull Long userId) {
+        if (userService.existById(userId)) {
+
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("userId", userId);
+            parameters.put("currentPage", currentPage);
+            parameters.put("itemsOnPage", itemsOnPage);
+
             logger.info("Получен список друзей пользователя");
-            return ResponseEntity.ok(userFriends);
+            return ResponseEntity.ok(userDtoService.getUserFriendsDtoById(parameters));
         }
-        logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", id));
+            logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));
     }
 
     @ApiOperation(value = "Изменение статуса пользователя")

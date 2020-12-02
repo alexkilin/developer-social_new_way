@@ -1,12 +1,13 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto.chat;
 
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 
-import java.util.List;
+import java.util.Map;
 
 public interface MessageDtoService {
 
-    List<MessageDto> getAllMessageDtoFromGroupChatByChatId(Long chatId);
+    PageDto<MessageDto, ?> getAllMessageDtoFromGroupChatByChatId(Map<String, Object> parameters);
 
-    List<MessageDto> getAllMessageDtoFromSingleChatByChatId(Long chatId);
+    PageDto<MessageDto, ?> getAllMessageDtoFromSingleChatByChatId(Map<String, Object> parameters);
 }
