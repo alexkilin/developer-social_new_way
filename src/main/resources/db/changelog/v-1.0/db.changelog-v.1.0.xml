@@ -54,5 +54,6 @@
     <include file="420-changeset-user_languages-table.xml" relativeToChangelogFile="true"/>
     <include file="450-changeset-users_audios_collections-table.xml" relativeToChangelogFile="true"/>
     <include file="470-changeset-users_videos_collections-table.xml" relativeToChangelogFile="true"/>
+    <include file="490-changeset-media_like-table.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
