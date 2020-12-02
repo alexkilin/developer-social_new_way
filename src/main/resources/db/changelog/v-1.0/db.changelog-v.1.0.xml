@@ -5,4 +5,54 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <include file="001-changeset-active-table.xml" relativeToChangelogFile="true"/>
+    <include file="370-changeset-role-table.xml" relativeToChangelogFile="true"/>
+    <include file="440-changeset-users-table.xml" relativeToChangelogFile="true"/>
+    <include file="070-changeset-albums-table.xml" relativeToChangelogFile="true"/>
+    <include file="010-changeset-album_audios-table.xml" relativeToChangelogFile="true"/>
+    <include file="060-changeset-album_video-table.xml" relativeToChangelogFile="true"/>
+    <include file="110-changeset-comments-table.xml" relativeToChangelogFile="true"/>
+    <include file="120-changeset-followers-table.xml" relativeToChangelogFile="true"/>
+    <include file="130-changeset-friends-table.xml" relativeToChangelogFile="true"/>
+    <include file="140-changeset-group_category-table.xml" relativeToChangelogFile="true"/>
+    <include file="150-changeset-group_chats-table.xml" relativeToChangelogFile="true"/>
+    <include file="220-changeset-language-table.xml" relativeToChangelogFile="true"/>
+    <include file="230-changeset-like-table.xml" relativeToChangelogFile="true"/>
+    <include file="240-changeset-media-table.xml" relativeToChangelogFile="true"/>
+    <include file="280-changeset-messages-table.xml" relativeToChangelogFile="true"/>
+    <include file="300-changeset-playlists-table.xml" relativeToChangelogFile="true"/>
+    <include file="350-changeset-posts-table.xml" relativeToChangelogFile="true"/>
+    <include file="360-changeset-reposts-table.xml" relativeToChangelogFile="true"/>
+    <include file="380-changeset-single_chat-table.xml" relativeToChangelogFile="true"/>
+    <include file="400-changeset-tags-table.xml" relativeToChangelogFile="true"/>
+    <include file="410-changeset-user_has_album-table.xml" relativeToChangelogFile="true"/>
+    <include file="430-changeset-user_tabs-table.xml" relativeToChangelogFile="true"/>
+    <include file="460-changeset-users_group_chats-table.xml" relativeToChangelogFile="true"/>
+    <include file="480-changeset-videos-table.xml" relativeToChangelogFile="true"/>
+    <include file="080-changeset-audios-table.xml" relativeToChangelogFile="true"/>
+    <include file="020-changeset-album_has_audio-table.xml" relativeToChangelogFile="true"/>
+    <include file="050-changeset-album_image-table.xml" relativeToChangelogFile="true"/>
+    <include file="210-changeset-images-table.xml" relativeToChangelogFile="true"/>
+    <include file="030-changeset-album_has_image-table.xml" relativeToChangelogFile="true"/>
+    <include file="040-changeset-album_has_video-table.xml" relativeToChangelogFile="true"/>
+    <include file="090-changeset-bookmarks-table.xml" relativeToChangelogFile="true"/>
+    <include file="100-changeset-comment_like-table.xml" relativeToChangelogFile="true"/>
+    <include file="160-changeset-group_chats_messages-table.xml" relativeToChangelogFile="true"/>
+    <include file="170-changeset-group_chats_users-table.xml" relativeToChangelogFile="true"/>
+    <include file="200-changeset-groups-table.xml" relativeToChangelogFile="true"/>
+    <include file="180-changeset-group_has_user-table.xml" relativeToChangelogFile="true"/>
+    <include file="190-changeset-group_wal-table.xml" relativeToChangelogFile="true"/>
+    <include file="250-changeset-media_comment-table.xml" relativeToChangelogFile="true"/>
+    <include file="260-changeset-media_messages-table.xml" relativeToChangelogFile="true"/>
+    <include file="270-changeset-message_like-table.xml" relativeToChangelogFile="true"/>
+    <include file="290-changeset-playlist_has_audios-table.xml" relativeToChangelogFile="true"/>
+    <include file="310-changeset-post_comment-table.xml" relativeToChangelogFile="true"/>
+    <include file="320-changeset-post_like-table.xml" relativeToChangelogFile="true"/>
+    <include file="330-changeset-post_media-table.xml" relativeToChangelogFile="true"/>
+    <include file="340-changeset-post_tags-table.xml" relativeToChangelogFile="true"/>
+    <include file="390-changeset-single_chat_messages-table.xml" relativeToChangelogFile="true"/>
+    <include file="420-changeset-user_languages-table.xml" relativeToChangelogFile="true"/>
+    <include file="450-changeset-users_audios_collections-table.xml" relativeToChangelogFile="true"/>
+    <include file="470-changeset-users_videos_collections-table.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>
