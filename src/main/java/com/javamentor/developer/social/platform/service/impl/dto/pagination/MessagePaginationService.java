@@ -24,12 +24,7 @@ public class MessagePaginationService<T, V> extends PaginationServiceImpl<Messag
 
     public PageDto<? extends T, ? extends V> getMessagePageDto(String methodName, Map<String, java.lang.Object> parameters) {
         PageDto<MessageDto, Object> pageDto;
-        try {
             pageDto = super.getPageDto(methodName, parameters);
-        } catch (Exception e) {
-            throw new PaginationException("Invalid parameters or declared implementation. " +
-                    "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");
-        }
         addMedias(pageDto);
 
         return (PageDto<? extends T, ? extends V>) pageDto;

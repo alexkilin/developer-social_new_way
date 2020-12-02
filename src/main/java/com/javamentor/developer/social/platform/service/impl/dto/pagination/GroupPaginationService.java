@@ -27,12 +27,8 @@ public class GroupPaginationService<T, V> extends PaginationServiceImpl<T, V> {
 
     public PageDto<? extends T, ? extends V> getGroupPageDto(String methodName, Map<String, Object> parameters) {
         PageDto<GroupWallDto, Object> pageDto;
-        try {
             pageDto = (PageDto<GroupWallDto, Object>) super.getPageDto(methodName, parameters);
-        } catch (Exception e){
-            throw new PaginationException("Invalid parameters or declared implementation. " +
-                    "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");
-        }
+
         addMediasAndTags(pageDto);
 
         return (PageDto<? extends T, ? extends V>) pageDto;

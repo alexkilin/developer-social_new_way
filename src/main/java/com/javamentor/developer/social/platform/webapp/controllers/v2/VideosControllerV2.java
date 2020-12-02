@@ -109,7 +109,7 @@ public class VideosControllerV2 {
                                       @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         Optional<User> userOptional = userService.getById(userId);
         if (!userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Пользователь с %d id не найден", userId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with id %d is not found", userId));
         }
         User user = userOptional.get();
         Videos videos = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
@@ -132,7 +132,7 @@ public class VideosControllerV2 {
         }
         Optional<User> userOptional = userService.getById(userId);
         if (!userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Пользователь с %d id не найден", userId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with id %d is not found", userId));
         }
         AlbumVideo albumVideo = albumVideoService.createAlbumVideosWithOwner(
                 albumVideoConverter.toAlbumVideo(albumDto, userOptional.get()));
@@ -149,12 +149,12 @@ public class VideosControllerV2 {
         Optional<AlbumVideo> albumVideoOptional = albumVideoService.getById(albumId);
         if (!albumVideoOptional.isPresent()) {
             logger.info(String.format("Видеоальбом с id  %s не найден", albumId));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Видеоальбом с id  %s не найден", albumId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Video album with id %s is not found", albumId));
         }
         Optional<Videos> videosOptional = videosService.getById(videoId);
         if (!videosOptional.isPresent()) {
             logger.info(String.format("Видео с id  %s не найдено", videoId));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Видео с id  %s не найдено", videoId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Video with id %s is not found", videoId));
         }
         AlbumVideo albumVideo = albumVideoOptional.get();
         Set<Videos> videosSet = albumVideo.getVideos();

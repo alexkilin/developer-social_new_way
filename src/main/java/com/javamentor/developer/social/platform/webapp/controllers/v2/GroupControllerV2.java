@@ -84,7 +84,7 @@ public class GroupControllerV2 {
             @ApiResponse(code = 200, message = "Посты группы получены", responseContainer = "List", response = GroupWallDto.class)
     })
     @GetMapping(value = "/{groupId}/posts", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<PageDto<GroupWallDto, ?>> showGroupWall(@ApiParam(value = "Идентификатор группы", example = "1")
+    public ResponseEntity<PageDto<GroupWallDto, Object>> showGroupWall(@ApiParam(value = "Идентификатор группы", example = "1")
                                                                 @PathVariable @NonNull Long groupId,
                                                             @ApiParam(value = "Текущая страница", example = "0")
                                                                 @RequestParam("currentPage") int currentPage,

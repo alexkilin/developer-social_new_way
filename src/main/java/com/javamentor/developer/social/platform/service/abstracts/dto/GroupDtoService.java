@@ -13,7 +13,7 @@ public interface GroupDtoService {
 
     Optional<GroupDto> getGroupById(Long id);
 
-    PageDto<GroupWallDto, ?> getPostsByGroupId(Map<String, Object> parameters);
+    PageDto<GroupWallDto, Object> getPostsByGroupId(Map<String, Object> parameters);
 
     Optional<GroupDto> getGroupByName(String name);
 

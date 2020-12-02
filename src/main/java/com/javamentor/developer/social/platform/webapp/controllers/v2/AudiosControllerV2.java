@@ -198,6 +198,10 @@ public class AudiosControllerV2 {
     public ResponseEntity<?> addAudioInCollectionsOfUser(@ApiParam(value = "Id аудио", example = "71") @RequestParam("audioId") Long audioId) {
 
         User user = userService.getPrincipal();
+        Optional<Audios> audio = audiosService.getById(audioId);
+        if(!audio.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Audio id %s not found", audioId));
+        }
         audiosService.addAudioInCollectionsOfUser(user, audioId);
         logger.info(String.format("Аудио id %s добавлено в коллекцию пользователя id %s", audioId, user.getUserId()));
         return ResponseEntity.ok().body(String.format("Audio id %s added to collection of user id %s", audioId, user.getUserId()));

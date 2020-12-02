@@ -26,12 +26,7 @@ public class PlaylistPaginationService<T, V> extends PaginationServiceImpl<T, V>
 
     public PageDto<? extends T, ? extends V> getPlaylistPageDto(String methodName, Map<String, Object> parameters) {
         PageDto<PlaylistGetDto, ?> pageDto;
-        try {
             pageDto = (PageDto<PlaylistGetDto, ?>) super.getPageDto(methodName, parameters);
-        } catch (Exception e) {
-            throw new PaginationException("Invalid parameters or declared implementation. " +
-                    "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");
-        }
         addContent(pageDto);
 
         return (PageDto<? extends T, ? extends V>) pageDto;
