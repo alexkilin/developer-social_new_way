@@ -5,6 +5,7 @@ import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudi
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
@@ -26,17 +27,15 @@ import io.swagger.annotations.*;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Validated
 @RestController
@@ -59,6 +58,7 @@ public class AudiosControllerV2 {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
     public AudiosControllerV2(AudioConverter audioConverter, AlbumAudioConverter albumAudioConverter, AudioDtoService audioDtoService,
                               AudiosService audiosService, UserService userService, AlbumService albumService,
                               AlbumAudioDtoService albumAudioDtoService, AlbumAudioService albumAudioService,
@@ -80,71 +80,115 @@ public class AudiosControllerV2 {
     @ApiOperation(value = "Получение всего аудио постранично")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио получено", responseContainer = "List", response = AudioDto.class)})
-    @GetMapping(value = "", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<List<AudioDto>> getPartAudios(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+    @GetMapping(params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AudioDto, ?>> getPartAudios(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                         @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
         logger.info(String.format("Аудио начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(audioDtoService.getPartAudio(currentPage, itemsOnPage));
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getPartAudio(parameters));
     }
 
     @ApiOperation(value = "Получение аудио по автору")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио по автору получено", response = AudioDto.class, responseContainer = "List")})
-    @GetMapping(value = "/author/{author}")
-    public ResponseEntity<List<AudioDto>> getAudioOfAuthor(@ApiParam(value = "Имя исполнителя", example = "Blur") @PathVariable @NotNull String author) {
+    @GetMapping(value = "/author/{author}", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AudioDto, ?>> getAudioOfAuthor(@ApiParam(value = "Имя исполнителя", example = "Blur") @PathVariable @NotNull String author,
+                                                    @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                    @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
         logger.info(String.format("Отправка всего аудио автора %s", author));
-        return ResponseEntity.ok().body(audioDtoService.getAudioOfAuthor(author));
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("author", author);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getAudioOfAuthor(parameters));
     }
 
 
     @ApiOperation(value = "Получение аудио по названию")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио по названию получено", response = AudioDto.class)})
-    @GetMapping(value = "/name/{name}")
-    public ResponseEntity<List<AudioDto>> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2") @PathVariable @NotNull String name) {
+    @GetMapping(value = "/name/{name}", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AudioDto, ?>> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2") @PathVariable @NotNull String name,
+                                                         @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                         @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
         logger.info(String.format("Отправка аудио %s", name));
-        return ResponseEntity.ok().body(audioDtoService.getAudioOfName(name));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("name", name);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getAudioOfName(parameters));
     }
 
     @ApiOperation(value = "Получение аудио по альбому")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио по альбому получено", response = AudioDto.class, responseContainer = "List")})
-    @GetMapping(value = "/album/{album}")
-    public ResponseEntity<List<AudioDto>> getAudioOfAlbum(@ApiParam(value = "Название альбома", example = "The best") @PathVariable @NotNull String album) {
+    @GetMapping(value = "/album/{album}", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AudioDto, ?>> getAudioOfAlbum(@ApiParam(value = "Название альбома", example = "The best") @PathVariable @NotNull String album,
+                                                          @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                          @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
         logger.info(String.format("Отправка всего аудио альбома %s", album));
-        return ResponseEntity.ok().body(audioDtoService.getAudioOfAlbum(album));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("album", album);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getAudioOfAlbum(parameters));
     }
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя постранично")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио из коллекции пользователя постранично", responseContainer = "List", response = AudioDto.class)})
     @GetMapping(value = "/user/{userId}", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity<List<AudioDto>> getPartAudioOfUser(
+    public ResponseEntity<PageDto<AudioDto, ?>> getPartAudioOfUser(
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
+
         logger.info(String.format("Аудио пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
-        return ResponseEntity.ok().body(audioDtoService.getPartAudioOfUser(userId, currentPage, itemsOnPage));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("userId", userId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getPartAudioOfUser(parameters));
     }
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя по автору")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио из коллекции пользователя по автору", response = AudioDto.class, responseContainer = "List")})
-    @GetMapping(value = "/user/{userId}/author", params = {"author"})
-    public ResponseEntity<List<AudioDto>> getAuthorAudioOfUser(@ApiParam(value = "Имя исполнителя", example = "Blur") @RequestParam("author") String author,
-                                                               @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
+    @GetMapping(value = "/user/{userId}/author", params = {"author", "currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AudioDto, ?>> getAuthorAudioOfUser(@ApiParam(value = "Имя исполнителя", example = "Blur") @RequestParam("author") String author,
+                                                               @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,
+                                                               @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                               @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Отправка избранного аудио пользователя c id %s автора %s", userId, author));
-        return ResponseEntity.ok().body(audioDtoService.getAuthorAudioOfUser(userId, author));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("userId", userId);
+        parameters.put("author", author);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getAuthorAudioOfUser(parameters));
     }
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя по альбому")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио из коллекции пользователя по альбому", response = AudioDto.class, responseContainer = "List")})
-    @GetMapping(value = "/user/{userId}/album", params = {"album"})
-    public ResponseEntity<List<AudioDto>> getAlbumAudioOfUser(@ApiParam(value = "Название альбома", example = "My Album") @RequestParam("album") String album,
-                                                              @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
+    @GetMapping(value = "/user/{userId}/album", params = {"album", "currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AudioDto, ?>> getAlbumAudioOfUser(@ApiParam(value = "Название альбома", example = "My Album") @RequestParam("album") String album,
+                                                              @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,
+                                                              @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                              @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Отправка избранного аудио пользователя c id %s альбома %s", userId, album));
-        return ResponseEntity.ok().body(audioDtoService.getAlbumAudioOfUser(userId, album));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("userId", userId);
+        parameters.put("album", album);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getAlbumAudioOfUser(parameters));
     }
 
     @ApiOperation(value = "Добавление аудио в коллекцию пользователя")
@@ -154,6 +198,10 @@ public class AudiosControllerV2 {
     public ResponseEntity<?> addAudioInCollectionsOfUser(@ApiParam(value = "Id аудио", example = "71") @RequestParam("audioId") Long audioId) {
 
         User user = userService.getPrincipal();
+        Optional<Audios> audio = audiosService.getById(audioId);
+        if(!audio.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Audio id %s not found", audioId));
+        }
         audiosService.addAudioInCollectionsOfUser(user, audioId);
         logger.info(String.format("Аудио id %s добавлено в коллекцию пользователя id %s", audioId, user.getUserId()));
         return ResponseEntity.ok().body(String.format("Audio id %s added to collection of user id %s", audioId, user.getUserId()));
@@ -182,10 +230,17 @@ public class AudiosControllerV2 {
             @ApiResponse(code = 200, message = "Альбомы успешно получены", response = AlbumDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Альбомы не найдены")
     })
-    @GetMapping(value = "/user/{userId}/album")
-    public ResponseEntity<List<AlbumAudioDto>> getAllAlbums(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
+    @GetMapping(value = "/user/{userId}/album", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AlbumAudioDto, ?>> getAllAlbums(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,
+                                                            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Получение всех альбомов пользователя с id %s", userId));
-        return ResponseEntity.ok().body(albumAudioDtoService.getAllByUserId(userId));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("userId", userId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+
+        return ResponseEntity.ok().body(albumAudioDtoService.getAllByUserId(parameters));
     }
 
     @ApiOperation(value = "Добавить существующее аудио в альбом")
@@ -232,10 +287,16 @@ public class AudiosControllerV2 {
     @ApiOperation(value = "Получение всех аудио из альбома")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио из альбома получено", response = AudioDto.class, responseContainer = "List")})
-    @GetMapping(value = "/albums/{albumId}/audio")
-    public ResponseEntity<?> getFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7") @PathVariable @NotNull Long albumId) {
+    @GetMapping(value = "/albums/{albumId}/audio", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AudioDto, ?>> getFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7") @PathVariable @NotNull Long albumId,
+                                                @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info(String.format("Все аудио из альбома с id:%s отправлено", albumId));
-        return ResponseEntity.ok().body(audioDtoService.getAudioFromAlbumOfUser(albumId));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("albumId", albumId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getAudioFromAlbumOfUser(parameters));
     }
 
     @ApiOperation(value = "Создание нового плейлиста для пользователя")
@@ -281,11 +342,16 @@ public class AudiosControllerV2 {
     @ApiOperation(value = "Получение списка плейлистов пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Плейлисты получены", response = PlaylistGetDto.class, responseContainer = "List")})
-    @GetMapping(value = "/user/{userId}/playlists")
-    public ResponseEntity<?> getPlaylistsOfUser(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
-        List<PlaylistGetDto> playlistGetDtoList = playlistDtoService.getAllByUserId(userId);
+    @GetMapping(value = "/user/{userId}/playlists", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<?> getPlaylistsOfUser(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,
+                                                @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("userId", userId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Плейлисты пользователя %s отправлены", userId));
-        return ResponseEntity.ok().body(playlistGetDtoList);
+        return ResponseEntity.ok().body(playlistDtoService.getAllByUserId(parameters));
     }
 
     @ApiOperation(value = "Получение плейлиста по Id")
@@ -356,15 +422,19 @@ public class AudiosControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Аудио отправлено", response = AudioDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Плейлист найден")})
-    @GetMapping(value = "/playlists/{playlistId}/audio")
+    @GetMapping(value = "/playlists/{playlistId}/audio", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<?> getAudioFromPlaylist(@ApiParam(value = "Id плейлиста", example = "2") @PathVariable @NotNull Long playlistId,
-                                                  @ApiParam(value = "Отступ", example = "0") @RequestParam("offset") @NotNull int offset,
-                                                  @ApiParam(value = "Количество данных на страницу", example = "10") @RequestParam("limit") @NotNull int limit) {
+                                                  @ApiParam(value = "Отступ", example = "0") @RequestParam("currentPage") @NotNull int currentPage,
+                                                  @ApiParam(value = "Количество данных на страницу", example = "10") @RequestParam("itemsOnPage") @NotNull int itemsOnPage) {
         if (!playlistService.existById(playlistId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s", playlistId));
         }
         logger.info(String.format("Аудио из плейлиста %s отправлено", playlistId));
-        return ResponseEntity.ok().body(audioDtoService.getAudioFromPlaylist(playlistId, offset, limit));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("playlistId", playlistId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getAudioFromPlaylist(parameters));
     }
 
 }

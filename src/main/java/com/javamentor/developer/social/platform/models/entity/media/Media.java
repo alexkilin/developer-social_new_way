@@ -1,6 +1,8 @@
 package com.javamentor.developer.social.platform.models.entity.media;
 
 import com.javamentor.developer.social.platform.models.entity.album.Album;
+import com.javamentor.developer.social.platform.models.entity.like.MediaLike;
+import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +11,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -47,6 +50,5 @@ public class Media {
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
-
-}
+    }
 

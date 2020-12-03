@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers.advice;
 
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +33,11 @@ public class AdviceController  extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> notFoundEx(RuntimeException runtimeException, WebRequest webRequest) {
+        return exceptionHandlerResponse(runtimeException, webRequest);
+    }
+
+    @ExceptionHandler(PaginationException.class)
+    protected ResponseEntity<Object> paginationException(RuntimeException runtimeException, WebRequest webRequest) {
         return exceptionHandlerResponse(runtimeException, webRequest);
     }
 

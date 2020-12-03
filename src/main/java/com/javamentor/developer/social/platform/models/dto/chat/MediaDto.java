@@ -20,4 +20,6 @@ public class MediaDto {
     private String mediaType;
     @ApiModelProperty(notes = "Дата публикования медиа.", hidden = true)
     private LocalDateTime persistDateTime;
+    @ApiModelProperty(notes = "Id сообщения")
+    private Long messageId;
 }

@@ -41,133 +41,127 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getPartAudios() throws Exception {
         this.mockMvc.perform(get(apiUrl + "/")
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(4))
-                .andExpect(jsonPath("$[0].id").value(70))
-                .andExpect(jsonPath("$[0].url").value("www.myaudio7.ru"))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon7"))
-                .andExpect(jsonPath("$[0].name").value("AudioTestName 7"))
-                .andExpect(jsonPath("$[0].author").value("Test Author 7"))
-                .andExpect(jsonPath("$[0].album").value("AlbumTestName 7"))
-                .andExpect(jsonPath("$[0].length").value(365))
-                .andExpect(jsonPath("$[1].id").value(20))
-                .andExpect(jsonPath("$[2].id").value(30))
-                .andExpect(jsonPath("$[3].id").value(40));
+                .andExpect(jsonPath("$.items.length()").value(4))
+                .andExpect(jsonPath("$.items[0].id").value(70))
+                .andExpect(jsonPath("$.items[0].url").value("www.myaudio7.ru"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 7"))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 7"))
+                .andExpect(jsonPath("$.items[0].album").value("AlbumTestName 7"))
+                .andExpect(jsonPath("$.items[0].length").value(365))
+                .andExpect(jsonPath("$.items[1].id").value(20))
+                .andExpect(jsonPath("$.items[2].id").value(30))
+                .andExpect(jsonPath("$.items[3].id").value(40));
     }
 
     @Test
     public void getAudioOfAuthor() throws Exception {
         mockMvc.perform(get(apiUrl + "/author/{author}", "Test Author 1")
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id").value(20))
-                .andExpect(jsonPath("$[0].name").value("AudioTestName 1"))
-                .andExpect(jsonPath("$[0].length").value(365))
-                .andExpect(jsonPath("$[0].album").value("AlbumTestName 1"))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon1"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(20))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 1"))
+                .andExpect(jsonPath("$.items[0].length").value(365))
+                .andExpect(jsonPath("$.items[0].album").value("AlbumTestName 1"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon1"));
     }
 
     @Test
     public void getAudioOfName() throws Exception {
         mockMvc.perform(get(apiUrl + "/name/{name}", "AudioTestName 2")
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id").value(30))
-                .andExpect(jsonPath("$[0].author").value("Test Author 2"))
-                .andExpect(jsonPath("$[0].length").value(365))
-                .andExpect(jsonPath("$[0].album").value("AlbumTestName 2"))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon2"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(30))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 2"))
+                .andExpect(jsonPath("$.items[0].length").value(365))
+                .andExpect(jsonPath("$.items[0].album").value("AlbumTestName 2"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon2"));
     }
 
     @Test
     public void getAudioOfAlbum() throws Exception {
         mockMvc.perform(get(apiUrl + "/album/{album}", "AlbumTestName 5")
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id").value(60))
-                .andExpect(jsonPath("$[0].author").value("Test Author 2"))
-                .andExpect(jsonPath("$[0].length").value(365))
-                .andExpect(jsonPath("$[0].name").value("AudioTestName 5"))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon5"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(60))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 2"))
+                .andExpect(jsonPath("$.items[0].length").value(365))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 5"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon5"));
     }
 
     @Test
     public void getPartAudioOfUser() throws Exception {
         mockMvc.perform(get(apiUrl + "/user/{userId}", 2)
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
-                .andExpect(jsonPath("$[0].id").value(30))
-                .andExpect(jsonPath("$[0].author").value("Test Author 2"))
-                .andExpect(jsonPath("$[0].length").value(365))
-                .andExpect(jsonPath("$[0].name").value("AudioTestName 2"))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon2"))
-                .andExpect(jsonPath("$[1].id").value(40))
-                .andExpect(jsonPath("$[1].author").value("Test Author 3"))
-                .andExpect(jsonPath("$[1].length").value(365))
-                .andExpect(jsonPath("$[1].name").value("AudioTestName 3"))
-                .andExpect(jsonPath("$[1].icon").value("TestIcon3"));
+                .andExpect(jsonPath("$.items.length()").value(3))
+                .andExpect(jsonPath("$.items[0].id").value(30))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 2"))
+                .andExpect(jsonPath("$.items[0].length").value(365))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 2"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon2"))
+                .andExpect(jsonPath("$.items[1].id").value(40))
+                .andExpect(jsonPath("$.items[1].author").value("Test Author 3"))
+                .andExpect(jsonPath("$.items[1].length").value(365))
+                .andExpect(jsonPath("$.items[1].name").value("AudioTestName 3"))
+                .andExpect(jsonPath("$.items[1].icon").value("TestIcon3"));
     }
 
     @Test
     public void getAuthorAudioOfUser() throws Exception {
         mockMvc.perform(get(apiUrl + "/user/{userId}/author?author=Test Author 1", 3)
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id").value(20))
-                .andExpect(jsonPath("$[0].author").value("Test Author 1"))
-                .andExpect(jsonPath("$[0].length").value(365))
-                .andExpect(jsonPath("$[0].name").value("AudioTestName 1"))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon1"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(20))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 1"))
+                .andExpect(jsonPath("$.items[0].length").value(365))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 1"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon1"));
     }
 
     @Test
     public void getAlbumAudioOfUser() throws Exception {
         mockMvc.perform(get(apiUrl + "/user/{userId}/album?album=AlbumTestName 7", 2)
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id").value(70))
-                .andExpect(jsonPath("$[0].author").value("Test Author 7"))
-                .andExpect(jsonPath("$[0].length").value(365))
-                .andExpect(jsonPath("$[0].name").value("AudioTestName 7"))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon7"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(70))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 7"))
+                .andExpect(jsonPath("$.items[0].length").value(365))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 7"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"));
     }
 
     @Test
     public void addAudioInCollectionsOfUser() throws Exception {
-        mockMvc.perform(put(apiUrl + "/user/{userId}/audio", 6)
+        mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "40"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Audio id 40 added to collection of user id 6"));
+                .andExpect(content().string("Audio id 40 added to collection of user id 65"));
 
-        mockMvc.perform(put(apiUrl + "/user/{userId}/audio", 90)
-                .param("audioId", "40"))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User id 90 not found"));
-
-        mockMvc.perform(put(apiUrl + "/user/{userId}/audio", 6)
+        mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "500"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -203,17 +197,17 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getAllAlbums() throws Exception {
         mockMvc.perform(get(apiUrl + "/user/{userId}/album", 2)
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(4))
-                .andExpect(jsonPath("$[0].id").value(20))
-                .andExpect(jsonPath("$[0].name").value("audioAlbum"))
-                .andExpect(jsonPath("$[0].icon").value("icon 2"))
-                .andExpect(jsonPath("$[1].id").value(30))
-                .andExpect(jsonPath("$[1].name").value("audioAlbum"))
-                .andExpect(jsonPath("$[1].icon").value("icon 3"));
+                .andExpect(jsonPath("$.items.length()").value(4))
+                .andExpect(jsonPath("$.items[0].id").value(20))
+                .andExpect(jsonPath("$.items[0].name").value("audioAlbum"))
+                .andExpect(jsonPath("$.items[0].icon").value("icon 2"))
+                .andExpect(jsonPath("$.items[1].id").value(30))
+                .andExpect(jsonPath("$.items[1].name").value("audioAlbum"))
+                .andExpect(jsonPath("$.items[1].icon").value("icon 3"));
     }
 
     @Test
@@ -262,12 +256,12 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getFromAlbumOfUser() throws Exception {
         mockMvc.perform(get(apiUrl + "/albums/{albumId}/audio", 40)
-                .param("currentPage", "0")
+                .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id").value(40));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(40));
     }
 
     @Test
@@ -315,11 +309,13 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getPlaylistsOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/playlists", 2))
+        mockMvc.perform(get(apiUrl + "/user/{userId}/playlists", 2)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "5"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].name").value("test0"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].name").value("test0"));
     }
 
     @Test
@@ -374,12 +370,12 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getAudioFromPlaylist() throws Exception {
         mockMvc.perform(get(apiUrl + "/playlists/{playlistId}/audio", 10)
-                .param("offset", "0")
-                .param("limit", "10"))
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
-                .andExpect(jsonPath("$[0].id").value(20))
-                .andExpect(jsonPath("$[0].icon").value("TestIcon1"));
+                .andExpect(jsonPath("$.items.length()").value(3))
+                .andExpect(jsonPath("$.items[0].id").value(20))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon1"));
     }
 }

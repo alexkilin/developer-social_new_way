@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.models.dto.group.*;
 import com.javamentor.developer.social.platform.models.entity.group.Group;
@@ -18,7 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,7 +36,10 @@ public class GroupControllerV2 {
     private final GroupHasUserConverter groupHasUserConverter;
 
     @Autowired
-    public GroupControllerV2(GroupDtoService groupDtoService, GroupHasUserService groupHasUserService, UserService userService, GroupService groupService, GroupConverter groupConverter, GroupHasUserConverter groupHasUserConverter) {
+    public GroupControllerV2(GroupDtoService groupDtoService,
+                             GroupHasUserService groupHasUserService, UserService userService,
+                             GroupService groupService, GroupConverter groupConverter,
+                             GroupHasUserConverter groupHasUserConverter) {
         this.groupDtoService = groupDtoService;
         this.groupHasUserService = groupHasUserService;
         this.userService = userService;
@@ -48,11 +53,15 @@ public class GroupControllerV2 {
             @ApiResponse(code = 200, message = "Инфа обо всех группах получена", responseContainer = "List", response = GroupInfoDto.class),
             @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)
     })
-    @GetMapping(params = {"page", "size"})
-    public ResponseEntity<List<GroupInfoDto>> getAllGroups(
-            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("page") int page,
-            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("size") int size) {
-        return ResponseEntity.ok().body(groupDtoService.getAllGroups(page, size));
+    @GetMapping(params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<Object, Object>> getAllGroups(
+            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(groupDtoService.getAllGroups(parameters));
     }
 
     @ApiOperation(value = "Получение информации об одной группе")
@@ -74,14 +83,18 @@ public class GroupControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты группы получены", responseContainer = "List", response = GroupWallDto.class)
     })
-    @GetMapping(value = "/{groupId}/posts", params = {"page", "size"})
-    public ResponseEntity<List<GroupWallDto>> showGroupWall(@ApiParam(value = "Идентификатор группы", example = "1")
+    @GetMapping(value = "/{groupId}/posts", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<GroupWallDto, Object>> showGroupWall(@ApiParam(value = "Идентификатор группы", example = "1")
                                                                 @PathVariable @NonNull Long groupId,
                                                             @ApiParam(value = "Текущая страница", example = "0")
-                                                                @RequestParam("page") int page,
+                                                                @RequestParam("currentPage") int currentPage,
                                                             @ApiParam(value = "Количество данных на страницу", example = "15")
-                                                                @RequestParam("size") int size) {
-        return ResponseEntity.ok().body(groupDtoService.getPostsByGroupId(groupId, page, size));
+                                                                @RequestParam("itemsOnPage") int itemsOnPage) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("groupId", groupId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(groupDtoService.getPostsByGroupId(parameters));
     }
 
     @ApiOperation(value = "Получение группы по наименованию группы")
@@ -104,18 +117,23 @@ public class GroupControllerV2 {
             @ApiResponse(code = 200, message = "Юзеры группы получены", responseContainer = "List", response = UserDto.class),
             @ApiResponse(code = 400, message = "Группа не найдена", response = String.class)
     })
-    @GetMapping(value = "/{groupId}/users", params = {"page", "size"})
+    @GetMapping(value = "/{groupId}/users", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<?> getUsersFromTheGroup(@ApiParam(value = "Идентификатор группы", example = "1")
                                                       @PathVariable @NonNull Long groupId,
                                                   @ApiParam(value = "Текущая страница", example = "0")
-                                                      @RequestParam("page") int page,
+                                                      @RequestParam("currentPage") int currentPage,
                                                   @ApiParam(value = "Количество данных на страницу", example = "15")
-                                                      @RequestParam("size") int size) {
+                                                      @RequestParam("itemsOnPage") int itemsOnPage) {
         Optional<GroupDto> groupDtoOptional = groupDtoService.getGroupById(groupId);
         if (!groupDtoOptional.isPresent()) {
             return ResponseEntity.badRequest().body(String.format("Group id %s not found", groupId));
         }
-        return ResponseEntity.ok(groupDtoService.getUsersFromTheGroup(groupId, page, size));
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("groupId", groupId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+
+        return ResponseEntity.ok(groupDtoService.getUsersFromTheGroup(parameters));
     }
 
     @ApiOperation(value = "Вступление в группу пользователя")

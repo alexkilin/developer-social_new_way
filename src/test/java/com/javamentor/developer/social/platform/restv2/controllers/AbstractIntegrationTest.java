@@ -27,7 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @DBUnit(caseSensitiveTableNames = true, allowEmptyFields = true, schema = "public")
 public abstract class AbstractIntegrationTest {
 
-    protected ObjectMapper objectMapper = new ObjectMapper();
+    protected final ObjectMapper objectMapper = new ObjectMapper();
 
     {
         objectMapper.registerModule(new JavaTimeModule());

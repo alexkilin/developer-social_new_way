@@ -3,28 +3,14 @@ package com.javamentor.developer.social.platform.dao.abstracts.dto;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
-import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 
 import java.util.List;
 
 public interface PostDtoDao {
 
-    List<PostDto> getAllPosts(Long userPrincipalId);
-
     List<PostDto> getPostById(Long postId, Long userPrincipalId);
 
-    List<PostDto> getPostsByTag(String text, Long userPrincipalId);
+    List<MediaPostDto> getMediasByPostId(List<Long> postId);
 
-    List<CommentDto> getCommentsByPostId(Long id);
-
-    List<MediaPostDto> getMediasByPostId(Long id);
-
-    List<TagDto> getTagsByPostId(Long id);
-
-    List<PostDto> getPostsByUserId(Long id, Long userPrincipalId);
-
-    List <PostDto> getAllBookmarkedPosts(Long userPrincipalId);
-
-    List <TagDto> getAllTags ();
-
+    List<TagDto> getTagsByPostId(List<Long> postId);
 }

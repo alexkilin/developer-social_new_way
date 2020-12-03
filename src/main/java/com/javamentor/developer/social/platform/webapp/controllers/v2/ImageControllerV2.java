@@ -2,7 +2,6 @@ package com.javamentor.developer.social.platform.webapp.controllers.v2;
 
 import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
-import com.javamentor.developer.social.platform.models.dto.media.image.AlbumImageDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageDto;
 import com.javamentor.developer.social.platform.models.entity.album.Album;
@@ -30,9 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @Validated
@@ -114,16 +111,21 @@ public class ImageControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Изображения получены", response = ImageDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)})
-    @GetMapping(value = "")
+    @GetMapping(params = {"currentPage", "itemsOnPage", "userId"})
     public ResponseEntity<?> getAllImagesOfUser(@ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
-                                                @ApiParam(value = "Отступ", example = "0") @RequestParam(value = "offset", defaultValue = "0", required = false) @NotNull Integer offset,
-                                                @ApiParam(value = "Количество данных на страницу", example = "5") @RequestParam(value = "limit", defaultValue = "20",  required = false) @NotNull Integer limit) {
+                                                @ApiParam(value = "Текущая страница", example = "0")
+                                                @RequestParam("currentPage") int currentPage,
+                                                @ApiParam(value = "Количество данных на страницу", example = "15")
+                                                @RequestParam("itemsOnPage") int itemsOnPage) {
         if(!userService.existById(userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
-        List<ImageDto> imageDtoList = imageDTOService.getAllByUserId(offset, limit, userId);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("userId", userId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Отправлен список пустой или с изображениями пользователя с id: %s", userId));
-        return ResponseEntity.ok().body(imageDtoList);
+        return ResponseEntity.status(HttpStatus.OK).body(imageDTOService.getAllByUserId(parameters));
     }
 
     @ApiOperation(value = "Создать фотоальбом")
@@ -225,17 +227,20 @@ public class ImageControllerV2 {
             @ApiResponse(code = 404, message = "", response = String.class),
             @ApiResponse(code = 404, message = "", response = String.class)
     })
-    @GetMapping(value = "/albums/{albumId}/images")
+    @GetMapping(value = "/albums/{albumId}/images", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<?> getImagesFromAlbumById(
             @ApiParam(value = "Id фотоальбома", example = "101") @PathVariable @NotNull Long albumId,
-            @ApiParam(value = "Отступ", example = "0") @RequestParam("offset") @NotNull int offset,
-            @ApiParam(value = "Количество данных на страницу", example = "5") @RequestParam("limit") @NotNull int limit) {
+            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         if(!albumImageService.existById(albumId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
-        List<ImageDto> imageDtoList = imageDTOService.getAllByAlbumId(offset, limit, albumId);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("albumId", albumId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Изображения из фотоальбома %s отправлены", albumId));
-        return ResponseEntity.ok(imageDtoList);
+        return ResponseEntity.ok(imageDTOService.getAllByAlbumId(parameters));
     }
 
     @ApiOperation(value = "Получить фотоальбом по Id")
@@ -257,17 +262,20 @@ public class ImageControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Фотоальбомы получены", response = AlbumDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)})
-    @GetMapping(value = "/albums")
+    @GetMapping(value = "/albums", params = {"currentPage", "itemsOnPage", "userId"})
     public ResponseEntity<?> getAllImageAlbumsOfUser(
             @ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
-            @ApiParam(value = "Отступ", example = "0") @RequestParam("offset") @NotNull int offset,
-            @ApiParam(value = "Количество данных на страницу", example = "5") @RequestParam("limit") @NotNull int limit) {
+            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         if(!userService.existById(userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
-        List<AlbumImageDto> albumDtoList = albumImageDtoService.getAllByUserId(userId);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("userId", userId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
         logger.info(String.format("Отправлен список пустой или с альбомами пользователя с id: %s", userId));
-        return ResponseEntity.ok().body(albumDtoList);
+        return ResponseEntity.status(HttpStatus.OK).body(albumImageDtoService.getAllByUserId(parameters));
     }
 
 }

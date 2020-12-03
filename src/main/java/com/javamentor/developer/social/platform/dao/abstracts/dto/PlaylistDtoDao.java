@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PlaylistDtoDao {
+
     Optional<PlaylistGetDto> getById(Long id);
-    List<PlaylistGetDto> getByUserId(Long userId);
-    List<AudioDto> getAudioDtoByPlaylistId(Long playlistId);
+
+    List<AudioDto> getAudioDtoByPlaylistId(List<Long> playlistId);
 }
