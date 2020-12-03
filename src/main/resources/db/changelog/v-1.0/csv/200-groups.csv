@@ -1,3 +1,4 @@
+id,address_image_group,description,last_redaction_date,link_site,name,persist_date,group_category_id,owner_id
 1407,This is a address of the group #0,This is a description of the group #0,2020-12-02 15:36:04.348614,www.groupsite0.ru,JAVA IS 0,2020-12-02 15:36:04.348644,1408,1
 1414,This is a address of the group #1,This is a description of the group #1,2020-12-02 15:36:04.349997,www.groupsite1.ru,JAVA IS 1,2020-12-02 15:36:04.350007,1415,49
 1421,This is a address of the group #2,This is a description of the group #2,2020-12-02 15:36:04.350157,www.groupsite2.ru,JAVA IS 2,2020-12-02 15:36:04.350165,1408,64
