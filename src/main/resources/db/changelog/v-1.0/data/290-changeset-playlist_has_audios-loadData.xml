@@ -7,7 +7,6 @@
 
     <changeSet id="1"  author="dev-social">
         <loadData tableName="playlist_has_audios"
-                  relativeToChangelogFile="true"
-                  file="290-playlist_has_audios.csv"/>
+                  file="db/changelog/v-1.0/csv/290-playlist_has_audios.csv"/>
     </changeSet>
 </databaseChangeLog>

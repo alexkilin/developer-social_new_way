@@ -9,18 +9,16 @@
         <sqlFile dbms="postgresql"
                  encoding="utf8"
                  endDelimiter="next"
-                 relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="370-create-role-table.sql"/>
+                 path="db/changelog/v-1.0/sql/370-create-role-table.sql"/>
         <rollback>
             <sqlFile dbms="postgresql"
                      encoding="utf8"
                      endDelimiter="next"
-                     relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="370-drop-role-table.sql"/>
+                     path="db/changelog/v-1.0/sql/370-drop-role-table.sql"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

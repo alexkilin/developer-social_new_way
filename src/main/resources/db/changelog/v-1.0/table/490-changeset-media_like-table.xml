@@ -9,10 +9,9 @@
         <sqlFile dbms="postgresql"
                  encoding="utf8"
                  endDelimiter="next"
-                 relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="490-create-media_like-table.sql"/>
+                 path="db/changelog/v-1.0/sql/490-create-media_like-table.sql"/>
         <rollback>
             <sqlFile dbms="postgresql"
                      encoding="utf8"
@@ -20,7 +19,7 @@
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="490-drop-media_like-table.sql"/>
+                     path="db/changelog/v-1.0/sql/490-drop-media_like-table.sql"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

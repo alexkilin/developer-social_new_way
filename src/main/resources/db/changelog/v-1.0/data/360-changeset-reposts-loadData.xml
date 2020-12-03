@@ -7,7 +7,6 @@
 
     <changeSet id="1"  author="dev-social">
         <loadData tableName="reposts"
-                  relativeToChangelogFile="true"
-                  file="360-reposts.csv"/>
+                  file="db/changelog/v-1.0/csv/360-reposts.csv"/>
     </changeSet>
 </databaseChangeLog>

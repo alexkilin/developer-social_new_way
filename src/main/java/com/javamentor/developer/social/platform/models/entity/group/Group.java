@@ -50,7 +50,7 @@ public class Group {
     private GroupCategory groupCategory;
 
     @OneToMany(fetch = FetchType.LAZY, targetEntity = Post.class, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "group_wal", joinColumns = @JoinColumn(name = "group_id"),
+    @JoinTable(name = "group_wall", joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private Set<Post> posts;
 

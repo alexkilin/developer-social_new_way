@@ -7,7 +7,6 @@
 
     <changeSet id="1"  author="dev-social">
         <loadData tableName="bookmarks"
-                  relativeToChangelogFile="true"
-                  file="090-bookmarks.csv"/>
+                  file="db/changelog/v-1.0/csv/090-bookmarks.csv"/>
     </changeSet>
 </databaseChangeLog>

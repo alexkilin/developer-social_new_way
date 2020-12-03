@@ -6,8 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="1"  author="dev-social">
-        <loadData tableName="media_messages"
-                  relativeToChangelogFile="true"
-                  file="270-media_messages.csv"/>
+        <loadData tableName="message_like"
+                  file="db/changelog/v-1.0/csv/270-message_like.csv"/>
     </changeSet>
 </databaseChangeLog>

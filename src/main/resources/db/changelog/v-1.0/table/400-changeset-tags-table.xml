@@ -9,10 +9,9 @@
         <sqlFile dbms="postgresql"
                  encoding="utf8"
                  endDelimiter="next"
-                 relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="400-create-tags-table.sql"/>
+                 path="db/changelog/v-1.0/sql/400-create-tags-table.sql"/>
         <rollback>
             <sqlFile dbms="postgresql"
                      encoding="utf8"
@@ -20,7 +19,7 @@
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="400-drop-tags-table.sql"/>
+                     path="db/changelog/v-1.0/sql/400-drop-tags-table.sql"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

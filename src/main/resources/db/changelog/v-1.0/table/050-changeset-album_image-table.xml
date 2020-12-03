@@ -9,10 +9,9 @@
         <sqlFile dbms="postgresql"
                  encoding="utf8"
                  endDelimiter="next"
-                 relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="050-create-album_image-table.sql"/>
+                 path="db/changelog/v-1.0/sql/050-create-album_image-table.sql"/>
         <rollback>
             <sqlFile dbms="postgresql"
                      encoding="utf8"
@@ -20,7 +19,7 @@
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="050-drop-album_image-table.sql"/>
+                     path="db/changelog/v-1.0/sql/050-drop-album_image-table.sql"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

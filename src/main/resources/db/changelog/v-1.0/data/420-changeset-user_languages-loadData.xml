@@ -6,8 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="1"  author="dev-social">
-        <loadData tableName="user_languages
-                  relativeToChangelogFile="true"
-                  file="420-user_languages.csv"/>
+        <loadData tableName="user_languages"
+                  file="db/changelog/v-1.0/csv/420-user_languages.csv"/>
     </changeSet>
 </databaseChangeLog>

@@ -9,10 +9,9 @@
         <sqlFile dbms="postgresql"
                  encoding="utf8"
                  endDelimiter="next"
-                 relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="180-create-group_has_user-table.sql"/>
+                 path="db/changelog/v-1.0/sql/180-create-group_has_user-table.sql"/>
         <rollback>
             <sqlFile dbms="postgresql"
                      encoding="utf8"
@@ -20,7 +19,7 @@
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="180-drop-group_has_user-table.sql"/>
+                     path="db/changelog/v-1.0/sql/180-drop-group_has_user-table.sql"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>
