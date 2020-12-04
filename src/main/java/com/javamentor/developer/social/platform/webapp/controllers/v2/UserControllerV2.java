@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -72,7 +73,7 @@ public class UserControllerV2 {
     })
     @GetMapping(params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<Object, Object>> getAllUsers(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                        @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+                                                               @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info("Получен список пользователей");
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
@@ -184,8 +185,8 @@ public class UserControllerV2 {
             logger.info("Получен список друзей пользователя");
             return ResponseEntity.ok(userDtoService.getUserFriendsDtoById(parameters));
         }
-            logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));
+        logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));
     }
 
     @ApiOperation(value = "Изменение статуса пользователя")
@@ -232,14 +233,50 @@ public class UserControllerV2 {
             @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)
     })
     @GetMapping("/principal")
-    public ResponseEntity<?> getPrincipal(){
+    public ResponseEntity<?> getPrincipal() {
         User userPrincipal = userService.getPrincipal();
-        if(userPrincipal != null){
+        if (userPrincipal != null) {
             return ResponseEntity.ok().body(userConverter.toDto(userPrincipal));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Авторизованный пользователь не найден"));
 
     }
+
+    @ApiOperation(value = "Получение фильтра по списку друзей пользователя по id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = UserFriendDto.class),
+            @ApiResponse(code = 404, message = "Пользователя с таким id не существует", response = String.class)
+    })
+    @GetMapping("/{id}filterfriends")
+    public ResponseEntity<?> getFiltredUserFriends(
+            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
+            @ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable("id") @NonNull Long userId,
+            @ApiParam(value = "Фильтр по начальной дате рождения", example = "30-08-2002") @RequestParam("startDateOfBirth") Date startDateOfBirth,
+            @ApiParam(value = "Фильтр по конечной дате рождения", example = "30-08-2002") @RequestParam("endDateOfBirth") Date endDateOfBirth,
+            @ApiParam(value = "Фильтр по образованию", example = "MIT University") @RequestParam("education") String education,
+            @ApiParam(value = "Фильтр по профессии", example = "Plumber") @RequestParam("profession") String profession,
+            @ApiParam(value = "Фильтр по городу", example = "SPb") @RequestParam("city") String city) {
+        if (userService.existById(userId)) {
+
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("userId", userId);
+            parameters.put("currentPage", currentPage);
+            parameters.put("itemsOnPage", itemsOnPage);
+
+            Map<String, Object> filters = new HashMap<>();
+            filters.put("startDateOfBirth", startDateOfBirth);
+            filters.put("endDateOfBirth", endDateOfBirth);
+            filters.put("education", education);
+            filters.put("profession", profession);
+            filters.put("city", city);
+
+            parameters.put("filters", filters);
+
+            logger.info("Получен список друзей пользователя с фильтрами");
+            return ResponseEntity.ok(userDtoService.getFiltredFriendsDtoById(parameters));
+        }
+        logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));
+    }
 }
-
-

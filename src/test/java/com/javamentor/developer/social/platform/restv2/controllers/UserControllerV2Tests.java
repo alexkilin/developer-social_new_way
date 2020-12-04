@@ -44,7 +44,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     private final Gson gson = new Gson();
 
 
-
     @Test
     void createUser() throws Exception {
         UserRegisterDto userDto = UserRegisterDto.builder()
@@ -237,4 +236,23 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().string("User with ID: 222 does not exist."));
     }
 
+    @Test
+    void getFiltredUserFriends() throws Exception {
+        mockMvc.perform(get(apiUrl + "/{userId}/friends", 2L)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("education", "MIT University"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(4));
+
+        mockMvc.perform(get(apiUrl + "/{userId}/friends", 222L)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("User with ID: 222 does not exist."));
+    }
 }
