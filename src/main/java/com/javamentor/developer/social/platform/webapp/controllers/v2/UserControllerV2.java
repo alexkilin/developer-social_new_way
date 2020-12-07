@@ -247,16 +247,16 @@ public class UserControllerV2 {
             @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = UserFriendDto.class),
             @ApiResponse(code = 404, message = "Пользователя с таким id не существует", response = String.class)
     })
-    @GetMapping("/{id}filterfriends")
-    public ResponseEntity<?> getFiltredUserFriends(
+    @GetMapping("/{id}/filterfriends")
+    public ResponseEntity<?> getFilterUserFriends(
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
             @ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable("id") @NonNull Long userId,
-            @ApiParam(value = "Фильтр по начальной дате рождения", example = "30-08-2002") @RequestParam("startDateOfBirth") Date startDateOfBirth,
-            @ApiParam(value = "Фильтр по конечной дате рождения", example = "30-08-2002") @RequestParam("endDateOfBirth") Date endDateOfBirth,
-            @ApiParam(value = "Фильтр по образованию", example = "MIT University") @RequestParam("education") String education,
-            @ApiParam(value = "Фильтр по профессии", example = "Plumber") @RequestParam("profession") String profession,
-            @ApiParam(value = "Фильтр по городу", example = "SPb") @RequestParam("city") String city) {
+            @ApiParam(value = "Фильтр по начальной дате рождения", example = "2008-05-30") @RequestParam(value = "startDateOfBirth", required = false) Date startDateOfBirth,
+            @ApiParam(value = "Фильтр по конечной дате рождения", example = "2008-05-30") @RequestParam(value = "endDateOfBirth", required = false) Date endDateOfBirth,
+            @ApiParam(value = "Фильтр по образованию", example = "MIT University") @RequestParam(value = "education", required = false) String education,
+            @ApiParam(value = "Фильтр по профессии", example = "Plumber") @RequestParam(value = "profession", required = false) String profession,
+            @ApiParam(value = "Фильтр по городу", example = "SPb") @RequestParam(value = "city", required = false) String city) {
         if (userService.existById(userId)) {
 
             Map<String, Object> parameters = new HashMap<>();
@@ -274,7 +274,7 @@ public class UserControllerV2 {
             parameters.put("filters", filters);
 
             logger.info("Получен список друзей пользователя с фильтрами");
-            return ResponseEntity.ok(userDtoService.getFiltredFriendsDtoById(parameters));
+            return ResponseEntity.ok(userDtoService.getFilterFriendsDtoById(parameters));
         }
         logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));

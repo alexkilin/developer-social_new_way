@@ -14,5 +14,5 @@ public interface UserDtoService {
 
     PageDto<Object, Object> getUserFriendsDtoById(Map<String, Object> parameters);
 
-    PageDto<Object, Object> getFiltredFriendsDtoById(Map<String, Object> parameters);
+    PageDto<Object, Object> getFilterFriendsDtoById(Map<String, Object> parameters);
 }

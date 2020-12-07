@@ -7,6 +7,7 @@ user_languages:
     language_id: 2
   - user_id: 2
     language_id: 2
-
-
-
+  - user_id: 4
+    language_id: 2
+  - user_id: 7
+    language_id: 3

@@ -237,15 +237,46 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
-    void getFiltredUserFriends() throws Exception {
-        mockMvc.perform(get(apiUrl + "/{userId}/friends", 2L)
+    void getFilterUserFriends() throws Exception {
+        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10")
-                .param("education", "MIT University"))
+                .param("education", "Harvard"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(4));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].fullName").value("Admin0"));
+
+        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("city", "SPb"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(3));
+
+        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("city", "SPb")
+                .param("profession", "Creator"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(1));
+
+//        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+//                .param("currentPage", "1")
+//                .param("itemsOnPage", "10")
+//                .param("startDateOfBirth", "1990-05-30")
+//                .param("endDateOfBirth", "2012-03-30"))
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.items.length()").value(4));
+
 
         mockMvc.perform(get(apiUrl + "/{userId}/friends", 222L)
                 .param("currentPage", "1")

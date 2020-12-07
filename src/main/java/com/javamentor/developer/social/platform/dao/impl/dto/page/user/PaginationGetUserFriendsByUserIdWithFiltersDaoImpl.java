@@ -43,14 +43,17 @@ public class PaginationGetUserFriendsByUserIdWithFiltersDaoImpl implements Pagin
             Map<String, Object> filters = (Map<String, Object>) parameters.get("filters");
 
             for (Map.Entry<String, Object> tmp : filters.entrySet()) {
-                if (!tmp.getValue().equals(null)) {
-                    if (!tmp.getKey().equals("startDateOfBirth") || !tmp.getKey().equals("endDateOfBirth")) {
-                        stringBuilder.append(" and f.user." + tmp.getKey() + " = " + tmp.getValue());
+                if (tmp.getValue() != null) {
+                    if (!(tmp.getKey().equals("startDateOfBirth")) || !(tmp.getKey().equals("endDateOfBirth"))) {
+                        stringBuilder.append(" and f.friend." + tmp.getKey() + " = '" + tmp.getValue() + "'");
                     }
                 }
-                if (!filters.get("startDateOfBirth").equals(null) && !filters.get("endDateOfBirth").equals(null)){
+            }
 
-                }
+
+            if (filters.get("startDateOfBirth") != null && filters.get("endDateOfBirth") != null) {
+//                stringBuilder.append(" and f.friend.dateOfBirth between '" + filters.get("startDateOfBirth")
+//                        + "' and '" + filters.get("endDateOfBirth") + "'");
             }
 
             userFriends = entityManager.createQuery(String.valueOf(stringBuilder))
