@@ -267,15 +267,24 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
 
-//        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
-//                .param("currentPage", "1")
-//                .param("itemsOnPage", "10")
-//                .param("startDateOfBirth", "1990-05-30")
-//                .param("endDateOfBirth", "2012-03-30"))
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.items.length()").value(4));
+        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("startDateOfBirth", "1990-05-30")
+                .param("endDateOfBirth", "2012-03-30"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(3));
+
+        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("endDateOfBirth", "2003-12-30"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(2));
 
 
         mockMvc.perform(get(apiUrl + "/{userId}/friends", 222L)
