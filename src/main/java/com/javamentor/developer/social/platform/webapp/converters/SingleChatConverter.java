@@ -21,7 +21,7 @@ public abstract class SingleChatConverter {
     @Mapping(source = "chatDto.image", target = "image")
     @Mapping(source = "userOneId", target ="userOne", qualifiedByName = "userIdToUser")
     @Mapping(source = "userTwoId", target ="userTwo", qualifiedByName = "userIdToUser")
-    public abstract SingleChat chatToSingleChat(ChatDto chatDto, Long userOneId, Long userTwoId);
+    public abstract SingleChat chatDtoToSingleChat(ChatDto chatDto, Long userOneId, Long userTwoId);
 
     @Mapping(source = "title", target = "title")
     @Mapping(source = "image", target = "image")
