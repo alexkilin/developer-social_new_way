@@ -127,7 +127,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items[0].userId").value(2))
                 .andExpect(jsonPath("$.items[0].firstName").value("Admin1"))
                 .andExpect(jsonPath("$.items[0].lastName").value("LastNameAdmin1"))
-                .andExpect(jsonPath("$.items[0].dateOfBirth").value("30.05.2008"))
+                .andExpect(jsonPath("$.items[0].dateOfBirth").value("11.07.2009"))
                 .andExpect(jsonPath("$.items[0].education").value("MIT University"))
                 .andExpect(jsonPath("$.items[0].aboutMe").value("My description about life - Admin1"))
                 .andExpect(jsonPath("$.items[0].avatar").value("www.myavatar0.ru/9090"))
@@ -237,8 +237,8 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
-    void getFilterUserFriends() throws Exception {
-        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+    void GetAllUsersWithFilters() throws Exception {
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10")
                 .param("education", "Harvard"))
@@ -246,18 +246,18 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].fullName").value("Admin0"));
+                .andExpect(jsonPath("$.items[0].firstName").value("Admin0"));
 
-        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10")
                 .param("city", "SPb"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(3));
+                .andExpect(jsonPath("$.items.length()").value(4));
 
-        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10")
                 .param("city", "SPb")
@@ -267,7 +267,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
 
-        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10")
                 .param("startDateOfBirth", "1990-05-30")
@@ -275,9 +275,9 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(3));
+                .andExpect(jsonPath("$.items.length()").value(4));
 
-        mockMvc.perform(get(apiUrl + "/{userId}/filterfriends", 2L)
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10")
                 .param("endDateOfBirth", "2003-12-30"))
@@ -285,14 +285,5 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2));
-
-
-        mockMvc.perform(get(apiUrl + "/{userId}/friends", 222L)
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User with ID: 222 does not exist."));
     }
 }

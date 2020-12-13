@@ -44,7 +44,7 @@ public class UserDtoServiceImpl extends PaginationServiceImpl<Object, Object> im
     }
 
     @Override
-    public PageDto<Object, Object> getFilterFriendsDtoById(Map<String, Object> parameters) {
-        return super.getPageDtoWithFilterUsers("getUserFriendsWithFilters", parameters);
+    public PageDto<Object, Object> GetAllUsersWithFilters(Map<String, Object> parameters) {
+        return super.getPageDtoWithFilterUsers("getAllUsersWithFilters", parameters);
     }
 }
