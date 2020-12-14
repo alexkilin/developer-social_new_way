@@ -181,17 +181,14 @@ public class ChatControllerV2 {
         }
 
         Optional<User> optionalUser = userService.getById(userId);
-        if (optionalUser.isPresent()) {
+        if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with id: %s not found", userId));
         }
 
-        SingleChat singleChat = singleChatConverter.chatToSingleChat(chatDto, userOne.getUserId(), userId);
+        SingleChat singleChat = singleChatConverter.chatDtoToSingleChat(chatDto, userOne.getUserId(), userId);
         singleChatService.create(singleChat);
         ChatDto outputChatDto = singleChatConverter.singleChatToChatDto(singleChat);
         return ResponseEntity.ok(outputChatDto);
     }
 
 }
-
-
-

@@ -46,7 +46,7 @@ public class Album {
     @NotNull
     private MediaType mediaType;
 
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private Set<Media> mediaSet = new HashSet<>();
 
     @Column(name = "persist_date", nullable = false)

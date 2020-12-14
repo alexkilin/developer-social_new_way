@@ -9,7 +9,7 @@ friends:
 
   - id: 6
     user_id: 2
-    friend_id: 4
+    friend_id: 7
 
   - id: 4
     user_id: 2

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -242,9 +243,36 @@ public class UserControllerV2 {
             return ResponseEntity.ok().body(userConverter.toDto(userPrincipal));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Авторизованный пользователь не найден"));
-
     }
 
+    @ApiOperation(value = "Получение фильтра по списку друзей пользователя по id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = UserFriendDto.class),
+    })
+    @GetMapping("/GetAllUsersWithFilters")
+    public ResponseEntity<?> GetAllUsersWithFilters(
+            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
+            @ApiParam(value = "Фильтр по начальной дате рождения", example = "2008-05-30") @RequestParam(value = "startDateOfBirth", required = false) String startDateOfBirth,
+            @ApiParam(value = "Фильтр по конечной дате рождения", example = "2008-05-30") @RequestParam(value = "endDateOfBirth", required = false) String endDateOfBirth,
+            @ApiParam(value = "Фильтр по образованию", example = "MIT University") @RequestParam(value = "education", required = false) String education,
+            @ApiParam(value = "Фильтр по профессии", example = "Plumber") @RequestParam(value = "profession", required = false) String profession,
+            @ApiParam(value = "Фильтр по городу", example = "SPb") @RequestParam(value = "city", required = false) String city) {
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+
+        Map<String, Object> filters = new HashMap<>();
+        filters.put("startDateOfBirth", startDateOfBirth);
+        filters.put("endDateOfBirth", endDateOfBirth);
+        filters.put("education", education);
+        filters.put("profession", profession);
+        filters.put("city", city);
+
+        parameters.put("filters", filters);
+
+        logger.info("Получен список друзей пользователя с фильтрами");
+        return ResponseEntity.ok(userDtoService.GetAllUsersWithFilters(parameters));
+    }
 }
-
-

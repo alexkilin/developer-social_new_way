@@ -62,6 +62,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     private final Gson gson = new Gson();
 
 
+
     @Test
     void createUser() throws Exception {
 
@@ -215,7 +216,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.userId").value(2))
                 .andExpect(jsonPath("$.firstName").value("Admin1"))
                 .andExpect(jsonPath("$.lastName").value("LastNameAdmin1"))
-                .andExpect(jsonPath("$.dateOfBirth").value("30.05.2008"))
+                .andExpect(jsonPath("$.dateOfBirth").value("11.07.2009"))
                 .andExpect(jsonPath("$.education").value("MIT University"))
                 .andExpect(jsonPath("$.aboutMe").value("My description about life - Admin1"))
                 .andExpect(jsonPath("$.avatar").value("www.myavatar0.ru/9090"))
@@ -254,4 +255,54 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().string("User with ID: 222 does not exist."));
     }
 
+    @Test
+    void GetAllUsersWithFilters() throws Exception {
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("education", "Harvard"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].firstName").value("Admin0"));
+
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("city", "SPb"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(4));
+
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("city", "SPb")
+                .param("profession", "Creator"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(1));
+
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("startDateOfBirth", "1990-05-30")
+                .param("endDateOfBirth", "2012-03-30"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(4));
+
+        mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("endDateOfBirth", "2003-12-30"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(2));
+    }
 }
