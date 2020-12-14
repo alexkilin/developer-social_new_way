@@ -6,4 +6,5 @@ import java.util.Map;
 
 public interface PaginationService<T, V> {
     PageDto<? extends T, ? extends V> getPageDto(String methodName, Map<String, Object> parameters);
+    PageDto<? extends T, ? extends V> getPageDtoWithFilterUsers(String methodName, Map<String, Object> parameters);
 }
