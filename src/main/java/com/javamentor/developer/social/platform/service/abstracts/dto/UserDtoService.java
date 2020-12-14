@@ -13,4 +13,6 @@ public interface UserDtoService {
     Optional<UserDto> getUserDtoById(Long id);
 
     PageDto<Object, Object> getUserFriendsDtoById(Map<String, Object> parameters);
+
+    PageDto<Object, Object> GetAllUsersWithFilters(Map<String, Object> parameters);
 }
