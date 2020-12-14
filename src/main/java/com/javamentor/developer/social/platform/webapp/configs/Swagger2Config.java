@@ -38,7 +38,9 @@ public class Swagger2Config {
                 .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors
-                        .basePackage("com.javamentor.developer.social.platform.webapp.controllers.v2"))
+                        .basePackage("com.javamentor.developer.social.platform.webapp.controllers"))
+//                .apis(RequestHandlerSelectors
+//                        .basePackage("com.javamentor.developer.social.platform.webapp.controllers.security"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(new ApiInfoBuilder()

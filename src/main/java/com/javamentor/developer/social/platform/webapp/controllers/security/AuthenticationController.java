@@ -1,12 +1,13 @@
 package com.javamentor.developer.social.platform.webapp.controllers.security;
 
-import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.PrincipalDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserAuthorizationDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -27,7 +28,8 @@ public class AuthenticationController {
 
     private UserService userService;
     private SecurityHelper securityHelper;
-    private Gson gson = new Gson();
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public AuthenticationController (UserService userService, SecurityHelper securityHelper) {
@@ -37,7 +39,7 @@ public class AuthenticationController {
 
     @ApiOperation(value = "Получение jwt токена по email + password")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Токен получен", response = String.class)})
+            @ApiResponse(code = 200, message = "Токен получен")})
     @GetMapping("/token")
     public ResponseEntity<String> generateToken(
             @ApiParam(value = "Mail и пароль")
@@ -45,11 +47,13 @@ public class AuthenticationController {
 
         Optional<User> optUser = userService.getByEmail(userAuthorizationDto.getEmail());
         if (!optUser.isPresent()) {
+            logger.info(String.format("Пользователя с таким email не существует"));
             return ResponseEntity.badRequest().body(String.format("User with this email does not exist"));
         }
 
         User user = optUser.get();
         if (!user.getPassword().equals(userAuthorizationDto.getPassword())) {
+            logger.info(String.format("Неверный пароль"));
             return ResponseEntity.badRequest().body(String.format("Wrong password, try again"));
         }
 
@@ -62,6 +66,7 @@ public class AuthenticationController {
     @GetMapping("/principal")
     public ResponseEntity<?> getPrincipal() {
         User user = securityHelper.getPrincipal();
+        logger.info(String.format("Principal получен"));
         return ResponseEntity.ok(
                     PrincipalDto.builder()
                         .email(user.getEmail())

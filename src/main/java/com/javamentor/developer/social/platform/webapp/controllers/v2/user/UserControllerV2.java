@@ -212,39 +212,6 @@ public class UserControllerV2 {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", statusDto.getUserId()));
     }
 
-    @ApiOperation(value = "Авторизация пользователя")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь успешно авторизован", response = UserDto.class),
-            @ApiResponse(code = 400, message = "Неправльный пароль", response = String.class),
-            @ApiResponse(code = 404, message = "Пользователь с этим email не найден", response = String.class)
-    })
-    @Validated(OnCreate.class)
-    @PostMapping("/login")
-    public ResponseEntity<?> userAuthorization(@ApiParam(value = "Данные для авторизации") @Valid @RequestBody UserAuthorizationDto userAuthorizationDto) {
-        Optional<User> user = userService.getByEmail(userAuthorizationDto.getEmail());
-        if (!user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with email: %s does not exist.", userAuthorizationDto.getEmail()));
-        }
-        if (userAuthorizationDto.getPassword().equals(user.get().getPassword())) {
-            return ResponseEntity.ok(userConverter.toDto(user.get()));
-        }
-        return ResponseEntity.badRequest().body("Incorrect password");
-    }
-
-    @ApiOperation(value = "Получение авторизованного пользователя")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь получен", response = UserDto.class),
-            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)
-    })
-    @GetMapping("/principal")
-    public ResponseEntity<?> getPrincipal(){
-        User userPrincipal = securityHelper.getPrincipal();
-        if(userPrincipal != null){
-            return ResponseEntity.ok().body(userConverter.toDto(userPrincipal));
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Авторизованный пользователь не найден"));
-    }
-
     @ApiOperation(value = "Получение фильтра по списку друзей пользователя по id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = UserFriendDto.class),
