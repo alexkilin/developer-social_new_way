@@ -1,0 +1,95 @@
+users:
+  - user_id: 2
+    first_name: "Admin1"
+    last_name: "LastNameAdmin1"
+    date_of_birth: "2009-07-12"
+    about_me: "My description about life - Admin1"
+    education: "MIT University"
+    status: "Pureness and perfection"
+    active_id: 1
+    image: "www.myavatar0.ru/9090"
+    email: "admin2@user.ru"
+    password: "userpass0"
+    persist_date: "2020-08-04 16:42:02.437378"
+    last_redaction_date: "2020-08-04 16:42:03.157535"
+    is_enable: "1"
+    role_id: 1
+    city: "SPb"
+    profession: "Plumber"
+    link_site: "www.jm.ru"
+
+  - user_id: 7
+    first_name: "Admin2"
+    last_name: "LastNameAdmin2"
+    date_of_birth: "2003-12-25"
+    about_me: "My description about life - Admin2"
+    education: "MIT University"
+    status: "Pureness and perfection"
+    active_id: 1
+    image: "www.myavatar0.ru/9090"
+    email: "admin3@user.ru"
+    password: "userpass0"
+    persist_date: "2020-08-04 16:42:02.437378"
+    last_redaction_date: "2020-08-04 16:42:03.157535"
+    is_enable: "1"
+    role_id: 1
+    city: "SPb"
+    profession: "Plumber"
+    link_site: "www.mys.ru"
+
+  - user_id: 4
+    first_name: "Admin3"
+    last_name: "LastNameAdmin3"
+    date_of_birth: "1990-02-20"
+    about_me: "My description about life - Admin3"
+    education: "MSU"
+    status: "Pureness and perfection"
+    active_id: 1
+    image: "www.avatar.ru/9090"
+    email: "admin4@user.ru"
+    password: "password"
+    persist_date: "2020-08-04 16:42:02.437378"
+    last_redaction_date: "2020-08-24 16:42:03.157435"
+    is_enable: "1"
+    role_id: 1
+    city: "SPb"
+    profession: "Creator"
+    link_site: "www.vk.ru"
+
+  - user_id: 5
+    first_name: "Admin4"
+    last_name: "LastNameUser0"
+    date_of_birth: "2004-02-23"
+    about_me: "My description about life - Admin4"
+    education: "MIT University"
+    status: "Listen to music"
+    active_id: 1
+    image: "www.myavatar.ru/9080"
+    email: "admin5@user.ru"
+    password: "userpass"
+    persist_date: "2020-08-04 16:42:02.437378"
+    last_redaction_date: "2010-03-04 16:42:03.157655"
+    is_enable: "1"
+    role_id: 1
+    city: "Msk"
+    profession: "Creator"
+    link_site: "www.site.ru"
+
+  - user_id: 6
+    first_name: "Admin0"
+    last_name: "LastNameUser0"
+    date_of_birth: "2012-03-30"
+    about_me: "My description about life - Admin0"
+    education: "Harvard"
+    status: "Pureness and perfection"
+    active_id: 1
+    image: "www.myavatar0.ru/9090"
+    email: "admin6@user.ru"
+    password: "userpass0"
+    persist_date: "2020-08-04 16:42:02.437378"
+    last_redaction_date: "2020-08-04 16:42:03.157535"
+    is_enable: "1"
+    role_id: 1
+    city: "SPb"
+    profession: "Plumber"
+    link_site: "www.mysite.ru"
