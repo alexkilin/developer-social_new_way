@@ -5,7 +5,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <include file="data/500-changeset-active-loadData.xml" relativeToChangelogFile="true"/>
+    <include file="data/001-changeset-active-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/370-changeset-role-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/440-changeset-users-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/070-changeset-albums-loadData.xml" relativeToChangelogFile="true"/>

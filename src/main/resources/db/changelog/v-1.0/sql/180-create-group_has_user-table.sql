@@ -2,7 +2,7 @@ create table group_has_user (
    id int8 not null,
     persist_date timestamp not null,
     group_id int8 not null,
-    user_user_id int8 not null,
+    user_id int8 not null,
     primary key (id)
 )
 
@@ -17,7 +17,7 @@ next
 
 alter table group_has_user
    add constraint FKo5foqw5fct5ji0601eeg3tm3q
-   foreign key (user_user_id)
+   foreign key (user_id)
    references users
 
 next

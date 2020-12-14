@@ -7,7 +7,8 @@
 
     <preConditions>
         <dbms type="postgresql"/>
-        <runningAs username="postgres"/>
+<!--        <runningAs username="postgres"/>-->
+        <runningAs username="root"/>
     </preConditions>
 
     <changeSet id="0" author="dev-social">
