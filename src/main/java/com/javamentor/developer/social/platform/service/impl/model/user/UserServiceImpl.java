@@ -5,6 +5,7 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDao userDao, @Lazy PasswordEncoder passwordEncoder) {
         super(userDao);
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
@@ -75,12 +76,4 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
         user.setLastRedactionDate(LocalDateTime.now());
         userDao.updateInfo(user);
     }
-
-    @Override
-    @Transactional
-    public User getPrincipal() {
-        Optional <User> optionalUser = userDao.getById(65L);
-        return optionalUser.orElse(null);
-    }
-
 }

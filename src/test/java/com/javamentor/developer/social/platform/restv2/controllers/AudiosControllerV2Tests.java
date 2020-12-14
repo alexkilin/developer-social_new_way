@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.restv2.controllers;
 
 
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
@@ -9,13 +10,22 @@ import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistC
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Sql(statements = {
+        "Insert into active(id, name) values(3, 'test')",
+        "Insert into role(id, name) values(1, 'USER')",
 
+        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
+                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
+})
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/audio/usersResources/Active.yml",
         "datasets/restv2/audio/usersResources/User.yml",
@@ -28,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/audio/albumAudioTest/Album.yml",
         "datasets/restv2/audio/albumAudioTest/UserHasAlbum.yml",
         "datasets/restv2/audio/albumAudioTest/AlbumHasAudio.yml",
-        "datasets/restv2/audio/Audio.yml"}, cleanBefore = true, cleanAfter = true)
+        "datasets/restv2/audio/Audio.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/audio";
@@ -159,7 +169,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .param("audioId", "40"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Audio id 40 added to collection of user id 65"));
+                .andExpect(content().string("Audio id 40 added to collection of user id 666"));
 
         mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "500"))
@@ -375,7 +385,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3))
-                .andExpect(jsonPath("$.items[0].id").value(20))
-                .andExpect(jsonPath("$.items[0].icon").value("TestIcon1"));
+                .andExpect(jsonPath("$.items[0].id").value(50))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon4"));
     }
 }

@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers.v2;
+package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
+import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
@@ -34,24 +35,24 @@ public class ChatControllerV2 {
     private final ChatDtoService chatDtoService;
     private final MessageDtoService messageDtoService;
     private final GroupChatService groupChatService;
-    private final GroupChatConverter groupChatConverter;
     private final SingleChatService singleChatService;
-    private final SingleChatConverter singleChatConverter;
+    private final GroupChatConverter groupChatConverter;
     private final UserService userService;
+    private final SecurityHelper securityHelper;
+    private final SingleChatConverter singleChatConverter;
 
 
     public ChatControllerV2(ChatDtoService chatDtoService, MessageDtoService messageDtoService,
-                            GroupChatService groupChatService, GroupChatConverter groupChatConverter,
-                            SingleChatService singleChatService, SingleChatConverter singleChatConverter,
-                            UserService userService) {
-
+                            GroupChatService groupChatService, SingleChatService singleChatService, GroupChatConverter groupChatConverter,
+                            UserService userService, SecurityHelper securityHelper, SingleChatConverter singleChatConverter) {
         this.chatDtoService = chatDtoService;
         this.messageDtoService = messageDtoService;
         this.groupChatService = groupChatService;
-        this.groupChatConverter = groupChatConverter;
         this.singleChatService = singleChatService;
-        this.singleChatConverter = singleChatConverter;
+        this.groupChatConverter = groupChatConverter;
         this.userService = userService;
+        this.securityHelper = securityHelper;
+        this.singleChatConverter = singleChatConverter;
     }
 
     @GetMapping("/user/{userId}/chats")
@@ -109,7 +110,7 @@ public class ChatControllerV2 {
             @ApiResponse(code = 404, message = "Чат с данным Id не существует", response = String.class)
     })
     public ResponseEntity<?> editGroupChatTitle(@ApiParam(value = "Объект чата")
-                                                    @RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto) {
+                                                @RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto) {
         Long chatId = chatEditTitleDto.getId();
 
         Optional<GroupChat> result = groupChatService.getById(chatId);
@@ -153,7 +154,7 @@ public class ChatControllerV2 {
     @Validated(OnCreate.class)
     public ResponseEntity<?> createGroupChat(@RequestBody @NotNull @Valid ChatDto chatDto) {
 
-        User user = userService.getPrincipal();
+        User user = securityHelper.getPrincipal();
         if (Objects.isNull(user)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
@@ -174,7 +175,7 @@ public class ChatControllerV2 {
     public ResponseEntity<?> createSingleChat(@RequestBody @NotNull @Valid ChatDto chatDto,
                                               @PathVariable("userId") Long userId) {
 
-        User userOne = userService.getPrincipal();
+        User userOne = securityHelper.getPrincipal();
         if (Objects.isNull(userOne)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
@@ -189,6 +190,7 @@ public class ChatControllerV2 {
         ChatDto outputChatDto = singleChatConverter.singleChatToChatDto(singleChat);
         return ResponseEntity.ok(outputChatDto);
     }
+
 }
 
 

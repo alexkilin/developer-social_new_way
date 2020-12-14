@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers.v2;
+package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
 import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
@@ -12,6 +12,7 @@ import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.post.Repost;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
+import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.dto.PostDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.comment.CommentService;
 import com.javamentor.developer.social.platform.service.abstracts.model.comment.PostCommentService;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -53,6 +55,7 @@ public class PostControllerV2 {
     private final RepostService repostService;
     private final CommentService commentService;
     private final LikeService likeService;
+    private final SecurityHelper securityHelper;
 
     @Autowired
     public PostControllerV2(PostDtoService postDtoService,
@@ -65,7 +68,8 @@ public class PostControllerV2 {
                             BookmarkService bookmarkService,
                             RepostService repostService,
                             CommentService commentService,
-                            LikeService likeService) {
+                            LikeService likeService,
+                            SecurityHelper securityHelper) {
 
         this.postDtoService = postDtoService;
         this.postConverter = postConverter;
@@ -78,6 +82,7 @@ public class PostControllerV2 {
         this.repostService = repostService;
         this.commentService = commentService;
         this.likeService = likeService;
+        this.securityHelper = securityHelper;
     }
 
 
@@ -86,8 +91,8 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PostDto.class)})
     @GetMapping(value = "/posts", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<PostDto, ?>> getAllPosts(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                        @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
-        Long userPrincipalId = userService.getPrincipal().getUserId();
+                                                           @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+        Long userPrincipalId = securityHelper.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
         parameters.put("currentPage", currentPage);
@@ -103,7 +108,7 @@ public class PostControllerV2 {
             @ApiParam(value = "Название тэга", example = "Some tag") @RequestParam("tag") String tagText,
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
-        Long userPrincipalId = userService.getPrincipal().getUserId();
+        Long userPrincipalId = securityHelper.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
         parameters.put("tagText", tagText);
@@ -117,7 +122,7 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Теги получены", responseContainer = "List", response = TagDto.class)})
     @GetMapping(value = "/posts/tags", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<Object, Object>> getAllTags(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                   @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+                                                              @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
@@ -134,7 +139,7 @@ public class PostControllerV2 {
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
 
-        Long userPrincipalId = userService.getPrincipal().getUserId();
+        Long userPrincipalId = securityHelper.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
         parameters.put("userId", userId);
@@ -198,7 +203,7 @@ public class PostControllerV2 {
     public ResponseEntity<?> addCommentToPost(
             @ApiParam(value = "Комментарий к посту") @RequestBody String comment,
             @ApiParam(value = "Идентификатор поста", example = "1") @PathVariable @NonNull Long postId) {
-        User user = userService.getPrincipal();
+        User user = securityHelper.getPrincipal();
         PostComment postComment = new PostComment(comment, user);
         commentService.create(postComment.getComment());
         Post post = Post.builder().id(postId).build();
@@ -215,7 +220,7 @@ public class PostControllerV2 {
     @PostMapping("/post/{postId}/like")
     public ResponseEntity<?> addLikeToPost(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
-        User user = userService.getPrincipal();
+        User user = securityHelper.getPrincipal();
 
         Optional<PostLike> optionalPostLike = postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
         if (optionalPostLike.isPresent()) {
@@ -239,7 +244,7 @@ public class PostControllerV2 {
     public ResponseEntity<?> deleteLikeFromPost(
             @ApiParam(value = "Id поста", example = "1")
             @PathVariable @NonNull Long postId) {
-        User user = userService.getPrincipal();
+        User user = securityHelper.getPrincipal();
         Optional<PostLike> optionalLike =
                 postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
 
@@ -260,7 +265,7 @@ public class PostControllerV2 {
     @PostMapping("/post/{postId}/bookmark")
     public ResponseEntity<?> addPostToBookmark(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
-        User user = userService.getPrincipal();
+        User user = securityHelper.getPrincipal();
 
         Optional<Bookmark> optionalBookmark = bookmarkService.getBookmarkByPostIdAndUserId(postId, user.getUserId());
         if(optionalBookmark.isPresent()) {
@@ -281,7 +286,7 @@ public class PostControllerV2 {
     @DeleteMapping("/post/{postId}/bookmark")
     public ResponseEntity<?> deletePostFromBookmark(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
-        User user = userService.getPrincipal();
+        User user = securityHelper.getPrincipal();
 
         Optional<Bookmark> optionalBookmark = bookmarkService.getBookmarkByPostIdAndUserId(postId, user.getUserId());
         if(!optionalBookmark.isPresent()) {
@@ -300,7 +305,7 @@ public class PostControllerV2 {
     @PostMapping("/post/{postId}/repost")
     public ResponseEntity<?> addRepostToPost(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
-        User user = userService.getPrincipal();
+        User user = securityHelper.getPrincipal();
         Post post = Post.builder().id(postId).build();
         Repost repost = Repost.builder().user(user).post(post).build();
         repostService.create(repost);
@@ -314,8 +319,8 @@ public class PostControllerV2 {
     })
     @GetMapping(value = "/posts/bookmarks", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity <PageDto<PostDto, ?>> getAllBookmarkedPosts(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                                @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage){
-        Long userPrincipalId = userService.getPrincipal().getUserId();
+                                                                      @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage){
+        Long userPrincipalId = securityHelper.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
         parameters.put("currentPage", currentPage);

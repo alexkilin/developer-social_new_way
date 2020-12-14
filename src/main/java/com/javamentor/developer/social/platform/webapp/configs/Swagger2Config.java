@@ -32,6 +32,7 @@ public class Swagger2Config {
 
     @Bean
     public Docket api2() {
+
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("developer-social-api-2.0")
                 .useDefaultResponseMessages(false)

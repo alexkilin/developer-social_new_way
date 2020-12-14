@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers.v2;
+package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
@@ -66,7 +66,7 @@ public class VideosControllerV2 {
             @ApiResponse(code = 200, message = "Несколько видео получено", responseContainer = "List", response = VideoDto.class)})
     @GetMapping(params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<VideoDto, ?>> getPartVideos(@ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
-                                                           @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+                                                              @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
@@ -172,8 +172,8 @@ public class VideosControllerV2 {
     })
     @GetMapping(value = "/user/{userId}/album", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AlbumVideoDto, ?>> getAllVideoAlbums(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,
-                                                                 @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
-                                                                 @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+                                                                       @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
+                                                                       @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
@@ -188,8 +188,8 @@ public class VideosControllerV2 {
             @ApiResponse(code = 200, message = "видео из альбома пользователя успешно получено", response = VideoDto.class, responseContainer = "List")})
     @GetMapping(value = "/album/{albumId}/video", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<VideoDto, ?>> getVideoFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7") @PathVariable @NotNull Long albumId,
-                                                     @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
-                                                     @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+                                                                        @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
+                                                                        @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("albumId", albumId);
@@ -204,9 +204,9 @@ public class VideosControllerV2 {
             @ApiResponse(code = 200, message = "Видео из коллекции пользователя по альбому", response = VideoDto.class, responseContainer = "List")})
     @GetMapping(value = "/user/{userId}/video", params = {"album", "currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<VideoDto, ?>> getAlbumVideoOfUser(@ApiParam(value = "Название альбома", example = "My Album") @RequestParam("album") String album,
-                                                              @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,
-                                                              @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
-                                                              @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+                                                                    @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,
+                                                                    @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
+                                                                    @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
@@ -216,4 +216,5 @@ public class VideosControllerV2 {
         logger.info(String.format("Отправка избранного видео пользователя c id %s альбома %s", userId, album));
         return ResponseEntity.ok().body(videoDtoService.getAlbumVideoOfUser(parameters));
     }
+
 }

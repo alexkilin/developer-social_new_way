@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers.v2;
+package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
 import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.models.dto.users.*;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
+import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,15 +39,17 @@ public class UserControllerV2 {
     private final UserDtoService userDtoService;
     private final UserService userService;
     private final UserConverter userConverter;
+    private final SecurityHelper securityHelper;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public UserControllerV2(UserDtoService userDtoService, UserService userService,
-                            UserConverter userConverter) {
+                            UserConverter userConverter, SecurityHelper securityHelper) {
         this.userDtoService = userDtoService;
         this.userService = userService;
         this.userConverter = userConverter;
+        this.securityHelper = securityHelper;
     }
 
 
@@ -72,7 +76,7 @@ public class UserControllerV2 {
     })
     @GetMapping(params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<Object, Object>> getAllUsers(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                        @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+                                                               @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         logger.info("Получен список пользователей");
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
@@ -184,8 +188,8 @@ public class UserControllerV2 {
             logger.info("Получен список друзей пользователя");
             return ResponseEntity.ok(userDtoService.getUserFriendsDtoById(parameters));
         }
-            logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));
+        logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));
     }
 
     @ApiOperation(value = "Изменение статуса пользователя")
@@ -233,13 +237,14 @@ public class UserControllerV2 {
     })
     @GetMapping("/principal")
     public ResponseEntity<?> getPrincipal(){
-        User userPrincipal = userService.getPrincipal();
+        User userPrincipal = securityHelper.getPrincipal();
         if(userPrincipal != null){
             return ResponseEntity.ok().body(userConverter.toDto(userPrincipal));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Авторизованный пользователь не найден"));
 
     }
+
 }
 
 
