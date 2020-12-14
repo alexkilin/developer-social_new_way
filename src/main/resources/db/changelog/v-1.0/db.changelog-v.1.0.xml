@@ -5,6 +5,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <include file="table/000-changeset-hibernate_sequence-sequence.xml" relativeToChangelogFile="true"/>
     <include file="table/001-changeset-active-table.xml" relativeToChangelogFile="true"/>
     <include file="table/370-changeset-role-table.xml" relativeToChangelogFile="true"/>
     <include file="table/440-changeset-users-table.xml" relativeToChangelogFile="true"/>
