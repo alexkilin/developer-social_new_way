@@ -1,12 +1,12 @@
 like:
   - id: 1
     like_type: 1
-    user_id: 4
+    user_id: 40
 
   - id: 2
     like_type: 1
-    user_id: 2
+    user_id: 20
 
   - id: 3
     like_type: 3
-    user_id: 3
+    user_id: 30

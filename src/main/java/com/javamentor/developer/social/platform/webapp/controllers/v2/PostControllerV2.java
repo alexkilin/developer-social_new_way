@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/v2", produces = "application/json;charset=UTF-8")
+@RequestMapping(value = "/api/v2/post", produces = "application/json;charset=UTF-8")
 @Api(value = "PostApi-v2", description = "Операции над постами пользователя")
 @Validated
 public class PostControllerV2 {
