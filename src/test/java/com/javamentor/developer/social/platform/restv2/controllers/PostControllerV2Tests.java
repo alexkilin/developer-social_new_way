@@ -91,26 +91,10 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items[0].text").value("Text1"));
     }
 
-    /*
-    Падает с ошибкой создание поста
-     */
     @Test
     public void addPost() throws Exception {
-        TagDto tagDto = TagDto.builder()
-                .text("MyNewTag")
-                .build();
-
         List<TagDto> tag = new ArrayList<>();
-        tag.add(tagDto);
-
-        MediaPostDto mediaDto = MediaPostDto.builder()
-                .mediaType("MyMedia")
-                .url("MyUrl")
-                .userId(50l)
-                .build();
-
         List<MediaPostDto> media = new ArrayList<>();
-        media.add(mediaDto);
 
         PostCreateDto postCreateDto = PostCreateDto.builder()
                 .text("MyText")
@@ -129,13 +113,13 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void deletePost() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/post/{id}", 4l)
+        mockMvc.perform(delete(apiUrl + "/post/{id}", 40)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        mockMvc.perform(delete(apiUrl + "/post/{id}", 400l)
+        mockMvc.perform(delete(apiUrl + "/post/{id}", 400)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
@@ -145,7 +129,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void showPostComments() throws Exception {
-        mockMvc.perform(get(apiUrl + "/post/{postId}/comments", 1)
+        mockMvc.perform(get(apiUrl + "/post/{postId}/comments", 10)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
@@ -156,7 +140,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addCommentToPost() throws Exception {
-        mockMvc.perform(post(apiUrl + "/post/{postId}/comment", 1)
+        mockMvc.perform(post(apiUrl + "/post/{postId}/comment", 10)
                 .param("comment", "MyNewComment"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -166,11 +150,11 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addLikeToPost() throws Exception {
-        mockMvc.perform(post(apiUrl + "/post/{postId}/like", 1))
+        mockMvc.perform(post(apiUrl + "/post/{postId}/like", 10))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(post(apiUrl + "/post/{postId}/like", 1))
+        mockMvc.perform(post(apiUrl + "/post/{postId}/like", 10))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The Like has already been added"));
@@ -178,11 +162,11 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void deleteLikeFromPost() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/post/{postId}/like", 2))
+        mockMvc.perform(delete(apiUrl + "/post/{postId}/like", 20))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        mockMvc.perform(delete(apiUrl + "/post/{postId}/like", 2))
+        mockMvc.perform(delete(apiUrl + "/post/{postId}/like", 20))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The Like already been removed"));
@@ -190,11 +174,11 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addPostToBookmark() throws Exception {
-        mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 1))
+        mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 10))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 1))
+        mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 10))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The Post has already been added to the bookmark"));
@@ -202,11 +186,11 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void deletePostFromBookmark() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/post/{postId}/bookmark", 2))
+        mockMvc.perform(delete(apiUrl + "/post/{postId}/bookmark", 20))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        mockMvc.perform(delete(apiUrl + "/post/{postId}/bookmark", 2))
+        mockMvc.perform(delete(apiUrl + "/post/{postId}/bookmark", 20))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The Post has already been removed from the bookmark"));
@@ -214,7 +198,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addRepostToPost() throws Exception {
-        mockMvc.perform(post(apiUrl + "/post/{postId}/repost", 1))
+        mockMvc.perform(post(apiUrl + "/post/{postId}/repost", 10))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
