@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "Insert into role(id, name) values(1, 'USER')",
 
         "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
+                "values (65,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
 })
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
@@ -59,7 +59,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(6))
+                .andExpect(jsonPath("$.items.length()").value(7))
                 .andExpect(jsonPath("$.items[0].title").value("Title1"))
                 .andExpect(jsonPath("$.items[0].text").value("Text1"))
                 .andExpect(jsonPath("$.items[2].title").value("Title3"))
