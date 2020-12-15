@@ -38,7 +38,6 @@ public class JWTFilter extends OncePerRequestFilter {
         //получение токена из заголовка и проверка на подлинность
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") && (SecurityContextHolder.getContext().getAuthentication() != null)) {
 
-
             try {
                 jwt = authorizationHeader.substring(7);
                 securityHelper.validateToken(jwt);
@@ -48,7 +47,6 @@ public class JWTFilter extends OncePerRequestFilter {
             catch (SignatureException | MalformedJwtException e) {
                 response.setStatus(401);
                 response.getWriter().print("You have invalid token");
-//                response.setHeader("Text", "fuck your bullshit shit");
             }
             //если время подписи истекло, то ExpiredJwtException
             catch (ExpiredJwtException e) {
@@ -63,13 +61,6 @@ public class JWTFilter extends OncePerRequestFilter {
             }
 
         }
-        //если пользователь авторизован, но не передал нам токен
-//        if ((!request.getRequestURI().matches("(.*)token(.*)")) && (authorizationHeader == null) && (!request.getRequestURI().matches("(.*)swagger(.*)"))) {
-//            System.out.println("here this bitch : " + request.getRequestURI());
-//            response.setStatus(401);
-//            response.getWriter().print("Your have no token");
-//        }
-//        (SecurityContextHolder.getContext().getAuthentication() != null)
 
         if (response.getStatus() == 200) {
             chain.doFilter(request, response);
