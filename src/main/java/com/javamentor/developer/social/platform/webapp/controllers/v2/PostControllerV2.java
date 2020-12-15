@@ -233,7 +233,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Удаление лайка из поста авторизованным пользователем")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Лайк удален из пост")
+            @ApiResponse(code = 200, message = "Лайк удален из пост")
     })
     @DeleteMapping("/post/{postId}/like")
     public ResponseEntity<?> deleteLikeFromPost(
@@ -249,8 +249,7 @@ public class PostControllerV2 {
 
         PostLike postLike = optionalLike.get();
         postLikeService.delete(postLike);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId, user.getUserId()));
+        return ResponseEntity.ok().body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Добавление поста в закладки авторизованного пользователя")
