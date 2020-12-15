@@ -13,13 +13,7 @@
                  stripComments="true"
                  path="db/changelog/v-1.0/sql/040-create-album_has_video-table.sql"/>
         <rollback>
-            <sqlFile dbms="postgresql"
-                     encoding="utf8"
-                     endDelimiter="next"
-                     relativeToChangelogFile="true"
-                     splitStatements="true"
-                     stripComments="true"
-                     path="db/changelog/v-1.0/sql/040-drop-album_has_video-table.sql"/>
+            <dropTable tableName="album_has_video"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

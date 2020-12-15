@@ -12,5 +12,8 @@
                  splitStatements="true"
                  stripComments="true"
                  path="db/changelog/v-1.0/sql/000-create-hibernate_sequence-sequence.sql"/>
+        <rollback>
+            <dropSequence sequenceName="hibernate_sequence"/>
+        </rollback>
     </changeSet>
 </databaseChangeLog>

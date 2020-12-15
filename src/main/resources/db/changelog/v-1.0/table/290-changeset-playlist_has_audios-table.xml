@@ -13,13 +13,7 @@
                  stripComments="true"
                  path="db/changelog/v-1.0/sql/290-create-playlist_has_audios-table.sql"/>
         <rollback>
-            <sqlFile dbms="postgresql"
-                     encoding="utf8"
-                     endDelimiter="next"
-                     relativeToChangelogFile="true"
-                     splitStatements="true"
-                     stripComments="true"
-                     path="db/changelog/v-1.0/sql/290-drop-playlist_has_audios-table.sql"/>
+            <dropTable tableName="playlist_has_audios"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

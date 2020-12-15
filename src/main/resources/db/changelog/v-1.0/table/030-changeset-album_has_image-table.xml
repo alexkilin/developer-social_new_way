@@ -13,13 +13,7 @@
                  stripComments="true"
                  path="db/changelog/v-1.0/sql/030-create-album_has_image-table.sql"/>
         <rollback>
-            <sqlFile dbms="postgresql"
-                     encoding="utf8"
-                     endDelimiter="next"
-                     relativeToChangelogFile="true"
-                     splitStatements="true"
-                     stripComments="true"
-                     path="db/changelog/v-1.0/sql/030-drop-album_has_image-table.sql"/>
+            <dropTable tableName="album_has_image"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

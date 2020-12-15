@@ -13,13 +13,7 @@
                  stripComments="true"
                  path="db/changelog/v-1.0/sql/240-create-media-table.sql"/>
         <rollback>
-            <sqlFile dbms="postgresql"
-                     encoding="utf8"
-                     endDelimiter="next"
-                     relativeToChangelogFile="true"
-                     splitStatements="true"
-                     stripComments="true"
-                     path="db/changelog/v-1.0/sql/240-drop-media-table.sql"/>
+            <dropTable tableName="media"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

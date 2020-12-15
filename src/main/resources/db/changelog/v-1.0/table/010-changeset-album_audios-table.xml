@@ -13,13 +13,7 @@
                  stripComments="true"
                  path="db/changelog/v-1.0/sql/010-create-album_audios-table.sql"/>
         <rollback>
-            <sqlFile dbms="postgresql"
-                     encoding="utf8"
-                     endDelimiter="next"
-                     relativeToChangelogFile="true"
-                     splitStatements="true"
-                     stripComments="true"
-                     path="db/changelog/v-1.0/sql/010-drop-album_audios-table.sql"/>
+            <dropTable tableName="album_audios"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

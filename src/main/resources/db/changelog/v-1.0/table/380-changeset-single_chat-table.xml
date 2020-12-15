@@ -13,13 +13,7 @@
                  stripComments="true"
                  path="db/changelog/v-1.0/sql/380-create-single_chat-table.sql"/>
         <rollback>
-            <sqlFile dbms="postgresql"
-                     encoding="utf8"
-                     endDelimiter="next"
-                     relativeToChangelogFile="true"
-                     splitStatements="true"
-                     stripComments="true"
-                     path="db/changelog/v-1.0/sql/380-drop-single_chat-table.sql"/>
+            <dropTable tableName="single_chat"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

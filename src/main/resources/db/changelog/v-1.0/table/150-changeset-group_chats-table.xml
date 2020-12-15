@@ -13,13 +13,7 @@
                  stripComments="true"
                  path="db/changelog/v-1.0/sql/150-create-group_chats-table.sql"/>
         <rollback>
-            <sqlFile dbms="postgresql"
-                     encoding="utf8"
-                     endDelimiter="next"
-                     relativeToChangelogFile="true"
-                     splitStatements="true"
-                     stripComments="true"
-                     path="db/changelog/v-1.0/sql/150-drop-group_chats-table.sql"/>
+            <dropTable tableName="group_chats"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

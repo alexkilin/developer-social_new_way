@@ -13,13 +13,7 @@
                  stripComments="true"
                  path="db/changelog/v-1.0/sql/420-create-user_languages-table.sql"/>
         <rollback>
-            <sqlFile dbms="postgresql"
-                     encoding="utf8"
-                     endDelimiter="next"
-                     relativeToChangelogFile="true"
-                     splitStatements="true"
-                     stripComments="true"
-                     path="db/changelog/v-1.0/sql/420-drop-user_languages-table.sql"/>
+            <dropTable tableName="user_languages"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>
