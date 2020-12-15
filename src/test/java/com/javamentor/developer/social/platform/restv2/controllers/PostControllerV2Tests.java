@@ -123,9 +123,30 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
         media.add(MediaPostDto.builder()
                 .mediaType("2")
-                .url("MyUrl")
+                .url("MyUrl1.ru")
                 .userId(50l)
-                .id(45l)
+                .id(452l)
+                .build());
+        postCreateDto.setMedia(media);
+
+        mockMvc.perform(post(apiUrl + "/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(postCreateDto)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        media.add(MediaPostDto.builder()
+                .mediaType("0")
+                .url("MyUrl2.ru")
+                .userId(50l)
+                .id(451l)
+                .build());
+
+        media.add(MediaPostDto.builder()
+                .mediaType("1")
+                .url("MyUrl3.ru")
+                .userId(50l)
+                .id(450l)
                 .build());
         postCreateDto.setMedia(media);
 
