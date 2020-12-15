@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.restv2.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
@@ -8,6 +9,8 @@ import com.javamentor.developer.social.platform.models.dto.TagDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -17,6 +20,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Sql(statements = {
+        "Insert into active(id, name) values(3, 'test')",
+        "Insert into role(id, name) values(1, 'USER')",
+
+        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
+                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
+})
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/post/bookmarks.yml",
         "datasets/restv2/post/like.yml",
@@ -31,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/post/usersResources/Role.yml",
         "datasets/restv2/post/usersResources/User.yml",
         "datasets/restv2/post/usersResources/Active.yml"
-}, cleanBefore = true, cleanAfter = true)
+}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/post";
@@ -42,7 +53,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
     Gson gson = new Gson();
 
     @Test
-    public void getAudioOfAuthor() throws Exception {
+    public void getAllPosts() throws Exception {
         mockMvc.perform(get(apiUrl + "/posts")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))

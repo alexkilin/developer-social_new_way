@@ -385,7 +385,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3))
-                .andExpect(jsonPath("$.items[0].id").value(50))
+                .andExpect(jsonPath("$.items[0].id").value(20))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon1"));
     }
 }
