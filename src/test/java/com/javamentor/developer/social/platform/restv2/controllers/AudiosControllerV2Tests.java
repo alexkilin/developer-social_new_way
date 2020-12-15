@@ -330,7 +330,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getPlaylistById() throws Exception {
-        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}", 10))
+        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}", 100))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(6))
@@ -344,13 +344,13 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addAudioToPlaylist() throws Exception {
-        mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 20)
+        mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
                 .param("audioId", "40"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
 
-        mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 20)
+        mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
                 .param("audioId", "500"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -362,7 +362,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("No playlist with id 700"));
 
-        mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 20)
+        mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
                 .param("audioId", "40"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -372,14 +372,14 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void removeAudioFromPlaylist() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/playlists/{playlistId}/audio/{audioId}", 10, 20))
+        mockMvc.perform(delete(apiUrl + "/playlists/{playlistId}/audio/{audioId}", 100, 20))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getAudioFromPlaylist() throws Exception {
-        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}/audio", 10)
+        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}/audio", 100)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
