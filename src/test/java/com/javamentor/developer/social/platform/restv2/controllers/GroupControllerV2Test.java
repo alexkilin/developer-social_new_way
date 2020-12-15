@@ -4,7 +4,6 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,11 +28,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/groupset/group/GroupHasUser.yml",
         "datasets/restv2/groupset/group/GroupWal.yml",
         "datasets/restv2/groupset/group/GroupCategory.yml",
-        "datasets/restv2/post/media.yml",
-        "datasets/restv2/post/postTest/post_media.yml",
-        "datasets/restv2/post/postTest/post_tags.yml",
-        "datasets/restv2/post/posts.yml",
-        "datasets/restv2/post/tags.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+        "datasets/restv2/groupset/group/postResources/media.yml",
+        "datasets/restv2/groupset/group/postResources/post_media.yml",
+        "datasets/restv2/groupset/group/postResources/post_tags.yml",
+        "datasets/restv2/groupset/group/postResources/posts.yml",
+        "datasets/restv2/groupset/group/postResources/tags.yml"}
+        , strategy = SeedStrategy.REFRESH, cleanAfter = true)
 public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Autowired
