@@ -1,14 +1,26 @@
 package com.javamentor.developer.social.platform.restv2.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.SeedStrategy;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Sql(statements = {
+        "Insert into active(id, name) values(3, 'test')",
+        "Insert into role(id, name) values(1, 'USER')",
+
+        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
+                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
+})
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/groupset/group/usersResources/User.yml",
         "datasets/restv2/groupset/group/usersResources/Active.yml",
@@ -21,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/post/postTest/post_media.yml",
         "datasets/restv2/post/postTest/post_tags.yml",
         "datasets/restv2/post/posts.yml",
-        "datasets/restv2/post/tags.yml"}, cleanBefore = true, cleanAfter = true)
+        "datasets/restv2/post/tags.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Autowired
