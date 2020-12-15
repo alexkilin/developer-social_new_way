@@ -109,6 +109,31 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(postCreateDto)))
                 .andDo(print())
                 .andExpect(status().isOk());
+
+        tag.add(TagDto.builder()
+                .text("MyText")
+                .build());
+        postCreateDto.setTags(tag);
+
+        mockMvc.perform(post(apiUrl + "/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(postCreateDto)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        media.add(MediaPostDto.builder()
+                .mediaType("2")
+                .url("MyUrl")
+                .userId(50l)
+                .id(45l)
+                .build());
+        postCreateDto.setMedia(media);
+
+        mockMvc.perform(post(apiUrl + "/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(postCreateDto)))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
