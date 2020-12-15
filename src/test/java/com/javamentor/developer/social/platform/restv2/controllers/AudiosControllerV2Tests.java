@@ -306,15 +306,15 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void deletePlaylist() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 2, 100))
+        mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 2, 1000))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("No playlist with id 100 for user 2"));
+                .andExpect(content().string("No playlist with id 1000 for user 2"));
 
         mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 2, 100))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Playlist with id 10 deleted"));
+                .andExpect(content().string("Playlist with id 100 deleted"));
     }
 
     @Test

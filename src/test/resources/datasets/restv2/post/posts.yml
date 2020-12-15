@@ -37,7 +37,7 @@ posts:
   - id: 65
     title: "Title5"
     text: "Text5"
-    user_id: 50
+    user_id: 65
     persist_date: "2020-08-12 12:33:43.313276"
     last_redaction_date: "2020-08-12 12:33:43.313276"
 
