@@ -8,5 +8,8 @@
     <changeSet id="1"  author="dev-social">
         <loadData tableName="users_audios_collections"
                   file="db/changelog/v-1.0/csv/450-users_audios_collections.csv"/>
+        <rollback>
+            <delete tableName="users_audios_collections"/>
+        </rollback>
     </changeSet>
 </databaseChangeLog>

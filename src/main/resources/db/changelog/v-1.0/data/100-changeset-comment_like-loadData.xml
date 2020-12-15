@@ -8,5 +8,8 @@
     <changeSet id="1"  author="dev-social">
         <loadData tableName="comment_like"
                   file="db/changelog/v-1.0/csv/100-comment_like.csv"/>
+        <rollback>
+            <delete tableName="comment_like"/>
+        </rollback>
     </changeSet>
 </databaseChangeLog>

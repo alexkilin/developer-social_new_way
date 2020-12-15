@@ -8,5 +8,8 @@
     <changeSet id="1"  author="dev-social">
         <loadData tableName="group_wall"
                   file="db/changelog/v-1.0/csv/190-group_wall.csv"/>
+        <rollback>
+            <delete tableName="group_wall"/>
+        </rollback>
     </changeSet>
 </databaseChangeLog>
