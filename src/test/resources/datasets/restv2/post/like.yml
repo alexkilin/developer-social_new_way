@@ -10,3 +10,7 @@ like:
   - id: 40
     like_type: 1
     user_id: 40
+
+  - id: 50
+    like_type: 1
+    user_id: 65

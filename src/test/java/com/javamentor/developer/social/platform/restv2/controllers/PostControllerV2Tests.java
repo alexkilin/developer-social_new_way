@@ -21,12 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/post/bookmarks.yml",
         "datasets/restv2/post/like.yml",
         "datasets/restv2/post/media.yml",
-        "datasets/restv2/post/post_media.yml",
-        "datasets/restv2/post/post_tags.yml",
+        "datasets/restv2/post/postTest/post_media.yml",
+        "datasets/restv2/post/postTest/post_tags.yml",
         "datasets/restv2/post/posts.yml",
         "datasets/restv2/post/tags.yml",
         "datasets/restv2/post/comments.yml",
-        "datasets/restv2/post/post_comment.yml",
+        "datasets/restv2/post/postTest/post_comment.yml",
+        "datasets/restv2/post/postTest/post_like.yml",
         "datasets/restv2/post/usersResources/Role.yml",
         "datasets/restv2/post/usersResources/User.yml",
         "datasets/restv2/post/usersResources/Active.yml"
@@ -177,14 +178,14 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void deleteLikeFromPost() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/post/{postId}/like", 1))
+        mockMvc.perform(delete(apiUrl + "/post/{postId}/like", 2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        mockMvc.perform(delete(apiUrl + "/post/{postId}/like", 1))
+        mockMvc.perform(delete(apiUrl + "/post/{postId}/like", 2))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("The Like has already been removed"));
+                .andExpect(content().string("The Like already been removed"));
     }
 
     @Test
@@ -201,11 +202,11 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void deletePostFromBookmark() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/post/{postId}/bookmark", 1))
+        mockMvc.perform(delete(apiUrl + "/post/{postId}/bookmark", 2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        mockMvc.perform(delete(apiUrl + "/post/{postId}/bookmark", 1))
+        mockMvc.perform(delete(apiUrl + "/post/{postId}/bookmark", 2))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The Post has already been removed from the bookmark"));

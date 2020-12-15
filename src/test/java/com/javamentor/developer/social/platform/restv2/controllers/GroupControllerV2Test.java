@@ -18,8 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/groupset/group/GroupWal.yml",
         "datasets/restv2/groupset/group/GroupCategory.yml",
         "datasets/restv2/post/media.yml",
-        "datasets/restv2/post/post_media.yml",
-        "datasets/restv2/post/post_tags.yml",
+        "datasets/restv2/post/postTest/post_media.yml",
+        "datasets/restv2/post/postTest/post_tags.yml",
         "datasets/restv2/post/posts.yml",
         "datasets/restv2/post/tags.yml"}, cleanBefore = true, cleanAfter = true)
 public class GroupControllerV2Test extends AbstractIntegrationTest {

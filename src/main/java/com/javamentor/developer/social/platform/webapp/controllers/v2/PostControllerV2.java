@@ -275,7 +275,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Удаление поста из закладок авторизованным пользователем")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Пост из закладок удален")
+            @ApiResponse(code = 200, message = "Пост из закладок удален")
     })
     @DeleteMapping("/post/{postId}/bookmark")
     public ResponseEntity<?> deletePostFromBookmark(
@@ -288,8 +288,7 @@ public class PostControllerV2 {
         }
 
         bookmarkService.deleteBookmarkByPostIdAndUserId(postId, user.getUserId());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId, user.getUserId()));
+        return ResponseEntity.ok().body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Репост поста авторизованным пользователем")
