@@ -20,6 +20,4 @@ public interface UserService extends GenericService<User, Long> {
 
     boolean existsAnotherByEmail(String email, Long userId);
 
-    User getPrincipal();
-
 }

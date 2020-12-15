@@ -1,25 +1,40 @@
 package com.javamentor.developer.social.platform.restv2.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.users.UserRegisterDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
+import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+@Sql(statements = {
+        "Insert into active(id, name) values(3, 'test')",
+        "Insert into role(id, name) values(1, 'USER')",
+
+        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
+        "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
+})
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/user/language.yml",
         "datasets/restv2/user/user_languages.yml",
@@ -27,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/user/role.yml",
         "datasets/restv2/user/userFriends.yml",
         "datasets/restv2/user/user.yml"
-}, cleanBefore = true, cleanAfter = true)
+}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/users";
@@ -41,11 +56,16 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SecurityHelper securityHelper;
+
     private final Gson gson = new Gson();
+
 
 
     @Test
     void createUser() throws Exception {
+
         UserRegisterDto userDto = UserRegisterDto.builder()
                 .email("admin@admin.ru")
                 .password("AdminPwd123")
@@ -124,26 +144,25 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(5))
 
-                .andExpect(jsonPath("$.items[0].userId").value(2))
-                .andExpect(jsonPath("$.items[0].firstName").value("Admin1"))
-                .andExpect(jsonPath("$.items[0].lastName").value("LastNameAdmin1"))
-                .andExpect(jsonPath("$.items[0].dateOfBirth").value("11.07.2009"))
-                .andExpect(jsonPath("$.items[0].education").value("MIT University"))
-                .andExpect(jsonPath("$.items[0].aboutMe").value("My description about life - Admin1"))
-                .andExpect(jsonPath("$.items[0].avatar").value("www.myavatar0.ru/9090"))
-                .andExpect(jsonPath("$.items[0].email").value("admin2@user.ru"))
-                .andExpect(jsonPath("$.items[0].password").value("userpass0"))
-                .andExpect(jsonPath("$.items[0].city").value("SPb"))
-                .andExpect(jsonPath("$.items[0].linkSite").isEmpty())
-                .andExpect(jsonPath("$.items[0].profession").value("Plumber"))
-                .andExpect(jsonPath("$.items[0].roleName").value("USER"))
-                .andExpect(jsonPath("$.items[0].status").value("Pureness and perfection"))
-                .andExpect(jsonPath("$.items[0].activeName").value("ACTIVE"))
+                .andExpect(jsonPath("$.items[1].userId").value(2))
+                .andExpect(jsonPath("$.items[1].firstName").value("Admin1"))
+                .andExpect(jsonPath("$.items[1].lastName").value("LastNameAdmin1"))
+                .andExpect(jsonPath("$.items[1].dateOfBirth").value("11.07.2009"))
+                .andExpect(jsonPath("$.items[1].education").value("MIT University"))
+                .andExpect(jsonPath("$.items[1].aboutMe").value("My description about life - Admin1"))
+                .andExpect(jsonPath("$.items[1].avatar").value("www.myavatar0.ru/9090"))
+                .andExpect(jsonPath("$.items[1].email").value("admin2@user.ru"))
+                .andExpect(jsonPath("$.items[1].password").value("userpass0"))
+                .andExpect(jsonPath("$.items[1].city").value("SPb"))
+                .andExpect(jsonPath("$.items[1].linkSite").isEmpty())
+                .andExpect(jsonPath("$.items[1].profession").value("Plumber"))
+                .andExpect(jsonPath("$.items[1].roleName").value("USER"))
+                .andExpect(jsonPath("$.items[1].status").value("Pureness and perfection"))
+                .andExpect(jsonPath("$.items[1].activeName").value("ACTIVE"))
 
-                .andExpect(jsonPath("$.items[1].userId").value(7))
-                .andExpect(jsonPath("$.items[2].userId").value(4))
-                .andExpect(jsonPath("$.items[3].userId").value(5))
-                .andExpect(jsonPath("$.items[4].userId").value(6));
+                .andExpect(jsonPath("$.items[2].userId").value(7))
+                .andExpect(jsonPath("$.items[3].userId").value(4))
+                .andExpect(jsonPath("$.items[4].userId").value(5));
     }
 
     @Test

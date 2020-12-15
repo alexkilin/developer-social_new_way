@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.webapp.controllers.v2;
+package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
 import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.models.dto.users.*;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
+import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,15 +40,17 @@ public class UserControllerV2 {
     private final UserDtoService userDtoService;
     private final UserService userService;
     private final UserConverter userConverter;
+    private final SecurityHelper securityHelper;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public UserControllerV2(UserDtoService userDtoService, UserService userService,
-                            UserConverter userConverter) {
+                            UserConverter userConverter, SecurityHelper securityHelper) {
         this.userDtoService = userDtoService;
         this.userService = userService;
         this.userConverter = userConverter;
+        this.securityHelper = securityHelper;
     }
 
 
@@ -206,39 +210,6 @@ public class UserControllerV2 {
         }
         logger.info(String.format("Пользователь с указанным ID: %d не найден!", statusDto.getUserId()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", statusDto.getUserId()));
-    }
-
-    @ApiOperation(value = "Авторизация пользователя")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь успешно авторизован", response = UserDto.class),
-            @ApiResponse(code = 400, message = "Неправльный пароль", response = String.class),
-            @ApiResponse(code = 404, message = "Пользователь с этим email не найден", response = String.class)
-    })
-    @Validated(OnCreate.class)
-    @PostMapping("/login")
-    public ResponseEntity<?> userAuthorization(@ApiParam(value = "Данные для авторизации") @Valid @RequestBody UserAuthorizationDto userAuthorizationDto) {
-        Optional<User> user = userService.getByEmail(userAuthorizationDto.getEmail());
-        if (!user.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with email: %s does not exist.", userAuthorizationDto.getEmail()));
-        }
-        if (userAuthorizationDto.getPassword().equals(user.get().getPassword())) {
-            return ResponseEntity.ok(userConverter.toDto(user.get()));
-        }
-        return ResponseEntity.badRequest().body("Incorrect password");
-    }
-
-    @ApiOperation(value = "Получение авторизованного пользователя")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь получен", response = UserDto.class),
-            @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)
-    })
-    @GetMapping("/principal")
-    public ResponseEntity<?> getPrincipal() {
-        User userPrincipal = userService.getPrincipal();
-        if (userPrincipal != null) {
-            return ResponseEntity.ok().body(userConverter.toDto(userPrincipal));
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Авторизованный пользователь не найден"));
     }
 
     @ApiOperation(value = "Получение фильтра по списку друзей пользователя по id")
