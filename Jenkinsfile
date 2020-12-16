@@ -16,7 +16,7 @@ pipeline {
         stage("Package") {
             steps {
                 echo "============= started packaging ============="
-                sh 'mvn package'
+                sh 'mvn package -DskipTests=true'
             }
         }
         stage('Docker') {
