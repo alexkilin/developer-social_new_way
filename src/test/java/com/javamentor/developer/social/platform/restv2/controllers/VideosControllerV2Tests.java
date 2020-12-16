@@ -54,11 +54,21 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
-    public void getVideoOfName() throws Exception {
-        mockMvc.perform(get(apiUrl + "/name?name=VideoTestName 4"))
+    public void getVideoOfNamePart() throws Exception {
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "2")
+                .param("itemsOnPage", "2"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(50));
+                .andExpect(jsonPath("$.totalResults").value(6))
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].id").value(30))
+                .andExpect(jsonPath("$.items[0].url").value("www.myvideo3.ru"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon2"))
+                .andExpect(jsonPath("$.items[0].name").value("VideoTestName 2"))
+                .andExpect(jsonPath("$.items[0].author").value("TestAuthor 2"))
+                .andExpect(jsonPath("$.items[1].id").value(40));
     }
 
     @Test
