@@ -117,6 +117,22 @@ public class PostControllerV2 {
         return ResponseEntity.ok(postDtoService.getPostsByTag(parameters));
     }
 
+    @ApiOperation(value = "Получение постов данного пользователя по его группам и всем постам друзей отсортированной по дате публикации")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
+    @GetMapping(value = "/posts", params = { "currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<PostDto, ?>> getPostsByAllFriendsAndGroups(
+            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
+        Long userPrincipalId = securityHelper.getPrincipal().getUserId();
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("userPrincipalId", userPrincipalId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok(postDtoService.getPostsByAllFriendsAndGroups(parameters));
+    }
+
     @ApiOperation(value = "Получение всех существующих тегов")
     @ApiResponses(value =  {
             @ApiResponse(code = 200, message = "Теги получены", responseContainer = "List", response = TagDto.class)})
