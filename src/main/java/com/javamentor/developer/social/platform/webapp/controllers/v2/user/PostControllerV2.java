@@ -120,7 +120,7 @@ public class PostControllerV2 {
     @ApiOperation(value = "Получение постов данного пользователя по его группам и всем постам друзей отсортированной по дате публикации")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
-    @GetMapping(value = "/posts", params = { "currentPage", "itemsOnPage"})
+    @GetMapping(value = "/posts/friends/groups", params = { "currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<PostDto, ?>> getPostsByAllFriendsAndGroups(
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {

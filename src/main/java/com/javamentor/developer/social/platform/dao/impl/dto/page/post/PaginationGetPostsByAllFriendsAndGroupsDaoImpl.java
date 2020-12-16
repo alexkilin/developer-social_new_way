@@ -53,7 +53,7 @@ public class PaginationGetPostsByAllFriendsAndGroupsDaoImpl implements Paginatio
                         "(select rp from Repost as rp where rp.user.userId = :userPrincipalId and rp.post.id = p.id)" +
                         "then true else false end " +
                         "from Post as p " +
-                        "join p.user as u ")
+                        "join p.user as u where p.group in (select ghu.group from GroupHasUser as ghu where ghu.user.userId = :userPrincipalId) and p.user in (select f.friend from Friend as f where f.user.userId = :userPrincipalId)")
                 .setParameter("userPrincipalId", parameters.get("userPrincipalId"))
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)
@@ -93,8 +93,8 @@ public class PaginationGetPostsByAllFriendsAndGroupsDaoImpl implements Paginatio
     @Override
     public Long getCount(Map<String, Object> parameters) {
         return entityManager.createQuery(
-                "select count (p) from Post p",
+                "select count (p) from Post p where p.group in (select ghu.group from GroupHasUser as ghu where ghu.user.userId = :userPrincipalId) and p.user in (select f.friend from Friend as f where f.user.userId = :userPrincipalId)",
                 Long.class
-        ).getSingleResult();
+        ).setParameter("userPrincipalId", parameters.get("userPrincipalId")).getSingleResult();
     }
 }
