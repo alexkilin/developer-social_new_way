@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.naming.AuthenticationException;
 import javax.persistence.EntityNotFoundException;
+import javax.security.auth.message.AuthException;
 import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
