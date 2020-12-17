@@ -136,7 +136,8 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "2"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(new MatchesPattern(Pattern.compile("Invalid pagination parameters.*"))));
+                .andExpect(content().string(new MatchesPattern(Pattern.compile(
+                        ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
 
         mockMvc.perform(get(apiUrl + "/name")
                 .param("namePart", "deoT")
@@ -144,7 +145,8 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "-2"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(new MatchesPattern(Pattern.compile("Invalid pagination parameters.*"))));
+                .andExpect(content().string(new MatchesPattern(Pattern.compile(
+                        ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
 
         mockMvc.perform(get(apiUrl + "/name")
                 .param("namePart", "deoT")
@@ -152,7 +154,8 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "2"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(new MatchesPattern(Pattern.compile("Invalid pagination parameters.*"))));
+                .andExpect(content().string(new MatchesPattern(Pattern.compile(
+                        ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
 
         mockMvc.perform(get(apiUrl + "/name")
                 .param("namePart", "deoT")
@@ -160,7 +163,8 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "0"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(new MatchesPattern(Pattern.compile("Invalid pagination parameters.*"))));
+                .andExpect(content().string(new MatchesPattern(Pattern.compile("" +
+                        ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
 
         mockMvc.perform(get(apiUrl + "/name")
                 .param("namePart", "deoT")
@@ -168,7 +172,8 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "3"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(new MatchesPattern(Pattern.compile("Nonexistent page construction.*"))));
+                .andExpect(content().string(new MatchesPattern(Pattern.compile(
+                        ".*is greater than total number of available pages.*"))));
     }
 
     @Test

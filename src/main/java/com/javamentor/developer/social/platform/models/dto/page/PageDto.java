@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.models.dto.page;
 
-import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationException;
 import lombok.*;
 
 import java.io.Serializable;
@@ -27,21 +26,8 @@ public class PageDto <T, V> implements Serializable {
         this.itemsOnPage = itemsOnPage;
         this.totalResults = totalResults;
         this.items = items;
-
-        if(totalResults != 0){
-            if(totalResults % itemsOnPage == 0){
-                totalPages = (int) (totalResults / itemsOnPage);
-            } else {
-                totalPages = (int) (totalResults / itemsOnPage) + 1;
-            }
-        } else {
-            totalPages = 0;
-        }
-
-        if (currentPage > totalPages) {
-            throw new IllegalArgumentException("Nonexistent page construction. " +
-                    String.format("Parameter 'currentPage' value [%d] is greater than total number of available pages [%d] " +
-                            "considering parameter 'itemsOnPage' value [%d]", this.currentPage, totalPages, this.itemsOnPage));
-        }
+        totalPages = (int) (totalResults % itemsOnPage == 0 ?
+                totalResults / itemsOnPage :
+                totalResults / itemsOnPage + 1);
     }
 }

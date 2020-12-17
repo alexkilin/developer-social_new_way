@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class PaginationServiceImpl<T, V> implements PaginationService<Object, Object> {
@@ -25,12 +24,17 @@ public class PaginationServiceImpl<T, V> implements PaginationService<Object, Ob
 
         if (currentPage > 0 && itemsOnPage > 0) {
             PaginationDao paginationDao = pageBeans.get(methodName);
-            return new PageDto<T, V>(
-                    currentPage,
-                    itemsOnPage,
-                    paginationDao.getItems(parameters),
-                    paginationDao.getCount(parameters));
+            PageDto<T, V> pageDto = new PageDto<T, V>(currentPage, itemsOnPage,
+                    paginationDao.getItems(parameters), paginationDao.getCount(parameters));
 
+            if (currentPage > pageDto.getTotalPages()) {
+                throw new PaginationException("Invalid pagination parameters. " +
+                        String.format("Parameter 'currentPage' value [%d] is greater than total number of available pages [%d] " +
+                                "considering parameter 'itemsOnPage' value [%d]",
+                                currentPage, pageDto.getTotalPages(), itemsOnPage));
+            }
+
+            return pageDto;
         }
 
         throw new PaginationException("Invalid pagination parameters. " +
