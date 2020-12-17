@@ -20,19 +20,21 @@ public class PaginationServiceImpl<T, V> implements PaginationService<Object, Ob
 
     @Override
     public PageDto<T, V> getPageDto(String methodName, Map<String, Object> parameters) {
-        Object currentPage = parameters.get("currentPage");
-        Object itemsOnPage = parameters.get("itemsOnPage");
+        int currentPage = (int) parameters.get("currentPage");
+        int itemsOnPage = (int) parameters.get("itemsOnPage");
 
-        if (currentPage != null && itemsOnPage != null) {
+        if (currentPage > 0 && itemsOnPage > 0) {
             PaginationDao paginationDao = pageBeans.get(methodName);
             return new PageDto<T, V>(
-                    (int) currentPage,
-                    (int) itemsOnPage,
+                    currentPage,
+                    itemsOnPage,
                     paginationDao.getItems(parameters),
                     paginationDao.getCount(parameters));
 
-        } else throw new PaginationException("Invalid pagination parameters. " +
-                "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");
+        }
+
+        throw new PaginationException("Invalid pagination parameters. " +
+                "Please, make sure that parameters 'currentPage' and 'itemsOnPage' values are greater than 0");
     }
 
     @Override
