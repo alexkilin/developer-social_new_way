@@ -55,7 +55,7 @@ public class PaginationGetPostsByAllFriendsAndGroupsDaoImpl implements Paginatio
                         "from Post as p " +
                         "join p.user as u " +
                         "where p.group in (select ghu.group from GroupHasUser as ghu where ghu.user.userId = :userPrincipalId) " +
-                        "and p.user in (select f.friend from Friend as f where f.user.userId = :userPrincipalId)")
+                        "and p.user in (select f.friend from Friend as f where f.user.userId = :userPrincipalId) order by p.persistDate DESC ")
                 .setParameter("userPrincipalId", parameters.get("userPrincipalId"))
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

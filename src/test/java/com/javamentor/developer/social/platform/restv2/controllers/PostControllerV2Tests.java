@@ -41,7 +41,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/post/postTest/post_like.yml",
         "datasets/restv2/post/usersResources/Role.yml",
         "datasets/restv2/post/usersResources/User.yml",
-        "datasets/restv2/post/usersResources/Active.yml"
+        "datasets/restv2/post/usersResources/Active.yml",
+        "datasets/restv2/post/usersResources/Friends.yml",
+        "datasets/restv2/post/groupResources/Group.yml",
+        "datasets/restv2/post/groupResources/GroupHasUser.yml",
+        "datasets/restv2/post/groupResources/GroupWal.yml"
 }, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 public class PostControllerV2Tests extends AbstractIntegrationTest {
 
@@ -64,6 +68,20 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items[0].text").value("Text1"))
                 .andExpect(jsonPath("$.items[2].title").value("Title3"))
                 .andExpect(jsonPath("$.items[2].text").value("Text3"));
+    }
+
+    @Test
+    public void getPostsByFriendsAndGroups() throws Exception {
+        mockMvc.perform(get(apiUrl + "/posts/friends/groups")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(3))
+                .andExpect(jsonPath("$.items[0].title").value("Title5"))
+                .andExpect(jsonPath("$.items[0].text").value("Text5"))
+                .andExpect(jsonPath("$.items[2].title").value("Title1"))
+                .andExpect(jsonPath("$.items[2].text").value("Text1"));
     }
 
     @Test
