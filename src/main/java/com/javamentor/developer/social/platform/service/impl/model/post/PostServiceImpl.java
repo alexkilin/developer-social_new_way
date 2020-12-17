@@ -89,4 +89,3 @@ public class PostServiceImpl extends GenericServiceAbstract<Post, Long> implemen
     }
 
 }
-

@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/post/postTest/post_media.yml",
         "datasets/restv2/post/postTest/post_tags.yml",
         "datasets/restv2/post/posts.yml",
+        "datasets/restv2/post/topics.yml",
         "datasets/restv2/post/tags.yml",
         "datasets/restv2/post/comments.yml",
         "datasets/restv2/post/postTest/post_comment.yml",
@@ -268,5 +269,29 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
+    }
+
+    @Test
+    public void getAllPostsByTopic() throws Exception {
+        mockMvc.perform(get(apiUrl + "/posts/topic")
+                .param("topic", "MyTopicName2")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].id").value(65))
+                .andExpect(jsonPath("$.items[0].firstName").value("Admin0"))
+                .andExpect(jsonPath("$.items[1].id").value(70))
+                .andExpect(jsonPath("$.items[1].title").value("Title5"))
+                .andExpect(jsonPath("$.totalResults").value(2));
+
+        mockMvc.perform(get(apiUrl + "/posts/topic")
+                .param("topic", "Nothing")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(0));
     }
 }
