@@ -82,6 +82,13 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items[0].text").value("Text5"))
                 .andExpect(jsonPath("$.items[2].title").value("Title1"))
                 .andExpect(jsonPath("$.items[2].text").value("Text1"));
+
+        mockMvc.perform(get(apiUrl + "/posts/friends/groups")
+                .param("currentPage", "5")
+                .param("itemsOnPage", "10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(0));
     }
 
     @Test
