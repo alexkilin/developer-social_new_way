@@ -1,0 +1,15 @@
+post_media:
+  - post_id: 10
+    media_id: 1
+
+  - post_id: 20
+    media_id: 2
+
+  - post_id: 30
+    media_id: 3
+
+  - post_id: 40
+    media_id: 4
+
+  - post_id: 50
+    media_id: 5

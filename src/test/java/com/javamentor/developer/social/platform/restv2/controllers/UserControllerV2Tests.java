@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DataSet(value = {
         "datasets/restv2/user/language.yml",
         "datasets/restv2/user/user_languages.yml",
-        "datasets/restv2/user/active.yml",
+        "datasets/restv2/user/Active.yml",
         "datasets/restv2/user/role.yml",
         "datasets/restv2/user/userFriends.yml",
         "datasets/restv2/user/user.yml"
@@ -158,11 +158,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items[1].profession").value("Plumber"))
                 .andExpect(jsonPath("$.items[1].roleName").value("USER"))
                 .andExpect(jsonPath("$.items[1].status").value("Pureness and perfection"))
-                .andExpect(jsonPath("$.items[1].activeName").value("ACTIVE"))
-
-                .andExpect(jsonPath("$.items[2].userId").value(7))
-                .andExpect(jsonPath("$.items[3].userId").value(4))
-                .andExpect(jsonPath("$.items[4].userId").value(5));
+                .andExpect(jsonPath("$.items[1].activeName").value("ACTIVE"));
     }
 
     @Test
