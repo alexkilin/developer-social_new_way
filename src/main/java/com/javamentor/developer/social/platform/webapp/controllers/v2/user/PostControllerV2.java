@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/v2", produces = "application/json;charset=UTF-8")
+@RequestMapping(value = "/api/v2/post", produces = "application/json;charset=UTF-8")
 @Api(value = "PostApi-v2", description = "Операции над постами пользователя")
 @Validated
 public class PostControllerV2 {
@@ -238,7 +238,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Удаление лайка из поста авторизованным пользователем")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Лайк удален из пост")
+            @ApiResponse(code = 200, message = "Лайк удален из пост")
     })
     @DeleteMapping("/post/{postId}/like")
     public ResponseEntity<?> deleteLikeFromPost(
@@ -254,8 +254,7 @@ public class PostControllerV2 {
 
         PostLike postLike = optionalLike.get();
         postLikeService.delete(postLike);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId, user.getUserId()));
+        return ResponseEntity.ok().body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Добавление поста в закладки авторизованного пользователя")
@@ -281,7 +280,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Удаление поста из закладок авторизованным пользователем")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Пост из закладок удален")
+            @ApiResponse(code = 200, message = "Пост из закладок удален")
     })
     @DeleteMapping("/post/{postId}/bookmark")
     public ResponseEntity<?> deletePostFromBookmark(
@@ -294,8 +293,7 @@ public class PostControllerV2 {
         }
 
         bookmarkService.deleteBookmarkByPostIdAndUserId(postId, user.getUserId());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(postDtoService.getPostById(postId, user.getUserId()));
+        return ResponseEntity.ok().body(postDtoService.getPostById(postId, user.getUserId()));
     }
 
     @ApiOperation(value = "Репост поста авторизованным пользователем")
