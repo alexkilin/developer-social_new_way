@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
+import com.javamentor.developer.social.platform.models.dto.TopicDto;
+import com.javamentor.developer.social.platform.models.entity.post.Topic;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -108,11 +110,17 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
         List<TagDto> tag = new ArrayList<>();
         List<MediaPostDto> media = new ArrayList<>();
 
+        TopicDto topicDto = TopicDto.builder()
+                .id(34l)
+                .topic("MyNewTopic")
+                .build();
+
         PostCreateDto postCreateDto = PostCreateDto.builder()
                 .text("MyText")
                 .title("MyTitle")
                 .tags(tag)
                 .userId(50l)
+                .topic(topicDto)
                 .media(media)
                 .build();
 

@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.models.dto;
 
+import com.javamentor.developer.social.platform.models.entity.post.Topic;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
@@ -45,4 +46,9 @@ public class PostCreateDto {
     @ApiModelProperty(notes = "Тэги новости")
     @Valid
     private List<TagDto> tags;
+
+    @NotNull
+    @ApiModelProperty(notes = "Тема топика, не может быть нулевой")
+    @Valid
+    private TopicDto topic;
 }
