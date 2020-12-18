@@ -62,4 +62,10 @@ public class PostDtoServiceImpl extends PostPaginationService<Object, Object> im
     public PageDto<PostDto, Object> getAllPosts(Map<String, Object> parameters) {
         return (PageDto<PostDto, Object>) super.getPostPageDto("getAllPosts", parameters);
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public PageDto<PostDto, Object> getAllPostsByTopic(Map<String, Object> parameters) {
+        return (PageDto<PostDto, Object>) super.getPostPageDto("getAllPostsByTopic", parameters);
+    }
 }
