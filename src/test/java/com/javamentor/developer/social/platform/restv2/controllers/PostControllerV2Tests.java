@@ -198,7 +198,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void addCommentToPost() throws Exception {
         mockMvc.perform(post(apiUrl + "/post/{postId}/comment", 10)
-                .param("comment", "MyNewComment"))
+                .content("Such a bad comment"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2))

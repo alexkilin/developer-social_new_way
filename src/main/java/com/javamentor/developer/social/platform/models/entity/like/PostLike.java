@@ -24,7 +24,7 @@ public class PostLike {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REMOVE }, optional = false)//TODO было персист
     @MapsId
     private Like like = new Like(LikeType.POST);
 
