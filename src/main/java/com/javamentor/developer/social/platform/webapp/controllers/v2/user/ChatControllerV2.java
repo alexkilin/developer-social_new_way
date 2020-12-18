@@ -64,22 +64,15 @@ public class ChatControllerV2 {
         return ResponseEntity.ok(chatDtoService.getAllChatDtoByUserId(userId));
     }
 
-    @GetMapping(value = "/user/chats", params = {"currentPage", "itemsOnPage"})
+    @GetMapping(value = "/user/chats", params = {"search"})
     @ApiOperation(value = "Поиск по чатам.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = ChatDto.class)
     })
-    public ResponseEntity<?> getChatsByChatName(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
-//        if (!groupChatService.existById(chatId)) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Chat id %s not found", chatId));
-//        }
-//        Map<String, Object> parameters = new HashMap<>();
-//        parameters.put("chatId", chatId);
-//        parameters.put("currentPage", currentPage);
-//        parameters.put("itemsOnPage", itemsOnPage);
-//        return ResponseEntity.ok(messageDtoService.getAllMessageDtoFromGroupChatByChatId(parameters));
-        return null;
+    public ResponseEntity<List<ChatDto>> getChatsByChatName(
+            @ApiParam(value = "Имя чата, можно не полное", example = "клуб") @RequestParam("search") String search) {
+        User user = securityHelper.getPrincipal();
+        return ResponseEntity.ok(chatDtoService.getChatDtoByChatName(user.getUserId(), search));
     }
 
     @GetMapping(value = "/group-chats/{chatId}/messages", params = {"currentPage", "itemsOnPage"})

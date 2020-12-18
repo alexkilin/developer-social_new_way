@@ -9,4 +9,6 @@ public interface ChatDtoService {
     List<ChatDto> getAllChatDtoByUserId(Long userId);
 
     ChatDto getChatDtoByGroupChatId(Long chatId);
+
+    List<ChatDto> getChatDtoByChatName(Long userId, String search);
 }

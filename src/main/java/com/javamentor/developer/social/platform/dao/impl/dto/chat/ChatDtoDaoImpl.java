@@ -71,11 +71,50 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 .getSingleResult();
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<ChatDto> getChatDtoByChatName(Long userId, String search) {
+        ChatDtoDaoImpl.userId = userId;
+        List<ChatDto> chatDtoList = (List<ChatDto>) em.createQuery("select " +
+                "(select max(me) from SingleChat si  join si.messages me where si.id=single.id)," +
+                " single.userOne.userId," +
+                "single.userTwo.userId," +
+                "single.userOne.firstName," +
+                "single.userOne.lastName," +
+                "single.userOne.avatar," +
+                "single.userOne.active.name," +
+                "single.userTwo.firstName," +
+                "single.userTwo.lastName," +
+                "single.userTwo.avatar," +
+                "single.userTwo.active.name, " +
+                "single.id " +
+                "from SingleChat single " +
+                "WHERE (single.userOne.userId=:id OR single.userTwo.userId=:id) and (single.userOne.firstName LIKE :search or single.userOne.lastName LIKE :search) ")
+                .setParameter("id", userId)
+                .setParameter("search", search+"%")
+                .unwrap(Query.class)
+                .setResultTransformer(new ChatDtoResultTransformer())
+                .getResultList();
+        chatDtoList.addAll((List<ChatDto>) em.createQuery("select " +
+                "(select max(me) from GroupChat si  join si.messages me where si.id=groupchats.id), " +
+                "groupchats.image," +
+                "groupchats.title," +
+                "groupchats.id " +
+                "from User user join user.groupChats groupchats where user.userId=:id and groupchats.title LIKE :search")
+                .setParameter("id", userId)
+                .setParameter("search", search+"%")
+                .unwrap(Query.class)
+                .setResultTransformer(new GroupChatDtoResultTransformer())
+                .getResultList());
+
+        return chatDtoList;
+    }
+
     private static class ChatDtoResultTransformer implements ResultTransformer {
         @Override
         public Object transformTuple(Object[] objects, String[] strings) {
             ChatDto chatDto;
-            if (((Number) objects[1]).longValue() != userId) {
+            if (((Number) objects[1]).longValue() == userId) {
                 chatDto = new ChatDto().builder()
                         .id(((Number) objects[11]).longValue())
                         .title(objects[3] + " " + objects[4])

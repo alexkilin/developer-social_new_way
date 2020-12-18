@@ -31,4 +31,8 @@ public class ChatDtoServiceImpl implements ChatDtoService {
         return dao.getChatDtoByGroupChatId(chatId);
     }
 
+    @Override
+    public List<ChatDto> getChatDtoByChatName(Long userId, String search) {
+        return dao.getChatDtoByChatName(userId, search);
+    }
 }
