@@ -326,4 +326,19 @@ public class PostControllerV2 {
         return ResponseEntity.ok().body(postDtoService.getAllBookmarkedPosts(parameters));
     }
 
+    @ApiOperation(value = "Получение всех постов по теме")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Все посты получены")
+    })
+    @GetMapping(value = "/posts/topic", params = {"currentPage", "itemsOnPage", "topic"})
+    public ResponseEntity <PageDto<PostDto, ?>> getAllPostsByTopic(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                                      @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
+                                                                      @ApiParam(value = "Тема топика", example = "Жабросли") @RequestParam("topic") String topic){
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        parameters.put("topic", topic);
+        return ResponseEntity.ok().body(postDtoService.getAllPostsByTopic(parameters));
+    }
+
 }

@@ -4,6 +4,7 @@ import com.javamentor.developer.social.platform.models.entity.comment.PostCommen
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
+import com.javamentor.developer.social.platform.models.entity.user.Role;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,6 +36,10 @@ public class Post {
     @NotNull
     @Column(length = 1000)
     private String text;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Topic.class, cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "topic_id", nullable = false)
+    private Topic topic;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
