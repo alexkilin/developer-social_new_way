@@ -114,7 +114,7 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
         @Override
         public Object transformTuple(Object[] objects, String[] strings) {
             ChatDto chatDto;
-            if (((Number) objects[1]).longValue() == userId) {
+            if (((Number) objects[1]).longValue() != userId) {
                 chatDto = new ChatDto().builder()
                         .id(((Number) objects[11]).longValue())
                         .title(objects[3] + " " + objects[4])
