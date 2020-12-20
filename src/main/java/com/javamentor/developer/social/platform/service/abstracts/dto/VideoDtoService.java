@@ -9,7 +9,7 @@ public interface VideoDtoService {
 
     PageDto<VideoDto, ?> getVideoOfAuthor(Map<String, Object> parameters);
 
-    VideoDto getVideoOfName(String name);
+    PageDto<VideoDto, ?> getVideoOfNamePart(Map<String, Object> parameters);
 
     PageDto<VideoDto, ?> getPartVideoOfUser(Map<String, Object> parameters);
 

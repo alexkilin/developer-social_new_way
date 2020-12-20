@@ -6,12 +6,15 @@ import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
 import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
+import org.hamcrest.text.MatchesPattern;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.regex.Pattern;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -64,11 +67,113 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
-    public void getVideoOfName() throws Exception {
-        mockMvc.perform(get(apiUrl + "/name?name=VideoTestName 4"))
+    public void getVideoOfNamePart() throws Exception {
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "2")
+                .param("itemsOnPage", "2"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(50));
+                .andExpect(jsonPath("$.totalResults").value(6))
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].id").value(30))
+                .andExpect(jsonPath("$.items[0].url").value("www.myvideo3.ru"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon2"))
+                .andExpect(jsonPath("$.items[0].name").value("VideoTestName 2"))
+                .andExpect(jsonPath("$.items[0].author").value("TestAuthor 2"))
+                .andExpect(jsonPath("$.items[1].id").value(40));
+
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalResults").value(6))
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].id").value(10))
+                .andExpect(jsonPath("$.items[0].url").value("www.myvideo1.ru"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon0"))
+                .andExpect(jsonPath("$.items[0].name").value("VideoTestName 0"))
+                .andExpect(jsonPath("$.items[0].author").value("TestAuthor 0"))
+                .andExpect(jsonPath("$.items[1].id").value(20));
+
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "3")
+                .param("itemsOnPage", "2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalResults").value(6))
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].id").value(50))
+                .andExpect(jsonPath("$.items[0].url").value("www.myVideo1.ru"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon4"))
+                .andExpect(jsonPath("$.items[0].name").value("VideoTestName 4"))
+                .andExpect(jsonPath("$.items[0].author").value("TestAuthor 4"))
+                .andExpect(jsonPath("$.items[1].id").value(60));
+
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "2")
+                .param("itemsOnPage", "5"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalResults").value(6))
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(60))
+                .andExpect(jsonPath("$.items[0].url").value("www.myImage1.ru"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon5"))
+                .andExpect(jsonPath("$.items[0].name").value("VideoTestName 5"))
+                .andExpect(jsonPath("$.items[0].author").value("TestAuthor 5"));
+    }
+
+    @Test
+    public void getVideoOfNamePartInvalidParams() throws Exception {
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "-2")
+                .param("itemsOnPage", "2"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(new MatchesPattern(Pattern.compile(
+                        ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
+
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "2")
+                .param("itemsOnPage", "-2"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(new MatchesPattern(Pattern.compile(
+                        ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
+
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "0")
+                .param("itemsOnPage", "2"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(new MatchesPattern(Pattern.compile(
+                        ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
+
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "20")
+                .param("itemsOnPage", "0"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(new MatchesPattern(Pattern.compile("" +
+                        ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
+
+        mockMvc.perform(get(apiUrl + "/name")
+                .param("namePart", "deoT")
+                .param("currentPage", "3")
+                .param("itemsOnPage", "3"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(new MatchesPattern(Pattern.compile(
+                        ".*is greater than total number of available pages.*"))));
     }
 
     @Test

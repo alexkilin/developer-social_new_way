@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class PaginationServiceImpl<T, V> implements PaginationService<Object, Object> {
@@ -20,19 +19,26 @@ public class PaginationServiceImpl<T, V> implements PaginationService<Object, Ob
 
     @Override
     public PageDto<T, V> getPageDto(String methodName, Map<String, Object> parameters) {
-        Object currentPage = parameters.get("currentPage");
-        Object itemsOnPage = parameters.get("itemsOnPage");
+        int currentPage = (int) parameters.get("currentPage");
+        int itemsOnPage = (int) parameters.get("itemsOnPage");
 
-        if (currentPage != null && itemsOnPage != null) {
+        if (currentPage > 0 && itemsOnPage > 0) {
             PaginationDao paginationDao = pageBeans.get(methodName);
-            return new PageDto<T, V>(
-                    (int) currentPage,
-                    (int) itemsOnPage,
-                    paginationDao.getItems(parameters),
-                    paginationDao.getCount(parameters));
+            PageDto<T, V> pageDto = new PageDto<T, V>(currentPage, itemsOnPage,
+                    paginationDao.getItems(parameters), paginationDao.getCount(parameters));
 
-        } else throw new PaginationException("Invalid pagination parameters. " +
-                "Please, make sure that parameters contains not null keys 'currentPage' and 'itemsOnPage'");
+            if (currentPage > pageDto.getTotalPages()) {
+                throw new PaginationException("Invalid pagination parameters. " +
+                        String.format("Parameter 'currentPage' value [%d] is greater than total number of available pages [%d] " +
+                                "considering parameter 'itemsOnPage' value [%d]",
+                                currentPage, pageDto.getTotalPages(), itemsOnPage));
+            }
+
+            return pageDto;
+        }
+
+        throw new PaginationException("Invalid pagination parameters. " +
+                "Please, make sure that parameters 'currentPage' and 'itemsOnPage' values are greater than 0");
     }
 
     @Override
