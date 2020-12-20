@@ -90,8 +90,8 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .param("currentPage", "5")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(0));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Invalid pagination parameters. Parameter 'currentPage' value [5] is greater than total number of available pages [1] considering parameter 'itemsOnPage' value [10]"));
     }
 
     @Test
