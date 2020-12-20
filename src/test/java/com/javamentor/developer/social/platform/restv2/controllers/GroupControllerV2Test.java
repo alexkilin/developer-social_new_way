@@ -32,7 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/groupset/group/postResources/post_media.yml",
         "datasets/restv2/groupset/group/postResources/post_tags.yml",
         "datasets/restv2/groupset/group/postResources/posts.yml",
-        "datasets/restv2/groupset/group/postResources/tags.yml"}
+        "datasets/restv2/groupset/group/postResources/tags.yml",
+        "datasets/restv2/groupset/group/postResources/topics.yml"}
         , strategy = SeedStrategy.REFRESH, cleanAfter = true)
 public class GroupControllerV2Test extends AbstractIntegrationTest {
 

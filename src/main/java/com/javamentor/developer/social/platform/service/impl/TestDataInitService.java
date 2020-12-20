@@ -19,6 +19,7 @@ import com.javamentor.developer.social.platform.models.entity.media.*;
 import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.post.Tag;
+import com.javamentor.developer.social.platform.models.entity.post.Topic;
 import com.javamentor.developer.social.platform.models.entity.post.UserTabs;
 import com.javamentor.developer.social.platform.models.entity.user.*;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
@@ -42,6 +43,7 @@ import com.javamentor.developer.social.platform.service.abstracts.model.media.Pl
 import com.javamentor.developer.social.platform.service.abstracts.model.media.VideosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.BookmarkService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.TagService;
+import com.javamentor.developer.social.platform.service.abstracts.model.post.TopicService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.FollowerService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.FriendService;
@@ -78,6 +80,7 @@ public class TestDataInitService {
     private final int numOfMessagesLikes = 100 * k;
     private final int numOfMediaComments = 100 * k;
     private final int numOfTags = 100 * k;
+    private final int numOfTopics = 100 * k;
 
     private final User[] users = new User[numOfUsers];
     private final Media[] medias = new Media[numOfMedias];
@@ -93,6 +96,7 @@ public class TestDataInitService {
     private final Tag[] tags = new Tag[numOfTags];
     private final SingleChat[] singleChats = new SingleChat[numOfChats];
     private Audios[] audios = new Audios[numOfMedias];
+    private final Topic[] topics = new Topic[numOfTopics];
 
     private final UserService userService;
     private final FollowerService followerService;
@@ -114,6 +118,7 @@ public class TestDataInitService {
     private final AlbumVideoService albumVideoService;
     private final UserTabsService userTabsService;
     private final TagService tagService;
+    private final TopicService topicService;
 
     private final SingleChatService singleChatService;
     private final GroupChatService groupChatService;
@@ -146,7 +151,8 @@ public class TestDataInitService {
                                GroupChatService groupChatService,
                                GroupCategoryService groupCategoryService,
                                BookmarkService bookmarkService,
-                               PlaylistService playlistService) {
+                               PlaylistService playlistService,
+                               TopicService topicService) {
         this.userService = userService;
         this.followerService = followerService;
         this.friendService = friendService;
@@ -172,6 +178,7 @@ public class TestDataInitService {
         this.groupCategoryService = groupCategoryService;
         this.bookmarkService = bookmarkService;
         this.playlistService = playlistService;
+        this.topicService = topicService;
     }
 
     public void createEntity() {
@@ -202,6 +209,7 @@ public class TestDataInitService {
         createBookmarks();
         createPlaylists();
         addAudiosToUserCollection();
+        createTopicEntity();
     }
 
     private void createUserEntity() {
@@ -429,6 +437,7 @@ public class TestDataInitService {
                     .tags(tagSet)
                     .text("There is the " + i + " text of this post")
                     .title("The " + i + " test post")
+                    .topic(new Topic("This is topic " + i))
                     .user(users[(int) (Math.random() * numOfUsers)])
                     .build();
         }
@@ -460,7 +469,7 @@ public class TestDataInitService {
                     .posts(postSet)
                     .description("This is a description of the group #" + i)
                     .owner(users[(int) (Math.random() * numOfUsers)])
-                    .addressImageGroup("This is a address of the group #" +i)
+                    .addressImageGroup("This is a address of the group #" + i)
                     .build();
             groupService.create(groups[i]);
             num += startNum;
@@ -614,7 +623,7 @@ public class TestDataInitService {
     private void createBookmarks() {
         for (int i = 0; i < numOfUsers / 2; i++) {
             bookmarkService.create(Bookmark.builder().post(posts[i]).user(users[i]).build());
-            bookmarkService.create(Bookmark.builder().post(posts[i+3]).user(users[i]).build());
+            bookmarkService.create(Bookmark.builder().post(posts[i + 3]).user(users[i]).build());
         }
     }
 
@@ -695,4 +704,14 @@ public class TestDataInitService {
         }
     }
 
+
+    private void createTopicEntity() {
+        for (int i = 0; i != numOfTopics; i++) {
+            topics[i] = Topic.builder()
+                    .topic("It's Topic " + i)
+                    .build();
+
+            topicService.create(topics[i]);
+        }
+    }
 }

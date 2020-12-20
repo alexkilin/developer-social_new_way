@@ -74,13 +74,22 @@ public class VideosControllerV2 {
         return ResponseEntity.ok().body(videoDtoService.getPartVideo(parameters));
     }
 
-    @ApiOperation(value = "Получение видео по названию")
+    @ApiOperation(value = "Получение видео по совпадению в названии по частям")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "видео по названию получено", response = VideoDto.class)})
-    @GetMapping(value = "/name", params = {"name"})
-    public ResponseEntity<VideoDto> getVideoOfName(@ApiParam(value = "Название видео", example = "Test video 3") @RequestParam @NotNull String name) {
-        logger.info(String.format("Отправка видео c названием %s", name));
-        return ResponseEntity.ok().body(videoDtoService.getVideoOfName(name));
+            @ApiResponse(code = 200, message = "Часть видео по совпадению в названии получено", responseContainer = "List", response = VideoDto.class)})
+    @GetMapping(value = "/name", params = {"namePart", "currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<VideoDto, ?>> getVideoOfNamePart(
+            @ApiParam(value = "Название видео", example = "Test video 3") @RequestParam @NotNull String namePart,
+            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("namePart", namePart);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        logger.info(String.format("Видео, содержащие в названии '%s', отправлены в количестве %s, начиная с объекта номер %s",
+                namePart, itemsOnPage, (currentPage - 1) * itemsOnPage + 1));
+        return ResponseEntity.ok().body(videoDtoService.getVideoOfNamePart(parameters));
     }
 
 

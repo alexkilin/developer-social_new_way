@@ -22,5 +22,7 @@ public interface PostDtoService {
 
     PageDto <PostDto, Object> getAllBookmarkedPosts(Map<String, Object> parameters);
 
+    PageDto <PostDto, Object> getAllPostsByTopic(Map<String, Object> parameters);
+
     PageDto <PostDto, Object> getPostsByAllFriendsAndGroups(Map<String, Object> parameters);
 }
