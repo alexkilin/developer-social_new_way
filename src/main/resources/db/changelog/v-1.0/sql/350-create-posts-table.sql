@@ -16,3 +16,10 @@ alter table posts
    references users
 
 next
+
+alter table posts
+    add constraint FKrfchr8dax0kfngvvkbteh5n7h
+    foreign key (topic_id)
+    references topics
+
+next
