@@ -31,7 +31,7 @@ variables:
 AudiosControllerV2Tests:
   stage: test
   script: 
-    - mvn test -Dtest=AudiosControllerV2Tests -e spring.profile.active=pipelines_test
+    - mvn test -Dtest=AudiosControllerV2Tests -Dspring.profile.active=pipelines_test
 
 
 # ChatControllerV2Tests:
