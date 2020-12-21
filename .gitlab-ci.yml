@@ -30,7 +30,7 @@ variables:
 
 AudiosControllerV2Tests:
   stage: test
-  script: mvn test -Dtest=AudiosControllerV2Tests --spring.datasource.url=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  script: mvn test --spring.datasource.url=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true -Dtest=AudiosControllerV2Tests
 
 
 # ChatControllerV2Tests:
