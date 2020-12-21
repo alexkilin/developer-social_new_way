@@ -1,0 +1,9 @@
+group_wall:
+  - group_id: 1
+    post_id: 10
+
+  - group_id: 1
+    post_id: 40
+
+  - group_id: 3
+    post_id: 50

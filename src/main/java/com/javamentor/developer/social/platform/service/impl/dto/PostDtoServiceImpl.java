@@ -48,6 +48,12 @@ public class PostDtoServiceImpl extends PostPaginationService<Object, Object> im
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public PageDto<PostDto, Object> getPostsByAllFriendsAndGroups(Map<String, Object> parameters) {
+        return (PageDto<PostDto, Object>) super.getPostPageDto("getPostsByAllFriendsAndGroups", parameters);
+    }
+
+    @Override
     public PageDto<Object, Object> getCommentsByPostId(Map<String, Object> parameters) {
         return super.getPageDto("showPostComments", parameters);
     }
