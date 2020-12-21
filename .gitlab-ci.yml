@@ -2,12 +2,12 @@ image: maven:latest
 
 variables:
   DOCKER_TLS_CERTDIR: ""
-  # SPRING_PROFILES_ACTIVE: pipelines_test
+  SPRING_PROFILES_ACTIVE: pipelines_test
   # DATABASE_URL: postgres://postgres@postgres/postgres
 
 services:
-  # - postgres:12.2-alpine
-  - solhaime/dev_social_db:latest
+   - postgres:12.2-alpine
+ # - solhaime/dev_social_db:latest
 
 variables:
   POSTGRES_DB: postgres
