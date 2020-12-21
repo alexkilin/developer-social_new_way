@@ -6,7 +6,8 @@ variables:
   # DATABASE_URL: postgres://postgres@postgres/postgres
 
 services:
-  - postgres:12.2-alpine
+  # - postgres:12.2-alpine
+  - dev_social_db:latest
 
 variables:
   POSTGRES_DB: postgres
@@ -32,7 +33,7 @@ variables:
 AudiosControllerV2Tests:
   stage: test
   script: 
-    - mvn test -Dtest=AudiosControllerV2Tests -e -Dspring.active.profile=pipelines_test
+    - mvn test -Dtest=AudiosControllerV2Tests
 
 
 # ChatControllerV2Tests:
