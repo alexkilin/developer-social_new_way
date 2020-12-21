@@ -7,7 +7,7 @@ variables:
 
 services:
   # - postgres:12.2-alpine
-  - dev_social_db:latest
+  - solhaime/dev_social_db:latest
 
 variables:
   POSTGRES_DB: postgres
