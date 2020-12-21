@@ -38,7 +38,7 @@ public class GroupChat {
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, mappedBy = "groupChats", cascade = {CascadeType.PERSIST})
     private Set<User> users;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST},targetEntity = Message.class)
+    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST},targetEntity = Message.class)
     @JoinTable(joinColumns = @JoinColumn(name = "chat_id"),
             inverseJoinColumns = @JoinColumn(name = "message_id"))
     private Set<Message> messages;

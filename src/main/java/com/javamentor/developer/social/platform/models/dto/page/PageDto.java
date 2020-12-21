@@ -21,21 +21,13 @@ public class PageDto <T, V> implements Serializable {
     private List <V> meta;
 
 
-    public PageDto(int currentPage, int itemsOnPage, List<T> items, Long totalResults){
+    public PageDto(int currentPage, int itemsOnPage, List<T> items, Long totalResults) throws IllegalArgumentException {
         this.currentPage = currentPage;
         this.itemsOnPage = itemsOnPage;
         this.totalResults = totalResults;
         this.items = items;
-
-        if(totalResults != 0 && itemsOnPage != 0){
-            if(totalResults % itemsOnPage == 0){
-                totalPages = (int) (totalResults / itemsOnPage);
-            } else {
-                totalPages = (int) (totalResults / itemsOnPage) + 1;
-            }
-        }else {
-            totalPages = 0;
-        }
+        totalPages = (int) (totalResults % itemsOnPage == 0 ?
+                totalResults / itemsOnPage :
+                totalResults / itemsOnPage + 1);
     }
 }
-
