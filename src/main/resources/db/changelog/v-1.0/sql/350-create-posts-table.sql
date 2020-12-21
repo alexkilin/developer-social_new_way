@@ -5,6 +5,7 @@ create table posts (
     text varchar(1000) not null,
     title varchar(50) not null,
     user_id int8 not null,
+    topic_id int8 not null,
     primary key (id)
 )
 
