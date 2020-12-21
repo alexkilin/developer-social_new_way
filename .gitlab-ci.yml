@@ -2,6 +2,7 @@ image: maven:latest
 
 variables:
   DOCKER_TLS_CERTDIR: ""
+  DATABASE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
 
 services:
   - postgres:12.2-alpine
