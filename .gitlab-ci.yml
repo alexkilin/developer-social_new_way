@@ -2,66 +2,59 @@ image: maven:latest
 
 variables:
   DOCKER_TLS_CERTDIR: ""
-  SPRING_PROFILES_ACTIVE: pipelines_test
-  # DATABASE_URL: postgres://postgres@postgres/postgres
 
 services:
-  # - postgres:12.2-alpine
-   - solhaime/dev_social_db:latest
+  - postgres:12.2-alpine
 
 variables:
-  POSTGRES_DB: dev_social
-  POSTGRES_HOST: localhost
+  POSTGRES_DB: postgres
+  POSTGRES_HOST: postgres
   POSTGRES_PORT: 5432
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: root
   POSTGRES_HOST_AUTH_METHOD: trust 
   TZ: UTC
 
-# stages:
-#   - build
-#   - test   
+stages:
+  - build
+  - test   
 
-# Clean project:
-#   stage: build
-#   script: mvn clean
+Clean project:
+  stage: build
+  script: mvn clean
 
-# Build project:
-#   stage: build
-#   script: mvn compile
+Build project:
+  stage: build
+  script: mvn compile
 
 AudiosControllerV2Tests:
+  variables: 
   stage: test
-  script: 
-    - mvn test -Dtest=AudiosControllerV2Tests
+  script: mvn test -Dtest=AudiosControllerV2Tests
 
+ChatControllerV2Tests:
+  stage: test
+  script: mvn test -Dtest=ChatControllerV2Tests
 
-# ChatControllerV2Tests:
-#   stage: test
-#   script: mvn test -Dtest=ChatControllerV2Tests -Dspring.datasource.url=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+GroupControllerV2Test:
+  stage: test
+  script: mvn test -Dtest=GroupControllerV2Test  
 
-# GroupControllerV2Test:
-#   stage: test
-#   script: mvn test -Dtest=GroupControllerV2Test -Dspring.datasource.url=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true  
+ImageControllerV2Tests:
+  stage: test
+  script: mvn test -Dtest=ImageControllerV2Tests
 
-# ImageControllerV2Tests:
-#   stage: test
-#   script: mvn test -Dtest=ImageControllerV2Tests -Dspring.datasource.url=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+PostControllerV2Tests:
+  stage: test
+  script: mvn test -Dtest=PostControllerV2Tests
 
-# PostControllerV2Tests:
-#   stage: test
-#   script: mvn test -Dtest=PostControllerV2Tests -Dspring.datasource.url=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+UserControllerV2Tests:
+  stage: test
+  script: mvn test -Dtest=UserControllerV2Tests
 
-# UserControllerV2Tests:
-#   stage: test
-#   script: mvn test -Dtest=UserControllerV2Tests -Dspring.datasource.url=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-
-# VideosControllerV2Tests:
-#   stage: test
-#   script: mvn test -Dtest=VideosControllerV2Tests -Dspring.datasource.url=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true   
-
-
-
+VideosControllerV2Tests:
+  stage: test
+  script: mvn test -Dtest=VideosControllerV2Tests   
 # image: maven:3.6.1-jdk-11
 
 # variables:
