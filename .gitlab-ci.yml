@@ -2,7 +2,7 @@ image: maven:latest
 
 variables:
   DOCKER_TLS_CERTDIR: ""
-  DATABASE_URL: postgres://postgres@postgres/postgres
+  # DATABASE_URL: postgres://postgres@postgres/postgres
 
 services:
   - postgres:12.2-alpine
