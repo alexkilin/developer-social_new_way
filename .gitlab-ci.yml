@@ -2,6 +2,7 @@ image: maven:latest
 
 variables:
   DOCKER_TLS_CERTDIR: ""
+  SPRING_PROFILES_ACTIVE: pipelines_test
   # DATABASE_URL: postgres://postgres@postgres/postgres
 
 services:
@@ -31,7 +32,7 @@ variables:
 AudiosControllerV2Tests:
   stage: test
   script: 
-    - mvn test -Dtest=AudiosControllerV2Tests -Dspring.profile.active=pipelines_test
+    - mvn test -Dtest=AudiosControllerV2Tests
 
 
 # ChatControllerV2Tests:
