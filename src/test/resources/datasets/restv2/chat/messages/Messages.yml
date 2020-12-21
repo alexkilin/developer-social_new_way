@@ -82,3 +82,31 @@ messages:
     last_redaction_date: 2020-09-02 03:36:50.977300
     persist_date: 2020-09-02 03:36:50.977300
     user_id: 60
+
+  - id: 13
+    is_unread: 1
+    message: "Test init message13"
+    last_redaction_date: 2020-09-02 03:36:50.977300
+    persist_date: 2020-09-02 03:36:50.977300
+    user_id: 666
+
+  - id: 14
+    is_unread: 1
+    message: "Test init message14"
+    last_redaction_date: 2020-09-02 03:36:50.977300
+    persist_date: 2020-09-02 03:36:50.977300
+    user_id: 1
+
+  - id: 15
+    is_unread: 1
+    message: "Test init message15"
+    last_redaction_date: 2020-09-02 03:36:50.977300
+    persist_date: 2020-09-02 03:36:50.977300
+    user_id: 666
+
+  - id: 16
+    is_unread: 1
+    message: "Test init message16"
+    last_redaction_date: 2020-09-02 03:36:50.977300
+    persist_date: 2020-09-02 03:36:50.977300
+    user_id: 60

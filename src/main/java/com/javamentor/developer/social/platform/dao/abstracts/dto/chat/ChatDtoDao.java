@@ -9,5 +9,5 @@ public interface ChatDtoDao {
 
     ChatDto getChatDtoByGroupChatId(Long chatId);
 
-    List<ChatDto> getChatDtoByChatName(Long userId,String search);
+    List<ChatDto> getChatDtoByChatName(Long userId, String search);
 }

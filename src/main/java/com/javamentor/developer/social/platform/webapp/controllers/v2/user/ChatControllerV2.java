@@ -64,13 +64,14 @@ public class ChatControllerV2 {
         return ResponseEntity.ok(chatDtoService.getAllChatDtoByUserId(userId));
     }
 
-    @GetMapping(value = "/user/chats", params = {"search"})
+    @PostMapping(value = "/user/chats")
     @ApiOperation(value = "Поиск по чатам.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = ChatDto.class)
     })
-    public ResponseEntity<List<ChatDto>> getChatsByChatName(
-            @ApiParam(value = "Имя чата, можно не полное", example = "клуб") @RequestParam("search") String search) {
+    public ResponseEntity<?> getChatsByChatName(
+            @ApiParam(value = "Имя чата, можно не полное, не зависит от регистра", example = "клуб") @RequestBody @NotNull @Valid String search) {
+
         User user = securityHelper.getPrincipal();
         return ResponseEntity.ok(chatDtoService.getChatDtoByChatName(user.getUserId(), search));
     }

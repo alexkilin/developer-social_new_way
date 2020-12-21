@@ -54,6 +54,41 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
+    public void getChatsByChatName() throws Exception {
+
+        mockMvc.perform(post(apiUrl + "/user/chats")
+                .contentType(MediaType.TEXT_PLAIN_VALUE)
+                .content("Admin"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].title").value("Admin0 LastNameUser0"));
+
+        mockMvc.perform(post(apiUrl + "/user/chats")
+                .contentType(MediaType.TEXT_PLAIN_VALUE)
+                .content("wwwww"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+
+        mockMvc.perform(post(apiUrl + "/user/chats")
+                .contentType(MediaType.TEXT_PLAIN_VALUE)
+                .content("adm lastName"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].title").value("Admin0 LastNameUser0"));
+
+        mockMvc.perform(post(apiUrl + "/user/chats")
+                .contentType(MediaType.TEXT_PLAIN_VALUE)
+                .content("group"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].title").value("Group chat #1"));
+    }
+
+    @Test
     public void getAllMessageDtoByGroupChatId() throws Exception {
         mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages", 10)
                 .param("currentPage", "1")

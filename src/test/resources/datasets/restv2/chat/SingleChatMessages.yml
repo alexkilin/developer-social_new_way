@@ -23,3 +23,15 @@ single_chat_messages:
   - chat_id: 4
     message_id: 12
 
+  - chat_id: 5
+    message_id: 13
+
+  - chat_id: 5
+    message_id: 14
+
+  - chat_id: 6
+    message_id: 15
+
+  - chat_id: 6
+    message_id: 16
+

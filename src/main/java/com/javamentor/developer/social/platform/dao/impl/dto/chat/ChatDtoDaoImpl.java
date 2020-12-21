@@ -89,20 +89,23 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 "single.userTwo.active.name, " +
                 "single.id " +
                 "from SingleChat single " +
-                "WHERE (single.userOne.userId=:id OR single.userTwo.userId=:id) and (single.userOne.firstName LIKE :search or single.userOne.lastName LIKE :search) ")
+                "WHERE (single.userOne.userId=:id OR single.userTwo.userId=:id) and " +
+                "((concat(lower(single.userTwo.firstName),' ', lower(single.userTwo.lastName)) LIKE lower(:search)) or " +
+                "(concat(lower(single.userTwo.lastName),' ', lower(single.userTwo.firstName)) LIKE lower(:search)))")
                 .setParameter("id", userId)
-                .setParameter("search", search+"%")
+                .setParameter("search", search)
                 .unwrap(Query.class)
                 .setResultTransformer(new ChatDtoResultTransformer())
                 .getResultList();
         chatDtoList.addAll((List<ChatDto>) em.createQuery("select " +
-                "(select max(me) from GroupChat si  join si.messages me where si.id=groupchats.id), " +
+                "(select max(me) from GroupChat si join si.messages me where si.id=groupchats.id), " +
                 "groupchats.image," +
                 "groupchats.title," +
                 "groupchats.id " +
-                "from User user join user.groupChats groupchats where user.userId=:id and groupchats.title LIKE :search")
+                "from User user join user.groupChats groupchats where user.userId=:id and (lower(groupchats.title) LIKE lower(:search) or lower(groupchats.title) LIKE lower(:searchMiddle))")
                 .setParameter("id", userId)
-                .setParameter("search", search+"%")
+                .setParameter("search", search)
+                .setParameter("searchMiddle", "% " + search)
                 .unwrap(Query.class)
                 .setResultTransformer(new GroupChatDtoResultTransformer())
                 .getResultList());
