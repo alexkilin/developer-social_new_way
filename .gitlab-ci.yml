@@ -31,8 +31,7 @@ variables:
 AudiosControllerV2Tests:
   stage: test
   script: 
-    - mvn -Dspring.datasource.url=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    - mvn test -Dtest=AudiosControllerV2Tests
+    - mvn test -Dtest=AudiosControllerV2Tests -e spring.profile.active=pipelines_test
 
 
 # ChatControllerV2Tests:
