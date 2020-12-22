@@ -20,9 +20,9 @@ import java.lang.annotation.Target;
 public @interface DefaultProfile {
 
     @AliasFor("profiles")
-    String[] value() default "test";
+    String[] value() default "test_local";
 
     @AliasFor("value")
-    String[] profiles() default "test";
+    String[] profiles() default "test_local";
 
 }
