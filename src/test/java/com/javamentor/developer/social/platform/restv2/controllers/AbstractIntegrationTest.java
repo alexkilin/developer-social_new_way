@@ -20,7 +20,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @AutoConfigureTestEntityManager
-@TestPropertySource("/config/application-test_local.properties")
+@DefaultProfile
+//@TestPropertySource("/config/application-test_local.properties")
 @PropertySource(encoding = "UTF-8", value = "/message/application-error-message.properties")
 @AutoConfigureMockMvc
 @DBRider
