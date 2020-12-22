@@ -1,6 +1,7 @@
 image: maven:latest
 
 variables:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
   DOCKER_TLS_CERTDIR: ""
 
 services:
