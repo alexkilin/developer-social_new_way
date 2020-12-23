@@ -1,0 +1,12 @@
+friends:
+  - id: 5
+    user_id: 65
+    friend_id: 40
+
+  - id: 6
+    user_id: 65
+    friend_id: 50
+
+  - id: 7
+    user_id: 65
+    friend_id: 60

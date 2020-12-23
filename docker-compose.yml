@@ -1,0 +1,29 @@
+version: '3'
+services:
+  db:
+    container_name: dev_social
+    ports:
+      - 5432:5432
+    environment:
+      TZ: 'UTC'
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: dev_social
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+  app:
+    build: .
+    container_name: dev_app
+    ports:
+      - 5557:5557
+    environment:
+      POSTGRES_HOST: db
+    restart: always
+    links:
+      - db
+#  runner:
+#    image: gitlab/gitlab-runner:alpine
+#    container_name: runner
+#    links:
+#      - app
+#    ports:
+#      - 8989:8989
