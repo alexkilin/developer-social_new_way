@@ -80,7 +80,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение всего аудио постранично")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Аудио получено", responseContainer = "List", response = AudioDto.class)})
+            @ApiResponse(code = 200, message = "Аудио получено", responseContainer = "List", response = PageDto.class)})
     @GetMapping(params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AudioDto, ?>> getPartAudios(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                               @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
@@ -94,7 +94,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение аудио по автору")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Аудио по автору получено", response = AudioDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Аудио по автору получено", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/author/{author}", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AudioDto, ?>> getAudioOfAuthor(@ApiParam(value = "Имя исполнителя", example = "Blur") @PathVariable @NotNull String author,
                                                                  @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
@@ -111,7 +111,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение аудио по названию")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Аудио по названию получено", response = AudioDto.class)})
+            @ApiResponse(code = 200, message = "Аудио по названию получено", response = PageDto.class)})
     @GetMapping(value = "/name/{name}", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AudioDto, ?>> getAudioOfName(@ApiParam(value = "Название аудио", example = "Song2") @PathVariable @NotNull String name,
                                                                @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
@@ -127,7 +127,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение аудио по альбому")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Аудио по альбому получено", response = AudioDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Аудио по альбому получено", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/album/{album}", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AudioDto, ?>> getAudioOfAlbum(@ApiParam(value = "Название альбома", example = "The best") @PathVariable @NotNull String album,
                                                                 @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
@@ -143,7 +143,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя постранично")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Аудио из коллекции пользователя постранично", responseContainer = "List", response = AudioDto.class)})
+            @ApiResponse(code = 200, message = "Аудио из коллекции пользователя постранично", responseContainer = "List", response = PageDto.class)})
     @GetMapping(value = "/user/{userId}", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AudioDto, ?>> getPartAudioOfUser(
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
@@ -160,7 +160,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя по автору")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Аудио из коллекции пользователя по автору", response = AudioDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Аудио из коллекции пользователя по автору", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/user/{userId}/author", params = {"author", "currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AudioDto, ?>> getAuthorAudioOfUser(@ApiParam(value = "Имя исполнителя", example = "Blur") @RequestParam("author") String author,
                                                                      @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,
@@ -177,7 +177,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение аудио из коллекции пользователя по альбому")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Аудио из коллекции пользователя по альбому", response = AudioDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Аудио из коллекции пользователя по альбому", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/user/{userId}/album", params = {"album", "currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AudioDto, ?>> getAlbumAudioOfUser(@ApiParam(value = "Название альбома", example = "My Album") @RequestParam("album") String album,
                                                                     @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,
@@ -228,7 +228,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение всех альбомов пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Альбомы успешно получены", response = AlbumDto.class, responseContainer = "List"),
+            @ApiResponse(code = 200, message = "Альбомы успешно получены", response = PageDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Альбомы не найдены")
     })
     @GetMapping(value = "/user/{userId}/album", params = {"currentPage", "itemsOnPage"})
@@ -287,7 +287,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Получение всех аудио из альбома")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Аудио из альбома получено", response = AudioDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Аудио из альбома получено", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/albums/{albumId}/audio", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<AudioDto, ?>> getFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7") @PathVariable @NotNull Long albumId,
                                                                    @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,

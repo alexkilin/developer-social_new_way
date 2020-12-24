@@ -51,11 +51,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                 httpServletResponse.setStatus(401);
                 httpServletResponse.getWriter().print("You have invalid token");
+                return;
 
             } catch (ExpiredJwtException e) {
-//                jwtUtil.logout();
-//                httpServletResponse.setStatus(401);
-//                httpServletResponse.getWriter().print("Your token has expired, please login again");
+                httpServletResponse.setStatus(401);
+                httpServletResponse.getWriter().print("Your token has expired, please login again");
+                return;
             }
         }
 
