@@ -173,7 +173,7 @@ public class PostControllerV2 {
     public ResponseEntity<PostDto> addPost(
             @ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostCreateDto postCreateDto) {
         Post post = postConverter.toEntity(postCreateDto);
-        postService.create(post);
+        postService.create(post);//TODO
         return ResponseEntity.ok().body(postConverter.toDto(post));
     }
 
@@ -245,9 +245,9 @@ public class PostControllerV2 {
 
         Post post = Post.builder().id(postId).build();
         PostLike postLike = new PostLike(user);
-        likeService.create(postLike.getLike());
+        likeService.update(postLike.getLike());//TODO было create
         postLike.setPost(post);
-        postLikeService.create(postLike);
+        postLikeService.update(postLike);//TODO тоже
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId, user.getUserId()));
     }
