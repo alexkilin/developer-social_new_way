@@ -88,7 +88,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Получение списка всех постов")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PostDto.class)})
+            @ApiResponse(code = 200, message = "Посты получены", responseContainer = "List", response = PageDto.class)})
     @GetMapping(value = "/posts", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<PostDto, ?>> getAllPosts(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
@@ -102,7 +102,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Получение поста по тэгу")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Посты получены", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/posts", params = {"tag", "currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<PostDto, ?>> getPostsByTag(
             @ApiParam(value = "Название тэга", example = "Some tag") @RequestParam("tag") String tagText,
@@ -119,7 +119,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Получение постов данного пользователя по его группам и всем постам друзей отсортированной по дате публикации")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Посты получены", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/posts/friends/groups", params = { "currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<PostDto, ?>> getPostsByAllFriendsAndGroups(
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
@@ -135,7 +135,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Получение всех существующих тегов")
     @ApiResponses(value =  {
-            @ApiResponse(code = 200, message = "Теги получены", responseContainer = "List", response = TagDto.class)})
+            @ApiResponse(code = 200, message = "Теги получены", responseContainer = "List", response = PageDto.class)})
     @GetMapping(value = "/posts/tags", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<Object, Object>> getAllTags(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                               @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
@@ -148,7 +148,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Получение списка постов пользователя по его ID")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты получены", response = PostDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Посты получены", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/posts/user/{id}", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<PostDto, ?>> getPostsByUserId(
             @ApiParam(value = "ID пользователя", example = "60") @PathVariable("id") Long userId,
@@ -173,7 +173,7 @@ public class PostControllerV2 {
     public ResponseEntity<PostDto> addPost(
             @ApiParam(value = "Объект добавляемого поста") @RequestBody @Valid @NotNull PostCreateDto postCreateDto) {
         Post post = postConverter.toEntity(postCreateDto);
-        postService.create(post);//TODO
+        postService.create(post);
         return ResponseEntity.ok().body(postConverter.toDto(post));
     }
 
@@ -197,7 +197,7 @@ public class PostControllerV2 {
     @ApiOperation(value = "Получение всех комментариев поста по id поста")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Комментарии получены", responseContainer = "List",
-                    response = CommentDto.class)})
+                    response = PageDto.class)})
     @GetMapping(value = "/post/{postId}/comments", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<Object, Object>> showPostComments(
             @ApiParam(value = "ID поста", example = "20") @PathVariable("postId") Long postId,
@@ -245,9 +245,9 @@ public class PostControllerV2 {
 
         Post post = Post.builder().id(postId).build();
         PostLike postLike = new PostLike(user);
-        likeService.update(postLike.getLike());//TODO было create
+        likeService.create(postLike.getLike());
         postLike.setPost(post);
-        postLikeService.update(postLike);//TODO тоже
+        postLikeService.create(postLike);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postDtoService.getPostById(postId, user.getUserId()));
     }
@@ -329,7 +329,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Получение закладок авторизованного пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Все посты получены")
+            @ApiResponse(code = 200, message = "Все посты получены", response = PageDto.class)
     })
     @GetMapping(value = "/posts/bookmarks", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity <PageDto<PostDto, ?>> getAllBookmarkedPosts(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
@@ -344,7 +344,7 @@ public class PostControllerV2 {
 
     @ApiOperation(value = "Получение всех постов по теме")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Все посты получены")
+            @ApiResponse(code = 200, message = "Все посты получены", response = PageDto.class)
     })
     @GetMapping(value = "/posts/topic", params = {"currentPage", "itemsOnPage", "topic"})
     public ResponseEntity <PageDto<PostDto, ?>> getAllPostsByTopic(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,

@@ -73,7 +73,7 @@ public class UserControllerV2 {
 
     @ApiOperation(value = "Получение списка пользователей")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Список пользователей получен", responseContainer = "List", response = UserDto.class)
+            @ApiResponse(code = 200, message = "Список пользователей получен", responseContainer = "List", response = PageDto.class)
     })
     @GetMapping(params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<Object, Object>> getAllUsers(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,

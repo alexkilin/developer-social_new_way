@@ -48,7 +48,7 @@ public class GroupControllerV2 {
 
     @ApiOperation(value = "Получение информации обо всех группах")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Инфа обо всех группах получена", responseContainer = "List", response = GroupInfoDto.class),
+            @ApiResponse(code = 200, message = "Инфа обо всех группах получена", responseContainer = "List", response = PageDto.class),
             @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)
     })
     @GetMapping(params = {"currentPage", "itemsOnPage"})
@@ -79,7 +79,7 @@ public class GroupControllerV2 {
 
     @ApiOperation(value = "Получение всех постов группы по id группы")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Посты группы получены", responseContainer = "List", response = GroupWallDto.class)
+            @ApiResponse(code = 200, message = "Посты группы получены", responseContainer = "List", response = PageDto.class)
     })
     @GetMapping(value = "/{groupId}/posts", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<GroupWallDto, Object>> showGroupWall(@ApiParam(value = "Идентификатор группы", example = "1")
