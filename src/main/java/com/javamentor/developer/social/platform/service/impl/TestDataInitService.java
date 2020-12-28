@@ -21,6 +21,7 @@ import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.post.Tag;
 import com.javamentor.developer.social.platform.models.entity.post.Topic;
 import com.javamentor.developer.social.platform.models.entity.post.UserTabs;
+import com.javamentor.developer.social.platform.models.entity.token.VerificationToken;
 import com.javamentor.developer.social.platform.models.entity.user.*;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumImageService;
@@ -45,9 +46,11 @@ import com.javamentor.developer.social.platform.service.abstracts.model.post.Boo
 import com.javamentor.developer.social.platform.service.abstracts.model.post.TagService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.TopicService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
+import com.javamentor.developer.social.platform.service.abstracts.model.token.VerificationTokenService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.FollowerService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.FriendService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.service.abstracts.util.VerificationEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,6 +102,7 @@ public class TestDataInitService {
     private final Topic[] topics = new Topic[numOfTopics];
 
     private final UserService userService;
+    private final VerificationTokenService verificationTokenService;
     private final FollowerService followerService;
     private final FriendService friendService;
     private final AlbumService albumService;
@@ -128,6 +132,7 @@ public class TestDataInitService {
 
     @Autowired
     public TestDataInitService(UserService userService,
+                               VerificationTokenService verificationTokenService,
                                FollowerService followerService,
                                FriendService friendService,
                                AlbumService albumService,
@@ -154,6 +159,7 @@ public class TestDataInitService {
                                PlaylistService playlistService,
                                TopicService topicService) {
         this.userService = userService;
+        this.verificationTokenService = verificationTokenService;
         this.followerService = followerService;
         this.friendService = friendService;
         this.albumService = albumService;
@@ -290,6 +296,9 @@ public class TestDataInitService {
                     .status(statusTest)
                     .build();
             userService.create(users[i]);
+            verificationTokenService.create(
+                    VerificationToken.TokenGenerator.getFor(users[i])
+            );
         }
     }
 
