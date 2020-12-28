@@ -45,7 +45,7 @@ public class AdviceController  extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(VerificationEmailException.class)
-    protected ResponseEntity<Object> emailCreationException(RuntimeException runtimeException, WebRequest webRequest) {
+    protected ResponseEntity<Object> emailDeliveryException(RuntimeException runtimeException, WebRequest webRequest) {
         return exceptionHandlerResponse(runtimeException, webRequest, INTERNAL_SERVER_ERROR);
     }
 
@@ -69,7 +69,7 @@ public class AdviceController  extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> exceptionHandlerResponse(RuntimeException runtimeException, WebRequest webRequest, HttpStatus status) {
         logger.info(runtimeException.fillInStackTrace().toString());
-        String[] body = runtimeException.getMessage().split(":");
+        String[] body = runtimeException.getMessage().split(": ");
         return handleExceptionInternal(runtimeException, body[body.length - 1].trim(), new HttpHeaders(), status, webRequest);
     }
 }
