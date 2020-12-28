@@ -4,7 +4,6 @@ import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import lombok.*;
-import org.apache.logging.log4j.util.Strings;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -74,9 +73,10 @@ public class User implements UserDetails {
     private LocalDateTime lastRedactionDate;
 
 
+    @Getter(AccessLevel.NONE)
     @Column(name = "is_enable")
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    private Boolean isEnable = true;
+    private Boolean isEnable = false;
 
     @Column(name = "city")
     private String city;
@@ -147,6 +147,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnable;
     }
 }
