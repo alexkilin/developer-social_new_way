@@ -7,17 +7,23 @@ import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.users.UserRegisterDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
+import com.javamentor.developer.social.platform.models.entity.token.VerificationToken;
 import com.javamentor.developer.social.platform.security.util.SecurityHelper;
+import com.javamentor.developer.social.platform.service.abstracts.model.token.VerificationTokenService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -53,17 +59,17 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     private UserService userService;
 
     @Autowired
+    private VerificationTokenService verificationTokenService;
+
+    @Autowired
     private SecurityHelper securityHelper;
 
     private final Gson gson = new Gson();
 
-
-
     @Test
     void createUser() throws Exception {
-
         UserRegisterDto userDto = UserRegisterDto.builder()
-                .email("admin@admin.ru")
+                .email("jm.platform.noreply@gmail.com")
                 .password("AdminPwd123")
                 .firstName("AdminFirstName")
                 .lastName("AdminLastName")
@@ -74,7 +80,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(userDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("admin@admin.ru"))
+                .andExpect(jsonPath("$.email").value("jm.platform.noreply@gmail.com"))
                 .andExpect(jsonPath("$.password").isNotEmpty())
                 .andExpect(jsonPath("$.firstName").value("AdminFirstName"))
                 .andExpect(jsonPath("$.lastName").value("AdminLastName"))
@@ -82,13 +88,80 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.roleName").value("USER"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
+        Assert.assertFalse("Проверка аттрибута подтверждения почты нового пользователя",
+                userService.getByEmail("jm.platform.noreply@gmail.com").get().isEnabled());
+
+        Long userId = userService.getByEmail("jm.platform.noreply@gmail.com").get().getUserId();
+        String token = verificationTokenService.getById(userId).get().getValue();
+        LocalDateTime expirationDate = verificationTokenService.getById(userId).get().getExpirationDateTime();
+
+        userDto.setLastName("NewAdminLastName");
+        mockMvc.perform(post(apiUrl + "/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(userDto)))
+                .andDo(print())
+                .andExpect(status().is(230))
+                .andExpect(jsonPath("$.email").value("jm.platform.noreply@gmail.com"))
+                .andExpect(jsonPath("$.password").isNotEmpty())
+                .andExpect(jsonPath("$.firstName").value("AdminFirstName"))
+                .andExpect(jsonPath("$.lastName").value("NewAdminLastName"))
+                .andExpect(jsonPath("$.activeName").value("ACTIVE"))
+                .andExpect(jsonPath("$.roleName").value("USER"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        String newToken = verificationTokenService.getById(userId).get().getValue();
+        Assert.assertNotEquals("Проверка неравенства значений проверочного кода до и после повторного запроса на регистрацию", token, newToken);
+
+        VerificationToken vToken = verificationTokenService.getById(userId).get();
+        LocalDateTime newExpirationDate = vToken.getExpirationDateTime();
+        Assert.assertTrue("Проверка обновления даты истечения срока подтверждения регистрации", newExpirationDate.isAfter(expirationDate));
+
+        vToken.setExpirationDateTime(LocalDateTime.now());
+        verificationTokenService.update(vToken);
+
+        mockMvc.perform(post(apiUrl + "/verifyemail")
+                .contentType(MediaType.TEXT_PLAIN)
+                .content(newToken)
+                .with(anonymous()))
+                .andDo(print())
+                .andExpect(status().is(HttpStatus.REQUEST_TIMEOUT.value()))
+                .andExpect(content().string("User 'jm.platform.noreply@gmail.com' registration code is outdated"));
+
+        vToken.setExpirationDateTime(newExpirationDate);
+        verificationTokenService.update(vToken);
+
+        mockMvc.perform(post(apiUrl + "/verifyemail")
+                .contentType(MediaType.TEXT_PLAIN)
+                .content(newToken)
+                .with(anonymous()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("jm.platform.noreply@gmail.com"))
+                .andExpect(jsonPath("$.password").isNotEmpty())
+                .andExpect(jsonPath("$.firstName").value("AdminFirstName"))
+                .andExpect(jsonPath("$.lastName").value("NewAdminLastName"))
+                .andExpect(jsonPath("$.activeName").value("ACTIVE"))
+                .andExpect(jsonPath("$.roleName").value("USER"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        Assert.assertTrue("Проверка аттрибута подтверждения почты нового пользователя после подтвеждения",
+                userService.getByEmail("jm.platform.noreply@gmail.com").get().isEnabled());
+
+        mockMvc.perform(post(apiUrl + "/verifyemail")
+                .contentType(MediaType.TEXT_PLAIN)
+                .content(newToken)
+                .with(anonymous()))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(String.format("Erroneous verification code parameter: '%s', no record found", newToken)));
+
         mockMvc.perform(post(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(
-                        "User with email: admin@admin.ru already exist. Email should be unique"));
+                        "User with email: jm.platform.noreply@gmail.com already registered. Email should be unique"));
     }
 
     @Test
