@@ -28,8 +28,8 @@ public class VideoDtoServiceImpl extends PaginationServiceImpl<VideoDto, Object>
     }
 
     @Override
-    public VideoDto getVideoOfName(String name) {
-        return videoDtoDao.getVideoOfName(name).orElseThrow(() -> new IllegalArgumentException("Invalid parameters"));
+    public PageDto<VideoDto, Object> getVideoOfNamePart(Map<String, Object> parameters) {
+        return super.getPageDto("getVideoOfNamePart", parameters);
     }
 
     @Override

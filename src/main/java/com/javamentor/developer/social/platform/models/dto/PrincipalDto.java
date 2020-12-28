@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class PrincipalDto {
 
+    private Long id;
     private String email;
     private String name;
     private String surname;
