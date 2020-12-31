@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.security.oAuth;
 
 import com.javamentor.developer.social.platform.models.entity.user.Active;
 import com.javamentor.developer.social.platform.models.entity.user.Provider;
+import com.javamentor.developer.social.platform.models.entity.user.Role;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.ActiveService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.RoleService;
@@ -10,11 +11,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
-import com.javamentor.developer.social.platform.models.entity.user.Role;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -118,9 +117,21 @@ public class OauthUserInfoExtractorService {
 
     }
 
+    /**
+     * Если кому-то в будущем будет интересно - что это за уродливый метод.
+     * Была необходимость инстанцировать зависимые сущности Role и Active.
+     * Так как на этапе инициализации контекста вместо необходимых бинов
+     * связанных сервисов подсовываются прокси и при попытке инстанцирования
+     * в блоке инициализации падает с ошибкой обращаясь к сервису-пустышке -
+     * пришлось ввести специальный метод.
+     * Вызывается перед сборкой нового юзера и первым дело проверяет,
+     * инстанцированно ли одно из полей (так как бин сервиса живет,
+     * пока живет приложение - достаточно единожды определить поля при первом вызове), почему одно, -
+     * потому что не существует возможности, когда одно поле будет определено, а другое нет.
+     */
     protected void instantiateRoleAndActive() {
 
-        if(role != null /*& active != null*/) {
+        if(role != null) {
             return;
         }
         Optional<Active> tempActive = activeService.getByActiveName("ACTIVE");
