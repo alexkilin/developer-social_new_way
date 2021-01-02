@@ -6,7 +6,7 @@ groups:
     link_site: "www.groupsite0.ru"
     name: "JAVA IS 0"
     persist_date: "2020-08-13 11:46:35.493000"
-    group_category_id: 1
+    group_category_id: 128
     owner_id: 60
 
   - id: 2
@@ -16,7 +16,7 @@ groups:
     link_site: "www.groupsite1.ru"
     name: "JAVA IS 1"
     persist_date: "2020-08-13 11:46:35.493000"
-    group_category_id: 1
+    group_category_id: 128
     owner_id: 20
 
   - id: 3
@@ -26,7 +26,7 @@ groups:
     link_site: "www.groupsite2.ru"
     name: "JAVA IS 2"
     persist_date: "2020-08-13 11:46:35.493000"
-    group_category_id: 2
+    group_category_id: 136
     owner_id: 30
 
   - id: 4
@@ -36,7 +36,7 @@ groups:
     link_site: "www.groupsite3.ru"
     name: "JAVA IS 3"
     persist_date: "2020-08-13 11:46:35.493000"
-    group_category_id: 1
+    group_category_id: 128
     owner_id: 40
 
   - id: 5
@@ -46,5 +46,5 @@ groups:
     link_site: "www.groupsite4.ru"
     name: "JAVA IS 4"
     persist_date: "2020-08-13 11:46:35.493000"
-    group_category_id: 2
+    group_category_id: 136
     owner_id: 50

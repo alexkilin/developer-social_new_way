@@ -9,10 +9,13 @@ import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswo
 import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
 import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
@@ -24,19 +27,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')",
-        "Insert into role(id, name) values(1, 'USER')",
+        "Insert into active(id, name) values(3, 'test')" ,
+        "Insert into role(id, name) values(1, 'USER')" ,
 
         "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-        "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
+                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)" ,
 })
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
-        "datasets/restv2/user/language.yml",
-        "datasets/restv2/user/user_languages.yml",
-        "datasets/restv2/user/Active.yml",
-        "datasets/restv2/user/role.yml",
-        "datasets/restv2/user/userFriends.yml",
+        "datasets/restv2/user/language.yml" ,
+        "datasets/restv2/user/user_languages.yml" ,
+        "datasets/restv2/user/Active.yml" ,
+        "datasets/restv2/user/role.yml" ,
+        "datasets/restv2/user/userFriends.yml" ,
         "datasets/restv2/user/user.yml"
 }, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 public class UserControllerV2Tests extends AbstractIntegrationTest {
@@ -57,6 +60,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     private final Gson gson = new Gson();
 
+    protected final Log logger = LogFactory.getLog(getClass());
 
 
     @Test
@@ -126,15 +130,15 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().string("Password changed for user 2"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        Assert.assertTrue("Сравнение с паролем в базе, подтверждение изменения",
-                passwordEncoder.matches(pwd, userService.getById(2L).get().getPassword()));
+        Assert.assertTrue("Сравнение с паролем в базе, подтверждение изменения" ,
+                passwordEncoder.matches(pwd , userService.getById(2L).get().getPassword()));
     }
 
     @Test
     void getUsers() throws Exception {
         mockMvc.perform(get(apiUrl + "/")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "5"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -201,7 +205,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     void getUserById() throws Exception {
-        mockMvc.perform(get(apiUrl + "/{userId}", 2L))
+        mockMvc.perform(get(apiUrl + "/{userId}" , 2L))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -221,7 +225,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.status").value("Pureness and perfection"))
                 .andExpect(jsonPath("$.activeName").value("ACTIVE"));
 
-        mockMvc.perform(get(apiUrl + "/{userId}", 222L))
+        mockMvc.perform(get(apiUrl + "/{userId}" , 222L))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -230,17 +234,17 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     void getFriendsOfUserById() throws Exception {
-        mockMvc.perform(get(apiUrl + "/{userId}/friends", 2L)
-                .param("currentPage", "1")
-                .param("itemsOnPage", "5"))
+        mockMvc.perform(get(apiUrl + "/{userId}/friends" , 2L)
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4));
 
-        mockMvc.perform(get(apiUrl + "/{userId}/friends", 222L)
-                .param("currentPage", "1")
-                .param("itemsOnPage", "5"))
+        mockMvc.perform(get(apiUrl + "/{userId}/friends" , 222L)
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -250,9 +254,9 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     @Test
     void GetAllUsersWithFilters() throws Exception {
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("education", "Harvard"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("education" , "Harvard"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -260,41 +264,77 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items[0].firstName").value("Admin0"));
 
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("city", "SPb"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("city" , "SPb"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4));
 
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("city", "SPb")
-                .param("profession", "Creator"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("city" , "SPb")
+                .param("profession" , "Creator"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
 
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("startDateOfBirth", "1990-05-30")
-                .param("endDateOfBirth", "2012-03-30"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("startDateOfBirth" , "1990-05-30")
+                .param("endDateOfBirth" , "2012-03-30"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4));
 
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("endDateOfBirth", "2003-12-30"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("endDateOfBirth" , "2003-12-30"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2));
+    }
+
+    /**
+     * Корректный тест который не будет работать -
+     * так как у нас родительская сущность у юзера это Friend
+     * Нельзя удалить Юзера так как его хранит таблица Friends.
+     * А вот удаляемый Friend по логике утянет за собой двух Юзеров,
+     * Ведь у него еще и каскад - All.
+     */
+
+    @Test
+    void deleteUserById() throws Exception {
+
+        MockHttpServletResponse response =
+                mockMvc.perform(delete(String.format("%s/%d",apiUrl , 6)))
+                        .andExpect(status().isOk())
+                        .andReturn()
+                        .getResponse();
+
+        logger.info("\n\nРЕЗУЛЬТАТЫ КОРРЕКТНОГО ЗАПРОСА НА УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ: " +
+                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
+                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+    }
+
+    @Test
+    void deleteUserByIdWrongId() throws Exception {
+
+        MockHttpServletResponse response =
+                mockMvc.perform(delete(String.format("%s/%d",apiUrl , 100500)))
+                        .andExpect(status().isNotFound())
+                        .andReturn()
+                        .getResponse();
+
+        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ(НЕСУЩЕСТВУЮЩИЙ ID): " +
+                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
+                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
     }
 }

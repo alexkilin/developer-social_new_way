@@ -264,7 +264,11 @@ public class GroupControllerV2 {
                     .body(String.format("Category with name \"%s\" already exist"
                             , groupCategory.getCategory()));
         }
-        return ResponseEntity.ok(groupCategoryDto);
+        GroupCategoryDto createdCategory = groupCategoryDtoService
+                .getByCategory(groupCategoryDto.getCategory())
+                .get();
+
+        return ResponseEntity.ok(createdCategory);
     }
 
     @ApiOperation(value = "Получение списка всех категорий")
@@ -308,7 +312,7 @@ public class GroupControllerV2 {
         Optional<GroupCategoryDto> byCategory = groupCategoryDtoService.getByCategory(category);
 
         if(!byCategory.isPresent()) {
-            return ResponseEntity.badRequest().body(String.format("There is no such category named \"%s\""
+            return ResponseEntity.badRequest().body(String.format("No category named \"%s\""
                     , category));
         }
         Map<String, Object> parameters = new HashMap<>();
@@ -318,7 +322,7 @@ public class GroupControllerV2 {
         PageDto<Object, Object> groupsByCategory = groupDtoService.getGroupsByCategory(parameters);
         if(groupsByCategory.getItems().isEmpty()) {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)
-                    .body("such an emptiness, looks like nothing was found");
+                    .body(String.format("There are no groups containing category named \"%s\"",category));
         }
 
         return ResponseEntity.ok(groupsByCategory);
