@@ -1,10 +1,10 @@
 playlist_has_audios:
 - playlist_id: 100
-  audios_id: 50
-- playlist_id: 100
   audios_id: 20
 - playlist_id: 100
   audios_id: 30
+- playlist_id: 100
+  audios_id: 50
 
 - playlist_id: 110
   audios_id: 20

@@ -86,7 +86,7 @@ public class User implements UserDetails {
 
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Role.class, cascade = {CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Role.class)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -94,7 +94,7 @@ public class User implements UserDetails {
     private String status;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Active.class, cascade = {CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Active.class)
     @JoinColumn(name = "active_id", nullable = false)
     private Active active;
 

@@ -21,11 +21,11 @@ public class GroupHasUser {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Group group;
 
     @Column(name = "persist_date", nullable = false)

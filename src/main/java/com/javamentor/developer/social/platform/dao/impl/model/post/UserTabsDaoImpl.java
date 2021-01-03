@@ -22,7 +22,8 @@ public class UserTabsDaoImpl extends GenericDaoAbstract<UserTabs, Long> implemen
 
     @Override
     public void deletePost(Post post) {
-
-        entityManager.remove(post);
+        // Post is in detached state, must be in managed
+        Post managedPost = entityManager.find(Post.class, post.getId());
+        entityManager.remove(managedPost);
     }
 }

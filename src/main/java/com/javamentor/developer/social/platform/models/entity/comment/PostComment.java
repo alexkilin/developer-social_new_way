@@ -22,10 +22,9 @@ public class PostComment {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId
     private Comment comment = new Comment(CommentType.POST);
 

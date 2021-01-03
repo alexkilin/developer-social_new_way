@@ -263,7 +263,7 @@ public class AudiosControllerV2 {
         Set<Audios> audiosSet = albumAudios.getAudios();
         audiosSet.add(audiosOptional.get());
         albumAudios.setAudios(audiosSet);
-        albumAudioService.create(albumAudios);
+        albumAudioService.update(albumAudios);
         return ResponseEntity.ok().body(String.format("Audio id %s added to album id %s", audioId, albumId));
     }
 

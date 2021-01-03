@@ -10,6 +10,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

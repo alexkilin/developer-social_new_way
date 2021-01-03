@@ -35,7 +35,7 @@ public class GroupChat {
     @CreationTimestamp
     private LocalDateTime persistDate;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, mappedBy = "groupChats", cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, mappedBy = "groupChats")
     private Set<User> users;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST},targetEntity = Message.class)

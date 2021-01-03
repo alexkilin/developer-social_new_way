@@ -169,7 +169,7 @@ public class VideosControllerV2 {
         Set<Videos> videosSet = albumVideo.getVideos();
         videosSet.add(videosOptional.get());
         albumVideo.setVideos(videosSet);
-        albumVideoService.create(albumVideo);
+        albumVideoService.update(albumVideo);
         logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
         return ResponseEntity.ok().body(String.format("Video id %s added to album id %s", videoId, albumId));
     }
