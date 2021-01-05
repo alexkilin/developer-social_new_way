@@ -56,36 +56,60 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getChatsByChatName() throws Exception {
 
-        mockMvc.perform(post(apiUrl + "/user/chats")
-                .contentType(MediaType.TEXT_PLAIN_VALUE)
-                .content("Admin"))
+        mockMvc.perform(get(apiUrl + "/user/chats")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("search", "Admin"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].title").value("Admin0 LastNameUser0"));
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].title").value("Admin0 LastNameUser0"));
 
-        mockMvc.perform(post(apiUrl + "/user/chats")
-                .contentType(MediaType.TEXT_PLAIN_VALUE)
-                .content("wwwww"))
+        mockMvc.perform(get(apiUrl + "/user/chats")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("search", "wwwww"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Invalid pagination parameters. Parameter 'currentPage' value [1] is greater than total number of available pages [0] considering parameter 'itemsOnPage' value [10]"));
 
-        mockMvc.perform(post(apiUrl + "/user/chats")
-                .contentType(MediaType.TEXT_PLAIN_VALUE)
-                .content("adm lastName"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].title").value("Admin0 LastNameUser0"));
 
-        mockMvc.perform(post(apiUrl + "/user/chats")
-                .contentType(MediaType.TEXT_PLAIN_VALUE)
-                .content("group"))
+        mockMvc.perform(get(apiUrl + "/user/chats")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("search", "adm lastName"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].title").value("Group chat #1"));
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].title").value("Admin0 LastNameUser0"));
+
+        mockMvc.perform(get(apiUrl + "/user/chats")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10")
+                .param("search", "group"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].title").value("Group chat #1"));
+
+        mockMvc.perform(get(apiUrl + "/user/chats")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "3")
+                .param("search", ""))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(3))
+                .andExpect(jsonPath("$.items[1].title").value("Admin60 LastNameUser60"))
+                .andExpect(jsonPath("$.items[2].title").value("Group chat #1"));
+
+        mockMvc.perform(get(apiUrl + "/user/chats")
+                .param("currentPage", "2")
+                .param("itemsOnPage", "3")
+                .param("search", ""))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].title").value("Group chat #2"));
     }
 
     @Test

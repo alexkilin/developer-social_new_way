@@ -1,8 +1,11 @@
 package com.javamentor.developer.social.platform.service.abstracts.dto.chat;
 
+import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ChatDtoService {
 
@@ -10,5 +13,5 @@ public interface ChatDtoService {
 
     ChatDto getChatDtoByGroupChatId(Long chatId);
 
-    List<ChatDto> getChatDtoByChatName(Long userId, String search);
+    PageDto<ChatDto, Object> getChatDtoByChatName(Map<String, Object> parameters);
 }
