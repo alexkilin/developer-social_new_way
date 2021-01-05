@@ -63,7 +63,7 @@ public class VideosControllerV2 {
 
     @ApiOperation(value = "Получение некоторого количества видео")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Несколько видео получено", responseContainer = "List", response = VideoDto.class)})
+            @ApiResponse(code = 200, message = "Несколько видео получено", responseContainer = "List", response = PageDto.class)})
     @GetMapping(params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<VideoDto, ?>> getPartVideos(@ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
                                                               @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
@@ -76,7 +76,7 @@ public class VideosControllerV2 {
 
     @ApiOperation(value = "Получение видео по совпадению в названии по частям")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Часть видео по совпадению в названии получено", responseContainer = "List", response = VideoDto.class)})
+            @ApiResponse(code = 200, message = "Часть видео по совпадению в названии получено", responseContainer = "List", response = PageDto.class)})
     @GetMapping(value = "/name", params = {"namePart", "currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<VideoDto, ?>> getVideoOfNamePart(
             @ApiParam(value = "Название видео", example = "Test video 3") @RequestParam @NotNull String namePart,
@@ -95,7 +95,7 @@ public class VideosControllerV2 {
 
     @ApiOperation(value = "Получение видео из коллекции пользователя по частям")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Видео из коллекции пользователя по частям", responseContainer = "List", response = VideoDto.class)})
+            @ApiResponse(code = 200, message = "Видео из коллекции пользователя по частям", responseContainer = "List", response = PageDto.class)})
     @GetMapping(value = "/user/{userId}/video", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<VideoDto, ?>> getPartVideoOfUser(
             @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
@@ -176,7 +176,7 @@ public class VideosControllerV2 {
 
     @ApiOperation(value = "Получение всех альбомов пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Альбомы успешно получены", response = AlbumDto.class, responseContainer = "List"),
+            @ApiResponse(code = 200, message = "Альбомы успешно получены", response = PageDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Альбомы не найдены")
     })
     @GetMapping(value = "/user/{userId}/album", params = {"currentPage", "itemsOnPage"})
@@ -194,7 +194,7 @@ public class VideosControllerV2 {
 
     @ApiOperation(value = "Получение всех видео из альбома ")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "видео из альбома пользователя успешно получено", response = VideoDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "видео из альбома пользователя успешно получено", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/album/{albumId}/video", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<VideoDto, ?>> getVideoFromAlbumOfUser(@ApiParam(value = "Id альбома", example = "7") @PathVariable @NotNull Long albumId,
                                                                         @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
@@ -210,7 +210,7 @@ public class VideosControllerV2 {
 
     @ApiOperation(value = "Получение видео пользователя по альбому")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Видео из коллекции пользователя по альбому", response = VideoDto.class, responseContainer = "List")})
+            @ApiResponse(code = 200, message = "Видео из коллекции пользователя по альбому", response = PageDto.class, responseContainer = "List")})
     @GetMapping(value = "/user/{userId}/video", params = {"album", "currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<VideoDto, ?>> getAlbumVideoOfUser(@ApiParam(value = "Название альбома", example = "My Album") @RequestParam("album") String album,
                                                                     @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId,

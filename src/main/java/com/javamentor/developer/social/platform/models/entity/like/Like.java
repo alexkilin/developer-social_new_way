@@ -28,7 +28,7 @@ public class Like {
     private LikeType likeType;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class, cascade = {CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "user_id")
     private User user;
 
