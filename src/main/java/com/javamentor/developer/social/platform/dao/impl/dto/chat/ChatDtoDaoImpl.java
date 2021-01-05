@@ -71,48 +71,6 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 .getSingleResult();
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<ChatDto> getChatDtoByChatName(Long userId, String search) {
-        ChatDtoDaoImpl.userId = userId;
-        List<ChatDto> chatDtoList = (List<ChatDto>) em.createQuery("select " +
-                "(select max(me) from SingleChat si  join si.messages me where si.id=single.id)," +
-                " single.userOne.userId," +
-                "single.userTwo.userId," +
-                "single.userOne.firstName," +
-                "single.userOne.lastName," +
-                "single.userOne.avatar," +
-                "single.userOne.active.name," +
-                "single.userTwo.firstName," +
-                "single.userTwo.lastName," +
-                "single.userTwo.avatar," +
-                "single.userTwo.active.name, " +
-                "single.id " +
-                "from SingleChat single " +
-                "WHERE (single.userOne.userId=:id OR single.userTwo.userId=:id) and " +
-                "((concat(lower(single.userTwo.firstName),' ', lower(single.userTwo.lastName)) LIKE lower(:search)) or " +
-                "(concat(lower(single.userTwo.lastName),' ', lower(single.userTwo.firstName)) LIKE lower(:search)))")
-                .setParameter("id", userId)
-                .setParameter("search", search)
-                .unwrap(Query.class)
-                .setResultTransformer(new ChatDtoResultTransformer())
-                .getResultList();
-        chatDtoList.addAll((List<ChatDto>) em.createQuery("select " +
-                "(select max(me) from GroupChat si join si.messages me where si.id=groupchats.id), " +
-                "groupchats.image," +
-                "groupchats.title," +
-                "groupchats.id " +
-                "from User user join user.groupChats groupchats where user.userId=:id and (lower(groupchats.title) LIKE lower(:search) or lower(groupchats.title) LIKE lower(:searchMiddle))")
-                .setParameter("id", userId)
-                .setParameter("search", search)
-                .setParameter("searchMiddle", "% " + search)
-                .unwrap(Query.class)
-                .setResultTransformer(new GroupChatDtoResultTransformer())
-                .getResultList());
-
-        return chatDtoList;
-    }
-
     private static class ChatDtoResultTransformer implements ResultTransformer {
         @Override
         public Object transformTuple(Object[] objects, String[] strings) {
