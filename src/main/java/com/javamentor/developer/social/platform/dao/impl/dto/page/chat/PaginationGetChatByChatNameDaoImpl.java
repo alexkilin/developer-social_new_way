@@ -54,8 +54,9 @@ public class PaginationGetChatByChatNameDaoImpl implements PaginationDao<ChatDto
                 .getResultList();
 
         if (chatDtoList.size() < itemsOnPage) {
-            int itemsOnLastPageSingleChat = getCountItemsOnLastPageSingleChat(chatDtoList.size(), parameters);
-            int singlePage = getCountSinglePage(parameters);
+            Long countSingleChat = getCountSingleChat(parameters);
+            int itemsOnLastPageSingleChat = getCountItemsOnLastPageSingleChat(chatDtoList.size(), itemsOnPage, countSingleChat);
+            int singlePage = (int) (countSingleChat / itemsOnPage);
 
             chatDtoList.addAll((List<ChatDto>) em.createQuery("select " +
                     "(select max(me) from GroupChat si join si.messages me where si.id=groupchats.id), " +
@@ -77,14 +78,7 @@ public class PaginationGetChatByChatNameDaoImpl implements PaginationDao<ChatDto
 
     @Override
     public Long getCount(Map<String, Object> parameters) {
-        Long countSingleChat = em.createQuery(
-               "select COUNT(single) from SingleChat single " +
-                       "WHERE (single.userOne.userId=:id OR single.userTwo.userId=:id) and " +
-                       "((concat(lower(single.userTwo.firstName),' ', lower(single.userTwo.lastName)) LIKE lower(:search)) or " +
-                       "(concat(lower(single.userTwo.lastName),' ', lower(single.userTwo.firstName)) LIKE lower(:search)))", Long.class)
-               .setParameter("id", parameters.get("userPrincipalId"))
-               .setParameter("search", parameters.get("search"))
-               .getSingleResult();
+        Long countSingleChat = getCountSingleChat(parameters);
 
         Long countGroupChat = em.createQuery(
                 "select COUNT(user) from User user join user.groupChats groupchats " +
@@ -150,13 +144,10 @@ public class PaginationGetChatByChatNameDaoImpl implements PaginationDao<ChatDto
 
     }
 
-    private int getCountItemsOnLastPageSingleChat (int singleChatOnPage, Map<String, Object> parameters) {
-        int itemsOnPage = (int) parameters.get("itemsOnPage");
+    private int getCountItemsOnLastPageSingleChat (int singleChatOnPage, int itemsOnPage, Long countSingleChat) {
         int itemsOnLastPageSingleChat = 0;
 
         if (singleChatOnPage == 0) {
-            Long countSingleChat = getCountSingleChat(parameters);
-
             if (countSingleChat < itemsOnPage) {
                 itemsOnLastPageSingleChat = countSingleChat.intValue();
             } else {
@@ -165,13 +156,6 @@ public class PaginationGetChatByChatNameDaoImpl implements PaginationDao<ChatDto
         }
 
         return itemsOnLastPageSingleChat;
-    }
-
-    private int getCountSinglePage (Map<String, Object> parameters) {
-        Long countSingleChat = getCountSingleChat(parameters);
-        int itemsOnPage = (int) parameters.get("itemsOnPage");
-
-        return (int) (countSingleChat / itemsOnPage);
     }
 
     private Long getCountSingleChat (Map<String, Object> parameters) {
