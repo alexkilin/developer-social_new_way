@@ -168,6 +168,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
      */
 
     @Test
+/*    @DataSet(cleanBefore = true, cleanAfter = true)*/
     public void createSingleChat() throws Exception {
         ChatDto chatDto = ChatDto.builder()
                 .image("MyImage")

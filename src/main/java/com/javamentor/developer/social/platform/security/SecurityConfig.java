@@ -54,6 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     private OauthUserInfoExtractorService externalUserExtractorService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -99,10 +101,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .allowedMethods("*");
     }
 
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
 
     @Bean
@@ -156,7 +154,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         tokenServices.setRestTemplate(template);
         filter.setTokenServices(tokenServices);
         tokenServices.setUserService(userService);
-        tokenServices.setPasswordEncoder(getPasswordEncoder());
+        tokenServices.setPasswordEncoder(passwordEncoder);
         tokenServices.setExternalUserExtractorService(externalUserExtractorService);
         return filter;
     }
