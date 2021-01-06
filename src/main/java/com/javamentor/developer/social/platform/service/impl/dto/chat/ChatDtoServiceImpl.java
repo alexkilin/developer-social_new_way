@@ -40,6 +40,6 @@ public class ChatDtoServiceImpl extends ChatPaginationService<Object, Object> im
     public PageDto<ChatDto, Object> getChatDtoByChatName(Map<String, Object> parameters) {
         String search = (String) parameters.get("search");
         parameters.put("search", search.trim().replaceAll("\\s+"," ").replace(" ", "% ")+"%");
-        return (PageDto<ChatDto, Object>) super.getChatPageDto("getChatDtoByChatName", parameters);
+        return (PageDto<ChatDto, Object>) super.getChatPageDto("getSingleChatDtoByChatName", "getGroupChatDtoByChatName", parameters);
     }
 }
