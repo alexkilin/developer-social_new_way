@@ -7,7 +7,7 @@ variables:
 
 services:
   - postgres:12.2-alpine
-  - pull_policy: if-not-present
+pull_policy: if-not-present
 
 variables:
   POSTGRES_DB: postgres
