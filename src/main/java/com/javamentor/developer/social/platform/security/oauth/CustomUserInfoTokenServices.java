@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.security.oAuth;
+package com.javamentor.developer.social.platform.security.oauth;
 
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.apache.commons.logging.Log;
@@ -95,15 +95,7 @@ public class CustomUserInfoTokenServices implements ResourceServerTokenServices 
             throw new InvalidTokenException(accessToken);
         }
 
-        if(userInfoEndpointUrl.contains("google")) {
-
-            externalUserExtractorService.extractGoogleUser(map);
-
-        } else if(userInfoEndpointUrl.contains("vk")) {
-
-            externalUserExtractorService.extractVkUser(map , this.restTemplate);
-
-        }
+        externalUserExtractorService.getUser(map);
         return extractAuthentication(map);
     }
 

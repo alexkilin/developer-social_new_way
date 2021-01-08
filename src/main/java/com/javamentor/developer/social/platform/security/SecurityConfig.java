@@ -1,7 +1,7 @@
 package com.javamentor.developer.social.platform.security;
 
-import com.javamentor.developer.social.platform.security.oAuth.CustomUserInfoTokenServices;
-import com.javamentor.developer.social.platform.security.oAuth.OauthUserInfoExtractorService;
+import com.javamentor.developer.social.platform.security.oauth.CustomUserInfoTokenServices;
+import com.javamentor.developer.social.platform.security.oauth.OauthUserInfoExtractorService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +19,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -27,6 +27,7 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilt
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.CompositeFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -49,8 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Autowired
     private OAuth2ClientContext oAuth2ClientContext;
     @Autowired
-    private AuthenticationProvider authProvider;
-    @Autowired
     private OauthUserInfoExtractorService externalUserExtractorService;
     @Autowired
     private UserService userService;
@@ -71,6 +70,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers("/actuator/**" , "/v2/**" , "/mypath/**" , "/swagger.yml" , "/anypath/").permitAll()
                 .antMatchers("/auth/principal" , "/logout/**").authenticated()
                 .antMatchers("/api/v2/**").hasAnyAuthority("USER" , "ADMIN")
+                .and()
+                .logout().logoutSuccessHandler(( new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK) ))
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .deleteCookies("Authorization")
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterAfter(jwtRequestFilter , UsernamePasswordAuthenticationFilter.class);
@@ -91,7 +95,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Override
     public void configure( AuthenticationManagerBuilder auth ) throws Exception {
         auth.userDetailsService(userDetailsService);
-        auth.authenticationProvider(authProvider);
     }
 
     @Override
@@ -100,7 +103,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .allowedOrigins("*")
                 .allowedMethods("*");
     }
-
 
 
     @Bean

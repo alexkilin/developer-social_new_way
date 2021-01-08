@@ -19,9 +19,9 @@ public abstract class GroupCategoryConverter {
         this.groupCategoryService = groupCategoryService;
     }
 
-    @Mapping(source = "category", target = "category")
+    @Mapping(source = "name", target = "category")
     public abstract GroupCategory toEntity( GroupCategoryDto groupCategoryDto);
 
-    @Mapping(source = "category", target = "category")
+    @Mapping(source = "category", target = "name")
     public abstract GroupCategoryDto toDto(GroupCategory groupCategory);
 }

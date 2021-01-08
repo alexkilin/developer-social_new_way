@@ -153,22 +153,6 @@ public class UserControllerV2 {
                 .body(String.format("Password changed for user %d", id));
     }
 
-    @ApiOperation(value = "Удаление пользователя по id")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Пользователь удален", response = String.class),
-            @ApiResponse(code = 404, message = "Пользователя с данным id нет в базе данных", response = String.class)
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUserById(@ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable @NonNull Long id) {
-        if (userService.existById(id)) {
-            userService.deleteById(id);
-            logger.info(String.format("Пользователь с ID: %d удалён успешно ", id));
-            return ResponseEntity.ok(String.format("User with ID: %d deleted", id));
-        }
-        logger.info(String.format("Пользователь с ID: %d не удалён", id));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", id));
-    }
-
     @ApiOperation(value = "Получение списка друзей пользователя по id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список друзей пользователя получен", responseContainer = "List", response = UserFriendDto.class),

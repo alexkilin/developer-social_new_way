@@ -33,10 +33,6 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long userId;
 
-    @Enumerated(EnumType.STRING)
-    private Provider provider;
-
-    private String externalId;
     @NotNull
     private String firstName;
 

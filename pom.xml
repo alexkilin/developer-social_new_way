@@ -33,7 +33,12 @@
             <version>2.0.0.RELEASE</version>
         </dependency>
 
-
+        <!-- библиотека для генерации пароля -->
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.6.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>

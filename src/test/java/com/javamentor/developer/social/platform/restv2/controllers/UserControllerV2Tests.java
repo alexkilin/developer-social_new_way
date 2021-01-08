@@ -60,8 +60,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     private final Gson gson = new Gson();
 
-    protected final Log logger = LogFactory.getLog(getClass());
-
 
     @Test
     void createUser() throws Exception {
@@ -302,39 +300,4 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items.length()").value(2));
     }
 
-    /**
-     * Корректный тест который не будет работать -
-     * так как у нас родительская сущность у юзера это Friend
-     * Нельзя удалить Юзера так как его хранит таблица Friends.
-     * А вот удаляемый Friend по логике утянет за собой двух Юзеров,
-     * Ведь у него еще и каскад - All.
-     */
-
-    @Test
-    void deleteUserById() throws Exception {
-
-        MockHttpServletResponse response =
-                mockMvc.perform(delete(String.format("%s/%d",apiUrl , 6)))
-                        .andExpect(status().isOk())
-                        .andReturn()
-                        .getResponse();
-
-        logger.info("\n\nРЕЗУЛЬТАТЫ КОРРЕКТНОГО ЗАПРОСА НА УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ: " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
-    }
-
-    @Test
-    void deleteUserByIdWrongId() throws Exception {
-
-        MockHttpServletResponse response =
-                mockMvc.perform(delete(String.format("%s/%d",apiUrl , 100500)))
-                        .andExpect(status().isNotFound())
-                        .andReturn()
-                        .getResponse();
-
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ(НЕСУЩЕСТВУЮЩИЙ ID): " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
-    }
 }

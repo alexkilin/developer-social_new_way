@@ -3,8 +3,16 @@ package com.javamentor.developer.social.platform.restv2.controllers;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
+import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupCategoryDtoDao;
+import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
 import com.javamentor.developer.social.platform.models.dto.group.GroupCategoryDto;
+import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
+import com.javamentor.developer.social.platform.models.dto.group.GroupHasUserInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupUpdateInfoDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
+import com.javamentor.developer.social.platform.service.abstracts.dto.GroupCategoryDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
+import liquibase.database.core.MockDatabase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
@@ -17,6 +25,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -49,9 +66,13 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private final String apiUrl = "/api/v2/groups";
+    @Autowired
+    private GroupCategoryDtoService groupCategoryDtoService;
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    @Autowired
+    private GroupDtoService groupDtoService;
+
+    private final String apiUrl = "/api/v2/groups";
 
     private final Gson gson = new Gson();
 
@@ -184,15 +205,15 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
         int groupId = 4;
         String userId = "40";
         MockHttpServletResponse response =
-                mockMvc.perform(get(String.format("%s%s%d%s" , apiUrl , "/" , groupId , "/users"))
+                mockMvc.perform(get(apiUrl + "/" + groupId + "/users")
                         .param("userId" , userId))
                         .andExpect(status().isOk())
                         .andReturn()
                         .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ КОРРЕКТНОГО ЗАПРОСА НА НАЛИЧИЕ ПОЛЬЗОВАТЕЛЯ В ГРУППЕ: " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+        assertNotNull(response.getContentAsString());
+        GroupHasUserInfoDto responseContent = gson.fromJson(response.getContentAsString() , GroupHasUserInfoDto.class);
+        assertTrue(responseContent.isGroupHasUser());
 
 
     }
@@ -203,16 +224,14 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
         int groupId = 4;
         String userId = "100500";
         MockHttpServletResponse response =
-                mockMvc.perform(get(String.format("%s%s%d%s" , apiUrl , "/" , groupId , "/users"))
+                mockMvc.perform(get(apiUrl + "/" + groupId + "/users")
                         .param("userId" , userId))
                         .andExpect(status().isBadRequest())
                         .andReturn()
                         .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА НАЛИЧИЕ ПОЛЬЗОВАТЕЛЯ В ГРУППЕ(WRONG USER OR GROUP ID): " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
-
+        String correctResponse = "User with id: 100500 or/and group with id: 4 not found";
+        assertEquals(correctResponse , response.getContentAsString());
 
     }
 
@@ -220,7 +239,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void updateGroup() throws Exception {
         GroupUpdateInfoDto groupUpdateInfoDto =
                 GroupUpdateInfoDto.builder()
-                        .id(4l)
+                        .id(4L)
                         .groupCategory("Programming")
                         .linkSite("TEST.SITE/NAME")
                         .name("TEST GROUP NAME")
@@ -233,9 +252,15 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ КОРРЕКТНОГО ЗАПРОСА НА ОБНОВЛЕНИЕ ГРУППЫ: " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+
+        GroupDto checkDB = groupDtoService.getGroupById(4L).get();
+        assertEquals(checkDB.getName(), groupUpdateInfoDto.getName());
+
+        assertNotNull(response.getContentAsString());
+        GroupUpdateInfoDto responseContent = gson.fromJson(response.getContentAsString() , GroupUpdateInfoDto.class);
+
+        assertEquals(groupUpdateInfoDto , responseContent);
+
 
     }
 
@@ -243,7 +268,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void updateGroupWrongGroupId() throws Exception {
         GroupUpdateInfoDto groupUpdateInfoDto =
                 GroupUpdateInfoDto.builder()
-                        .id(100500l)
+                        .id(100500L)
                         .groupCategory("Programming")
                         .linkSite("TEST.SITE/NAME")
                         .name("TEST GROUP NAME")
@@ -256,15 +281,16 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА ОБНОВЛЕНИЕ ГРУППЫ(WRONG GROUP ID): " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+        String correctResponse = "Group with id 100500 not found";
+        assertEquals(correctResponse , response.getContentAsString());
+
 
     }
+
     @Test
-    void addGroupCategory() throws Exception{
+    void addGroupCategory() throws Exception {
         GroupCategoryDto groupCategoryDto = GroupCategoryDto.builder()
-                .category("TEST CATEGORY")
+                .name("TEST CATEGORY")
                 .build();
 
         MockHttpServletResponse response = mockMvc.perform(post(apiUrl + "/groupCategory/add")
@@ -274,15 +300,22 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ КОРРЕКТНОГО ЗАПРОСА НА ДОБАВЛЕНИЕ КАТЕГОРИИ: " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+        assertNotNull(response.getContentAsString());
+        GroupCategoryDto responseContent = gson.fromJson(response.getContentAsString() , GroupCategoryDto.class);
+
+
+        Optional<GroupCategoryDto> checkDB = groupCategoryDtoService.getGroupCategoryByName("TEST CATEGORY");
+        assertTrue(checkDB.isPresent());
+
+        assertEquals(checkDB.get(), responseContent);
+
+
     }
 
     @Test
-    void addGroupCategoryExistingCategory() throws Exception{
+    void addGroupCategoryExistingCategory() throws Exception {
         GroupCategoryDto groupCategoryDto = GroupCategoryDto.builder()
-                .category("Programming")
+                .name("Programming")
                 .build();
 
         MockHttpServletResponse response = mockMvc.perform(post(apiUrl + "/groupCategory/add")
@@ -292,29 +325,19 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА ДОБАВЛЕНИЕ СУЩЕСТВУЮЩЕЙ КАТЕГОРИИ: " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+        String correctResponse = "Category with name \"Programming\" already exist";
+        assertEquals(correctResponse , response.getContentAsString());
+
     }
 
-    @Test
-    void getAllCategoriesAsList() throws Exception{
-        MockHttpServletResponse response = mockMvc.perform(get(apiUrl + "/groupCategory/all/asList"))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse();
-
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА ПОЛУЧЕНИЕ ВСЕХ КАТЕГОРИЙ(СПИСОК): " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
-    }
 
     @Test
-    void getAllCategoriesPagination() throws Exception{
+    void getAllCategoriesPagination() throws Exception {
 
-        MultiValueMap<String, String> pageArguments = new LinkedMultiValueMap<>();
-        pageArguments.add("currentPage", "1");
-        pageArguments.add("itemsOnPage", "15");
+        MultiValueMap<String, String> pageArguments = new LinkedMultiValueMap<String, String>() {{
+            add("currentPage" , "1");
+            add("itemsOnPage" , "15");
+        }};
 
         MockHttpServletResponse response = mockMvc.perform(get(apiUrl + "/groupCategory/all/pageable")
                 .params(pageArguments))
@@ -322,18 +345,28 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse();
 
+        assertNotNull(response.getContentAsString());
+        PageDto responseContent = gson.fromJson(response.getContentAsString() , PageDto.class);
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА ПОЛУЧЕНИЕ ВСЕХ КАТЕГОРИЙ(ПАГИНАЦИЯ): " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+        Map<String, Object> parameters = new LinkedHashMap<String, Object>() {{
+            put("currentPage" , 1);
+            put("itemsOnPage" , 15);
+        }};
+
+        PageDto checkDB = groupCategoryDtoService.getAllCategories(parameters);
+
+        assertEquals(checkDB.getTotalResults() , responseContent.getTotalResults());
+
     }
-    @Test
-    void getGroupsByCategory() throws Exception{
 
-        MultiValueMap<String, String> pageArguments = new LinkedMultiValueMap<>();
-        pageArguments.add("category", "Programming");
-        pageArguments.add("currentPage", "1");
-        pageArguments.add("itemsOnPage", "15");
+    @Test
+    void getGroupsByCategory() throws Exception {
+
+        MultiValueMap<String, String> pageArguments = new LinkedMultiValueMap<String, String>() {{
+            add("category" , "Programming");
+            add("currentPage" , "1");
+            add("itemsOnPage" , "15");
+        }};
 
         MockHttpServletResponse response = mockMvc.perform(get(apiUrl + "/sort/byCategory")
                 .params(pageArguments))
@@ -341,28 +374,40 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ КОРРЕКТНОГО ЗАПРОСА НА ПОЛУЧЕНИЕ ГРУПП ПО КАТЕГОРИ(ПАГИНАЦИЯ): " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+        assertNotNull(response.getContentAsString());
+        PageDto responseContent = gson.fromJson(response.getContentAsString() , PageDto.class);
+
+        Map<String, Object> parameters = new LinkedHashMap<String, Object>() {{
+            put("category" , "Programming");
+            put("currentPage" , 1);
+            put("itemsOnPage" , 15);
+        }};
+
+        PageDto checkDB = groupDtoService.getGroupsByCategory(parameters);
+
+        assertEquals(checkDB.getTotalResults() , responseContent.getTotalResults());
+
     }
 
     @Test
-    void getGroupsByCategoryNoGroupsFound() throws Exception{
+    void getGroupsByCategoryNoGroupsFound() throws Exception {
 
         GroupCategoryDto groupCategoryDto = GroupCategoryDto.builder()
-                .category("TEST")
+                .name("TEST")
                 .build();
 
         mockMvc.perform(post(apiUrl + "/groupCategory/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(groupCategoryDto)));
 
+        Optional<GroupCategoryDto> test = groupCategoryDtoService.getGroupCategoryByName("TEST");
+        assertTrue(test.isPresent());
 
-
-        MultiValueMap<String, String> pageArguments = new LinkedMultiValueMap<>();
-        pageArguments.add("category", "TEST");
-        pageArguments.add("currentPage", "1");
-        pageArguments.add("itemsOnPage", "15");
+        MultiValueMap<String, String> pageArguments = new LinkedMultiValueMap<String, String>() {{
+            add("category" , "TEST");
+            add("currentPage" , "1");
+            add("itemsOnPage" , "15");
+        }};
 
         MockHttpServletResponse response = mockMvc.perform(get(apiUrl + "/sort/byCategory")
                 .params(pageArguments))
@@ -370,18 +415,19 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА ПОЛУЧЕНИЕ ГРУПП ПО КАТЕГОРИИ(ПО КАТЕГОРИИ НЕТ ГРУПП): " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+        String correctResponse = "There are no groups containing category named \"TEST\"";
+        assertEquals(correctResponse , response.getContentAsString());
+
     }
 
     @Test
-    void getGroupsByCategoryNotExist() throws Exception{
+    void getGroupsByCategoryNotExist() throws Exception {
 
-        MultiValueMap<String, String> pageArguments = new LinkedMultiValueMap<>();
-        pageArguments.add("category", "TEST");
-        pageArguments.add("currentPage", "1");
-        pageArguments.add("itemsOnPage", "15");
+        MultiValueMap<String, String> pageArguments = new LinkedMultiValueMap<String, String>() {{
+            add("category" , "TEST");
+            add("currentPage" , "1");
+            add("itemsOnPage" , "15");
+        }};
 
         MockHttpServletResponse response = mockMvc.perform(get(apiUrl + "/sort/byCategory")
                 .params(pageArguments))
@@ -389,9 +435,9 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА ПОЛУЧЕНИЕ ГРУПП ПО КАТЕГОРИИ(НЕСУЩЕСТВУЮЩАЯ КАТЕГОРИЯ): " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+        String correctResponse = "No category named \"TEST\"";
+        assertEquals(correctResponse , response.getContentAsString());
+
     }
 
 

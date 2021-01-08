@@ -7,7 +7,5 @@ import java.util.Optional;
 
 public interface GroupCategoryDtoDao {
 
-    List<GroupCategoryDto> getAllCategories();
-
-    Optional <GroupCategoryDto> getByCategory(String category);
+    Optional <GroupCategoryDto> getGroupCategoryByName( String category);
 }

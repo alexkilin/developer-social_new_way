@@ -8,11 +8,6 @@ import java.util.Optional;
 
 public interface GroupCategoryService extends GenericService<GroupCategory, Long> {
 
-    Optional<GroupCategory> getByCategory( String category );
+    Optional<GroupCategory> getGroupCategoryByName( String category );
 
-    boolean createCategory( GroupCategory category );
-
-    int deleteCategory( GroupCategory category );
-
-    List<GroupCategory> getAllCategories();
 }

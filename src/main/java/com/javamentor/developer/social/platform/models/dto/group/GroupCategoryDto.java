@@ -24,5 +24,5 @@ public class GroupCategoryDto {
 
     @NonNull
     @ApiModelProperty(notes = "Наименование категории группы. Не должно быть пустым.")
-    private String category;
+    private String name;
 }

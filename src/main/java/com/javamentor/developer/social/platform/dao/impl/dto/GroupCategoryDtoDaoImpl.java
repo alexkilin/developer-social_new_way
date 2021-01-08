@@ -19,30 +19,7 @@ public class GroupCategoryDtoDaoImpl implements GroupCategoryDtoDao {
     private EntityManager entityManager;
 
     @Override
-    public List<GroupCategoryDto> getAllCategories() {
-        return entityManager.createQuery("select c.id, c.category from GroupCategory c")
-                .unwrap(Query.class)
-                .setResultTransformer(new ResultTransformer() {
-
-                    @Override
-                    public Object transformTuple( Object[] objects , String[] strings ) {
-                        if(objects[0] != null && objects[1] != null) {
-                            return GroupCategoryDto.builder()
-                                    .id((Long) objects[0])
-                                    .category((String) objects[1])
-                                    .build();
-                        } else return null;
-                    }
-
-                    @Override
-                    public List transformList( List list ) {
-                        return list;
-                    }
-                }).getResultList();
-    }
-
-    @Override
-    public Optional<GroupCategoryDto> getByCategory( String category ) {
+    public Optional<GroupCategoryDto> getGroupCategoryByName( String category ) {
 
         Query<GroupCategoryDto> query = entityManager.createQuery(
                 "select c.id, c.category " +
@@ -57,7 +34,7 @@ public class GroupCategoryDtoDaoImpl implements GroupCategoryDtoDao {
                         if(objects[0] != null && objects[1] != null) {
                             return GroupCategoryDto.builder()
                                     .id((Long) objects[0])
-                                    .category((String) objects[1])
+                                    .name((String) objects[1])
                                     .build();
                         } else return null;
                     }

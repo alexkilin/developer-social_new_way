@@ -8,11 +8,6 @@ import java.util.Optional;
 
 public interface GroupCategoryDao extends GenericDao<GroupCategory, Long> {
 
-    Optional <GroupCategory> getByCategory(String category);
-
-    void createCategory(GroupCategory category);
-
-    int deleteCategory(GroupCategory category);
-
-    List<GroupCategory> getAllCategories();
+    Optional <GroupCategory> getGroupCategoryByName( String category);
+    
 }

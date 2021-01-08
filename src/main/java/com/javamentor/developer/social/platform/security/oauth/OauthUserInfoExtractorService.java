@@ -1,9 +1,9 @@
-package com.javamentor.developer.social.platform.security.oAuth;
+package com.javamentor.developer.social.platform.security.oauth;
 
 import com.javamentor.developer.social.platform.models.entity.user.Active;
-import com.javamentor.developer.social.platform.models.entity.user.Provider;
 import com.javamentor.developer.social.platform.models.entity.user.Role;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.security.util.PassayRandomPasswordGenerator;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.ActiveService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.RoleService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
@@ -29,20 +29,30 @@ public class OauthUserInfoExtractorService {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private PassayRandomPasswordGenerator passwordGenerator;
+
     protected final Log logger = LogFactory.getLog(getClass());
 
     private Role role;
 
     private Active active;
 
+    public void getUser( Map<String, Object> map ) {
+        if(map.containsKey("sub")) {
+            extractGoogleUser(map);
+        } else {
+            extractVkUser(map);
+        }
 
-    public void extractVkUser( Map<String, Object> map , OAuth2RestOperations restTemplate ) {
+    }
 
-        String email = (String) restTemplate
-                .getOAuth2ClientContext()
-                .getAccessToken()
-                .getAdditionalInformation()
-                .get("email");
+
+    public void extractVkUser( Map<String, Object> map ) {
+        ArrayList<Object> response = (ArrayList<Object>) map.get("response");
+        Map<String, Object> responseMap = (Map<String, Object>) response.get(0);
+
+        String email = (String) responseMap.get("id");
 
         Optional<User> externalUser = userService.getByEmail(email);
 
@@ -52,13 +62,11 @@ public class OauthUserInfoExtractorService {
 
         instantiateRoleAndActive();
 
-        ArrayList<Object> response = (ArrayList<Object>) map.get("response");
-        Map<String, Object> responseMap = (Map<String, Object>) response.get(0);
         String firstname = (String) responseMap.get("first_name");
         String lastName = (String) responseMap.get("last_name");
-        String id = String.valueOf(responseMap.get("id"));
         String avatar = (String) responseMap.get("photo_max");
         String noPhoto = "https://vk.com/images/camera_200.png";
+        String password = passwordGenerator.generatePassword();
 
         if(avatar.equals(noPhoto)) {
             avatar = null;
@@ -69,14 +77,12 @@ public class OauthUserInfoExtractorService {
                 .firstName(firstname)
                 .lastName(lastName)
                 .email(email)
-                .password("password")
+                .password(password)
                 .education(education)
                 .avatar(avatar)
                 .role(role)
                 .active(active)
                 .isEnable(true)
-                .externalId(id)
-                .provider(Provider.VK)
                 .build();
 
         userService.create(user);
@@ -84,7 +90,7 @@ public class OauthUserInfoExtractorService {
 
     public void extractGoogleUser( Map<String, Object> map ) {
 
-        String email = (String) map.get("email");
+        String email = (String) map.get("sub");
 
         Optional<User> externalUser = userService.getByEmail(email);
 
@@ -93,23 +99,19 @@ public class OauthUserInfoExtractorService {
         }
 
         instantiateRoleAndActive();
-
-        String id = (String) map.get("sub");
-        String googleName = (String) map.get("name");
         String name = (String) map.get("given_name");
         String lastName = (String) map.get("family_name");
         String avatar = (String) map.get("picture");
+        String password = passwordGenerator.generatePassword();
 
         User user = User.builder()
                 .firstName(name)
                 .lastName(lastName)
                 .email(email)
-                .password("password")
+                .password(password)
                 .role(role)
                 .active(active)
                 .isEnable(true)
-                .externalId(id)
-                .provider(Provider.GOOGLE)
                 .avatar(avatar)
                 .build();
 

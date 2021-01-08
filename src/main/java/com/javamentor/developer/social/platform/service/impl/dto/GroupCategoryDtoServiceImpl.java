@@ -18,14 +18,10 @@ public class GroupCategoryDtoServiceImpl extends PaginationServiceImpl<GroupCate
     @Autowired
     private GroupCategoryDtoDao groupCategoryDtoDao;
 
-    @Override
-    public List<GroupCategoryDto> getAllCategories() {
-        return groupCategoryDtoDao.getAllCategories();
-    }
 
     @Override
-    public Optional<GroupCategoryDto> getByCategory( String category ) {
-        return groupCategoryDtoDao.getByCategory(category);
+    public Optional<GroupCategoryDto> getGroupCategoryByName( String category ) {
+        return groupCategoryDtoDao.getGroupCategoryByName(category);
     }
 
     @Override

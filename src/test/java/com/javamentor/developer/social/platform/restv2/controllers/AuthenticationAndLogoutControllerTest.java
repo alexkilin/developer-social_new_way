@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.restv2.controllers;
 
 import com.google.gson.Gson;
+import com.javamentor.developer.social.platform.models.dto.PrincipalDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserAuthorizationDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.security.util.SecurityHelper;
@@ -14,6 +15,9 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -47,7 +51,6 @@ public class AuthenticationAndLogoutControllerTest extends AbstractIntegrationTe
 
     private final String apiUrl = "/auth";
 
-    protected final Log logger = LogFactory.getLog(getClass());
 
     @Test
     void createAuthenticationToken() throws Exception {
@@ -69,28 +72,13 @@ public class AuthenticationAndLogoutControllerTest extends AbstractIntegrationTe
 
         String responseJwt = response.getContentAsString();
 
-        boolean validateToken = securityHelper
-                .validateToken(responseJwt , currentUserDetails);
-
+        boolean validateToken = securityHelper.validateToken(responseJwt , currentUserDetails);
         assertTrue(validateToken);
-/**
- * Если покажется странным использование логов.
- * Они более удобочитаемы, чем andDo(print()).
- */
-
-
-        logger.info("\n\nРЕЗУЛЬТАТ КОРРЕКТНОГО ЗАПРОСА: "+
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ JWT: \n-> " + responseJwt + "\n" +
-                "РЕЗУЛЬТАТ ВАЛИДАЦИИ ТОКЕНА:\n-> " + validateToken);
 
     }
 
-    /**
-     * Для свагера не описано поведение контроллера при предоставлении неверных данных
-     */
     @Test
-    void createAuthenticationTokenWrongEmail() throws Exception{
+    void createAuthenticationTokenWrongEmail() throws Exception {
         UserAuthorizationDto invalidEmail = UserAuthorizationDto.builder()
                 .email("НЕСУЩЕСТВУЮЩИЙ")
                 .password("ПОЛЬЗОВАТЕЛЬ")
@@ -103,16 +91,13 @@ public class AuthenticationAndLogoutControllerTest extends AbstractIntegrationTe
                 .andReturn()
                 .getResponse();
 
-        String content = invalidEmailResponse.getContentAsString();
-        int status = invalidEmailResponse.getStatus();
-
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА ПОЛУЧЕНИЕ ТОКЕНА С НЕПРАВИЛЬНЫМ EMAIL: " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + status +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + content);
+        String correctResponse = "User with this email does not exist";
+        assertEquals(correctResponse, invalidEmailResponse.getContentAsString());
 
     }
+
     @Test
-    void createAuthenticationTokenWrongPassword() throws Exception{
+    void createAuthenticationTokenWrongPassword() throws Exception {
         UserAuthorizationDto invalidPassword = UserAuthorizationDto.builder()
                 .email("admin666@user.ru")
                 .password("НЕВЕРНЫЙ ПАРОЛЬ")
@@ -125,12 +110,8 @@ public class AuthenticationAndLogoutControllerTest extends AbstractIntegrationTe
                 .andReturn()
                 .getResponse();
 
-        String content = invalidPasswordResponse.getContentAsString();
-        int status = invalidPasswordResponse.getStatus();
-
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА ПОЛУЧЕНИЕ ТОКЕНА С НЕПРАВИЛЬНЫМ PASSWORD: " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + status +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + content);
+        String correctResponse = "Wrong password, try again";
+        assertEquals(correctResponse, invalidPasswordResponse.getContentAsString());
     }
 
 
@@ -143,42 +124,33 @@ public class AuthenticationAndLogoutControllerTest extends AbstractIntegrationTe
                 .andReturn()
                 .getResponse();
 
-        String responseContentAsString = response.getContentAsString();
+        assertNotNull(response.getContentAsString());
+        PrincipalDto responseContent = gson.fromJson(response.getContentAsString() , PrincipalDto.class);
 
-        assertTrue(responseContentAsString.contains("admin666@user.ru"));
+        System.out.println(response.getHeader("Authorization"));
+        assertEquals("admin666@user.ru" , responseContent.getEmail());
 
-        logger.info("\n\nРЕЗУЛЬТАТ ПОЛУЧЕНИЯ PRINCIPAL: "+
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + responseContentAsString);
     }
 
-    /**
-     * В данный момент доступ к контроллеру осуществляется по адресу "/logout/".
-     * Так как @RequestMapping у класса контроллера "/logout" - а маппинг метода - "/".
-     * Адрес "/logout" - predefined - зарезервирован Спрингом и так же существует и работает.
-     * Возвращает 3xx редирект на страничку "/login?logout".
-     * Если нужно предоставить возможность редиректа фронту, можно обойтись добавлением в конфиг -
-     * .and().logout().logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
-     * Последнее, что остается в этом контроллере - это вызов старог метода securityHelper.logout(),
-     * который делает - SecurityContextHolder.getContext().setAuthentication(null);
-     * Мертворожденный метод-велосипед.
-     * Его так же можно заменить добавив в конфиг -
-     * .and().logout().clearAuthentication(true).deleteCookies("Authorization")
-     * И от данного контроллера можно окончательно избавиться.
-     * Если так и задумывалось и обе странички нужны - то данное описание можно удалить.
-     * Хотя бы, если можно, давайте, пожалуйста, изменим метод с get на post.
-     */
+
     @Test
     @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
-    void makeLogout() throws Exception{
+    void makeLogout() throws Exception {
 
-        MockHttpServletResponse response = mockMvc.perform(get("/logout/"))
+        MockHttpServletResponse response = mockMvc.perform(post("/logout").header("Authorization", "Bearer "))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
 
-       logger.info("\n\nПОЛУЧЕННЫЙ СТАТУС ПРИ ПОПЫТКЕ LOGOUT: \n-> " +
-               response.getStatus());
+        assertNull(response.getHeader("Authorization"));
 
+        MockHttpServletResponse checkAccessIsForbidden = mockMvc.perform(get(apiUrl + "/principal"))
+                .andExpect(status().isForbidden())
+                .andReturn()
+                .getResponse();
+
+        String errorMessage = "Access Denied";
+        assertEquals(errorMessage, checkAccessIsForbidden.getErrorMessage());
     }
 
 }

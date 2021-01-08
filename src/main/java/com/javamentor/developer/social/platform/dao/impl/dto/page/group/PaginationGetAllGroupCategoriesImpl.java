@@ -32,7 +32,7 @@ public class PaginationGetAllGroupCategoriesImpl implements PaginationDao<GroupC
             public Object transformTuple( Object[] objects , String[] strings ) {
                 return GroupCategoryDto.builder()
                         .id((Long) objects[0])
-                        .category((String) objects[1])
+                        .name((String) objects[1])
                         .build();
             }
 

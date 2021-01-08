@@ -24,36 +24,8 @@ public class GroupCategoryServiceImpl extends GenericServiceAbstract<GroupCatego
 
     @Override
     @Transactional
-    public Optional<GroupCategory> getByCategory( String category ) {
-        return groupCategoryDao.getByCategory(category);
+    public Optional<GroupCategory> getGroupCategoryByName( String category ) {
+        return groupCategoryDao.getGroupCategoryByName(category);
     }
 
-    /**
-     * Можно было и void, но тогда не понять - сохранилась ли новая категория или уже была.
-     * О результате операции необходимо сообщить на фронт,
-     * а так как описывать любую сервисную логику в контроллере - дурной тон,
-     * мы возвращаем булевское значение и в зависимости от него - код состояния и сообщение.
-     */
-    @Transactional
-    public boolean createCategory( GroupCategory category ) {
-        String categoryName = category.getCategory();
-
-        Optional<GroupCategory> tempCategory = getByCategory(categoryName);
-        if(tempCategory.isPresent()) {
-            return false;
-        }
-        groupCategoryDao.createCategory(category);
-        return true;
-    }
-
-    @Transactional
-    public int deleteCategory( GroupCategory category ) {
-
-        return groupCategoryDao.deleteCategory(category);
-
-    }
-
-    public List<GroupCategory> getAllCategories() {
-        return groupCategoryDao.getAllCategories();
-    }
 }

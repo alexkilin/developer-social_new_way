@@ -18,28 +18,12 @@ public class GroupCategoryDaoImpl extends GenericDaoAbstract<GroupCategory, Long
     protected EntityManager entityManager;
 
     @Override
-    public Optional<GroupCategory> getByCategory( String category ) {
+    public Optional<GroupCategory> getGroupCategoryByName( String category ) {
         TypedQuery<GroupCategory> query = entityManager.createQuery(
                 "SELECT c FROM GroupCategory c " +
                         "WHERE c.category = :paramCategory" , GroupCategory.class)
                 .setParameter("paramCategory" , category);
         return SingleResultUtil.getSingleResultOrNull(query);
-    }
-
-    public void createCategory( GroupCategory category ) {
-        entityManager.persist(category);
-    }
-
-    public int deleteCategory(GroupCategory category){
-
-        return entityManager.createQuery("DELETE FROM GroupCategory c    " +
-                "where c.category =:paramCategory")
-                .setParameter("paramCategory", category.getCategory()).executeUpdate();
-    }
-
-
-    public List<GroupCategory> getAllCategories(){
-       return entityManager.createQuery("FROM GroupCategory", GroupCategory.class).getResultList();
     }
 
 }

@@ -9,9 +9,7 @@ import java.util.Optional;
 
 public interface GroupCategoryDtoService {
 
-    List<GroupCategoryDto> getAllCategories();
-
-    Optional<GroupCategoryDto> getByCategory( String category );
+    Optional<GroupCategoryDto> getGroupCategoryByName( String category );
 
     PageDto<GroupCategoryDto, Object> getAllCategories( Map<String, Object> parameters );
 

@@ -5,8 +5,13 @@ import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
+import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
+import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
+import com.javamentor.developer.social.platform.webapp.converters.SingleChatConverter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dbunit.Assertion;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,6 +21,16 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.AssertTrue;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,7 +60,11 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    @Autowired
+    private SingleChatConverter converter;
 
     Gson gson = new Gson();
 
@@ -171,8 +190,8 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 /*    @DataSet(cleanBefore = true, cleanAfter = true)*/
     public void createSingleChat() throws Exception {
         ChatDto chatDto = ChatDto.builder()
-                .image("MyImage")
-                .title("MyTitle")
+                .image("VeryUniqueImage")
+                .title("VeryUniqueTitle")
                 .build();
 
         int userId = 1;
@@ -185,15 +204,18 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                         .andReturn()
                         .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ КОРРЕКТНОГО ЗАПРОСА НА СОЗДАНИЕ ОДИНОЧНОГО ЧАТА: " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
-    }
+        assertNotNull(response.getContentAsString());
+        ChatDto responseContent = gson.fromJson(response.getContentAsString() , ChatDto.class);
+        assertEquals(chatDto.getTitle(), responseContent.getTitle());
 
-    /**
-     * В методе создания одиночного чата есть проверка на наличие Principal,
-     * Но она бесполезная, поэтому для нее тест не написан.
-     */
+        TypedQuery<SingleChat> query = entityManager.createQuery("select c from SingleChat c where c.title=:title" , SingleChat.class)
+                .setParameter("title" , chatDto.getTitle());
+        Optional<TypedQuery<SingleChat>> checkDB = Optional.of(query);
+
+        assertTrue(checkDB.isPresent());
+
+
+    }
 
 
     @Test
@@ -213,8 +235,8 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                         .andReturn()
                         .getResponse();
 
-        logger.info("\n\nРЕЗУЛЬТАТЫ ЗАПРОСА НА СОЗДАНИЕ ОДИНОЧНОГО ЧАТА С НЕСУЩЕСТВУЮЩИМ ПОЛЬЗОВАТЕЛЕМ(WRONG ID): " +
-                "\nСТАТУС ЗАПРОСА: \n-> " + response.getStatus() +
-                "\nПОЛУЧЕННЫЙ КОНТЕНТ: \n-> " + response.getContentAsString() + "\n\n");
+        String correctResponse = "User with id: 999999989 not found";
+        assertEquals(correctResponse, response.getContentAsString());
+
     }
 }
