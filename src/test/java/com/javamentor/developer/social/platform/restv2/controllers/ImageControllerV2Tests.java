@@ -5,6 +5,11 @@ import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageCreateDto;
+import com.javamentor.developer.social.platform.models.entity.album.Album;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
+import com.javamentor.developer.social.platform.models.entity.media.Audios;
+import com.javamentor.developer.social.platform.models.entity.media.Image;
 import com.javamentor.developer.social.platform.restv2.controllers.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,12 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityManager;
+
+
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,6 +51,8 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private EntityManager entityManager;
 
     private final Gson gson = new Gson();
 
@@ -47,7 +60,7 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void createImage() throws Exception {
         ImageCreateDto imageCreateDto = ImageCreateDto.builder()
-                .description("MyDescription")
+                .description("MyDescriptionTest")
                 .url("www.myURL.ru")
                 .userId(6l)
                 .build();
@@ -58,6 +71,11 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.url").value("www.myURL.ru"));
+
+        Image image = (Image) entityManager.createQuery("SELECT a from Image a where a.description like :description")
+                .setParameter("description", "MyDescriptionTest")
+                .getSingleResult();
+        assertEquals("MyDescriptionTest", image.getDescription());
     }
 
     @Test
@@ -102,10 +120,10 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
-    public void createAlbum() throws Exception {
+        public void createAlbum() throws Exception {
         AlbumCreateDto albumCreateDto = AlbumCreateDto.builder()
-                .icon("MyIcon")
-                .name("MyAlbumName")
+                .icon("MyIconTest")
+                .name("MyAlbumNameTest")
                 .userId(5l)
                 .build();
 
@@ -114,7 +132,13 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(albumCreateDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("MyAlbumName"));
+                .andExpect(jsonPath("$.name").value("MyAlbumNameTest"));
+
+        AlbumImage album = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a where a.album.icon like :icon")
+                .setParameter("icon", "MyIconTest")
+                .getSingleResult();
+        assertEquals("MyAlbumNameTest", album.getAlbum().getName());
+        assertEquals(com.javamentor.developer.social.platform.models.entity.media.MediaType.IMAGE, album.getAlbum().getMediaType());
     }
 
     @Test
@@ -133,11 +157,16 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addImageToAlbum() throws Exception {
-        mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", 32)
-                .param("id", "30"))
+        mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", 27)
+                .param("id", "20"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Image 30 added to album 32"));
+                .andExpect(content().string("Image 20 added to album 27"));
+
+        AlbumImage albumImage = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a where a.id = 27")
+                .getSingleResult();
+        Set<Image> imageSet = albumImage.getImages();
+        assertEquals(2, imageSet.size());
 
         mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", 32000)
                 .param("id", "30"))

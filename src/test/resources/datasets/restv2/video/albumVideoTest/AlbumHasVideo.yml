@@ -5,7 +5,7 @@ album_has_video:
   - album_id: 10
     videos_id: 20
 
-  - album_id: 20
+  - album_id: 200
     videos_id: 30
 
   - album_id: 30

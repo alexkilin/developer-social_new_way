@@ -2,12 +2,20 @@ package com.javamentor.developer.social.platform.restv2.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
+import com.javamentor.developer.social.platform.models.entity.group.Group;
+import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser;
+import com.javamentor.developer.social.platform.models.entity.media.Audios;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityManager;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -39,6 +47,8 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private EntityManager entityManager;
 
     @Test
     public void getAllGroups() throws Exception {
@@ -129,6 +139,16 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("User with id: 20 added to the group with id: 4"));
+
+        GroupHasUser groupHasUser = (GroupHasUser) entityManager.createQuery("SELECT u from GroupHasUser u where u.group.id= 4 and u.user.userId = 20")
+                .getSingleResult();
+        User user20 = groupHasUser.getUser();
+        assertEquals("Admin1", user20.getFirstName());
+
+        GroupHasUser groupHasUser2 = (GroupHasUser) entityManager.createQuery("SELECT u from GroupHasUser u where u.group.id= 4 and u.user.userId = 40")
+                .getSingleResult();
+        User user40 = groupHasUser2.getUser();
+        assertEquals("Admin3", user40.getFirstName());
     }
 
     @Test

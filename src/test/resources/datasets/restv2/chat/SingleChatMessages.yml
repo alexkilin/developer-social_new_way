@@ -1,25 +1,25 @@
 single_chat_messages:
-  - chat_id: 1
+  - chat_id: 10
     message_id: 1
 
-  - chat_id: 1
+  - chat_id: 10
     message_id: 2
 
-  - chat_id: 2
+  - chat_id: 20
     message_id: 3
 
-  - chat_id: 2
+  - chat_id: 20
     message_id: 4
 
-  - chat_id: 3
+  - chat_id: 30
     message_id: 5
 
-  - chat_id: 3
+  - chat_id: 30
     message_id: 6
 
-  - chat_id: 4
+  - chat_id: 40
     message_id: 7
 
-  - chat_id: 4
+  - chat_id: 40
     message_id: 12
 

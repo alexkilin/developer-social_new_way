@@ -1,27 +1,27 @@
 user_has_album:
-  - id: 10
+  - id: 110
     persist_date: "2020-08-07 23:35:34.817330"
     album_id: 10
     user_id: 2
 
-  - id: 20
+  - id: 120
     persist_date: "2020-08-07 23:35:34.817330"
-    album_id: 20
+    album_id: 200
     user_id: 2
 
-  - id: 30
+  - id: 130
     persist_date: "2020-08-07 23:35:34.817330"
     album_id: 30
     user_id: 3
 
-  - id: 40
+  - id: 140
     persist_date: "2020-08-07 23:35:34.817330"
     album_id: 10
     user_id: 3
 
-  - id: 50
+  - id: 150
     persist_date: "2020-08-07 23:35:34.817330"
-    album_id: 20
+    album_id: 200
     user_id: 2
 
   - id: 60
