@@ -174,8 +174,8 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "500"))
                 .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Audio id 500 not found"));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Audio with id 500 not found"));
     }
 
     @Test

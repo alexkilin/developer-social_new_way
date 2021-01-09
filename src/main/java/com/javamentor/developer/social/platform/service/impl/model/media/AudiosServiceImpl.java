@@ -28,6 +28,7 @@ public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> impl
     }
 
     @Override
+    @Transactional
     public void addAudioInCollectionsOfUser(User user, Long audioId) {
         Optional<Audios> audios = audiosDao.getById(audioId);
         if(!audios.isPresent()){
@@ -37,5 +38,11 @@ public class AudiosServiceImpl extends GenericServiceAbstract<Audios, Long> impl
         set.add(audios.get());
         user.setAudios(set);
         userService.update(user);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Audios> getByIdWithMedia(Long id) {
+        return audiosDao.getByIdWithMedia(id);
     }
 }

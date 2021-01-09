@@ -32,4 +32,10 @@ public class PlaylistServiceImpl extends GenericServiceAbstract<Playlist, Long> 
     public Optional<Playlist> getPlaylistByNameAndUserId (long userID, String playlistName) {
         return playlistDao.getPlaylistByNameAndUserId(userID, playlistName);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Playlist> getByIdWithContent(Long id) {
+        return playlistDao.getByIdWithContent(id);
+    }
 }

@@ -12,6 +12,8 @@ public interface UserDao extends GenericDao<User, Long> {
 
     Optional<User> getByEmail(String email);
 
+    Optional<User> getByEmailWithRole(String email);
+
     boolean existByEmail(String email);
 
     boolean existsAnotherByEmail(String email, Long userId);
@@ -20,4 +22,7 @@ public interface UserDao extends GenericDao<User, Long> {
 
     void updateInfo(User user);
 
+    Optional<User> getByIdWithAudios(Long id);
+
+    Optional<User> getByIdWithVideos(Long id);
 }

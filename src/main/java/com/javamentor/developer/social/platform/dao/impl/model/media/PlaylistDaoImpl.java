@@ -40,4 +40,15 @@ public class PlaylistDaoImpl extends GenericDaoAbstract<Playlist, Long> implemen
 
         return SingleResultUtil.getSingleResultOrNull(query);
     }
+
+    @Override
+    public Optional<Playlist> getByIdWithContent(Long id) {
+        TypedQuery<Playlist> query = entityManager.createQuery("SELECT p " +
+                        "FROM Playlist AS p " +
+                        "LEFT JOIN FETCH p.playlistContent AS c " +
+                        "LEFT JOIN FETCH c.media " +
+                        "WHERE p.id = :paramId", Playlist.class)
+                .setParameter("paramId", id);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
 }

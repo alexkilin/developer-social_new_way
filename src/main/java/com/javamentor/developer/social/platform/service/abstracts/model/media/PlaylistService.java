@@ -10,4 +10,6 @@ public interface PlaylistService extends GenericService<Playlist, Long> {
     boolean userHasPlaylist(Long userId, Long playlistId);
 
     Optional<Playlist> getPlaylistByNameAndUserId (long userID, String playlistName);
+
+    Optional<Playlist> getByIdWithContent(Long id);
 }

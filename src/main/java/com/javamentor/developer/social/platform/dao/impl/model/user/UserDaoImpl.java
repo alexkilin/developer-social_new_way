@@ -32,6 +32,16 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
     }
 
     @Override
+    public Optional<User> getByEmailWithRole(String email) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+                        "FROM User u " +
+                        "JOIN FETCH u.role " +
+                        "WHERE u.email = :email", User.class)
+                .setParameter("email", email);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
     public boolean existByEmail(String email) {
         Long count = entityManager.createQuery(
                 "SELECT COUNT(u) " +
@@ -86,6 +96,26 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
     }
 
     @Override
+    public Optional<User> getByIdWithAudios(Long id) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+                        "FROM User AS u " +
+                        "LEFT JOIN FETCH u.audios " +
+                        "WHERE u.userId = :paramId", User.class)
+                .setParameter("paramId", id);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
+    public Optional<User> getByIdWithVideos(Long id) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+                        "FROM User AS u " +
+                        "LEFT JOIN FETCH u.videos " +
+                        "WHERE u.userId = :paramId", User.class)
+                .setParameter("paramId", id);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
     public void updateUserPassword(User user) {
         Query query = entityManager.createQuery(
                 "UPDATE User u SET " +
@@ -95,5 +125,4 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
         query.setParameter("id", user.getUserId());
         query.executeUpdate();
     }
-
 }

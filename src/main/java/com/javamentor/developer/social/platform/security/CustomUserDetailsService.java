@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.security;
 
-import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        Optional<User> optionalUser= userService.getByEmail(userName);
+        Optional<User> optionalUser= userService.getByEmailWithRole(userName);
         if (!optionalUser.isPresent()) {
             throw new UsernameNotFoundException("Unknown user: " + userName);
         }
