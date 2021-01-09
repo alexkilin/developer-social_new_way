@@ -19,13 +19,7 @@ variables:
 stages:
   - clean
   - build
-  - audio
-  - chat
-  - group
-  - image
-  - post
-  - user
-  - videos  
+  - test 
 
 Clean project:
   stage: clean
@@ -36,45 +30,52 @@ Build project:
   script: mvn compile
 
 AudiosControllerV2Tests:
+  parallel: 1
   variables:
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true 
-  stage: audio
+  stage: test
   script: mvn test -Dtest=AudiosControllerV2Tests
 
 ChatControllerV2Tests:
+  parallel: 1
   variables:
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-  stage: chat
+  stage: test
   script: mvn test -Dtest=ChatControllerV2Tests
 
 GroupControllerV2Test:
+  parallel: 1
   variables:
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-  stage: group
+  stage: test
   script: mvn test -Dtest=GroupControllerV2Test  
 
 ImageControllerV2Tests:
+  parallel: 1
   variables:
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-  stage: image
+  stage: test
   script: mvn test -Dtest=ImageControllerV2Tests
 
 PostControllerV2Tests:
+  parallel: 1
   variables:
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-  stage: post
+  stage: test
   script: mvn test -Dtest=PostControllerV2Tests
 
 UserControllerV2Tests:
+  parallel: 1
   variables:
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-  stage: user
+  stage: test
   script: mvn test -Dtest=UserControllerV2Tests
 
 VideosControllerV2Tests:
+  parallel: 1
   variables:
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-  stage: videos
+  stage: test
   script: mvn test -Dtest=VideosControllerV2Tests   
 # image: maven:3.6.1-jdk-11
 
