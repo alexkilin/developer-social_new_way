@@ -10,7 +10,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
+/**
+ * Аннотация на замену @TestPropertySource.
+ * Если указать имя профиля @DefaultProfile(имя_профиля)
+ * - application-имя_профиля.properties - Будет использовать его.
+ * В противном случае используется профиль по умолчанию - test_local.
+ */
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

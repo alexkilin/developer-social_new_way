@@ -1,8 +1,8 @@
 single_chat_messages:
-  - chat_id: 1
+  - chat_id: 5
     message_id: 1
 
-  - chat_id: 1
+  - chat_id: 5
     message_id: 2
 
   - chat_id: 2
