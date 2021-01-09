@@ -6,7 +6,7 @@
 #      - 5432:5432
 #    environment:
 #      TZ: 'UTC'
-#      POSTGRES_PASSWORD: root
+#      POSTGRES_PASSWORD: 12345 #root
 #      POSTGRES_DB: dev_social
 #      PGDATA: /var/lib/postgresql/data/pgdata
 #    restart: always
@@ -27,3 +27,31 @@
 ##      - app
 ##    ports:
 ##      - 8989:8989
+
+version: '2'
+
+services:
+  app:
+    image: 'platform:latest'
+    ports:
+    - "5557:5557"
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dev_social
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+
+  db:
+    image: 'postgres:13.1-alpine'
+    ports:
+    - "5432:5432"
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=dev_social
