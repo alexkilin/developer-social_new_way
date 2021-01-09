@@ -24,7 +24,7 @@ stages:
   - group
   - image
   - post
-  - users
+  - user
   - videos  
 
 Clean project:
