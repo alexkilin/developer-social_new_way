@@ -39,7 +39,7 @@ public class AuthenticationController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public AuthenticationController( UserService userService , /*JwtUtil jwtUtil,*/ SecurityHelper securityHelper ) {
+    public AuthenticationController( UserService userService , SecurityHelper securityHelper ) {
         this.userService = userService;
         this.securityHelper = securityHelper;
     }
@@ -50,7 +50,7 @@ public class AuthenticationController {
             @ApiResponse(code = 200, message = "Principal получен", response = PrincipalDto.class)})
     @GetMapping("/principal")
     public ResponseEntity<?> getPrincipal() {
-        User user = securityHelper.getPrincipal();//securityHelper.getPrincipal();
+        User user = securityHelper.getPrincipal();
         logger.info(String.format("Principal получен"));
         return ResponseEntity.ok(
                 PrincipalDto.builder()

@@ -5,40 +5,53 @@ import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
-import com.javamentor.developer.social.platform.models.entity.album.Album;
-import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
+import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
+import com.javamentor.developer.social.platform.webapp.converters.SingleChatConverter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dbunit.Assertion;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.AssertTrue;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')",
-        "Insert into role(id, name) values(1, 'USER')",
+        "Insert into active(id, name) values(3, 'test')" ,
+        "Insert into role(id, name) values(1, 'USER')" ,
 
         "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
+                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)" ,
 })
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
-        "datasets/restv2/chat/messages/Messages.yml",
-        "datasets/restv2/chat/usersChatTest/Active.yml",
-        "datasets/restv2/chat/usersChatTest/Role.yml",
-        "datasets/restv2/chat/usersChatTest/User.yml",
-        "datasets/restv2/chat/GroupChat.yml",
-        "datasets/restv2/chat/GroupChatsMessages.yml",
-        "datasets/restv2/chat/SingleChat.yml",
-        "datasets/restv2/chat/SingleChatMessages.yml",
+        "datasets/restv2/chat/messages/Messages.yml" ,
+        "datasets/restv2/chat/usersChatTest/Active.yml" ,
+        "datasets/restv2/chat/usersChatTest/Role.yml" ,
+        "datasets/restv2/chat/usersChatTest/User.yml" ,
+        "datasets/restv2/chat/GroupChat.yml" ,
+        "datasets/restv2/chat/GroupChatsMessages.yml" ,
+        "datasets/restv2/chat/SingleChat.yml" ,
+        "datasets/restv2/chat/SingleChatMessages.yml" ,
         "datasets/restv2/chat/UsersGroupChats.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
@@ -46,34 +59,38 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
     @Autowired
-    private EntityManager entityManager;
+    private SingleChatConverter converter;
 
     Gson gson = new Gson();
 
     @Test
     public void getChatsDto() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/chats", 5))
+        mockMvc.perform(get(apiUrl + "/user/{userId}/chats" , 5))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(40))
+                .andExpect(jsonPath("$[0].id").value(4))
                 .andExpect(jsonPath("$[1].title").value("Group chat #1"));
     }
 
     @Test
     public void getAllMessageDtoByGroupChatId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages", 10)
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10"))
+        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 10)
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(6))
                 .andExpect(jsonPath("$.items[0].message").value("Test init message1"));
 
-        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages", 4)
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10"))
+        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 4)
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Chat id 4 not found"));
@@ -81,21 +98,21 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getAllMessageDtoBySingleChatId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages", 10)
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10"))
+        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages" , 1)
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2))
                 .andExpect(jsonPath("$.items[0].message").value("Test init message1"))
                 .andExpect(jsonPath("$.items[1].userSenderImage").value("www.myavatar1.ru/9090"));
 
-        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages", 400)
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10"))
+        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages" , 40)
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Chat id 400 not found"));
+                .andExpect(content().string("Chat id 40 not found"));
     }
 
     @Test
@@ -111,27 +128,26 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("NewTitle"));
-
     }
 
     @Test
     public void deleteUserFromSingleChat() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}", 10, 1))
+        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 1 , 1))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("done delete chat from user"));
 
-        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}", 20, 100))
+        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 2 , 100))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("user not found"));
 
-        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}", 100, 1))
+        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 100 , 1))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Single chat not found"));
 
-        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}", 20, 2))
+        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 2 , 2))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("No such user in chat"));
@@ -140,12 +156,12 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void createGroupChat() throws Exception {
         ChatDto chatDto = ChatDto.builder()
-                .image("MyImageTest")
-                .title("MyTitleTest")
+                .image("MyImage")
+                .title("MyTitle")
                 .build();
 
         /*
-        кусок ниже не пашет по причине невозможности передать principal
+        кусок ниже не пашет по причине не возможности передать principal
         */
 //        mockMvc.perform(post(apiUrl + "/group-chats")
 //                .contentType(MediaType.APPLICATION_JSON)
@@ -159,31 +175,68 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(chatDto)))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
 
-        GroupChat groupChat= (GroupChat) entityManager.createQuery("SELECT a from GroupChat a where a.image like :image")
-                .setParameter("image", "MyImageTest")
-                .getSingleResult();
-        assertEquals("MyTitleTest", groupChat.getTitle());
+    /**
+     * Пришлось изменить датасеты SingleChat и SingleChatMessages потому что триклятый сиквенс
+     * Пытается создать чат с айди 1 и падает на констрейнтах.
+     * Я не понимаю, у меня одного проблемы с сиквенсом который один на все таблицы и только спит и видит,
+     * как уронить все случайно родив айди, который уже есть в данной таблице.
+     * Может я тупой или меня это вообще не касается, но какой нам плюс от того,
+     * Что у users id начинается с 1, а у albums с 2129, это хоть как-то облегчает навигацию?
+     */
+
+    @Test
+/*    @DataSet(cleanBefore = true, cleanAfter = true)*/
+    public void createSingleChat() throws Exception {
+        ChatDto chatDto = ChatDto.builder()
+                .image("VeryUniqueImage")
+                .title("VeryUniqueTitle")
+                .build();
+
+        int userId = 1;
+
+        MockHttpServletResponse response =
+                mockMvc.perform(post(String.format("%s%s%d",apiUrl,"/single-chats/user/",userId))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(chatDto)))
+                        .andExpect(status().isOk())
+                        .andReturn()
+                        .getResponse();
+
+        assertNotNull(response.getContentAsString());
+        ChatDto responseContent = gson.fromJson(response.getContentAsString() , ChatDto.class);
+        assertEquals(chatDto.getTitle(), responseContent.getTitle());
+
+        TypedQuery<SingleChat> query = entityManager.createQuery("select c from SingleChat c where c.title=:title" , SingleChat.class)
+                .setParameter("title" , chatDto.getTitle());
+        Optional<TypedQuery<SingleChat>> checkDB = Optional.of(query);
+
+        assertTrue(checkDB.isPresent());
+
 
     }
 
+
     @Test
-    public void createSingleChat() throws Exception {
+    public void createSingleChatWrongUserId() throws Exception {
         ChatDto chatDto = ChatDto.builder()
-                .image("MyImageSingleTest")
-                .title("MyTitleSingleTest")
+                .image("MyImage")
+                .title("MyTitle")
                 .build();
 
-        mockMvc.perform(post(apiUrl + "/single-chats/user/{userId}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(chatDto)))
-                .andDo(print())
-                .andExpect(status().isOk());
+        int userId = 999999989;
 
-        SingleChat singleChat= (SingleChat) entityManager.createQuery("SELECT a from SingleChat a where a.image like :image")
-                .setParameter("image", "MyImageSingleTest")
-                .getSingleResult();
-        assertEquals("MyTitleSingleTest", singleChat.getTitle());
+        MockHttpServletResponse response =
+                mockMvc.perform(post(String.format("%s%s%d",apiUrl,"/single-chats/user/",userId))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(chatDto)))
+                        .andExpect(status().isNotFound())
+                        .andReturn()
+                        .getResponse();
+
+        String correctResponse = "User with id: 999999989 not found";
+        assertEquals(correctResponse, response.getContentAsString());
 
     }
 }
