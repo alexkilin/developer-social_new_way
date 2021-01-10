@@ -98,7 +98,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getAllMessageDtoBySingleChatId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages" , 1)
+        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages" , 5)
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "10"))
                 .andDo(print())
@@ -132,7 +132,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void deleteUserFromSingleChat() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 1 , 1))
+        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 5 , 1))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("done delete chat from user"));
