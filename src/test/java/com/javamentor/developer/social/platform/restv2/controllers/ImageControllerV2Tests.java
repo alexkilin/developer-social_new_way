@@ -134,7 +134,7 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("MyAlbumNameTest"));
 
-        AlbumImage album = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a where a.album.icon like :icon")
+        AlbumImage album = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a join fetch a.album a2 where a2.icon like :icon")
                 .setParameter("icon", "MyIconTest")
                 .getSingleResult();
         assertEquals("MyAlbumNameTest", album.getAlbum().getName());
@@ -163,7 +163,7 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Image 20 added to album 27"));
 
-        AlbumImage albumImage = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a where a.id = 27")
+        AlbumImage albumImage = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a join fetch a.images where a.id = 27")
                 .getSingleResult();
         Set<Image> imageSet = albumImage.getImages();
         assertEquals(2, imageSet.size());

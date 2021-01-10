@@ -249,7 +249,7 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("MyVideoAlbumTest"));
 
-        AlbumVideo album = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a where a.album.icon like :icon")
+        AlbumVideo album = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a join fetch a.album a2 where a2.icon like :icon")
                 .setParameter("icon", "MyNewIconTest")
                 .getSingleResult();
         assertEquals("MyVideoAlbumTest", album.getAlbum().getName());
@@ -272,7 +272,7 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Video id 40 added to album id 200"));
 
-        AlbumVideo albumVideo = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a where a.id = 200")
+        AlbumVideo albumVideo = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a join fetch a.videos where a.id = 200")
                 .getSingleResult();
         Set<Videos> videoSet = albumVideo.getVideos();
         assertEquals(2,videoSet.size());

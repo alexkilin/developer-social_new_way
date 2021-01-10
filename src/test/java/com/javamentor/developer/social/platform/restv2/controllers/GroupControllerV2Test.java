@@ -140,12 +140,14 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("User with id: 20 added to the group with id: 4"));
 
-        GroupHasUser groupHasUser = (GroupHasUser) entityManager.createQuery("SELECT u from GroupHasUser u where u.group.id= 4 and u.user.userId = 20")
+        GroupHasUser groupHasUser = (GroupHasUser) entityManager.createQuery("SELECT a from GroupHasUser a join fetch a.group g " +
+                "join fetch a.user u where g.id= 4 and u.userId = 20")
                 .getSingleResult();
         User user20 = groupHasUser.getUser();
         assertEquals("Admin1", user20.getFirstName());
 
-        GroupHasUser groupHasUser2 = (GroupHasUser) entityManager.createQuery("SELECT u from GroupHasUser u where u.group.id= 4 and u.user.userId = 40")
+        GroupHasUser groupHasUser2 = (GroupHasUser) entityManager.createQuery("SELECT a from GroupHasUser a join fetch a.group g " +
+                "join fetch a.user u where g.id= 4 and u.userId = 40")
                 .getSingleResult();
         User user40 = groupHasUser2.getUser();
         assertEquals("Admin3", user40.getFirstName());

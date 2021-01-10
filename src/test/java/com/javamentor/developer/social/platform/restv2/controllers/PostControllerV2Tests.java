@@ -249,7 +249,8 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .content("Such a bad comment"))
                 .andDo(print())
                 .andExpect(status().isCreated());
-        PostComment postComment = (PostComment) entityManager.createQuery("SELECT a from PostComment a where a.comment.comment like :comment")
+        PostComment postComment = (PostComment) entityManager.createQuery("SELECT a from PostComment a " +
+                "join fetch a.comment c join fetch a.post p where c.comment like :comment")
                 .setParameter("comment", "Such a bad comment")
                 .getSingleResult();
         assertEquals(100, postComment.getPost().getId());
@@ -261,9 +262,11 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        Post post =  (Post) entityManager.createQuery("SELECT a from Post a where a.id=100")
+        Post post =  (Post) entityManager.createQuery("SELECT a from Post a join fetch " +
+                "a.postLikes pl join fetch pl.like l join fetch l.user where a.id=100")
                 .getSingleResult();
-        Optional<PostLike> postLike = post.getPostLikes().stream().filter(x-> x.getLike().getUser().getUserId()==65).findFirst();
+        Optional<PostLike> postLike = post.getPostLikes().stream().filter(x-> x.getLike().getUser().getUserId()==65)
+                .findFirst();
         assertTrue(postLike.isPresent());
 
         mockMvc.perform(post(apiUrl + "/post/{postId}/like", 100))
@@ -289,13 +292,15 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 100))
                 .andDo(print())
                 .andExpect(status().isCreated());
-        Bookmark bookmark = (Bookmark) entityManager.createQuery("SELECT a from Bookmark a where a.user.userId = 65 and a.post.id = 100").getSingleResult();
+        Bookmark bookmark = (Bookmark) entityManager.createQuery("SELECT a from Bookmark a " +
+                "join fetch a.post p where a.user.userId = 65 and p.id = 100").getSingleResult();
         assertEquals("Title1", bookmark.getPost().getTitle());
 
         mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 30))
                 .andDo(print())
                 .andExpect(status().isCreated());
-        Bookmark bookmark2 = (Bookmark) entityManager.createQuery("SELECT a from Bookmark a where a.user.userId = 65 and a.post.id = 30").getSingleResult();
+        Bookmark bookmark2 = (Bookmark) entityManager.createQuery("SELECT a from Bookmark a " +
+                "join fetch a.post p where a.user.userId = 65 and p.id = 30").getSingleResult();
         assertEquals("Title3", bookmark2.getPost().getTitle());
 
         mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 100))
@@ -322,7 +327,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        Post post =  (Post) entityManager.createQuery("SELECT a from Post a where a.id=100")
+        Post post =  (Post) entityManager.createQuery("SELECT a from Post a join fetch a.reposts r join fetch r.user u where a.id=100")
                 .getSingleResult();
         Optional<Repost> repost = post.getReposts().stream().filter(x-> x.getUser().getUserId()==65).findFirst();
         assertTrue(repost.isPresent());

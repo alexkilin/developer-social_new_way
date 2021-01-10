@@ -7,11 +7,8 @@ import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
-import com.javamentor.developer.social.platform.models.entity.album.Album;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
-import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.junit.jupiter.api.Test;
@@ -188,7 +185,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Audio id 40 added to collection of user id 666"));
 
-        User user = (User) entityManager.createQuery("SELECT u from User u where u.userId = 666")
+        User user = (User) entityManager.createQuery("SELECT u from User as u join fetch u.audios a where u.userId = 666")
                 .getSingleResult();
         assertEquals(1, user.getAudios().size());
 
@@ -253,7 +250,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Audio id 20 added to album id 40"));
 
-        AlbumAudios albumAudios = (AlbumAudios) entityManager.createQuery("SELECT a from AlbumAudios a where a.id = 40")
+        AlbumAudios albumAudios = (AlbumAudios) entityManager.createQuery("SELECT a from AlbumAudios a join fetch a.audios where a.id = 40")
                 .getSingleResult();
         Set<Audios> audiosSet = albumAudios.getAudios();
         assertEquals(3,audiosSet.size());
@@ -292,7 +289,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("MyTestAlbum"));
 
-        AlbumAudios album = (AlbumAudios) entityManager.createQuery("SELECT a from AlbumAudios a where a.album.icon like :icon")
+        AlbumAudios album = (AlbumAudios) entityManager.createQuery("SELECT a from AlbumAudios a join fetch a.album a2 where a2.icon like :icon")
                 .setParameter("icon", "TestIcon991")
                 .getSingleResult();
         assertEquals("MyTestAlbum", album.getAlbum().getName());
@@ -398,7 +395,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
 
-        Playlist playlist = (Playlist) entityManager.createQuery("SELECT a from Playlist a where a.id =200")
+        Playlist playlist = (Playlist) entityManager.createQuery("SELECT a from Playlist a join fetch a.playlistContent where a.id =200")
                 .getSingleResult();
         Set <Audios> audiosSet =  playlist.getPlaylistContent();
         assertEquals(1, audiosSet.size());
@@ -409,7 +406,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2));
 
-        Playlist playlist2 = (Playlist) entityManager.createQuery("SELECT a from Playlist a where a.id =200")
+        Playlist playlist2 = (Playlist) entityManager.createQuery("SELECT a from Playlist a join fetch a.playlistContent where a.id =200")
                 .getSingleResult();
         Set <Audios> audiosSet2 =  playlist2.getPlaylistContent();
         assertEquals(2, audiosSet2.size());
