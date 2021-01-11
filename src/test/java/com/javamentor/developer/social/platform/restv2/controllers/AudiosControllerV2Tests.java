@@ -7,6 +7,10 @@ import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
+import com.javamentor.developer.social.platform.models.entity.media.Audios;
+import com.javamentor.developer.social.platform.models.entity.media.Playlist;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,6 +18,12 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityManager;
+
+import java.util.Optional;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,6 +55,9 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private EntityManager entityManager;
 
     Gson gson = new Gson();
 
@@ -165,11 +178,16 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addAudioInCollectionsOfUser() throws Exception {
-        mockMvc.perform(put(apiUrl + "/user/audio")
+
+       mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "40"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Audio id 40 added to collection of user id 666"));
+
+        User user = (User) entityManager.createQuery("SELECT u from User as u join fetch u.audios a where u.userId = 666")
+                .getSingleResult();
+        assertEquals(1, user.getAudios().size());
 
         mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "500"))
@@ -195,6 +213,10 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(audioDto)))
                 .andDo(print())
                 .andExpect(status().isCreated());
+
+        Audios audios = (Audios) entityManager.createQuery("SELECT a from Audios a where a.length = 200")
+                .getSingleResult();
+        assertEquals("Test Author 200", audios.getAuthor());
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/audio", 900)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -228,6 +250,18 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Audio id 20 added to album id 40"));
 
+        AlbumAudios albumAudios = (AlbumAudios) entityManager.createQuery("SELECT a from AlbumAudios a join fetch a.audios where a.id = 40")
+                .getSingleResult();
+        Set<Audios> audiosSet = albumAudios.getAudios();
+        assertEquals(3,audiosSet.size());
+        Optional<Audios> audios20 = albumAudios.getAudios().stream().filter(a -> a.getId() == 20).findFirst();
+        Optional<Audios> audios30 = albumAudios.getAudios().stream().filter(a -> a.getId() == 30).findFirst();
+        Optional<Audios> audios40 = albumAudios.getAudios().stream().filter(a -> a.getId() == 40).findFirst();
+        assertTrue(audios20.isPresent());
+        assertTrue(audios30.isPresent());
+        assertTrue(audios40.isPresent());
+
+
         mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 800)
                 .param("audioId", "20"))
                 .andDo(print())
@@ -244,7 +278,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void createAlbum() throws Exception {
         AlbumDto albumDto = AlbumDto.builder()
-                .icon("TestIcon99")
+                .icon("TestIcon991")
                 .name("MyTestAlbum")
                 .build();
 
@@ -254,6 +288,12 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("MyTestAlbum"));
+
+        AlbumAudios album = (AlbumAudios) entityManager.createQuery("SELECT a from AlbumAudios a join fetch a.album a2 where a2.icon like :icon")
+                .setParameter("icon", "TestIcon991")
+                .getSingleResult();
+        assertEquals("MyTestAlbum", album.getAlbum().getName());
+        assertEquals(com.javamentor.developer.social.platform.models.entity.media.MediaType.AUDIO, album.getAlbum().getMediaType());
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 5)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -265,20 +305,20 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getFromAlbumOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/albums/{albumId}/audio", 40)
+        mockMvc.perform(get(apiUrl + "/albums/{albumId}/audio", 30)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].id").value(40));
+                .andExpect(jsonPath("$.items[0].id").value(30));
     }
 
     @Test
     public void createPlaylist() throws Exception {
         PlaylistCreateDto playlistCreateDto = PlaylistCreateDto.builder()
-                .image("MyImage")
-                .name("MyName")
+                .image("MyImageTest")
+                .name("MyNameTest")
                 .build();
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 3)
@@ -286,8 +326,13 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(playlistCreateDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.image").value("MyImage"))
-                .andExpect(jsonPath("$.name").value("MyName"));
+                .andExpect(jsonPath("$.image").value("MyImageTest"))
+                .andExpect(jsonPath("$.name").value("MyNameTest"));
+
+        Playlist playlist = (Playlist) entityManager.createQuery("SELECT a from Playlist a where a.name like :name")
+                .setParameter("name", "MyNameTest")
+                .getSingleResult();
+        assertEquals("MyImageTest", playlist.getImage());
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 900)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -349,6 +394,22 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
+
+        Playlist playlist = (Playlist) entityManager.createQuery("SELECT a from Playlist a join fetch a.playlistContent where a.id =200")
+                .getSingleResult();
+        Set <Audios> audiosSet =  playlist.getPlaylistContent();
+        assertEquals(1, audiosSet.size());
+
+        mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
+                .param("audioId", "30"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(2));
+
+        Playlist playlist2 = (Playlist) entityManager.createQuery("SELECT a from Playlist a join fetch a.playlistContent where a.id =200")
+                .getSingleResult();
+        Set <Audios> audiosSet2 =  playlist2.getPlaylistContent();
+        assertEquals(2, audiosSet2.size());
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
                 .param("audioId", "500"))

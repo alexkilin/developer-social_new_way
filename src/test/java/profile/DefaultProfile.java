@@ -1,4 +1,4 @@
-package com.javamentor.developer.social.platform.restv2.controllers;
+package profile;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.test.context.ActiveProfiles;

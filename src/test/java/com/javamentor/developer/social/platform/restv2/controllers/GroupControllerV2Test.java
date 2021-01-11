@@ -121,8 +121,8 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void showGroupWallInvalidId() throws Exception {
         this.mockMvc.perform(get("/api/v2/groups/{groupId}/posts?currentPage=1&itemsOnPage=2" , 100))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(0));
+                .andExpect(status().isBadRequest());
+
     }
 
     @Test

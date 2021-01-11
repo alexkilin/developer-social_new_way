@@ -7,7 +7,14 @@ import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.TopicDto;
-import com.javamentor.developer.social.platform.models.entity.post.Topic;
+import com.javamentor.developer.social.platform.models.entity.comment.Comment;
+import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
+import com.javamentor.developer.social.platform.models.entity.like.PostLike;
+import com.javamentor.developer.social.platform.models.entity.media.Image;
+import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
+import com.javamentor.developer.social.platform.models.entity.post.Post;
+import com.javamentor.developer.social.platform.models.entity.post.Repost;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,9 +22,13 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,6 +67,8 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private EntityManager entityManager;
 
     Gson gson = new Gson();
 
@@ -136,13 +149,12 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
         List<MediaPostDto> media = new ArrayList<>();
 
         TopicDto topicDto = TopicDto.builder()
-                .id(34l)
                 .topic("MyNewTopic")
                 .build();
 
         PostCreateDto postCreateDto = PostCreateDto.builder()
-                .text("MyText")
-                .title("MyTitle")
+                .text("MyTextTest")
+                .title("MyTitleTest")
                 .tags(tag)
                 .userId(50l)
                 .topic(topicDto)
@@ -167,10 +179,9 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk());
 
         media.add(MediaPostDto.builder()
-                .mediaType("2")
+                .mediaType("AUDIO")
                 .url("MyUrl1.ru")
                 .userId(50l)
-                .id(452l)
                 .build());
         postCreateDto.setMedia(media);
 
@@ -181,17 +192,15 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk());
 
         media.add(MediaPostDto.builder()
-                .mediaType("0")
+                .mediaType("IMAGE")
                 .url("MyUrl2.ru")
                 .userId(50l)
-                .id(451l)
                 .build());
 
         media.add(MediaPostDto.builder()
-                .mediaType("1")
+                .mediaType("VIDEO")
                 .url("MyUrl3.ru")
                 .userId(50l)
-                .id(450l)
                 .build());
         postCreateDto.setMedia(media);
 
@@ -200,6 +209,11 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(postCreateDto)))
                 .andDo(print())
                 .andExpect(status().isOk());
+        List list =  entityManager.createQuery("SELECT a from Post a where a.title like :title and a.text like :text")
+                .setParameter("title", "MyTitleTest")
+                .setParameter("text", "MyTextTest")
+                .getResultList();
+        assertEquals(4, list.size());
     }
 
     @Test
@@ -220,7 +234,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void showPostComments() throws Exception {
-        mockMvc.perform(get(apiUrl + "/post/{postId}/comments", 10)
+        mockMvc.perform(get(apiUrl + "/post/{postId}/comments", 100)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andDo(print())
@@ -231,21 +245,31 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addCommentToPost() throws Exception {
-        mockMvc.perform(post(apiUrl + "/post/{postId}/comment", 10)
+        mockMvc.perform(post(apiUrl + "/post/{postId}/comment", 100)
                 .content("Such a bad comment"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[1].comment").value("MyNewComment"));
+                .andExpect(status().isCreated());
+        PostComment postComment = (PostComment) entityManager.createQuery("SELECT a from PostComment a " +
+                "join fetch a.comment c join fetch a.post p where c.comment like :comment")
+                .setParameter("comment", "Such a bad comment")
+                .getSingleResult();
+        assertEquals(100, postComment.getPost().getId());
     }
 
     @Test
     public void addLikeToPost() throws Exception {
-        mockMvc.perform(post(apiUrl + "/post/{postId}/like", 10))
+        mockMvc.perform(post(apiUrl + "/post/{postId}/like", 100))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(post(apiUrl + "/post/{postId}/like", 10))
+        Post post =  (Post) entityManager.createQuery("SELECT a from Post a join fetch " +
+                "a.postLikes pl join fetch pl.like l join fetch l.user where a.id=100")
+                .getSingleResult();
+        Optional<PostLike> postLike = post.getPostLikes().stream().filter(x-> x.getLike().getUser().getUserId()==65)
+                .findFirst();
+        assertTrue(postLike.isPresent());
+
+        mockMvc.perform(post(apiUrl + "/post/{postId}/like", 100))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The Like has already been added"));
@@ -265,11 +289,21 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addPostToBookmark() throws Exception {
-        mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 10))
+        mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 100))
                 .andDo(print())
                 .andExpect(status().isCreated());
+        Bookmark bookmark = (Bookmark) entityManager.createQuery("SELECT a from Bookmark a " +
+                "join fetch a.post p where a.user.userId = 65 and p.id = 100").getSingleResult();
+        assertEquals("Title1", bookmark.getPost().getTitle());
 
-        mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 10))
+        mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 30))
+                .andDo(print())
+                .andExpect(status().isCreated());
+        Bookmark bookmark2 = (Bookmark) entityManager.createQuery("SELECT a from Bookmark a " +
+                "join fetch a.post p where a.user.userId = 65 and p.id = 30").getSingleResult();
+        assertEquals("Title3", bookmark2.getPost().getTitle());
+
+        mockMvc.perform(post(apiUrl + "/post/{postId}/bookmark", 100))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The Post has already been added to the bookmark"));
@@ -289,9 +323,14 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addRepostToPost() throws Exception {
-        mockMvc.perform(post(apiUrl + "/post/{postId}/repost", 10))
+        mockMvc.perform(post(apiUrl + "/post/{postId}/repost", 100))
                 .andDo(print())
                 .andExpect(status().isCreated());
+
+        Post post =  (Post) entityManager.createQuery("SELECT a from Post a join fetch a.reposts r join fetch r.user u where a.id=100")
+                .getSingleResult();
+        Optional<Repost> repost = post.getReposts().stream().filter(x-> x.getUser().getUserId()==65).findFirst();
+        assertTrue(repost.isPresent());
     }
 
     @Test
@@ -322,9 +361,8 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/posts/topic")
                 .param("topic", "Nothing")
                 .param("currentPage", "1")
-                .param("itemsOnPage", "10"))
+                .param("itemsOnPage", "1"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(0));
+                .andExpect(status().isBadRequest());
     }
 }
