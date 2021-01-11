@@ -7,15 +7,11 @@ import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.users.UserRegisterDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
-import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
@@ -28,12 +24,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @DataSet(value = {
-        "datasets/restv2/user/language.yml" ,
-        "datasets/restv2/user/user_languages.yml" ,
-        "datasets/restv2/user/Active.yml" ,
-        "datasets/restv2/user/role.yml" ,
-        "datasets/restv2/user/userFriends.yml" ,
-        "datasets/restv2/user/user.yml"
+        "datasets/restv2/user/userResources/language.yml" ,
+        "datasets/restv2/user/userResources/user_languages.yml" ,
+        "datasets/restv2/user/userResources/Active.yml" ,
+        "datasets/restv2/user/userResources/Role.yml" ,
+        "datasets/restv2/user/userResources/userFriends.yml" ,
+        "datasets/restv2/user/userResources/User.yml"
 }, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 @Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
@@ -49,9 +45,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private SecurityHelper securityHelper;
 
     private final Gson gson = new Gson();
 

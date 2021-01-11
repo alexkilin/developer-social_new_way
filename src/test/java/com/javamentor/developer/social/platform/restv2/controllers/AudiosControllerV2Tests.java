@@ -33,15 +33,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/audio/usersResources/Active.yml",
         "datasets/restv2/audio/usersResources/User.yml",
         "datasets/restv2/audio/usersResources/Role.yml",
-        "datasets/restv2/audio/UsersAudiosCollections.yml",
+        "datasets/restv2/audio/audioResources/UsersAudiosCollections.yml" ,
         "datasets/restv2/audio/playlistAudioTest/Playlist.yml",
         "datasets/restv2/audio/playlistAudioTest/PlaylistHasAudios.yml",
-        "datasets/restv2/audio/Media.yml",
+        "datasets/restv2/audio/audioResources/Media.yml" ,
         "datasets/restv2/audio/albumAudioTest/AudioAlbum.yml",
         "datasets/restv2/audio/albumAudioTest/Album.yml",
         "datasets/restv2/audio/albumAudioTest/UserHasAlbum.yml",
         "datasets/restv2/audio/albumAudioTest/AlbumHasAudio.yml",
-        "datasets/restv2/audio/Audio.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+        "datasets/restv2/audio/audioResources/Audio.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 @Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 class AudiosControllerV2Tests extends AbstractIntegrationTest {

@@ -7,14 +7,11 @@ import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.TopicDto;
-import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
-import com.javamentor.developer.social.platform.models.entity.media.Image;
 import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.post.Repost;
-import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -35,15 +32,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @DataSet(value = {
-        "datasets/restv2/post/bookmarks.yml",
-        "datasets/restv2/post/like.yml",
-        "datasets/restv2/post/media.yml",
+        "datasets/restv2/post/postResources/bookmarks.yml" ,
+        "datasets/restv2/post/postResources/like.yml" ,
+        "datasets/restv2/post/postResources/media.yml" ,
         "datasets/restv2/post/postTest/post_media.yml",
         "datasets/restv2/post/postTest/post_tags.yml",
-        "datasets/restv2/post/posts.yml",
-        "datasets/restv2/post/topics.yml",
-        "datasets/restv2/post/tags.yml",
-        "datasets/restv2/post/comments.yml",
+        "datasets/restv2/post/postResources/posts.yml" ,
+        "datasets/restv2/post/postResources/topics.yml" ,
+        "datasets/restv2/post/postResources/tags.yml" ,
+        "datasets/restv2/post/postResources/comments.yml" ,
         "datasets/restv2/post/postTest/post_comment.yml",
         "datasets/restv2/post/postTest/post_like.yml",
         "datasets/restv2/post/usersResources/Role.yml",
