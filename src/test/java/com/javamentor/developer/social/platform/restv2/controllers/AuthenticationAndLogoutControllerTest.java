@@ -30,15 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * А после метода очищать данные(см. второй @Sql).
  * Это дает более чистые и независимые друг о друга тесты.
  */
-@Sql(statements = {
-        "Insert into active(id, name) values(1, 'test')" ,
-        "Insert into role(id, name) values(1, 'USER')" ,
-
-        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id, password) " +
-                "values (1,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 1, 1,'user666')" ,
-}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(statements = {"delete from Users" , "delete from active" , "delete from role"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-
 public class AuthenticationAndLogoutControllerTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -127,7 +120,6 @@ public class AuthenticationAndLogoutControllerTest extends AbstractIntegrationTe
         assertNotNull(response.getContentAsString());
         PrincipalDto responseContent = gson.fromJson(response.getContentAsString() , PrincipalDto.class);
 
-        System.out.println(response.getHeader("Authorization"));
         assertEquals("admin666@user.ru" , responseContent.getEmail());
 
     }

@@ -35,14 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')" ,
-        "Insert into role(id, name) values(1, 'USER')" ,
 
-        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)" ,
-})
-@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/chat/messages/Messages.yml" ,
         "datasets/restv2/chat/usersChatTest/Active.yml" ,
@@ -53,6 +46,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/chat/SingleChat.yml" ,
         "datasets/restv2/chat/SingleChatMessages.yml" ,
         "datasets/restv2/chat/UsersGroupChats.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/chats";
@@ -62,9 +57,6 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @PersistenceContext
     protected EntityManager entityManager;
-
-    @Autowired
-    private SingleChatConverter converter;
 
     Gson gson = new Gson();
 
