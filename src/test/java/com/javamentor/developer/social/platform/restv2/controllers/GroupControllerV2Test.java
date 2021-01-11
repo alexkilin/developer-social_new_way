@@ -38,14 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')" ,
-        "Insert into role(id, name) values(1, 'USER')" ,
 
-        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)" ,
-})
-@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/groupset/group/usersResources/User.yml" ,
         "datasets/restv2/groupset/group/usersResources/Active.yml" ,
@@ -61,6 +54,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/groupset/group/postResources/tags.yml" ,
         "datasets/restv2/groupset/group/postResources/topics.yml"}
         , strategy = SeedStrategy.REFRESH, cleanAfter = true)
+@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Autowired

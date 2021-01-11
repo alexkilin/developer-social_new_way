@@ -6,11 +6,7 @@ import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
 import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
-import com.javamentor.developer.social.platform.models.entity.album.Album;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
-import com.javamentor.developer.social.platform.models.entity.media.Audios;
-import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import org.hamcrest.text.MatchesPattern;
 import org.junit.jupiter.api.Test;
@@ -31,25 +27,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')",
-        "Insert into role(id, name) values(1, 'USER')",
 
-        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
-})
-@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/video/usersResources/Active.yml",
         "datasets/restv2/video/usersResources/User.yml",
         "datasets/restv2/video/usersResources/Role.yml",
-        "datasets/restv2/video/UsersVideosCollections.yml",
-        "datasets/restv2/video/Media.yml",
+        "datasets/restv2/video/videoResources/UsersVideosCollections.yml" ,
+        "datasets/restv2/video/videoResources/Media.yml" ,
         "datasets/restv2/video/albumVideoTest/VideoAlbum.yml",
         "datasets/restv2/video/albumVideoTest/Album.yml",
         "datasets/restv2/video/albumVideoTest/UserHasAlbum.yml",
         "datasets/restv2/video/albumVideoTest/AlbumHasVideo.yml",
-        "datasets/restv2/video/Video.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+        "datasets/restv2/video/videoResources/Video.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 class VideosControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/video";

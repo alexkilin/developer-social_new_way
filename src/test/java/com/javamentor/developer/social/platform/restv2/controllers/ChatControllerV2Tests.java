@@ -6,17 +6,10 @@ import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
-import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
-import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
-import com.javamentor.developer.social.platform.webapp.converters.SingleChatConverter;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.dbunit.Assertion;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.validation.constraints.AssertTrue;
 
 import java.util.Optional;
 
@@ -35,24 +27,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')" ,
-        "Insert into role(id, name) values(1, 'USER')" ,
 
-        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)" ,
-})
-@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/chat/messages/Messages.yml" ,
         "datasets/restv2/chat/usersChatTest/Active.yml" ,
         "datasets/restv2/chat/usersChatTest/Role.yml" ,
         "datasets/restv2/chat/usersChatTest/User.yml" ,
-        "datasets/restv2/chat/GroupChat.yml" ,
-        "datasets/restv2/chat/GroupChatsMessages.yml" ,
-        "datasets/restv2/chat/SingleChat.yml" ,
-        "datasets/restv2/chat/SingleChatMessages.yml" ,
-        "datasets/restv2/chat/UsersGroupChats.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+        "datasets/restv2/chat/chatResources/GroupChat.yml" ,
+        "datasets/restv2/chat/chatResources/GroupChatsMessages.yml" ,
+        "datasets/restv2/chat/chatResources/SingleChat.yml" ,
+        "datasets/restv2/chat/chatResources/SingleChatMessages.yml" ,
+        "datasets/restv2/chat/chatResources/UsersGroupChats.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/chats";
@@ -62,9 +49,6 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @PersistenceContext
     protected EntityManager entityManager;
-
-    @Autowired
-    private SingleChatConverter converter;
 
     Gson gson = new Gson();
 

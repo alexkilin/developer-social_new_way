@@ -7,14 +7,11 @@ import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.TopicDto;
-import com.javamentor.developer.social.platform.models.entity.comment.Comment;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
-import com.javamentor.developer.social.platform.models.entity.media.Image;
 import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.post.Repost;
-import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -33,24 +30,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')",
-        "Insert into role(id, name) values(1, 'USER')",
 
-        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-                "values (65,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
-})
-@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
-        "datasets/restv2/post/bookmarks.yml",
-        "datasets/restv2/post/like.yml",
-        "datasets/restv2/post/media.yml",
+        "datasets/restv2/post/postResources/bookmarks.yml" ,
+        "datasets/restv2/post/postResources/like.yml" ,
+        "datasets/restv2/post/postResources/media.yml" ,
         "datasets/restv2/post/postTest/post_media.yml",
         "datasets/restv2/post/postTest/post_tags.yml",
-        "datasets/restv2/post/posts.yml",
-        "datasets/restv2/post/topics.yml",
-        "datasets/restv2/post/tags.yml",
-        "datasets/restv2/post/comments.yml",
+        "datasets/restv2/post/postResources/posts.yml" ,
+        "datasets/restv2/post/postResources/topics.yml" ,
+        "datasets/restv2/post/postResources/tags.yml" ,
+        "datasets/restv2/post/postResources/comments.yml" ,
         "datasets/restv2/post/postTest/post_comment.yml",
         "datasets/restv2/post/postTest/post_like.yml",
         "datasets/restv2/post/usersResources/Role.yml",
@@ -61,6 +51,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/post/groupResources/GroupHasUser.yml",
         "datasets/restv2/post/groupResources/GroupWal.yml"
 }, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/post";
