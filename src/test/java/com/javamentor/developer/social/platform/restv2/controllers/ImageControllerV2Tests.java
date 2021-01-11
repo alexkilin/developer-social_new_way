@@ -29,30 +29,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-//@DataSet(value = {
-//        "datasets/restv2/image/usersResources/User.yml",
-//        "datasets/restv2/image/usersResources/Role.yml",
+@DataSet(value = {
+        "datasets/restv2/image/usersResources/User.yml",
+        "datasets/restv2/image/usersResources/Role.yml",
+        "datasets/restv2/image/albumTest/Active.yml",
+//        "datasets/restv2/image/Media.yml",
+//        "datasets/restv2/image/Image.yml",
 //        "datasets/restv2/image/albumTest/Album.yml",
 //        "datasets/restv2/image/albumTest/AlbumImage.yml",
 //        "datasets/restv2/image/albumTest/AlbumHasImage.yml",
-//        "datasets/restv2/image/albumTest/Active.yml",
-//        "datasets/restv2/image/Media.yml",
-//        "datasets/restv2/image/Image.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
-@DataSet(value = {
-        "datasets/restv2/groupset/group/usersResources/User.yml" ,
-        "datasets/restv2/groupset/group/usersResources/Active.yml" ,
-        "datasets/restv2/groupset/group/usersResources/Role.yml" ,
-        "datasets/restv2/groupset/group/Group.yml" ,
-        "datasets/restv2/groupset/group/GroupHasUser.yml" ,
-        "datasets/restv2/groupset/group/GroupWal.yml" ,
-        "datasets/restv2/groupset/group/GroupCategory.yml" ,
-        "datasets/restv2/groupset/group/postResources/media.yml" ,
-        "datasets/restv2/groupset/group/postResources/post_media.yml" ,
-        "datasets/restv2/groupset/group/postResources/post_tags.yml" ,
-        "datasets/restv2/groupset/group/postResources/posts.yml" ,
-        "datasets/restv2/groupset/group/postResources/tags.yml" ,
-        "datasets/restv2/groupset/group/postResources/topics.yml"}
-        , strategy = SeedStrategy.REFRESH, cleanAfter = true)
+}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 @Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class ImageControllerV2Tests extends AbstractIntegrationTest {
