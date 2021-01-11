@@ -42,15 +42,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class ImageControllerV2Tests extends AbstractIntegrationTest {
 
-    @DataSet(value = {
-            "datasets/restv2/image/usersResources/User.yml",
-            "datasets/restv2/image/usersResources/Role.yml",
-            "datasets/restv2/image/albumTest/Album.yml",
-            "datasets/restv2/image/albumTest/AlbumImage.yml",
-            "datasets/restv2/image/albumTest/AlbumHasImage.yml",
-            "datasets/restv2/image/albumTest/Active.yml",
-            "datasets/restv2/image/Media.yml",
-            "datasets/restv2/image/image.yml"}/*, strategy = SeedStrategy.REFRESH,*/, cleanAfter = true)
+//    @DataSet(value = {
+//            "datasets/restv2/image/usersResources/User.yml",
+//            "datasets/restv2/image/usersResources/Role.yml",
+//            "datasets/restv2/image/albumTest/Album.yml",
+//            "datasets/restv2/image/albumTest/AlbumImage.yml",
+//            "datasets/restv2/image/albumTest/AlbumHasImage.yml",
+//            "datasets/restv2/image/albumTest/Active.yml",
+//            "datasets/restv2/image/Media.yml",
+//            "datasets/restv2/image/image.yml"}/*, strategy = SeedStrategy.REFRESH,*/, cleanAfter = true)
     @Test
     public void test() throws Exception{
         System.out.println("Hello!");
