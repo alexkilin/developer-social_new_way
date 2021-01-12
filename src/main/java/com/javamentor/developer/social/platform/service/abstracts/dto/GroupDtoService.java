@@ -18,4 +18,6 @@ public interface GroupDtoService {
     Optional<GroupDto> getGroupByName(String name);
 
     PageDto<Object, Object> getUsersFromTheGroup(Map<String, Object> parameters);
+
+    PageDto<Object, Object> getGroupsByCategory( Map<String, Object> parameters );
 }

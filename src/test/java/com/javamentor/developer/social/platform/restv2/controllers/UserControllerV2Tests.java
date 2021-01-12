@@ -7,7 +7,6 @@ import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.users.UserRegisterDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
-import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -23,22 +22,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-@Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')",
-        "Insert into role(id, name) values(1, 'USER')",
 
-        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-        "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
-})
-@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
-        "datasets/restv2/user/language.yml",
-        "datasets/restv2/user/user_languages.yml",
-        "datasets/restv2/user/Active.yml",
-        "datasets/restv2/user/role.yml",
-        "datasets/restv2/user/userFriends.yml",
-        "datasets/restv2/user/user.yml"
+        "datasets/restv2/user/userResources/language.yml" ,
+        "datasets/restv2/user/userResources/user_languages.yml" ,
+        "datasets/restv2/user/userResources/Active.yml" ,
+        "datasets/restv2/user/userResources/Role.yml" ,
+        "datasets/restv2/user/userResources/userFriends.yml" ,
+        "datasets/restv2/user/userResources/User.yml"
 }, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/users";
@@ -52,11 +46,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private SecurityHelper securityHelper;
-
     private final Gson gson = new Gson();
-
 
 
     @Test
@@ -126,15 +116,15 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().string("Password changed for user 2"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        Assert.assertTrue("Сравнение с паролем в базе, подтверждение изменения",
-                passwordEncoder.matches(pwd, userService.getById(2L).get().getPassword()));
+        Assert.assertTrue("Сравнение с паролем в базе, подтверждение изменения" ,
+                passwordEncoder.matches(pwd , userService.getById(2L).get().getPassword()));
     }
 
     @Test
     void getUsers() throws Exception {
         mockMvc.perform(get(apiUrl + "/")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "5"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -201,7 +191,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     void getUserById() throws Exception {
-        mockMvc.perform(get(apiUrl + "/{userId}", 2L))
+        mockMvc.perform(get(apiUrl + "/{userId}" , 2L))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -221,7 +211,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.status").value("Pureness and perfection"))
                 .andExpect(jsonPath("$.activeName").value("ACTIVE"));
 
-        mockMvc.perform(get(apiUrl + "/{userId}", 222L))
+        mockMvc.perform(get(apiUrl + "/{userId}" , 222L))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -230,17 +220,17 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     void getFriendsOfUserById() throws Exception {
-        mockMvc.perform(get(apiUrl + "/{userId}/friends", 2L)
-                .param("currentPage", "1")
-                .param("itemsOnPage", "5"))
+        mockMvc.perform(get(apiUrl + "/{userId}/friends" , 2L)
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4));
 
-        mockMvc.perform(get(apiUrl + "/{userId}/friends", 222L)
-                .param("currentPage", "1")
-                .param("itemsOnPage", "5"))
+        mockMvc.perform(get(apiUrl + "/{userId}/friends" , 222L)
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -250,9 +240,9 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     @Test
     void GetAllUsersWithFilters() throws Exception {
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("education", "Harvard"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("education" , "Harvard"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -260,41 +250,42 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items[0].firstName").value("Admin0"));
 
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("city", "SPb"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("city" , "SPb"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4));
 
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("city", "SPb")
-                .param("profession", "Creator"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("city" , "SPb")
+                .param("profession" , "Creator"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
 
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("startDateOfBirth", "1990-05-30")
-                .param("endDateOfBirth", "2012-03-30"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("startDateOfBirth" , "1990-05-30")
+                .param("endDateOfBirth" , "2012-03-30"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4));
 
         mockMvc.perform(get(apiUrl + "/GetAllUsersWithFilters")
-                .param("currentPage", "1")
-                .param("itemsOnPage", "10")
-                .param("endDateOfBirth", "2003-12-30"))
+                .param("currentPage" , "1")
+                .param("itemsOnPage" , "10")
+                .param("endDateOfBirth" , "2003-12-30"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2));
     }
+
 }

@@ -1,0 +1,25 @@
+bookmarks:
+  - id: 10
+    persist_date: "2020-08-04 16:47:23.940175"
+    post_id: 100
+    user_id: 40
+
+  - id: 20
+    persist_date: "2020-08-04 16:47:23.940168"
+    post_id: 100
+    user_id: 20
+
+  - id: 30
+    persist_date: "2020-08-04 16:47:23.875175"
+    post_id: 100
+    user_id: 30
+
+  - id: 40
+    persist_date: "2020-08-04 16:47:23.875175"
+    post_id: 20
+    user_id: 65
+
+  - id: 50
+    persist_date: "2020-08-04 16:47:23.875175"
+    post_id: 20
+    user_id: 3
