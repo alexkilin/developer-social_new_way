@@ -34,16 +34,6 @@ public abstract class AlbumImageConverter {
     public abstract AlbumImage toAlbumImage(AlbumCreateDto albumCreateDto);
 
     @Mappings({
-            @Mapping(source = "albumImageDto.id", target = "id"),
-            @Mapping(target = "album.mediaType", expression = "java(MediaType.IMAGE)"),
-            @Mapping(source = "albumImageDto.id", target = "album.id"),
-            @Mapping(source = "albumImageDto.name", target = "album.name"),
-            @Mapping(source = "albumImageDto.icon", target = "album.icon"),
-            @Mapping(source = "userOwner.userId", target = "album.userOwnerId", qualifiedByName = "userSetter")
-    })
-    public abstract AlbumImage toAlbumImage(AlbumImageDto albumImageDto, User userOwner);
-
-    @Mappings({
             @Mapping(source = "albumImage.id", target = "id"),
             @Mapping(source = "albumImage.album.icon", target = "icon"),
             @Mapping(source = "albumImage.album.name", target = "name"),

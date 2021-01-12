@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,11 +18,12 @@ public class GroupCategoryDaoImpl extends GenericDaoAbstract<GroupCategory, Long
     protected EntityManager entityManager;
 
     @Override
-    public Optional<GroupCategory> getByCategory(String category) {
+    public Optional<GroupCategory> getGroupCategoryByName( String category ) {
         TypedQuery<GroupCategory> query = entityManager.createQuery(
                 "SELECT c FROM GroupCategory c " +
-                        "WHERE c.category = :paramCategory", GroupCategory.class)
-                .setParameter("paramCategory", category);
+                        "WHERE c.category = :paramCategory" , GroupCategory.class)
+                .setParameter("paramCategory" , category);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
+
 }

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder    
 @Table(name = "`like`")
 public class Like {
 

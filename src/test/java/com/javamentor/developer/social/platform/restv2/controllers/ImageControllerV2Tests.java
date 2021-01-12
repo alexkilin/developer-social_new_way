@@ -1,11 +1,13 @@
 package com.javamentor.developer.social.platform.restv2.controllers;
 
+
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.image.ImageCreateDto;
-import com.javamentor.developer.social.platform.restv2.controllers.AbstractIntegrationTest;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
+import com.javamentor.developer.social.platform.models.entity.media.Image;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,33 +15,45 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import javax.persistence.EntityManager;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')",
-        "Insert into role(id, name) values(1, 'USER')",
 
-        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
-})
-@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/image/usersResources/User.yml",
         "datasets/restv2/image/usersResources/Role.yml",
+        "datasets/restv2/image/usersResources/Active.yml",
         "datasets/restv2/image/albumTest/Album.yml",
         "datasets/restv2/image/albumTest/AlbumImage.yml",
         "datasets/restv2/image/albumTest/AlbumHasImage.yml",
-        "datasets/restv2/image/albumTest/Active.yml",
-        "datasets/restv2/image/Media.yml",
-        "datasets/restv2/image/image.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+        "datasets/restv2/image/imageResources/Media.yml" ,
+        "datasets/restv2/image/imageResources/Image.yml"
+}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class ImageControllerV2Tests extends AbstractIntegrationTest {
+//    @Test
+//    public void test() throws Exception{
+//        System.out.println("hello");
+//    }
+
 
     private final String apiUrl = "/api/v2/images";
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private EntityManager entityManager;
 
     private final Gson gson = new Gson();
 
@@ -47,7 +61,7 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void createImage() throws Exception {
         ImageCreateDto imageCreateDto = ImageCreateDto.builder()
-                .description("MyDescription")
+                .description("MyDescriptionTest")
                 .url("www.myURL.ru")
                 .userId(6l)
                 .build();
@@ -58,6 +72,11 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.url").value("www.myURL.ru"));
+
+        Image image = (Image) entityManager.createQuery("SELECT a from Image a where a.description like :description")
+                .setParameter("description", "MyDescriptionTest")
+                .getSingleResult();
+        assertEquals("MyDescriptionTest", image.getDescription());
     }
 
     @Test
@@ -102,10 +121,10 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
-    public void createAlbum() throws Exception {
+        public void createAlbum() throws Exception {
         AlbumCreateDto albumCreateDto = AlbumCreateDto.builder()
-                .icon("MyIcon")
-                .name("MyAlbumName")
+                .icon("MyIconTest")
+                .name("MyAlbumNameTest")
                 .userId(5l)
                 .build();
 
@@ -114,7 +133,13 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(albumCreateDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("MyAlbumName"));
+                .andExpect(jsonPath("$.name").value("MyAlbumNameTest"));
+
+        AlbumImage album = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a join fetch a.album a2 where a2.icon like :icon")
+                .setParameter("icon", "MyIconTest")
+                .getSingleResult();
+        assertEquals("MyAlbumNameTest", album.getAlbum().getName());
+        assertEquals(com.javamentor.developer.social.platform.models.entity.media.MediaType.IMAGE, album.getAlbum().getMediaType());
     }
 
     @Test
@@ -133,11 +158,16 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addImageToAlbum() throws Exception {
-        mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", 32)
-                .param("id", "30"))
+        mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", 27)
+                .param("id", "20"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Image 30 added to album 32"));
+                .andExpect(content().string("Image 20 added to album 27"));
+
+        AlbumImage albumImage = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a join fetch a.images where a.id = 27")
+                .getSingleResult();
+        Set<Image> imageSet = albumImage.getImages();
+        assertEquals(2, imageSet.size());
 
         mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", 32000)
                 .param("id", "30"))

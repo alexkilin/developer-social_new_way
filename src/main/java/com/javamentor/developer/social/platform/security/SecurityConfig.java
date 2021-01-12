@@ -1,8 +1,17 @@
 package com.javamentor.developer.social.platform.security;
 
+import com.javamentor.developer.social.platform.security.oauth.CustomUserInfoTokenServices;
+import com.javamentor.developer.social.platform.security.oauth.OauthUserInfoExtractorService;
+import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -10,27 +19,43 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
+import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
+import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.CompositeFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.Filter;
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
+@EnableOAuth2Client
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
-
+    @Autowired
+    @Qualifier("custom")
     private UserDetailsService userDetailsService;
+    @Autowired
     private OncePerRequestFilter jwtRequestFilter;
+    @Autowired
+    private OAuth2ClientContext oAuth2ClientContext;
+    @Autowired
+    private OauthUserInfoExtractorService externalUserExtractorService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public SecurityConfig( @Qualifier("custom") UserDetailsService userDetailsService
-            , OncePerRequestFilter jwtRequestFilter ) {
-
-        this.userDetailsService = userDetailsService;
-        this.jwtRequestFilter = jwtRequestFilter;
-    }
 
     @Override
     public void configure( HttpSecurity http ) throws Exception {
@@ -46,9 +71,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers("/auth/principal" , "/logout/**").authenticated()
                 .antMatchers("/api/v2/users/verifyemail").anonymous()
                 .antMatchers("/api/v2/**").hasAnyAuthority("USER" , "ADMIN")
+                .and()
+                .logout().logoutSuccessHandler(( new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK) ))
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .deleteCookies("Authorization")
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterAfter(jwtRequestFilter , UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(ssoFilter() , UsernamePasswordAuthenticationFilter.class);
 
     }
 
@@ -74,9 +105,62 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .allowedMethods("*");
     }
 
+
     @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    public FilterRegistrationBean oAuth2ClientFilterRegistration( OAuth2ClientContextFilter oAuth2ClientContextFilter ) {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(oAuth2ClientContextFilter);
+        registration.setOrder(-100);
+        return registration;
     }
+
+    private Filter ssoFilter() {
+        CompositeFilter filter = new CompositeFilter();
+        List<Filter> filters = new ArrayList<>();
+        filters.add(createSsoFilter("/login/google" , google() , googleResource()));
+        filters.add(createSsoFilter("/login/vk" , vk() , vkResource()));
+        filter.setFilters(filters);
+        return filter;
+    }
+
+
+    @Bean
+    @ConfigurationProperties("google.client")
+    public AuthorizationCodeResourceDetails google() {
+        return new AuthorizationCodeResourceDetails();
+    }
+
+    @Bean
+    @ConfigurationProperties("google.resource")
+    public ResourceServerProperties googleResource() {
+        return new ResourceServerProperties();
+    }
+
+    @Bean
+    @ConfigurationProperties("vk.client")
+    public AuthorizationCodeResourceDetails vk() {
+        return new AuthorizationCodeResourceDetails();
+    }
+
+    @Bean
+    @ConfigurationProperties("vk.resource")
+    public ResourceServerProperties vkResource() {
+        return new ResourceServerProperties();
+    }
+
+
+    private OAuth2ClientAuthenticationProcessingFilter createSsoFilter( String filterUrl , AuthorizationCodeResourceDetails oauth2ResourceDetails , ResourceServerProperties resourceServerProperties ) {
+        OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(filterUrl);
+        OAuth2RestTemplate template = new OAuth2RestTemplate(oauth2ResourceDetails , oAuth2ClientContext);
+        filter.setRestTemplate(template);
+        CustomUserInfoTokenServices tokenServices = new CustomUserInfoTokenServices(resourceServerProperties.getUserInfoUri() , oauth2ResourceDetails.getClientId());
+        tokenServices.setRestTemplate(template);
+        filter.setTokenServices(tokenServices);
+        tokenServices.setUserService(userService);
+        tokenServices.setPasswordEncoder(passwordEncoder);
+        tokenServices.setExternalUserExtractorService(externalUserExtractorService);
+        return filter;
+    }
+
 
 }
