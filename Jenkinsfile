@@ -21,8 +21,8 @@ pipeline {
             steps {
                 echo "============= started dockerizing ============="
 
-                sh 'docker build -t platform .'
-                sh 'docker-compose up -d'
+                sh 'sudo docker build -t platform .'
+                sh 'sudo docker-compose up -d'
             }
         }
     }
