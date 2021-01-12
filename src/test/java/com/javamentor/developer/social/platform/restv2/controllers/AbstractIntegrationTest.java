@@ -14,6 +14,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.TimeZone;
+
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = PlatformApplication.class)
@@ -31,6 +33,7 @@ public abstract class AbstractIntegrationTest {
     protected final ObjectMapper objectMapper = new ObjectMapper();
 
     {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
