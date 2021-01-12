@@ -36,8 +36,8 @@ public abstract class GroupConverter {
 
     @Named("groupCategorySetter")
     protected GroupCategory groupCategorySetter(String category){
-        if(groupCategoryService.getByCategory(category).isPresent()){
-            return groupCategoryService.getByCategory(category).get();
+        if(groupCategoryService.getGroupCategoryByName(category).isPresent()){
+            return groupCategoryService.getGroupCategoryByName(category).get();
         }
         GroupCategory newGroupCategory = new GroupCategory();
         newGroupCategory.setCategory(category);

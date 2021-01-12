@@ -46,4 +46,9 @@ public class GroupDtoServiceImpl extends GroupPaginationService<Object, Object> 
     public PageDto<Object, Object> getUsersFromTheGroup(Map<String, Object> parameters) {
         return super.getPageDto("getUsersFromTheGroup", parameters);
     }
+
+    @Override
+    public PageDto<Object, Object> getGroupsByCategory( Map<String, Object> parameters ) {
+        return super.getPageDto("getGroupsByCategory" , parameters);
+    }
 }

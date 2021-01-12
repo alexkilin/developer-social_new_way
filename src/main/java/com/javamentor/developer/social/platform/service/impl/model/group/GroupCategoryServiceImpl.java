@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,14 +17,15 @@ public class GroupCategoryServiceImpl extends GenericServiceAbstract<GroupCatego
     private final GroupCategoryDao groupCategoryDao;
 
     @Autowired
-    public GroupCategoryServiceImpl(GroupCategoryDao dao) {
+    public GroupCategoryServiceImpl( GroupCategoryDao dao ) {
         super(dao);
         this.groupCategoryDao = dao;
     }
 
     @Override
     @Transactional
-    public Optional<GroupCategory> getByCategory(String category) {
-        return groupCategoryDao.getByCategory(category);
+    public Optional<GroupCategory> getGroupCategoryByName( String category ) {
+        return groupCategoryDao.getGroupCategoryByName(category);
     }
+
 }

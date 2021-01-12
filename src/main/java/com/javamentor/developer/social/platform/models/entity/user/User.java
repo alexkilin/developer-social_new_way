@@ -33,7 +33,6 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long userId;
 
-
     @NotNull
     private String firstName;
 
@@ -98,22 +97,22 @@ public class User implements UserDetails {
     @JoinColumn(name = "active_id", nullable = false)
     private Active active;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Language.class, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Language.class)
     @JoinTable(name = "user_languages", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "language_id"))
     private Set<Language> languages;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class)
     @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "audio_id"))
     private Set<Audios> audios;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Videos.class, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Videos.class)
     @JoinTable(name = "users_videos_collections", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "video_id"))
     private Set<Videos> videos;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = GroupChat.class, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = GroupChat.class)
     @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_chat_id"))
     private Set<GroupChat> groupChats;

@@ -6,6 +6,8 @@ import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
 import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
+import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import org.hamcrest.text.MatchesPattern;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,37 +16,39 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityManager;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Sql(statements = {
-        "Insert into active(id, name) values(3, 'test')",
-        "Insert into role(id, name) values(1, 'USER')",
 
-        "Insert into Users(user_id,first_name, last_name, email, last_redaction_date, persist_date, active_id, role_id) " +
-                "values (666,'user666','user666', 'admin666@user.ru', '2020-08-04 16:42:03.157535', '2020-08-04 16:42:03.157535', 3, 1)",
-})
-@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 @DataSet(value = {
         "datasets/restv2/video/usersResources/Active.yml",
         "datasets/restv2/video/usersResources/User.yml",
         "datasets/restv2/video/usersResources/Role.yml",
-        "datasets/restv2/video/UsersVideosCollections.yml",
-        "datasets/restv2/video/Media.yml",
+        "datasets/restv2/video/videoResources/UsersVideosCollections.yml" ,
+        "datasets/restv2/video/videoResources/Media.yml" ,
         "datasets/restv2/video/albumVideoTest/VideoAlbum.yml",
         "datasets/restv2/video/albumVideoTest/Album.yml",
         "datasets/restv2/video/albumVideoTest/UserHasAlbum.yml",
         "datasets/restv2/video/albumVideoTest/AlbumHasVideo.yml",
-        "datasets/restv2/video/Video.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+        "datasets/restv2/video/videoResources/Video.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 class VideosControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/video";
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private EntityManager entityManager;
 
     Gson gson = new Gson();
 
@@ -189,8 +193,8 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void addVideo() throws Exception {
         VideoDto videoDto = VideoDto.builder()
-                .author("MyAuthor")
-                .icon("MyIcon")
+                .author("MyAuthor33")
+                .icon("MyIcon33")
                 .name("MyNewVideo")
                 .url("www.myVideo.ru")
                 .build();
@@ -201,6 +205,11 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.url").value("www.myVideo.ru"));
+
+        Videos video = (Videos) entityManager.createQuery("SELECT a from Videos a where a.icon like :icon")
+                .setParameter("icon","MyIcon33" )
+                .getSingleResult();
+        assertEquals("MyAuthor33", video.getAuthor());
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/video", 500)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -213,8 +222,8 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void createVideoAlbum() throws Exception {
         AlbumVideoDto albumVideoDto = AlbumVideoDto.builder()
-                .icon("MyNewIcon")
-                .name("MyVideoAlbum")
+                .icon("MyNewIconTest")
+                .name("MyVideoAlbumTest")
                 .build();
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6000)
@@ -229,24 +238,41 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(albumVideoDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("MyVideoAlbum"));
+                .andExpect(jsonPath("$.name").value("MyVideoAlbumTest"));
+
+        AlbumVideo album = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a join fetch a.album a2 where a2.icon like :icon")
+                .setParameter("icon", "MyNewIconTest")
+                .getSingleResult();
+        assertEquals("MyVideoAlbumTest", album.getAlbum().getName());
+        assertEquals(com.javamentor.developer.social.platform.models.entity.media.MediaType.VIDEO, album.getAlbum().getMediaType());
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumVideoDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Video album with name 'MyVideoAlbum' already exists"));
+                .andExpect(content().string("Video album with name 'MyVideoAlbumTest' already exists"));
     }
 
     @Test
     public void addInAlbums() throws Exception {
         mockMvc.perform(put(apiUrl + "/album/video")
-                .param("albumId", "20")
+                .param("albumId", "200")
                 .param("videoId", "40"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Video id 40 added to album id 20"));
+                .andExpect(content().string("Video id 40 added to album id 200"));
+
+        AlbumVideo albumVideo = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a join fetch a.videos where a.id = 200")
+                .getSingleResult();
+        Set<Videos> videoSet = albumVideo.getVideos();
+        assertEquals(2,videoSet.size());
+        Optional<Videos> video30 = albumVideo.getVideos().stream().filter(a -> a.getId() == 30).findFirst();
+        Optional<Videos> video40 = albumVideo.getVideos().stream().filter(a -> a.getId() == 40).findFirst();
+        assertTrue(video30.isPresent());
+        assertTrue(video40.isPresent());
+
+
 
         mockMvc.perform(put(apiUrl + "/album/video")
                 .param("albumId", "500")
@@ -256,7 +282,7 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().string("Video album with id 500 is not found"));
 
         mockMvc.perform(put(apiUrl + "/album/video")
-                .param("albumId", "20")
+                .param("albumId", "200")
                 .param("videoId", "400"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
