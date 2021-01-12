@@ -17,6 +17,14 @@ pipeline {
                 sh 'mvn clean package -DskipTests=true'
             }
         }
+        stage('Docker') {
+            steps {
+                echo "============= started dockerizing ============="
+
+                sh 'docker build -t platform .'
+                sh 'docker-compose up -d'
+            }
+        }
     }
 }
 
