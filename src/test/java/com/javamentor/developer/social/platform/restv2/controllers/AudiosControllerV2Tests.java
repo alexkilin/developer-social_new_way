@@ -56,16 +56,16 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4))
-                .andExpect(jsonPath("$.items[0].id").value(70))
-                .andExpect(jsonPath("$.items[0].url").value("www.myaudio7.ru"))
-                .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"))
-                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 7"))
-                .andExpect(jsonPath("$.items[0].author").value("Test Author 7"))
-                .andExpect(jsonPath("$.items[0].album").value("AlbumTestName 7"))
+                .andExpect(jsonPath("$.items[0].id").value(20))
+                .andExpect(jsonPath("$.items[0].url").value("www.myaudio2.ru"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon1"))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 1"))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 1"))
+                .andExpect(jsonPath("$.items[0].album").value("AlbumTestName 1"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
-                .andExpect(jsonPath("$.items[1].id").value(20))
-                .andExpect(jsonPath("$.items[2].id").value(30))
-                .andExpect(jsonPath("$.items[3].id").value(40));
+                .andExpect(jsonPath("$.items[1].id").value(30))
+                .andExpect(jsonPath("$.items[2].id").value(40))
+                .andExpect(jsonPath("$.items[3].id").value(70));
     }
 
     @Test

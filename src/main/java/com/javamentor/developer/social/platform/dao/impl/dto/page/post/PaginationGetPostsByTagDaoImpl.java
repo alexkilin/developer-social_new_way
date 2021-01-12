@@ -51,7 +51,8 @@ public class PaginationGetPostsByTagDaoImpl implements PaginationDao<PostDto> {
                         "from Post as p " +
                         "join p.user as u " +
                         "join p.tags as t " +
-                        "where t.text = :tagText")
+                        "where t.text = :tagText " +
+                        "order by p.id asc")
                 .setParameter("userPrincipalId", parameters.get("userPrincipalId"))
                 .setParameter("tagText", parameters.get("tagText"))
                 .setFirstResult((currentPage - 1) * itemsOnPage)

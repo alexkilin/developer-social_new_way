@@ -24,9 +24,10 @@ public class PaginationGetVideoOfUserDaoImpl implements PaginationDao<VideoDto> 
         int itemsOnPage = (int) parameters.get("itemsOnPage");
 
         return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
-                        " v.media.url, v.name, v.icon, v.author, v.media.persistDateTime)" +
-                        " FROM Videos as v WHERE v.media.mediaType = 2 AND v.media.user.userId = :userId", VideoDto.class)
+                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id, " +
+                        "v.media.url, v.name, v.icon, v.author, v.media.persistDateTime) " +
+                        "FROM Videos as v WHERE v.media.mediaType = 2 AND v.media.user.userId = :userId " +
+                        "ORDER BY v.id ASC", VideoDto.class)
                 .setParameter("userId", userId)
                 .setFirstResult((currentPage - 1)* itemsOnPage)
                 .setMaxResults(itemsOnPage)

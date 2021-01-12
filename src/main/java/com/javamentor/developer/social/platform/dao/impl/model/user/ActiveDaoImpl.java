@@ -6,16 +6,11 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.user.Active;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 @Repository
 public class ActiveDaoImpl extends GenericDaoAbstract<Active, Long> implements ActiveDao {
-
-    @PersistenceContext
-    protected EntityManager entityManager;
 
     @Override
     public Optional<Active> getByActiveName(String name) {

@@ -20,7 +20,6 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
     @PersistenceContext
     private EntityManager em;
 
-
     @Override
     @Transactional
     public List<ChatDto> getAllChatDtoByUserId(Long userId) {
@@ -39,7 +38,8 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 "single.userTwo.active.name, " +
                 "single.id " +
                 "from SingleChat single " +
-                    "WHERE single.userOne.userId=:id OR single.userTwo.userId=:id")
+                "WHERE single.userOne.userId=:id OR single.userTwo.userId=:id " +
+                "ORDER BY single.id ASC")
                 .setParameter("id", userId)
                 .unwrap(Query.class)
                 .setResultTransformer(new ChatDtoResultTransformer())
@@ -49,7 +49,9 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 "groupchats.image," +
                 "groupchats.title," +
                 "groupchats.id " +
-                "from User user join user.groupChats groupchats where user.userId=:id")
+                "from User user join user.groupChats groupchats " +
+                "WHERE user.userId=:id " +
+                "ORDER BY groupchats.id ASC")
                 .setParameter("id", userId)
                 .unwrap(Query.class)
                 .setResultTransformer(new GroupChatDtoResultTransformer())

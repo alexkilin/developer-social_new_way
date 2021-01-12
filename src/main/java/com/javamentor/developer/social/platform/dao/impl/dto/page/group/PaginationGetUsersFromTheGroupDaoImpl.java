@@ -42,8 +42,10 @@ public class PaginationGetUsersFromTheGroupDaoImpl implements PaginationDao<User
                         "u.linkSite, "+
                         "u.role.name, " +
                         "u.status, " +
-                        "u.active.name" +
-                        " FROM User u join GroupHasUser g ON u.userId = g.user.userId WHERE g.group.id = :groupId")
+                        "u.active.name " +
+                        "FROM User u join GroupHasUser g ON u.userId = g.user.userId " +
+                        "WHERE g.group.id = :groupId " +
+                        "ORDER BY u.userId ASC")
                 .setParameter("groupId", groupId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage);

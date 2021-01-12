@@ -33,7 +33,9 @@ public class PaginationGetAllMessagesFromSingleChatDaoImpl implements Pagination
                 "m.persistDate, " +
                 "m.userSender.avatar, " +
                 "m.message  " +
-                "from SingleChat sc join sc.messages as m where sc.id=:chatId")
+                "from SingleChat sc join sc.messages as m " +
+                "where sc.id=:chatId " +
+                "order by m.id asc")
                 .setParameter("chatId", chatId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

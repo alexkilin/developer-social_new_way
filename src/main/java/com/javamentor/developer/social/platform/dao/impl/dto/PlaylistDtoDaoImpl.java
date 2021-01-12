@@ -68,7 +68,8 @@ public class PlaylistDtoDaoImpl implements PlaylistDtoDao {
                         "p.id " +
                         "FROM Playlist p " +
                         "JOIN p.playlistContent c " +
-                        "WHERE p.id in (:playlistId)")
+                        "WHERE p.id in (:playlistId) " +
+                        "ORDER BY p.id ASC")
                 .setParameter("playlistId", playlistId)
                 .unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 

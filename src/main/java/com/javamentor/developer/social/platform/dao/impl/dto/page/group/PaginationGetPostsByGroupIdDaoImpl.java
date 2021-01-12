@@ -40,7 +40,8 @@ public class PaginationGetPostsByGroupIdDaoImpl implements PaginationDao<GroupWa
                         "(SELECT COUNT(rp) FROM p.reposts rp) " +
                         "FROM Group g " +
                         "LEFT JOIN g.posts p " +
-                        "WHERE g.id = :groupId")
+                        "WHERE g.id = :groupId " +
+                        "ORDER BY p.id ASC")
                 .setParameter("groupId", groupId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

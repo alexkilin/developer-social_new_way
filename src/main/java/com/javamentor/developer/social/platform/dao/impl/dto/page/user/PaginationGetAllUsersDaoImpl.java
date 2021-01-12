@@ -43,7 +43,8 @@ public class PaginationGetAllUsersDaoImpl implements PaginationDao<UserDto> {
                     "u.status, " +
                     "u.active.name, " +
                     "u.profession " +
-                    "FROM User u")
+                    "FROM User u " +
+                    "ORDER BY u.userId ASC")
                     .setFirstResult((currentPage - 1) * itemsOnPage)
                     .setMaxResults(itemsOnPage)
                     .unwrap(Query.class)

@@ -6,17 +6,11 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 @Repository
 public class PlaylistDaoImpl extends GenericDaoAbstract<Playlist, Long> implements PlaylistDao {
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
 
     @Override
     public boolean userHasPlaylist(Long userId, Long playlistId) {

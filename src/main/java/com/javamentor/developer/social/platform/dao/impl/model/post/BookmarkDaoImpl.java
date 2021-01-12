@@ -6,16 +6,11 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 @Repository
 public class BookmarkDaoImpl extends GenericDaoAbstract<Bookmark, Long> implements BookmarkDao {
-
-    @PersistenceContext
-    protected EntityManager entityManager;
 
     @Override
     public void deleteBookmarkByPostIdAndUserId(Long postId, Long userId) {

@@ -19,6 +19,6 @@ public interface GenericDao<T, PK extends Serializable> {
 
     List<T> getAll();
 
-    List<T> getPartAudio(int currentPage, int itemsOnPage);
+    List<T> getPart(int currentPage, int itemsOnPage);
 
 }

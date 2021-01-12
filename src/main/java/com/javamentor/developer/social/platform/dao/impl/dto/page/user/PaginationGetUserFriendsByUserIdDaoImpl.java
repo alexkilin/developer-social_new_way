@@ -38,7 +38,8 @@ public class PaginationGetUserFriendsByUserIdDaoImpl implements PaginationDao<Us
                             "f.friend.profession, " +
                             "f.friend.status " +
                             "from Friend f " +
-                            "where f.user.userId = :userId")
+                            "where f.user.userId = :userId " +
+                            "order by f.friend.userId asc")
                     .setParameter("userId", userId)
                     .setFirstResult((currentPage - 1) * itemsOnPage)
                     .setMaxResults(itemsOnPage)

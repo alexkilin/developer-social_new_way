@@ -6,15 +6,10 @@ import com.javamentor.developer.social.platform.models.entity.group.GroupHasUser
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 @Repository
 public class GroupHasUserDaoImpl extends GenericDaoAbstract<GroupHasUser, Long> implements GroupHasUserDao {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Override
     public boolean verificationUserInGroup(Long groupId, Long userId) {

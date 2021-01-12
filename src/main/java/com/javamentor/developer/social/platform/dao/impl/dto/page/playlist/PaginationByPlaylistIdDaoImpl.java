@@ -38,7 +38,8 @@ public class PaginationByPlaylistIdDaoImpl implements PaginationDao<AudioDto> {
                         "c.media.persistDateTime " +
                         "FROM Playlist p " +
                         "JOIN p.playlistContent c " +
-                        "WHERE p.id = :playlistId")
+                        "WHERE p.id = :playlistId " +
+                        "ORDER BY c.id ASC")
                 .setParameter("playlistId", playlistId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

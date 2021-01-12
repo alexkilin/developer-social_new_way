@@ -37,7 +37,9 @@ public class PaginationGetAudioFromAlbumOfUserDaoImpl implements PaginationDao<A
                         "c.media.persistDateTime, " +
                         "c.album, " +
                         "c.length " +
-                        "FROM AlbumAudios u join u.audios as c where u.album.id =:albumId")
+                        "FROM AlbumAudios u join u.audios as c " +
+                        "where u.album.id =:albumId " +
+                        "order by c.id asc")
                 .setParameter("albumId", albumId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

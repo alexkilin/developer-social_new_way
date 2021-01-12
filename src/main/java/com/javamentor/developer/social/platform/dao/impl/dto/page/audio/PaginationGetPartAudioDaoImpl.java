@@ -36,7 +36,9 @@ public class PaginationGetPartAudioDaoImpl implements PaginationDao<AudioDto> {
                         "a.album," +
                         "a.length," +
                         "a.media.persistDateTime " +
-                        "FROM Audios as a WHERE a.media.mediaType = 1")
+                        "FROM Audios as a " +
+                        "WHERE a.media.mediaType = 1 " +
+                        "ORDER BY a.id ASC")
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)
                 .unwrap(Query.class)

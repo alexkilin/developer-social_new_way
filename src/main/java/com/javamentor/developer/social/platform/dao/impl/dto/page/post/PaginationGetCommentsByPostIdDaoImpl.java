@@ -42,7 +42,8 @@ public class PaginationGetCommentsByPostIdDaoImpl implements PaginationDao<Comme
                         "FROM Post p " +
                         "LEFT JOIN PostComment pc on p.id = pc.post.id " +
                         "LEFT JOIN Comment c on pc.comment.id = c.id " +
-                        "WHERE p.id = :postId")
+                        "WHERE p.id = :postId " +
+                        "ORDER BY c.id ASC")
                 .setParameter("postId", postId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

@@ -51,7 +51,8 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         "p.id " +
                         "FROM Post p " +
                         "LEFT JOIN p.media m " +
-                        "WHERE p.id in (:postId)")
+                        "WHERE p.id in (:postId) " +
+                        "ORDER BY m.id ASC")
                 .setParameter("postId", postId);
         return queryMediasForPost.unwrap(Query.class)
                 .setResultTransformer(new ResultTransformer() {
@@ -86,7 +87,8 @@ public class PostDtoDaoImpl implements PostDtoDao {
                         "p.id " +
                         "FROM Post p " +
                         "LEFT JOIN p.tags t " +
-                        "WHERE p.id in (:postId)")
+                        "WHERE p.id in (:postId) " +
+                        "ORDER BY p.id ASC, t.id ASC")
                 .setParameter("postId", postId);
         return queryTagsForPost.unwrap(Query.class).setResultTransformer(new ResultTransformer() {
 

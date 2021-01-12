@@ -33,7 +33,8 @@ public class PaginationGetAllGroupsDaoImpl implements PaginationDao<GroupInfoDto
                         "(SELECT COUNT(ghu.id) FROM ghu WHERE ghu.group.id = g.id), " +
                         "g.addressImageGroup " +
                         "FROM Group g JOIN GroupCategory gc ON gc.id = g.groupCategory.id " +
-                        "JOIN GroupHasUser ghu ON g.id = ghu.group.id")
+                        "JOIN GroupHasUser ghu ON g.id = ghu.group.id " + "" +
+                        "ORDER BY g.id ASC")
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage);
         return (List<GroupInfoDto>) query.unwrap(Query.class).setResultTransformer(new ResultTransformer() {

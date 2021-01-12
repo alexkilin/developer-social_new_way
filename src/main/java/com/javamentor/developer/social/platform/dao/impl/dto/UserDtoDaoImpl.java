@@ -88,7 +88,9 @@ class UserDtoDaoImpl implements UserDtoDao {
         Query query = entityManager.createQuery("SELECT " +
                 "l.id, " +
                 "l.name " +
-                "FROM User u left join u.languages l  where u.userId = :userId")
+                "FROM User u LEFT JOIN u.languages l " +
+                "WHERE u.userId = :userId " +
+                "ORDER BY l.id ASC")
                 .setParameter("userId", userId)
                 .unwrap(Query.class);
 

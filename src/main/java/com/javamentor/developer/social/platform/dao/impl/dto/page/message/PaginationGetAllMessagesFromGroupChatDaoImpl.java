@@ -34,7 +34,9 @@ public class PaginationGetAllMessagesFromGroupChatDaoImpl implements PaginationD
                 "m.persistDate, " +
                 "m.userSender.avatar, " +
                 "m.message " +
-                "from GroupChat gr join gr.messages m where gr.id = :chatId")
+                "from GroupChat gr join gr.messages m " +
+                "where gr.id = :chatId " +
+                "order by m.id asc")
                 .setParameter("chatId", chatId)
                 .unwrap(Query.class)
                 .setFirstResult((currentPage - 1) * currentPage)

@@ -67,7 +67,7 @@ public class PaginationGetUsersWithFiltersDaoImpl implements PaginationDao<UserD
             }
 
 
-            userFriends = entityManager.createQuery(stringBuilder.toString())
+            userFriends = entityManager.createQuery(stringBuilder.append(" order by u.userId asc").toString())
                     .setFirstResult((currentPage - 1) * itemsOnPage)
                     .setMaxResults(itemsOnPage)
                     .unwrap(Query.class)

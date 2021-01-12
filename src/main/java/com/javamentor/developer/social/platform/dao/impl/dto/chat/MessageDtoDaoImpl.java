@@ -26,7 +26,9 @@ public class MessageDtoDaoImpl implements MessageDtoDao {
                 "m.mediaType , " +
                 "m.persistDateTime, " +
                 "mes.id " +
-                "from Message mes join mes.media as m where mes.id in (:messageId)")
+                "from Message mes join mes.media as m " +
+                "where mes.id in (:messageId) " +
+                "ORDER BY m.id ASC, mes.id ASC")
                 .setParameter("messageId", messageId)
                 .unwrap(Query.class).setResultTransformer(
                         new ResultTransformer() {

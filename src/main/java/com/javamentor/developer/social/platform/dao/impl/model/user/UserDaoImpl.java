@@ -6,8 +6,6 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -16,12 +14,9 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserDao {
 
-    @PersistenceContext
-    protected EntityManager entityManager;
-
     @SuppressWarnings("unchecked")
     public List<User> getAll() {
-        return entityManager.createQuery("SELECT u from User u").getResultList();
+        return entityManager.createQuery("SELECT u from User u ORDER BY u.userId ASC").getResultList();
     }
 
     @Override

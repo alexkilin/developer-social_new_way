@@ -40,7 +40,7 @@ public class UserDto {
     @Pattern(groups = {OnCreate.class, OnUpdate.class}, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле фамилия должно начинаться с буквы")
     private String lastName;
 
-    @JsonFormat(pattern = "dd.MM.yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     @ApiModelProperty(notes = "Дата рождения пользователя", example = "01.01.2000", position = 6)
     private Date dateOfBirth;
 
