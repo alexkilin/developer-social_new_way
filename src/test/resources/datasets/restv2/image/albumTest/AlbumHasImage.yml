@@ -3,7 +3,7 @@ album_has_image:
     image_id: 30
 
   - album_id: 21
-    image_id: 20
+    image_id: 2000
 
   - album_id: 22
     image_id: 30
