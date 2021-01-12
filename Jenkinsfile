@@ -1,5 +1,27 @@
 #!groovy
 
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    agent {
+        label 'master'
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '1', artifactNumToKeepStr: '1'))
+        timestamps()
+    }
+    stages {
+        stage("Package") {
+            steps {
+                echo "============= started packaging ============="
+                sh 'mvn clean package -DskipTests=true'
+            }
+        }
+    }
+}
+
+
+
 //pipeline {
 //    agent any
 //    tools {
