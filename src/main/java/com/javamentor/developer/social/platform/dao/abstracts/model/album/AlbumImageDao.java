@@ -4,4 +4,6 @@ import com.javamentor.developer.social.platform.dao.abstracts.GenericDao;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumImage;
 
 public interface AlbumImageDao extends GenericDao<AlbumImage, Long> {
+
+    AlbumImage createAlbumImageWithOwner( AlbumImage albumImage);
 }
