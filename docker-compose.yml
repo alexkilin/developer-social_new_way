@@ -34,7 +34,7 @@ services:
   app:
     image: 'platform:latest'
     ports:
-    - "5557:5557"
+    - "5561:5561"
     build:
       context: .
     container_name: app
