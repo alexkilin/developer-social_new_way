@@ -2,15 +2,20 @@ package com.javamentor.developer.social.platform.service.impl.dto.chat;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.chat.ChatDtoDao;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
+import com.javamentor.developer.social.platform.service.impl.dto.pagination.ChatPaginationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class ChatDtoServiceImpl implements ChatDtoService {
+public class ChatDtoServiceImpl extends ChatPaginationService<Object, Object> implements ChatDtoService {
 
     private final ChatDtoDao dao;
 
@@ -31,4 +36,10 @@ public class ChatDtoServiceImpl implements ChatDtoService {
         return dao.getChatDtoByGroupChatId(chatId);
     }
 
+    @Override
+    public PageDto<ChatDto, Object> getChatDtoByChatName(Map<String, Object> parameters) {
+        String search = (String) parameters.get("search");
+        parameters.put("search", search.trim().replaceAll("\\s+"," ").replace(" ", "% ")+"%");
+        return (PageDto<ChatDto, Object>) super.getChatPageDto("getSingleChatDtoByChatName", "getGroupChatDtoByChatName", parameters);
+    }
 }

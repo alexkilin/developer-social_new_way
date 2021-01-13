@@ -1,8 +1,10 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
+import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.user.User;
@@ -62,6 +64,26 @@ public class ChatControllerV2 {
     })
     public ResponseEntity<List<ChatDto>> getChatsDto(@ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
         return ResponseEntity.ok(chatDtoService.getAllChatDtoByUserId(userId));
+    }
+
+    @GetMapping(value = "/user/chats", params = {"currentPage", "itemsOnPage", "search"})
+    @ApiOperation(value = "Поиск по чатам.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = PageDto.class)
+    })
+    public ResponseEntity<PageDto<ChatDto, ?>> getChatsByChatName(
+            @ApiParam(value = "Имя чата, можно не полное, не зависит от регистра", example = "группа людей") @RequestParam String search,
+            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
+        Long userPrincipalId = securityHelper.getPrincipal().getUserId();
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("userPrincipalId", userPrincipalId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        parameters.put("search", search);
+
+        return ResponseEntity.ok(chatDtoService.getChatDtoByChatName(parameters));
     }
 
     @GetMapping(value = "/group-chats/{chatId}/messages", params = {"currentPage", "itemsOnPage"})

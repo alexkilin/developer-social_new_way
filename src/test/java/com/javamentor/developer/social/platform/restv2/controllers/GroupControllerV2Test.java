@@ -74,7 +74,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     public void getAllGroups() throws Exception {
         mockMvc.perform(get("/api/v2/groups?currentPage=1&itemsOnPage=3"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3));
     }
@@ -82,7 +81,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     public void showGroup() throws Exception {
         mockMvc.perform(get("/api/v2/groups/{groupId}" , 1))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(1))
                 .andExpect(jsonPath("name").value("JAVA IS 0"))
@@ -97,7 +95,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void showGroupInvalidId() throws Exception {
         mockMvc.perform(get("/api/v2/groups/{groupId}" , 100))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Group id 100 not found"));
     }
@@ -107,7 +104,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
         mockMvc.perform(get("/api/v2/groups/{groupId}/posts" , 1)
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "2"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2));
     }
@@ -115,7 +111,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void showGroupWallInvalidId() throws Exception {
         this.mockMvc.perform(get("/api/v2/groups/{groupId}/posts?currentPage=1&itemsOnPage=2" , 100))
-                .andDo(print())
                 .andExpect(status().isBadRequest());
 
     }
@@ -123,7 +118,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void findGroupByName() throws Exception {
         mockMvc.perform(get("/api/v2/groups/name?name=JAVA IS 0"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(1))
                 .andExpect(jsonPath("name").value("JAVA IS 0"))
@@ -134,7 +128,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void findGroupByInvalidName() throws Exception {
         mockMvc.perform(get("/api/v2/groups/name?name=JavaGroupTest"))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Group name JavaGroupTest not found"));
     }
@@ -142,7 +135,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void getUsersFromTheGroup() throws Exception {
         mockMvc.perform(get("/api/v2/groups/{groupId}/users?currentPage=1&itemsOnPage=2" , 1))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
     }
@@ -150,7 +142,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void getUsersFromTheGroupInvalidId() throws Exception {
         mockMvc.perform(get("/api/v2/groups/{groupId}/users?currentPage=1&itemsOnPage=2" , 100))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Group id 100 not found"));
     }
@@ -158,7 +149,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void userJoinGroup() throws Exception {
         mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=20" , 4))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("User with id: 20 added to the group with id: 4"));
     }
@@ -166,7 +156,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void userJoinGroupExist() throws Exception {
         mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=20" , 2))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("User with id: 20 already a member of the group with id: 2"));
     }
@@ -175,14 +164,12 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void userJoinGroupInvalidId() throws Exception {
         mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=100" , 100))
-                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void deleteUserById() throws Exception {
         mockMvc.perform(delete("/api/v2/groups/{groupId}/users?userId=60" , 1))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("User with id: 60 is no longer a member of the group with id: 1"));
     }
@@ -190,7 +177,6 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void deleteUserByInvalidId() throws Exception {
         mockMvc.perform(delete("/api/v2/groups/{groupId}/users?userId=1" , 100))
-                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
