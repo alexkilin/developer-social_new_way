@@ -29,8 +29,8 @@ Build project:
   resource_group: build
   stage: build
   script:   
-    -mvn clean   
-    -mvn compile
+    - mvn clean   
+    - mvn compile
 
 Run tests:
   # resource_group: test
