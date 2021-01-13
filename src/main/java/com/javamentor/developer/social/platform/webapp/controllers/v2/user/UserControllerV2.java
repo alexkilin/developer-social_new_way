@@ -3,16 +3,18 @@ package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.*;
-import com.javamentor.developer.social.platform.models.entity.token.VerificationToken;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
+import com.javamentor.developer.social.platform.security.util.JwtUtil;
 import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
-import com.javamentor.developer.social.platform.service.abstracts.model.token.VerificationTokenService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.service.abstracts.util.VerificationEmailService;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import io.swagger.annotations.*;
 import lombok.NonNull;
 import lombok.ToString;
@@ -26,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -41,8 +42,8 @@ public class UserControllerV2 {
 
     private final UserDtoService userDtoService;
     private final UserService userService;
-    private final VerificationTokenService verificationTokenService;
     private final VerificationEmailService verificationEmailService;
+    private final JwtUtil jwtUtil;
     private final UserConverter userConverter;
     private final SecurityHelper securityHelper;
 
@@ -50,13 +51,13 @@ public class UserControllerV2 {
 
     @Autowired
     public UserControllerV2(UserDtoService userDtoService, UserService userService,
-                            VerificationTokenService verificationTokenService,
                             VerificationEmailService verificationEmailService,
+                            JwtUtil jwtUtil,
                             UserConverter userConverter, SecurityHelper securityHelper) {
         this.userDtoService = userDtoService;
         this.userService = userService;
-        this.verificationTokenService = verificationTokenService;
         this.verificationEmailService = verificationEmailService;
+        this.jwtUtil = jwtUtil;
         this.userConverter = userConverter;
         this.securityHelper = securityHelper;
     }
@@ -109,62 +110,69 @@ public class UserControllerV2 {
                 user -> {
                     if (user.isEnabled()) {
                         logger.info(String.format("Пользователь с email: %s уже существует и зарегистрирован", user.getEmail()));
-                        return ResponseEntity.badRequest().body(String.format("User with email: %s already registered. Email should be unique", user.getEmail()));
+                        return ResponseEntity.badRequest().body(String.format("User with email '%s' already registered. Email should be unique", user.getEmail()));
                     }
                     user.setFirstName(userRegisterDto.getFirstName());
                     user.setLastName(userRegisterDto.getLastName());
                     user.setPassword(userRegisterDto.getPassword());
                     userService.update(user);
                     logger.info(String.format("Регистрационные данные пользователя с эл. почтой '%s' обновлены", user.getEmail()));
-                    VerificationToken vToken = VerificationToken.TokenGenerator.getFor(user);
-                    verificationTokenService.update(vToken);
-                    logger.info(String.format("Код подтверждения регистрации '%s' для пользователя c эл. почтой %s обновлен", vToken.getValue(), user.getEmail()));
-                    verificationEmailService.sendEmail(user);
-                    logger.info(String.format("На адрес эл. почты '%s' пользователя '%s' направлено письмо с проверочным кодом", user.getEmail(),
-                            user.getFirstName() + ' ' + user.getLastName()));
-                    return ResponseEntity.status(230).<Object>body(userConverter.toDto(user));
+                    generateAndSendVerificationEmail(user);
+                    return ResponseEntity.status(230).body(userConverter.toDto(user));
                 })
                 .orElseGet(() -> {
                     User user = userConverter.toEntity(userRegisterDto);
                     userService.create(user);
                     logger.info(String.format("Пользователь с email: %s добавлен в базу данных", user.getEmail()));
-
-                    VerificationToken vToken = VerificationToken.TokenGenerator.getFor(user);
-                    verificationTokenService.create(vToken);
-                    logger.info(String.format("Код подтверждения регистрации '%s' для пользователя c эл. почтой %s создан и добавлен в базу данных",
-                            vToken.getValue(), user.getEmail()));
-
-                    verificationEmailService.sendEmail(user);
-                    logger.info(String.format("На адрес эл. почты '%s' пользователя '%s' направлено письмо с проверочным кодом",
-                            user.getEmail(), user.getFirstName() + ' ' + user.getLastName()));
+                    generateAndSendVerificationEmail(user);
                     return ResponseEntity.ok(userConverter.toDto(user));
                 });
+    }
+
+    private void generateAndSendVerificationEmail(User user) {
+        String verificationToken = jwtUtil.createEmailVerificationToken(user.getUsername());
+        logger.info(String.format("Код подтверждения регистрации для пользователя c эл. почтой %s сгенерирован", user.getEmail()));
+
+        verificationEmailService.sendEmail(user.getEmail(), verificationToken);
+        logger.info(String.format("На адрес эл. почты пользователя '%s' направлено письмо проверочным кодом", user.getEmail()));
     }
 
     @ApiOperation(value = "Подтверждение адреса эл. почты при регистрации")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Почтовый адрес пользователя подтвержден", response = UserRegisterDto.class),
             @ApiResponse(code = 400, message = "Ошибка подтверждения почтового адреса пользователя", response = String.class),
+            @ApiResponse(code = 406, message = "Код регистрации поврежден", response = String.class),
             @ApiResponse(code = 408, message = "Период действия кода регистрации пользователя истек", response = String.class)
     })
     @PostMapping(value = "/verifyemail")
-    public ResponseEntity<?> verifyEmail(@ApiParam(value = "Код подтверждения, высланный пользователю на эл. почту") @RequestBody @NotNull String vToken) {
-        return verificationTokenService.getByValue(vToken).
-                map(token -> {
-                    User user = token.getUser();
-                    if (LocalDateTime.now().isBefore(token.getExpirationDateTime())) {
+    public ResponseEntity<?> verifyEmail(
+            @ApiParam(value = "Код подтверждения, высланный пользователю на эл. почту в виде параметра url")
+            @RequestBody @NotNull String token) {
+
+        String email;
+        try {
+            jwtUtil.extractExpiration(token);
+            email = jwtUtil.extractUsername(token);
+        } catch (ExpiredJwtException ex) {
+            logger.info(String.format("У полученного кода регистрации '%s' вышел срок действия", token));
+            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body("Registration code is outdated");
+        } catch (SignatureException | MalformedJwtException ex) {
+            logger.info(String.format("Полученный код регистрации '%s' поврежден. Сообщение об ошибке ['%s']", token, ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Registration code is corrupted");
+        }
+        return userService.getByEmail(email)
+                .map(user -> {
+                    if (!user.isEnabled()) {
                         user.setIsEnable(true);
                         userService.update(user);
                         logger.info(String.format("Учетная запись пользователя с эл. почтой '%s' активирована", user.getEmail()));
-                        verificationTokenService.deleteById(token.getId());
-                        logger.info(String.format("Запись с кодом подтверждения для пользователя с эл. почтой '%s' удалена из бызы данных", user.getEmail()));
-                        return ResponseEntity.<Object>ok(userConverter.toDto(user));
+                    } else {
+                        logger.info(String.format("Учетная запись пользователя с эл. почтой '%s' была активирована ранее", user.getEmail()));
                     }
-                    logger.info(String.format("У кода регистрации пользователя с эл. почтой '%s' вышел срок действия", user.getEmail()));
-                    return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(String.format("User '%s' registration code is outdated", token.getUser().getEmail()));
+                    return ResponseEntity.<Object>ok(userConverter.toDto(user));
                 }).orElseGet(() -> {
-                    logger.info(String.format("Код подтверждения регистрации '%s' не найден", vToken));
-                    return ResponseEntity.badRequest().body(String.format("Erroneous verification code parameter: '%s', no record found", vToken));
+                    logger.info(String.format("Пользователь с эл. почтой '%s' не найден", email));
+                    return ResponseEntity.badRequest().body(String.format("No matching user record found for verification code '%s'", token));
                 });
     }
 
