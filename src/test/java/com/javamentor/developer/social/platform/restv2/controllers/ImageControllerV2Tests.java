@@ -42,11 +42,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class ImageControllerV2Tests extends AbstractIntegrationTest {
-//    @Test
-//    public void test() throws Exception{
-//        System.out.println("hello");
-//    }
-
 
     private final String apiUrl = "/api/v2/images";
 
