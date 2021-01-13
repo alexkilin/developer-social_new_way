@@ -62,7 +62,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("admin@admin.ru"))
                 .andExpect(jsonPath("$.password").isNotEmpty())
@@ -75,7 +74,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(
                         "User with email: admin@admin.ru already exist. Email should be unique"));
@@ -93,7 +91,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(put(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("NewName"))
                 .andExpect(jsonPath("$.lastName").value("NewLastName"))
@@ -111,7 +108,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(patch(apiUrl + "/2/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userResetPasswordDto)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Password changed for user 2"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
@@ -126,25 +122,10 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(5))
+                .andExpect(jsonPath("$.items.length()").value(5));
 
-                .andExpect(jsonPath("$.items[1].userId").value(2))
-                .andExpect(jsonPath("$.items[1].firstName").value("Admin1"))
-                .andExpect(jsonPath("$.items[1].lastName").value("LastNameAdmin1"))
-                .andExpect(jsonPath("$.items[1].dateOfBirth").value("11.07.2009"))
-                .andExpect(jsonPath("$.items[1].education").value("MIT University"))
-                .andExpect(jsonPath("$.items[1].aboutMe").value("My description about life - Admin1"))
-                .andExpect(jsonPath("$.items[1].avatar").value("www.myavatar0.ru/9090"))
-                .andExpect(jsonPath("$.items[1].email").value("admin2@user.ru"))
-                .andExpect(jsonPath("$.items[1].password").value("userpass0"))
-                .andExpect(jsonPath("$.items[1].city").value("SPb"))
-                .andExpect(jsonPath("$.items[1].linkSite").isEmpty())
-                .andExpect(jsonPath("$.items[1].profession").value("Plumber"))
-                .andExpect(jsonPath("$.items[1].roleName").value("USER"))
-                .andExpect(jsonPath("$.items[1].status").value("Pureness and perfection"))
-                .andExpect(jsonPath("$.items[1].activeName").value("ACTIVE"));
+
     }
 
     @Test
@@ -158,7 +139,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(statusDto)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("Outer space exploration"));
 
@@ -171,7 +151,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(statusDto)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User with ID: 222 does not exist."));
     }
@@ -193,12 +172,11 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     void getUserById() throws Exception {
         mockMvc.perform(get(apiUrl + "/{userId}" , 2L))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(2))
                 .andExpect(jsonPath("$.firstName").value("Admin1"))
                 .andExpect(jsonPath("$.lastName").value("LastNameAdmin1"))
-                .andExpect(jsonPath("$.dateOfBirth").value("11.07.2009"))
+                .andExpect(jsonPath("$.dateOfBirth").value("12.07.2009"))
                 .andExpect(jsonPath("$.education").value("MIT University"))
                 .andExpect(jsonPath("$.aboutMe").value("My description about life - Admin1"))
                 .andExpect(jsonPath("$.avatar").value("www.myavatar0.ru/9090"))
@@ -213,7 +191,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
         mockMvc.perform(get(apiUrl + "/{userId}" , 222L))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User with ID: 222 does not exist."));
     }
@@ -224,7 +201,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4));
 
@@ -232,7 +208,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "5"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User with ID: 222 does not exist."));
     }
@@ -244,7 +219,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage" , "10")
                 .param("education" , "Harvard"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
                 .andExpect(jsonPath("$.items[0].firstName").value("Admin0"));
@@ -254,7 +228,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage" , "10")
                 .param("city" , "SPb"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4));
 
@@ -264,7 +237,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .param("city" , "SPb")
                 .param("profession" , "Creator"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
 
@@ -274,7 +246,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .param("startDateOfBirth" , "1990-05-30")
                 .param("endDateOfBirth" , "2012-03-30"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4));
 
@@ -283,7 +254,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage" , "10")
                 .param("endDateOfBirth" , "2003-12-30"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2));
     }

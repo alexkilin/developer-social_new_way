@@ -61,7 +61,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         this.mockMvc.perform(get(apiUrl + "/")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4))
                 .andExpect(jsonPath("$.items[0].id").value(70))
@@ -81,7 +80,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/author/{author}", "Test Author 1")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
                 .andExpect(jsonPath("$.items[0].id").value(20))
@@ -96,7 +94,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/name/{name}", "AudioTestName 2")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
                 .andExpect(jsonPath("$.items[0].id").value(30))
@@ -111,7 +108,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/album/{album}", "AlbumTestName 5")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
                 .andExpect(jsonPath("$.items[0].id").value(60))
@@ -126,7 +122,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/user/{userId}", 2)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3))
                 .andExpect(jsonPath("$.items[0].id").value(30))
@@ -146,7 +141,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/user/{userId}/author?author=Test Author 1", 3)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
                 .andExpect(jsonPath("$.items[0].id").value(20))
@@ -161,7 +155,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/user/{userId}/album?album=AlbumTestName 7", 2)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
                 .andExpect(jsonPath("$.items[0].id").value(70))
@@ -176,7 +169,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
        mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "40"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Audio id 40 added to collection of user id 666"));
 
@@ -186,7 +178,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
         mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "500"))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Audio id 500 not found"));
     }
@@ -206,7 +197,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/audio", 2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(audioDto)))
-                .andDo(print())
                 .andExpect(status().isCreated());
 
         Audios audios = (Audios) entityManager.createQuery("SELECT a from Audios a where a.length = 200")
@@ -216,7 +206,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/audio", 900)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(audioDto)))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User id 900 not found"));
     }
@@ -226,7 +215,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/user/{userId}/album", 2)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4))
                 .andExpect(jsonPath("$.items[0].id").value(20))
@@ -241,7 +229,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     public void addInAlbums() throws Exception {
         mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 40)
                 .param("audioId", "20"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Audio id 20 added to album id 40"));
 
@@ -259,13 +246,11 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
         mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 800)
                 .param("audioId", "20"))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Album id 800 not found"));
 
         mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 40)
                 .param("audioId", "900"))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Audio id 900 not found"));
     }
@@ -280,7 +265,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 5)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumDto)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("MyTestAlbum"));
 
@@ -293,7 +277,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 5)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Audio album with name 'MyTestAlbum' already exists"));
     }
@@ -303,7 +286,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/albums/{albumId}/audio", 30)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
                 .andExpect(jsonPath("$.items[0].id").value(30));
@@ -319,7 +301,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 3)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(playlistCreateDto)))
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.image").value("MyImageTest"))
                 .andExpect(jsonPath("$.name").value("MyNameTest"));
@@ -332,14 +313,12 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 900)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(playlistCreateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The user does not exist"));
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 3)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(playlistCreateDto)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("The playlist already exists"));
     }
@@ -347,12 +326,10 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void deletePlaylist() throws Exception {
         mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 2, 1000))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("No playlist with id 1000 for user 2"));
 
         mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 2, 100))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Playlist with id 100 deleted"));
     }
@@ -362,7 +339,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/user/{userId}/playlists", 2)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
                 .andExpect(jsonPath("$.items[0].name").value("test0"));
@@ -371,13 +347,11 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getPlaylistById() throws Exception {
         mockMvc.perform(get(apiUrl + "/playlists/{playlistId}", 100))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(6))
                 .andExpect(jsonPath("$.name").value("test0"));
 
         mockMvc.perform(get(apiUrl + "/playlists/{playlistId}", 900))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("No playlist with id 900"));
     }
@@ -386,7 +360,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     public void addAudioToPlaylist() throws Exception {
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
                 .param("audioId", "40"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
 
@@ -397,7 +370,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
                 .param("audioId", "30"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2));
 
@@ -408,19 +380,16 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
                 .param("audioId", "500"))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("No audio with id 500 found"));
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 700)
                 .param("audioId", "40"))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("No playlist with id 700"));
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
                 .param("audioId", "40"))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("This playlist already contains audio with id 40"));
 
@@ -429,7 +398,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void removeAudioFromPlaylist() throws Exception {
         mockMvc.perform(delete(apiUrl + "/playlists/{playlistId}/audio/{audioId}", 100, 20))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -438,7 +406,6 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/playlists/{playlistId}/audio", 100)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3))
                 .andExpect(jsonPath("$.items[0].id").value(20))

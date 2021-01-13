@@ -6,7 +6,11 @@ import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
 import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
+import com.javamentor.developer.social.platform.models.entity.album.Album;
+import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
+import com.javamentor.developer.social.platform.models.entity.media.Audios;
+import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import org.hamcrest.text.MatchesPattern;
 import org.junit.jupiter.api.Test;
@@ -57,7 +61,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(5))
                 .andExpect(jsonPath("$.items[0].id").value(10))
@@ -76,7 +79,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("namePart", "deoT")
                 .param("currentPage", "2")
                 .param("itemsOnPage", "2"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalResults").value(6))
                 .andExpect(jsonPath("$.items.length()").value(2))
@@ -91,7 +93,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("namePart", "deoT")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "2"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalResults").value(6))
                 .andExpect(jsonPath("$.items.length()").value(2))
@@ -106,7 +107,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("namePart", "deoT")
                 .param("currentPage", "3")
                 .param("itemsOnPage", "2"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalResults").value(6))
                 .andExpect(jsonPath("$.items.length()").value(2))
@@ -121,7 +121,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("namePart", "deoT")
                 .param("currentPage", "2")
                 .param("itemsOnPage", "5"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalResults").value(6))
                 .andExpect(jsonPath("$.items.length()").value(1))
@@ -138,7 +137,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("namePart", "deoT")
                 .param("currentPage", "-2")
                 .param("itemsOnPage", "2"))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(new MatchesPattern(Pattern.compile(
                         ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
@@ -147,7 +145,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("namePart", "deoT")
                 .param("currentPage", "2")
                 .param("itemsOnPage", "-2"))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(new MatchesPattern(Pattern.compile(
                         ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
@@ -156,7 +153,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("namePart", "deoT")
                 .param("currentPage", "0")
                 .param("itemsOnPage", "2"))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(new MatchesPattern(Pattern.compile(
                         ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
@@ -165,7 +161,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("namePart", "deoT")
                 .param("currentPage", "20")
                 .param("itemsOnPage", "0"))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(new MatchesPattern(Pattern.compile("" +
                         ".*make sure that parameters 'currentPage' and 'itemsOnPage' values are greater.*"))));
@@ -174,7 +169,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("namePart", "deoT")
                 .param("currentPage", "3")
                 .param("itemsOnPage", "3"))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(new MatchesPattern(Pattern.compile(
                         ".*is greater than total number of available pages.*"))));
@@ -185,7 +179,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/user/{userId}/video", 2)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3));
     }
@@ -202,7 +195,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/video", 5)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(videoDto)))
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.url").value("www.myVideo.ru"));
 
@@ -214,7 +206,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/video", 500)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(videoDto)))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User with id 500 is not found"));
     }
@@ -229,14 +220,12 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6000)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumVideoDto)))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User with id 6000 is not found"));
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumVideoDto)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("MyVideoAlbumTest"));
 
@@ -249,7 +238,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumVideoDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Video album with name 'MyVideoAlbumTest' already exists"));
     }
@@ -259,7 +247,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(put(apiUrl + "/album/video")
                 .param("albumId", "200")
                 .param("videoId", "40"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Video id 40 added to album id 200"));
 
@@ -277,14 +264,12 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(put(apiUrl + "/album/video")
                 .param("albumId", "500")
                 .param("videoId", "40"))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Video album with id 500 is not found"));
 
         mockMvc.perform(put(apiUrl + "/album/video")
                 .param("albumId", "200")
                 .param("videoId", "400"))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Video with id 400 is not found"));
     }
@@ -294,7 +279,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/user/{userId}/album", 2)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2));
     }
@@ -304,7 +288,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/album/{albumId}/video", 30)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
     }
@@ -315,7 +298,6 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("album", "videoAlbum3")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
     }

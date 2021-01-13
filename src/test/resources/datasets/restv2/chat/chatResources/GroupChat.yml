@@ -9,7 +9,7 @@ group_chats:
     title: 'Group chat #2'
     persist_date: 2020-09-02 03:36:50.977300
 
-  - id: 30
+  - id: 300
     image: 'Chat image #3'
     title: 'Group chat #3'
     persist_date: 2020-09-02 03:36:50.977300
