@@ -19,3 +19,9 @@ users_group_chats:
 
   - user_id: 60
     group_chat_id: 20
+
+  - user_id: 666
+    group_chat_id: 10
+
+  - user_id: 666
+    group_chat_id: 20
