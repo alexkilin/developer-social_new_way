@@ -32,7 +32,7 @@ Build project:
     - mvn clean   
     - mvn compile
 
-Run tests:
+AudioControllerV2Tests:
   resource_group: test
   variables:
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true 
