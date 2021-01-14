@@ -23,6 +23,9 @@ pipeline {
 
                 sh 'docker build --rm -t platform .'
                 sh 'docker-compose up -d'
+                sh 'docker rmi $(docker images -f "dangling=true" -q)'
+
+                echo "============= end dockerizing ============="
             }
         }
     }
