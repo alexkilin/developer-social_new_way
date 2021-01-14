@@ -16,7 +16,12 @@
 
     <include file="v-1.0/db.changelog-v.1.0.xml" relativeToChangelogFile="true"/>
     <include file="v-1.0/db.changelog-loadData-v.1.0.xml" relativeToChangelogFile="true"/>
-
+    <include file="v-2.0/sql_update_cascade_1/db.changelog-v.2.0.xml" relativeToChangelogFile="true"/>
+    <include file="v-2.0/create_sequence_2/db.changelog-v.2.1.xml" relativeToChangelogFile="true"/>
+    <include file="v-2.0/create_sequence_2/db.changelog-v.2.1.1.xml" relativeToChangelogFile="true"/>
+    <include file="v-2.0/adding_sequence_on_updated_cascade_3/db.changelog-v.2.2.xml" relativeToChangelogFile="true"/>
+    <include file="v-2.0/create_sequence_2/db.changelog-v.2.1.2.xml" relativeToChangelogFile="true"/>
+    <include file="v-2.0/adding_sequence_on_updated_cascade_3/db.changelog-v.2.2.1.xml" relativeToChangelogFile="true"/>
 
     <changeSet id="1000" author="dev-social">
         <tagDatabase tag="v.1.0"/>

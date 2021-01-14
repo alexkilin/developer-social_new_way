@@ -1,0 +1,1 @@
+update user_tabs set id = nextval('user_tabs_seq');

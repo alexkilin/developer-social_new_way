@@ -1,0 +1,1 @@
+update media set id = nextval('media_seq');

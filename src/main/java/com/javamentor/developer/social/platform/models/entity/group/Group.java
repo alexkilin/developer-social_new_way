@@ -21,7 +21,7 @@ import java.util.Set;
 public class Group {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "groups_seq")
     private Long id;
 
     @Column

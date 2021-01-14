@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <include file="001-active-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="070-albums-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="090-bookmarks-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="110-comments-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="120-followers-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="130-friends-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="140-group-category-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="150-group_chats-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="180-group_has_user-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="200-groups-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="220-language-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="230-like-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="240-media-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="280-messages-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="350-posts-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="360-reposts-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="370-role-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="380-single_chat-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="400-tags-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="410-user_has_album-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="430-user_tabs-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="440-users-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="500-topics-sequence.sql" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

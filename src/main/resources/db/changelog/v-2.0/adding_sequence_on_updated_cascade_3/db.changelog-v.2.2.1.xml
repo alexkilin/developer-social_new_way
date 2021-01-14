@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <include file="440-users-add-sequence-recreate.sql" relativeToChangelogFile="true"/>
+    <include file="300-playlists-add-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="280-messages-add-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="200-groups-reattach-sequence.sql" relativeToChangelogFile="true"/>
+    <include file="album-video-hotfix-all-in-one.sql" relativeToChangelogFile="true"/>
+    <include file="album-hotfix-sequence.sql" relativeToChangelogFile="true"/>
+
+
+</databaseChangeLog>

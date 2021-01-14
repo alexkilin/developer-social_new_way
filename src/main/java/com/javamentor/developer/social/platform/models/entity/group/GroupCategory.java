@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class GroupCategory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "group_category_seq")
     private Long id;
 
     @Column
