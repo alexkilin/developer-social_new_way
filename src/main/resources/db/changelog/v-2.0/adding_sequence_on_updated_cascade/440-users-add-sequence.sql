@@ -1,0 +1,1 @@
+update users set user_id = nextval('users_seq');

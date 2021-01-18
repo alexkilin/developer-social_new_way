@@ -1,601 +1,67 @@
 media:
-  - id: 1000
+  - id: 200
     media_type: 1
     persist_date: '2020-09-28 14:25:35.595700'
     url: "www.myimage.ru"
-    album_id:  31
-    user_id: 2
-  - id: 2000
+    album_id:  200
+    user_id: 200
+  - id: 201
     media_type: 0
     persist_date: '2020-09-28 14:25:35.605689'
     url: "www.myimage.ru"
-    album_id:  32
-    user_id: 3
-  - id: 30
+    album_id:  200
+    user_id: 200
+  - id: 202
     media_type: 0
     persist_date: '2020-09-28 14:25:35.608686'
     url: "www.myimage.ru"
-    album_id:  33
-    user_id: 4
-  - id: 40
+    album_id:  200
+    user_id: 200
+  - id: 203
     media_type: 2
     persist_date: '2020-09-28 14:25:35.610192'
     url: "www.myimage.ru"
-    album_id:  34
-    user_id: 5
-  - id: 50
+    album_id:  201
+    user_id: 201
+  - id: 204
     media_type: 0
     persist_date: '2020-09-28 14:25:35.614187'
     url: "www.myimage.ru"
-    album_id:  35
-    user_id: 6
-  - id: 60
+    album_id:  201
+    user_id: 201
+  - id: 205
     media_type: 1
     persist_date: '2020-09-28 14:25:35.618182'
     url: "www.myimage.ru"
-    album_id:  36
-    user_id: 2
-  - id: 70
+    album_id:  201
+    user_id: 201
+  - id: 206
     media_type: 2
     persist_date: '2020-09-28 14:25:35.633167'
     url: "www.myimage.ru"
-    album_id:  37
-    user_id: 3
-  - id: 80
+    album_id:  202
+    user_id: 202
+  - id: 207
     media_type: 0
     persist_date: '2020-09-28 14:25:35.637161'
     url: "www.myimage.ru"
-    album_id:  38
-    user_id: 4
-  - id: 90
+    album_id:  202
+    user_id: 202
+  - id: 208
     media_type: 0
     persist_date: '2020-09-28 14:25:35.643155'
     url: "www.myimage.ru"
-    album_id:  39
-    user_id: 5
-  - id: 100
+    album_id:  202
+    user_id: 202
+  - id: 209
     media_type: 2
     persist_date: '2020-09-28 14:25:35.646151'
     url: "www.myimage.ru"
-    album_id:  40
-    user_id: 5
-  - id: 110
+    album_id:  203
+    user_id: 203
+  - id: 210
     media_type: 1
     persist_date: '2020-09-28 14:25:35.648148'
     url: "www.myimage.ru"
-    album_id:  41
-    user_id: 6
-  - id: 120
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.650146'
-    url: "www.myimage.ru"
-    album_id:  42
-    user_id: 2
-  - id: 130
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.652145'
-    url: "www.myimage.ru"
-    album_id:  43
-    user_id: 2
-  - id: 140
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.655141'
-    url: "www.myimage.ru"
-    album_id:  44
-    user_id: 3
-  - id: 150
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.657138'
-    url: "www.myimage.ru"
-    album_id:  45
-    user_id: 4
-  - id: 160
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.659136'
-    url: "www.myimage.ru"
-    album_id:  46
-    user_id: 5
-  - id: 170
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.661134'
-    url: "www.myimage.ru"
-    album_id:  47
-    user_id: 6
-  - id: 180
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.662132'
-    url: "www.myimage.ru"
-    album_id:  48
-    user_id: 6
-  - id: 190
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.664132'
-    url: "www.myimage.ru"
-    album_id:  49
-    user_id: 2
-  - id: 200
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.667128'
-    url: "www.myimage.ru"
-    album_id:  50
-    user_id: 2
-  - id: 210
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.670123'
-    url: "www.myimage.ru"
-    album_id:  21
-    user_id: 2
-  - id: 220
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.671123'
-    url: "www.myimage.ru"
-    album_id:  22
-    user_id: 2
-  - id: 230
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.673120'
-    url: "www.myimage.ru"
-    album_id:  23
-    user_id: 2
-  - id: 240
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.674118'
-    url: "www.myimage.ru"
-    album_id:  24
-    user_id: 2
-  - id: 250
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.676118'
-    url: "www.myimage.ru"
-    album_id:  25
-    user_id: 2
-  - id: 260
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.680112'
-    url: "www.myimage.ru"
-    album_id:  26
-    user_id: 2
-  - id: 270
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.682110'
-    url: "www.myimage.ru"
-    album_id:  27
-    user_id: 2
-  - id: 280
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.684108'
-    url: "www.myimage.ru"
-    album_id:  28
-    user_id: 2
-  - id: 290
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.686106'
-    url: "www.myimage.ru"
-    album_id:  29
-    user_id: 2
-  - id: 300
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.688105'
-    url: "www.myimage.ru"
-    album_id:  30
-    user_id: 2
-  - id: 310
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.691100'
-    url: "www.myimage.ru"
-    album_id:  31
-    user_id: 2
-  - id: 320
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.692098'
-    url: "www.myimage.ru"
-    album_id:  32
-    user_id: 2
-  - id: 330
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.694096'
-    url: "www.myimage.ru"
-    album_id:  33
-    user_id: 2
-  - id: 340
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.695095'
-    url: "www.myimage.ru"
-    album_id:  34
-    user_id: 2
-  - id: 350
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.696093'
-    url: "www.myimage.ru"
-    album_id:  35
-    user_id: 2
-  - id: 360
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.698092'
-    url: "www.myimage.ru"
-    album_id:  36
-    user_id: 2
-  - id: 370
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.701089'
-    url: "www.myimage.ru"
-    album_id:  37
-    user_id: 3
-  - id: 380
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.704085'
-    url: "www.myimage.ru"
-    album_id:  38
-    user_id: 3
-  - id: 390
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.706083'
-    url: "www.myimage.ru"
-    album_id:  39
-    user_id: 3
-  - id: 400
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.707082'
-    url: "www.myimage.ru"
-    album_id:  40
-    user_id: 3
-  - id: 410
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.709079'
-    url: "www.myimage.ru"
-    album_id:  41
-    user_id: 3
-  - id: 420
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.711077'
-    url: "www.myimage.ru"
-    album_id:  42
-    user_id: 3
-  - id: 430
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.714074'
-    url: "www.myimage.ru"
-    album_id:  43
-    user_id: 3
-  - id: 440
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.717071'
-    url: "www.myimage.ru"
-    album_id:  44
-    user_id: 3
-  - id: 450
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.719068'
-    url: "www.myimage.ru"
-    album_id:  45
-    user_id: 3
-  - id: 460
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.720066'
-    url: "www.myimage.ru"
-    album_id:  46
-    user_id: 3
-  - id: 470
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.722064'
-    url: "www.myimage.ru"
-    album_id:  47
-    user_id: 3
-  - id: 480
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.723063'
-    url: "www.myimage.ru"
-    album_id:  48
-    user_id: 3
-  - id: 490
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.725061'
-    url: "www.myimage.ru"
-    album_id:  49
-    user_id: 3
-  - id: 500
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.727059'
-    url: "www.myimage.ru"
-    album_id:  50
-    user_id: 3
-  - id: 510
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.729056'
-    url: "www.myimage.ru"
-    album_id:  51
-    user_id: 3
-  - id: 520
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.730055'
-    url: "www.myimage.ru"
-    album_id:  52
-    user_id: 3
-  - id: 530
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.732054'
-    url: "www.myimage.ru"
-    album_id:  53
-    user_id: 3
-  - id: 540
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.734051'
-    url: "www.myimage.ru"
-    album_id:  54
-    user_id: 3
-  - id: 550
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.735049'
-    url: "www.myimage.ru"
-    album_id:  55
-    user_id: 4
-  - id: 560
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.737047'
-    url: "www.myimage.ru"
-    album_id:  56
-    user_id: 4
-  - id: 570
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.738046'
-    url: "www.myimage.ru"
-    album_id:  57
-    user_id: 4
-  - id: 580
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.740044'
-    url: "www.myimage.ru"
-    album_id:  58
-    user_id: 4
-  - id: 590
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.741042'
-    url: "www.myimage.ru"
-    album_id:  59
-    user_id: 4
-  - id: 600
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.742041'
-    url: "www.myimage.ru"
-    album_id:  60
-    user_id: 4
-  - id: 610
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.744039'
-    url: "www.myimage.ru"
-    album_id:  61
-    user_id: 4
-  - id: 620
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.745038'
-    url: "www.myimage.ru"
-    album_id:  62
-    user_id: 4
-  - id: 630
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.746038'
-    url: "www.myimage.ru"
-    album_id:  63
-    user_id: 4
-  - id: 640
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.748035'
-    url: "www.myimage.ru"
-    album_id:  64
-    user_id: 4
-  - id: 650
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.750033'
-    url: "www.myimage.ru"
-    album_id:  65
-    user_id: 4
-  - id: 660
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.752030'
-    url: "www.myimage.ru"
-    album_id:  66
-    user_id: 4
-  - id: 670
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.754027'
-    url: "www.myimage.ru"
-    album_id:  67
-    user_id: 4
-  - id: 680
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.755026'
-    url: "www.myimage.ru"
-    album_id:  68
-    user_id: 4
-  - id: 690
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.756026'
-    url: "www.myimage.ru"
-    album_id:  69
-    user_id: 4
-  - id: 700
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.757024'
-    url: "www.myimage.ru"
-    album_id:  70
-    user_id: 4
-  - id: 710
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.758023'
-    url: "www.myimage.ru"
-    album_id:  71
-    user_id: 4
-  - id: 720
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.760021'
-    url: "www.myimage.ru"
-    album_id:  72
-    user_id: 4
-  - id: 730
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.761020'
-    url: "www.myimage.ru"
-    album_id:  73
-    user_id: 5
-  - id: 740
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.763018'
-    url: "www.myimage.ru"
-    album_id:  74
-    user_id: 5
-  - id: 750
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.764016'
-    url: "www.myimage.ru"
-    album_id:  75
-    user_id: 5
-  - id: 760
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.765015'
-    url: "www.myimage.ru"
-    album_id:  76
-    user_id: 5
-  - id: 770
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.767013'
-    url: "www.myimage.ru"
-    album_id:  77
-    user_id: 5
-  - id: 780
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.768011'
-    url: "www.myimage.ru"
-    album_id:  78
-    user_id: 5
-  - id: 790
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.769011'
-    url: "www.myimage.ru"
-    album_id:  79
-    user_id: 5
-  - id: 800
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.771008'
-    url: "www.myimage.ru"
-    album_id:  80
-    user_id: 5
-  - id: 810
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.772008'
-    url: "www.myimage.ru"
-    album_id:  81
-    user_id: 5
-  - id: 820
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.773006'
-    url: "www.myimage.ru"
-    album_id:  82
-    user_id: 5
-  - id: 830
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.774005'
-    url: "www.myimage.ru"
-    album_id:  83
-    user_id: 5
-  - id: 840
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.775004'
-    url: "www.myimage.ru"
-    album_id:  84
-    user_id: 5
-  - id: 850
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.776003'
-    url: "www.myimage.ru"
-    album_id:  85
-    user_id: 5
-  - id: 860
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.777001'
-    url: "www.myimage.ru"
-    album_id:  86
-    user_id: 5
-  - id: 870
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.778999'
-    url: "www.myimage.ru"
-    album_id:  87
-    user_id: 5
-  - id: 880
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.780003'
-    url: "www.myimage.ru"
-    album_id:  88
-    user_id: 5
-  - id: 890
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.781996'
-    url: "www.myimage.ru"
-    album_id:  89
-    user_id: 5
-  - id: 900
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.783994'
-    url: "www.myimage.ru"
-    album_id:  90
-    user_id: 5
-  - id: 910
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.785992'
-    url: "www.myimage.ru"
-    album_id:  91
-    user_id: 6
-  - id: 920
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.787990'
-    url: "www.myimage.ru"
-    album_id:  92
-    user_id: 6
-  - id: 930
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.789987'
-    url: "www.myimage.ru"
-    album_id:  93
-    user_id: 6
-  - id: 940
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.791985'
-    url: "www.myimage.ru"
-    album_id:  94
-    user_id: 6
-  - id: 950
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.792983'
-    url: "www.myimage.ru"
-    album_id:  95
-    user_id: 6
-  - id: 960
-    media_type: 1
-    persist_date: '2020-09-28 14:25:35.793982'
-    url: "www.myimage.ru"
-    album_id:  96
-    user_id: 6
-  - id: 970
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.795980'
-    url: "www.myimage.ru"
-    album_id:  97
-    user_id: 6
-  - id: 980
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.796979'
-    url: "www.myimage.ru"
-    album_id:  98
-    user_id: 6
-  - id: 990
-    media_type: 0
-    persist_date: '2020-09-28 14:25:35.797977'
-    url: "www.myimage.ru"
-    album_id:  99
-    user_id: 6
-  - id: 1000
-    media_type: 2
-    persist_date: '2020-09-28 14:25:35.803971'
-    url: "www.myimage.ru"
-    album_id:  100
-    user_id: 6
+    album_id:  203
+    user_id: 203

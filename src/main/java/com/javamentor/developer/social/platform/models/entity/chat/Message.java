@@ -22,7 +22,7 @@ import java.util.Set;
 public class Message {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue( generator = "messages_seq")
     private Long id;
 
     @Column

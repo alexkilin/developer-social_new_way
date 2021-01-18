@@ -28,7 +28,7 @@ import java.util.Set;
 public class Topic {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "topics_seq")
     private Long id;
 
     @Transient

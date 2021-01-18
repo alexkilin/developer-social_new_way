@@ -16,7 +16,7 @@ import java.util.Set;
 public class Language {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "language_seq")
     private Long id;
 
     @Column

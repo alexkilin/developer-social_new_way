@@ -80,28 +80,28 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     public void showGroup() throws Exception {
-        mockMvc.perform(get("/api/v2/groups/{groupId}" , 1))
+        mockMvc.perform(get("/api/v2/groups/{groupId}" , 200))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(1))
+                .andExpect(jsonPath("id").value(200))
                 .andExpect(jsonPath("name").value("JAVA IS 0"))
                 .andExpect(jsonPath("lastRedactionDate").value("2020-08-13T11:46:35.493"))
                 .andExpect(jsonPath("persistDate").value("2020-08-13T11:46:35.493"))
                 .andExpect(jsonPath("linkSite").value("www.groupsite0.ru"))
                 .andExpect(jsonPath("groupCategory").value("Programming"))
-                .andExpect(jsonPath("ownerFio").value("LastNameUser0 Admin0"))
+                .andExpect(jsonPath("ownerFio").value("LastNameUser0 Admin65"))
                 .andExpect(jsonPath("description").value("This is a description of the group #0"));
     }
 
     @Test
     void showGroupInvalidId() throws Exception {
-        mockMvc.perform(get("/api/v2/groups/{groupId}" , 100))
+        mockMvc.perform(get("/api/v2/groups/{groupId}" , 1000))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Group id 100 not found"));
+                .andExpect(content().string("Group id 1000 not found"));
     }
 
     @Test
     void showGroupWall() throws Exception {
-        mockMvc.perform(get("/api/v2/groups/{groupId}/posts" , 1)
+        mockMvc.perform(get("/api/v2/groups/{groupId}/posts" , 200)
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "2"))
                 .andExpect(status().isOk())
@@ -110,7 +110,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     void showGroupWallInvalidId() throws Exception {
-        this.mockMvc.perform(get("/api/v2/groups/{groupId}/posts?currentPage=1&itemsOnPage=2" , 100))
+        this.mockMvc.perform(get("/api/v2/groups/{groupId}/posts?currentPage=1&itemsOnPage=2" , 1000))
                 .andExpect(status().isBadRequest());
 
     }
@@ -119,7 +119,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void findGroupByName() throws Exception {
         mockMvc.perform(get("/api/v2/groups/name?name=JAVA IS 0"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(1))
+                .andExpect(jsonPath("id").value(200))
                 .andExpect(jsonPath("name").value("JAVA IS 0"))
                 .andExpect(jsonPath("groupCategory").value("Programming"))
                 .andExpect(jsonPath("subscribers").value(1));
@@ -134,44 +134,44 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Test
     void getUsersFromTheGroup() throws Exception {
-        mockMvc.perform(get("/api/v2/groups/{groupId}/users?currentPage=1&itemsOnPage=2" , 1))
+        mockMvc.perform(get("/api/v2/groups/{groupId}/users?currentPage=1&itemsOnPage=2" , 200))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1));
     }
 
     @Test
     void getUsersFromTheGroupInvalidId() throws Exception {
-        mockMvc.perform(get("/api/v2/groups/{groupId}/users?currentPage=1&itemsOnPage=2" , 100))
+        mockMvc.perform(get("/api/v2/groups/{groupId}/users?currentPage=1&itemsOnPage=2" , 1000))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Group id 100 not found"));
+                .andExpect(content().string("Group id 1000 not found"));
     }
 
     @Test
     void userJoinGroup() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=20" , 4))
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=205" , 200))
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 20 added to the group with id: 4"));
+                .andExpect(content().string("User with id: 205 added to the group with id: 200"));
     }
 
     @Test
     void userJoinGroupExist() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=20" , 2))
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=202" , 201))
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 20 already a member of the group with id: 2"));
+                .andExpect(content().string("User with id: 202 already a member of the group with id: 201"));
     }
 
 
     @Test
     void userJoinGroupInvalidId() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=100" , 100))
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=1000" , 200))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void deleteUserById() throws Exception {
-        mockMvc.perform(delete("/api/v2/groups/{groupId}/users?userId=60" , 1))
+        mockMvc.perform(delete("/api/v2/groups/{groupId}/users?userId=200" , 200))
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 60 is no longer a member of the group with id: 1"));
+                .andExpect(content().string("User with id: 200 is no longer a member of the group with id: 200"));
     }
 
     @Test
@@ -183,8 +183,8 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void groupHasUser() throws Exception {
 
-        int groupId = 4;
-        String userId = "40";
+        int groupId = 200;
+        String userId = "200";
         MockHttpServletResponse response =
                 mockMvc.perform(get(apiUrl + "/" + groupId + "/users")
                         .param("userId" , userId))
@@ -202,8 +202,8 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     @Test
     void groupHasUserWrongId() throws Exception {
 
-        int groupId = 4;
-        String userId = "100500";
+        int groupId = 200;
+        String userId = "1000";
         MockHttpServletResponse response =
                 mockMvc.perform(get(apiUrl + "/" + groupId + "/users")
                         .param("userId" , userId))
@@ -211,7 +211,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                         .andReturn()
                         .getResponse();
 
-        String correctResponse = "User with id: 100500 or/and group with id: 4 not found";
+        String correctResponse = "User with id: 1000 or/and group with id: 200 not found";
         assertEquals(correctResponse , response.getContentAsString());
 
     }
@@ -220,7 +220,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void updateGroup() throws Exception {
         GroupUpdateInfoDto groupUpdateInfoDto =
                 GroupUpdateInfoDto.builder()
-                        .id(4L)
+                        .id(200L)
                         .groupCategory("Programming")
                         .linkSite("TEST.SITE/NAME")
                         .name("TEST GROUP NAME")
@@ -234,7 +234,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .getResponse();
 
 
-        GroupDto checkDB = groupDtoService.getGroupById(4L).get();
+        GroupDto checkDB = groupDtoService.getGroupById(200L).get();
         assertEquals(checkDB.getName(), groupUpdateInfoDto.getName());
 
         assertNotNull(response.getContentAsString());
@@ -249,7 +249,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
     void updateGroupWrongGroupId() throws Exception {
         GroupUpdateInfoDto groupUpdateInfoDto =
                 GroupUpdateInfoDto.builder()
-                        .id(100500L)
+                        .id(1000L)
                         .groupCategory("Programming")
                         .linkSite("TEST.SITE/NAME")
                         .name("TEST GROUP NAME")
@@ -262,7 +262,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        String correctResponse = "Group with id 100500 not found";
+        String correctResponse = "Group with id 1000 not found";
         assertEquals(correctResponse , response.getContentAsString());
 
 

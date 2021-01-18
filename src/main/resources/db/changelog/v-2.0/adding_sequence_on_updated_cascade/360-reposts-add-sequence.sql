@@ -1,0 +1,1 @@
+update reposts set id = nextval('reposts_seq');
