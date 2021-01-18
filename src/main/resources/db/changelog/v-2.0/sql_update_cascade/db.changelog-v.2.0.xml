@@ -47,5 +47,6 @@
     <include file="470-update-cascade-users_videos_collections.sql" relativeToChangelogFile="true"/>
     <include file="480-update-cascade-videos.sql" relativeToChangelogFile="true"/>
     <include file="490-update-cascade-media_like.sql" relativeToChangelogFile="true"/>
+    <include file="500-album-video-hotfix.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

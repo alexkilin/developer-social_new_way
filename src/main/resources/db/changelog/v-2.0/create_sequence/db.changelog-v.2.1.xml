@@ -28,5 +28,5 @@
     <include file="430-user_tabs-sequence.sql" relativeToChangelogFile="true"/>
     <include file="440-users-sequence.sql" relativeToChangelogFile="true"/>
     <include file="500-topics-sequence.sql" relativeToChangelogFile="true"/>
-
+    <include file="440-users-sequence-recreate.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
