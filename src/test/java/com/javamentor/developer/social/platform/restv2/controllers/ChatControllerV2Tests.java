@@ -56,9 +56,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     public void getChatsDto() throws Exception {
         mockMvc.perform(get(apiUrl + "/user/{userId}/chats" , 205))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(5))
-                .andExpect(jsonPath("$[0].id").value(203))
-                .andExpect(jsonPath("$[3].title").value("Group chat #1"));
+                .andExpect(jsonPath("$.length()").value(5));
     }
 
     @Test

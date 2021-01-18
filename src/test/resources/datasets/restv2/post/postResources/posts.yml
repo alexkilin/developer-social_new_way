@@ -43,7 +43,7 @@ posts:
     title: "Title5"
     text: "Text5"
     topic_id: 201
-    user_id: 202
+    user_id: 205
     persist_date: "2020-08-12 12:33:43.313276"
     last_redaction_date: "2020-08-12 12:33:43.313276"
 
@@ -51,6 +51,14 @@ posts:
     title: "Title5"
     text: "Text5"
     topic_id: 201
-    user_id: 203
+    user_id: 205
+    persist_date: "2020-08-12 12:33:43.313276"
+    last_redaction_date: "2020-08-12 12:33:43.313276"
+
+  - id: 207
+    title: "Title5"
+    text: "Text5"
+    topic_id: 201
+    user_id: 205
     persist_date: "2020-08-12 12:33:43.313276"
     last_redaction_date: "2020-08-12 12:33:43.313276"

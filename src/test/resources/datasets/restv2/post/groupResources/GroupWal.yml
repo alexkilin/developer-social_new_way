@@ -10,3 +10,12 @@ group_wall:
 
   - group_id: 203
     post_id: 203
+
+  - group_id: 204
+    post_id: 207
+
+  - group_id: 204
+    post_id: 206
+
+  - group_id: 204
+    post_id: 205

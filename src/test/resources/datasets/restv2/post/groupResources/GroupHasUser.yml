@@ -3,7 +3,7 @@ group_has_user:
   - persist_date: "2020-08-13 11:46:35.493000"
     id: 200
     group_id: 200
-    user_id: 200
+    user_id: 202
 
   - persist_date: "2020-08-13 11:46:35.493000"
     id: 201
@@ -14,9 +14,9 @@ group_has_user:
   - persist_date: "2020-08-13 11:46:35.493000"
     id: 202
     group_id: 202
-    user_id: 202
+    user_id: 200
 
   - persist_date: "2020-08-13 11:46:35.493000"
-    id: 202
-    group_id: 202
+    id: 203
+    group_id: 204
     user_id: 65

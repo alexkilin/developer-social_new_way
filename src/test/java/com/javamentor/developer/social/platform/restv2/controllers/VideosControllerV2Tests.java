@@ -63,14 +63,14 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(5))
-                .andExpect(jsonPath("$.items[0].id").value(10))
+                .andExpect(jsonPath("$.items[0].id").value(200))
                 .andExpect(jsonPath("$.items[0].url").value("www.myvideo1.ru"))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon0"))
                 .andExpect(jsonPath("$.items[0].name").value("VideoTestName 0"))
                 .andExpect(jsonPath("$.items[0].author").value("TestAuthor 0"))
-                .andExpect(jsonPath("$.items[1].id").value(20))
-                .andExpect(jsonPath("$.items[2].id").value(40))
-                .andExpect(jsonPath("$.items[3].id").value(50));
+                .andExpect(jsonPath("$.items[1].id").value(201))
+                .andExpect(jsonPath("$.items[2].id").value(203))
+                .andExpect(jsonPath("$.items[3].id").value(204));
     }
 
     @Test
@@ -82,12 +82,12 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalResults").value(6))
                 .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].id").value(30))
+                .andExpect(jsonPath("$.items[0].id").value(202))
                 .andExpect(jsonPath("$.items[0].url").value("www.myvideo3.ru"))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon2"))
                 .andExpect(jsonPath("$.items[0].name").value("VideoTestName 2"))
                 .andExpect(jsonPath("$.items[0].author").value("TestAuthor 2"))
-                .andExpect(jsonPath("$.items[1].id").value(40));
+                .andExpect(jsonPath("$.items[1].id").value(203));
 
         mockMvc.perform(get(apiUrl + "/name")
                 .param("namePart", "deoT")
@@ -96,12 +96,12 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalResults").value(6))
                 .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].id").value(10))
+                .andExpect(jsonPath("$.items[0].id").value(200))
                 .andExpect(jsonPath("$.items[0].url").value("www.myvideo1.ru"))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon0"))
                 .andExpect(jsonPath("$.items[0].name").value("VideoTestName 0"))
                 .andExpect(jsonPath("$.items[0].author").value("TestAuthor 0"))
-                .andExpect(jsonPath("$.items[1].id").value(20));
+                .andExpect(jsonPath("$.items[1].id").value(201));
 
         mockMvc.perform(get(apiUrl + "/name")
                 .param("namePart", "deoT")
@@ -110,12 +110,12 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalResults").value(6))
                 .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].id").value(50))
+                .andExpect(jsonPath("$.items[0].id").value(204))
                 .andExpect(jsonPath("$.items[0].url").value("www.myVideo1.ru"))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon4"))
                 .andExpect(jsonPath("$.items[0].name").value("VideoTestName 4"))
                 .andExpect(jsonPath("$.items[0].author").value("TestAuthor 4"))
-                .andExpect(jsonPath("$.items[1].id").value(60));
+                .andExpect(jsonPath("$.items[1].id").value(205));
 
         mockMvc.perform(get(apiUrl + "/name")
                 .param("namePart", "deoT")
@@ -124,7 +124,7 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalResults").value(6))
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].id").value(60))
+                .andExpect(jsonPath("$.items[0].id").value(205))
                 .andExpect(jsonPath("$.items[0].url").value("www.myImage1.ru"))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon5"))
                 .andExpect(jsonPath("$.items[0].name").value("VideoTestName 5"))
@@ -176,7 +176,7 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getPartVideoOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/video", 2)
+        mockMvc.perform(get(apiUrl + "/user/{userId}/video", 200)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
@@ -192,7 +192,7 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .url("www.myVideo.ru")
                 .build();
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/video", 5)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/video", 200)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(videoDto)))
                 .andExpect(status().isCreated())
@@ -203,11 +203,11 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .getSingleResult();
         assertEquals("MyAuthor33", video.getAuthor());
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/video", 500)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/video", 1000)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(videoDto)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("User with id 500 is not found"));
+                .andExpect(content().string("User with id 1000 is not found"));
     }
 
     @Test
@@ -217,13 +217,13 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .name("MyVideoAlbumTest")
                 .build();
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6000)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 1000)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumVideoDto)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("User with id 6000 is not found"));
+                .andExpect(content().string("User with id 1000 is not found"));
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 210)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumVideoDto)))
                 .andExpect(status().isOk())
@@ -235,7 +235,7 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
         assertEquals("MyVideoAlbumTest", album.getAlbum().getName());
         assertEquals(com.javamentor.developer.social.platform.models.entity.media.MediaType.VIDEO, album.getAlbum().getMediaType());
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 6)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 203)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumVideoDto)))
                 .andExpect(status().isBadRequest())
@@ -246,37 +246,38 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
     public void addInAlbums() throws Exception {
         mockMvc.perform(put(apiUrl + "/album/video")
                 .param("albumId", "200")
-                .param("videoId", "40"))
+                .param("videoId", "202"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Video id 40 added to album id 200"));
+                .andExpect(content().string("Video id 202 added to album id 200"));
 
         AlbumVideo albumVideo = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a join fetch a.videos where a.id = 200")
                 .getSingleResult();
         Set<Videos> videoSet = albumVideo.getVideos();
-        assertEquals(2,videoSet.size());
-        Optional<Videos> video30 = albumVideo.getVideos().stream().filter(a -> a.getId() == 30).findFirst();
-        Optional<Videos> video40 = albumVideo.getVideos().stream().filter(a -> a.getId() == 40).findFirst();
-        assertTrue(video30.isPresent());
-        assertTrue(video40.isPresent());
-
+        assertEquals(3,videoSet.size());
+        Optional<Videos> video200 = albumVideo.getVideos().stream().filter(a -> a.getId() == 200).findFirst();
+        Optional<Videos> video201 = albumVideo.getVideos().stream().filter(a -> a.getId() == 201).findFirst();
+        Optional<Videos> video202 = albumVideo.getVideos().stream().filter(a -> a.getId() == 202).findFirst();
+        assertTrue(video200.isPresent());
+        assertTrue(video201.isPresent());
+        assertTrue(video202.isPresent());
 
 
         mockMvc.perform(put(apiUrl + "/album/video")
-                .param("albumId", "500")
-                .param("videoId", "40"))
+                .param("albumId", "1000")
+                .param("videoId", "200"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Video album with id 500 is not found"));
+                .andExpect(content().string("Video album with id 1000 is not found"));
 
         mockMvc.perform(put(apiUrl + "/album/video")
                 .param("albumId", "200")
-                .param("videoId", "400"))
+                .param("videoId", "1000"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Video with id 400 is not found"));
+                .andExpect(content().string("Video with id 1000 is not found"));
     }
 
     @Test
     public void getAllAlbums() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/album", 2)
+        mockMvc.perform(get(apiUrl + "/user/{userId}/album", 200)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
                 .andExpect(status().isOk())
@@ -285,16 +286,16 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getFromAlbumOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/album/{albumId}/video", 30)
+        mockMvc.perform(get(apiUrl + "/album/{albumId}/video", 200)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(1));
+                .andExpect(jsonPath("$.items.length()").value(2));
     }
 
     @Test
     public void getAlbumVideoOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/video", 3)
+        mockMvc.perform(get(apiUrl + "/user/{userId}/video", 201)
                 .param("album", "videoAlbum3")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))

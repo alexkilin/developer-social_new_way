@@ -70,7 +70,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(7))
+                .andExpect(jsonPath("$.items.length()").value(8))
                 .andExpect(jsonPath("$.items[0].title").value("Title1"))
                 .andExpect(jsonPath("$.items[0].text").value("Text1"))
                 .andExpect(jsonPath("$.items[2].title").value("Title3"))
@@ -86,8 +86,8 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items.length()").value(3))
                 .andExpect(jsonPath("$.items[0].title").value("Title5"))
                 .andExpect(jsonPath("$.items[0].text").value("Text5"))
-                .andExpect(jsonPath("$.items[2].title").value("Title1"))
-                .andExpect(jsonPath("$.items[2].text").value("Text1"));
+                .andExpect(jsonPath("$.items[2].title").value("Title5"))
+                .andExpect(jsonPath("$.items[2].text").value("Text5"));
 
         mockMvc.perform(get(apiUrl + "/posts/friends/groups")
                 .param("currentPage", "5")
@@ -120,7 +120,7 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getPostsByUserId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/posts/user/{id}", 203)
+        mockMvc.perform(get(apiUrl + "/posts/user/{id}", 202)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
@@ -318,12 +318,12 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items.length()").value(3))
                 .andExpect(jsonPath("$.items[0].id").value(205))
-                .andExpect(jsonPath("$.items[0].firstName").value("Admin3"))
+                .andExpect(jsonPath("$.items[0].firstName").value("Admin65"))
                 .andExpect(jsonPath("$.items[1].id").value(206))
                 .andExpect(jsonPath("$.items[1].title").value("Title5"))
-                .andExpect(jsonPath("$.totalResults").value(2));
+                .andExpect(jsonPath("$.totalResults").value(3));
 
         mockMvc.perform(get(apiUrl + "/posts/topic")
                 .param("topic", "Nothing")
