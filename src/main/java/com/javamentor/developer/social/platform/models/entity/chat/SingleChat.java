@@ -20,7 +20,7 @@ import java.util.Set;
 public class SingleChat {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "single_chat_seq")
     private Long id;
 
     private String title;

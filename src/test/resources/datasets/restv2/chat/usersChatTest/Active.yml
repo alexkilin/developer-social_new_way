@@ -1,6 +1,5 @@
 active:
-  - id: 1
+  - id: 200
     name: "ACTIVE"
-
-  - id: 2
-    name: "DISABLED"
+  - id: 201
+    name: "Offline"

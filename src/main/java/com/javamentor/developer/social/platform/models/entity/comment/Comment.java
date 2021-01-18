@@ -24,7 +24,7 @@ public class Comment {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "comments_seq")
     private Long id;
 
     @Column

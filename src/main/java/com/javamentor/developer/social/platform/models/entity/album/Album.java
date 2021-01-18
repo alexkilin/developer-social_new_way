@@ -30,7 +30,7 @@ public class Album {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "albums_seq")
     private Long id;
 
     @NonNull

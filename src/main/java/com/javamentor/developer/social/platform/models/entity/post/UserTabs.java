@@ -19,7 +19,7 @@ import java.util.Objects;
 public class UserTabs {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "user_tabs_seq")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

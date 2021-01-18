@@ -1,0 +1,1 @@
+update user_has_album set id = nextval('user_has_album_seq');
