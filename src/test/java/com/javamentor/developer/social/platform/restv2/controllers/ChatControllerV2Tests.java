@@ -54,11 +54,11 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getChatsDto() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/chats" , 5))
+        mockMvc.perform(get(apiUrl + "/user/{userId}/chats" , 205))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(4))
-                .andExpect(jsonPath("$[1].title").value("Group chat #1"));
+                .andExpect(jsonPath("$.length()").value(5))
+                .andExpect(jsonPath("$[0].id").value(203))
+                .andExpect(jsonPath("$[3].title").value("Group chat #1"));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].title").value("Admin0 LastNameUser0"));
+                .andExpect(jsonPath("$.items[0].title").value("Admin1 LastNameAdmin1"));
 
         mockMvc.perform(get(apiUrl + "/user/chats")
                 .param("currentPage", "1")
@@ -89,7 +89,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].title").value("Admin0 LastNameUser0"));
+                .andExpect(jsonPath("$.items[0].title").value("Admin1 LastNameAdmin1"));
 
         mockMvc.perform(get(apiUrl + "/user/chats")
                 .param("currentPage", "1")
@@ -107,7 +107,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3))
-                .andExpect(jsonPath("$.items[1].title").value("Admin60 LastNameUser60"))
+                .andExpect(jsonPath("$.items[1].title").value("Admin65 LastNameUser0"))
                 .andExpect(jsonPath("$.items[2].title").value("Group chat #1"));
 
         mockMvc.perform(get(apiUrl + "/user/chats")
@@ -122,42 +122,42 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getAllMessageDtoByGroupChatId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 10)
+        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 200)
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(6))
                 .andExpect(jsonPath("$.items[0].message").value("Test init message1"));
 
-        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 4)
+        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 1000)
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "10"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Chat id 4 not found"));
+                .andExpect(content().string("Chat id 1000 not found"));
     }
 
     @Test
     public void getAllMessageDtoBySingleChatId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages" , 5)
+        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages" , 202)
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].message").value("Test init message1"))
-                .andExpect(jsonPath("$.items[1].userSenderImage").value("www.myavatar1.ru/9090"));
+                .andExpect(jsonPath("$.items[0].message").value("Test init message5"))
+                .andExpect(jsonPath("$.items[1].userSenderImage").value("www.myavatar0.ru/9090"));
 
-        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages" , 40)
+        mockMvc.perform(get(apiUrl + "/single-chats/{chatId}/messages" , 1000)
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "10"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Chat id 40 not found"));
+                .andExpect(content().string("Chat id 1000 not found"));
     }
 
     @Test
     public void editGroupChatTitle() throws Exception {
         ChatEditTitleDto chatEditTitleDto = ChatEditTitleDto.builder()
                 .title("NewTitle")
-                .id(10l)
+                .id(200l)
                 .build();
 
         mockMvc.perform(put(apiUrl + "/group-chats/title")
@@ -169,19 +169,19 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void deleteUserFromSingleChat() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 5 , 1))
+        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 200 , 200))
                 .andExpect(status().isOk())
                 .andExpect(content().string("done delete chat from user"));
 
-        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 2 , 100))
+        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 201 , 1000))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("user not found"));
 
-        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 100 , 1))
+        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 1000 , 201))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Single chat not found"));
 
-        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 2 , 2))
+        mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 202 , 201))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("No such user in chat"));
     }
@@ -226,7 +226,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .title("VeryUniqueTitle")
                 .build();
 
-        int userId = 1;
+        int userId = 200;
 
         MockHttpServletResponse response =
                 mockMvc.perform(post(String.format("%s%s%d",apiUrl,"/single-chats/user/",userId))
@@ -245,8 +245,6 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
         Optional<TypedQuery<SingleChat>> checkDB = Optional.of(query);
 
         assertTrue(checkDB.isPresent());
-
-
     }
 
 
@@ -257,7 +255,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .title("MyTitle")
                 .build();
 
-        int userId = 999999989;
+        int userId = 1000;
 
         MockHttpServletResponse response =
                 mockMvc.perform(post(String.format("%s%s%d",apiUrl,"/single-chats/user/",userId))
@@ -267,7 +265,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                         .andReturn()
                         .getResponse();
 
-        String correctResponse = "User with id: 999999989 not found";
+        String correctResponse = "User with id: 1000 not found";
         assertEquals(correctResponse, response.getContentAsString());
 
     }

@@ -9,10 +9,10 @@ users_group_chats:
     group_chat_id: 202
 
   - user_id: 203
-    group_chat_id: 203
+    group_chat_id: 202
 
   - user_id: 204
-    group_chat_id: 204
+    group_chat_id: 201
 
   - user_id: 205
     group_chat_id: 200

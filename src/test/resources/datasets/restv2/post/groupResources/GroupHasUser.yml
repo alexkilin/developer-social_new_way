@@ -1,17 +1,22 @@
 group_has_user:
 
   - persist_date: "2020-08-13 11:46:35.493000"
-    id: 6
-    group_id: 1
-    user_id: 65
+    id: 200
+    group_id: 200
+    user_id: 200
 
   - persist_date: "2020-08-13 11:46:35.493000"
-    id: 7
-    group_id: 2
-    user_id: 65
+    id: 201
+    group_id: 201
+    user_id: 201
 
 
   - persist_date: "2020-08-13 11:46:35.493000"
-    id: 3
-    group_id: 3
+    id: 202
+    group_id: 202
+    user_id: 202
+
+  - persist_date: "2020-08-13 11:46:35.493000"
+    id: 202
+    group_id: 202
     user_id: 65
