@@ -62,7 +62,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("jm.platform.noreply@gmail.com"))
                 .andExpect(jsonPath("$.password").isNotEmpty())
                 .andExpect(jsonPath("$.firstName").value("AdminFirstName"))
@@ -79,7 +79,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
                 .andDo(print())
-                .andExpect(status().is(230))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("jm.platform.noreply@gmail.com"))
                 .andExpect(jsonPath("$.password").isNotEmpty())
                 .andExpect(jsonPath("$.firstName").value("AdminFirstName"))
@@ -88,11 +88,13 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.roleName").value("USER"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
+        final String verificationUrl = "/auth/reg";
+
         // Действительный токен пользователя jm.platform.noreply@gmail.com от 2021-01-13 03:57:17 UTC
         // при времени жизни токена 100 лет
         String validToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqbS5wbGF0Zm9ybS5ub3JlcGx5QGdtYWlsLmNvbSIsImlhdCI6MTY" +
                 "xMDUxMDIzNywiZXhwIjo0NzY2MjcwMjM3fQ.qOfFk9VWWespOKqR1ScyPD0mrZ3qavlGz3j7sRs_xcw";
-        mockMvc.perform(post(apiUrl + "/verifyemail")
+        mockMvc.perform(post(verificationUrl)
                 .contentType(MediaType.TEXT_PLAIN)
                 .content(validToken)
                 .with(anonymous()))
@@ -108,6 +110,13 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         Assert.assertTrue("Проверка аттрибута подтверждения почты нового пользователя после подтвеждения",
                 userService.getByEmail("jm.platform.noreply@gmail.com").get().isEnabled());
 
+        mockMvc.perform(post(verificationUrl)
+                .contentType(MediaType.TEXT_PLAIN)
+                .content(validToken)
+                .with(anonymous()))
+                .andExpect(status().is(HttpStatus.CONFLICT.value()))
+                .andExpect(content().string("User have been activated earlier"));
+
         mockMvc.perform(post(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
@@ -118,7 +127,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         // при времени жизни токена 3 cекунды
         String expiredToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqbS5wbGF0Zm9ybS5ub3JlcGx5QGdtYWlsLmNvbSIsImlhdCI6MTY" +
                 "xMDUwOTY5MiwiZXhwIjoxNjEwNTA5Njk1fQ.CnUS3Ae5NQngF1_CBnYGFLEHI2GcDS8CQ2t4UMZ1uKA";
-        mockMvc.perform(post(apiUrl + "/verifyemail")
+        mockMvc.perform(post(verificationUrl)
                 .contentType(MediaType.TEXT_PLAIN)
                 .content(expiredToken)
                 .with(anonymous()))
@@ -129,7 +138,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         // при времени жизни токена 100 лет
         String unknownUserToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzb21lLmludmFsaWQuZW1haWxAZ21haWwuY29tIiwiaWF0Ijox" +
                 "NjEwNTEyNjI4LCJleHAiOjQ3NjYyNzI2Mjh9.x5jwfSXL9eXr3nlomc9RG0kIAWYjs49Buey_RMY0CKU";
-        mockMvc.perform(post(apiUrl + "/verifyemail")
+        mockMvc.perform(post(verificationUrl)
                 .contentType(MediaType.TEXT_PLAIN)
                 .content(unknownUserToken)
                 .with(anonymous()))
@@ -138,7 +147,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
         // Некорректный токен
         String notAToken = "eyJ";
-        mockMvc.perform(post(apiUrl + "/verifyemail")
+        mockMvc.perform(post(verificationUrl)
                 .contentType(MediaType.TEXT_PLAIN)
                 .content(notAToken)
                 .with(anonymous()))

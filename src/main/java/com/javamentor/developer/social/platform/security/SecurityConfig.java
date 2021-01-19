@@ -11,7 +11,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -66,10 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         http.cors();
         http.authorizeRequests()
                 .antMatchers("/v2/api-docs" , "/configuration/**" , "/swagger*/**" , "/webjars/**").permitAll()
-                .antMatchers("/auth/token").anonymous()
+                .antMatchers("/auth/token", "/auth/reg").anonymous()
                 .antMatchers("/actuator/**" , "/v2/**" , "/mypath/**" , "/swagger.yml" , "/anypath/").permitAll()
                 .antMatchers("/auth/principal" , "/logout/**").authenticated()
-                .antMatchers("/api/v2/users/verifyemail").anonymous()
                 .antMatchers("/api/v2/**").hasAnyAuthority("USER" , "ADMIN")
                 .and()
                 .logout().logoutSuccessHandler(( new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK) ))
