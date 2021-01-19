@@ -1,0 +1,1 @@
+update playlists set playlist_id = nextval('playlists_seq');

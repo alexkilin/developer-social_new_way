@@ -1,6 +1,5 @@
 role:
-  - id: 1
-    name: "ADMIN"
-
-  - id: 2
+  - id: 200
     name: "USER"
+  - id: 201
+    name: "ADMIN"

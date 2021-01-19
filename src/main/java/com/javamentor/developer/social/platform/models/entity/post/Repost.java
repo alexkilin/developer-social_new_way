@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Repost {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "reposts_seq")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

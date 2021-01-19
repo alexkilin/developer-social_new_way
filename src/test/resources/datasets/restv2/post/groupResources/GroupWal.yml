@@ -1,9 +1,21 @@
 group_wall:
-  - group_id: 1
-    post_id: 100
+  - group_id: 200
+    post_id: 200
 
-  - group_id: 1
-    post_id: 40
+  - group_id: 201
+    post_id: 201
 
-  - group_id: 3
-    post_id: 50
+  - group_id: 202
+    post_id: 202
+
+  - group_id: 203
+    post_id: 203
+
+  - group_id: 204
+    post_id: 207
+
+  - group_id: 204
+    post_id: 206
+
+  - group_id: 204
+    post_id: 205

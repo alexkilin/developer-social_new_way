@@ -27,7 +27,7 @@ public class Media {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "media_seq")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

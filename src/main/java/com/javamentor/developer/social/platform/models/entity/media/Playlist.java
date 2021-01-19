@@ -21,7 +21,7 @@ import java.util.Set;
 public class Playlist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "playlists_seq")
     @Column(name = "playlist_id")
     private Long id;
 

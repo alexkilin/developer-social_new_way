@@ -63,16 +63,16 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "5"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(4))
-                .andExpect(jsonPath("$.items[0].id").value(70))
+                .andExpect(jsonPath("$.items[0].id").value(200))
                 .andExpect(jsonPath("$.items[0].url").value("www.myaudio7.ru"))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"))
                 .andExpect(jsonPath("$.items[0].name").value("AudioTestName 7"))
                 .andExpect(jsonPath("$.items[0].author").value("Test Author 7"))
                 .andExpect(jsonPath("$.items[0].album").value("AlbumTestName 7"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
-                .andExpect(jsonPath("$.items[1].id").value(20))
-                .andExpect(jsonPath("$.items[2].id").value(30))
-                .andExpect(jsonPath("$.items[3].id").value(40));
+                .andExpect(jsonPath("$.items[1].id").value(201))
+                .andExpect(jsonPath("$.items[2].id").value(202))
+                .andExpect(jsonPath("$.items[3].id").value(203));
     }
 
     @Test
@@ -82,7 +82,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].id").value(20))
+                .andExpect(jsonPath("$.items[0].id").value(201))
                 .andExpect(jsonPath("$.items[0].name").value("AudioTestName 1"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
                 .andExpect(jsonPath("$.items[0].album").value("AlbumTestName 1"))
@@ -96,7 +96,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].id").value(30))
+                .andExpect(jsonPath("$.items[0].id").value(202))
                 .andExpect(jsonPath("$.items[0].author").value("Test Author 2"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
                 .andExpect(jsonPath("$.items[0].album").value("AlbumTestName 2"))
@@ -110,7 +110,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].id").value(60))
+                .andExpect(jsonPath("$.items[0].id").value(205))
                 .andExpect(jsonPath("$.items[0].author").value("Test Author 2"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
                 .andExpect(jsonPath("$.items[0].name").value("AudioTestName 5"))
@@ -119,31 +119,31 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getPartAudioOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}", 2)
+        mockMvc.perform(get(apiUrl + "/user/{userId}", 200)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(3))
-                .andExpect(jsonPath("$.items[0].id").value(30))
-                .andExpect(jsonPath("$.items[0].author").value("Test Author 2"))
+                .andExpect(jsonPath("$.items.length()").value(4))
+                .andExpect(jsonPath("$.items[0].id").value(200))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 7"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
-                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 2"))
-                .andExpect(jsonPath("$.items[0].icon").value("TestIcon2"))
-                .andExpect(jsonPath("$.items[1].id").value(40))
-                .andExpect(jsonPath("$.items[1].author").value("Test Author 3"))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 7"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"))
+                .andExpect(jsonPath("$.items[1].id").value(201))
+                .andExpect(jsonPath("$.items[1].author").value("Test Author 1"))
                 .andExpect(jsonPath("$.items[1].length").value(365))
-                .andExpect(jsonPath("$.items[1].name").value("AudioTestName 3"))
-                .andExpect(jsonPath("$.items[1].icon").value("TestIcon3"));
+                .andExpect(jsonPath("$.items[1].name").value("AudioTestName 1"))
+                .andExpect(jsonPath("$.items[1].icon").value("TestIcon1"));
     }
 
     @Test
     public void getAuthorAudioOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/author?author=Test Author 1", 3)
+        mockMvc.perform(get(apiUrl + "/user/{userId}/author?author=Test Author 1", 202)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].id").value(20))
+                .andExpect(jsonPath("$.items[0].id").value(201))
                 .andExpect(jsonPath("$.items[0].author").value("Test Author 1"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
                 .andExpect(jsonPath("$.items[0].name").value("AudioTestName 1"))
@@ -152,12 +152,12 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getAlbumAudioOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/album?album=AlbumTestName 7", 2)
+        mockMvc.perform(get(apiUrl + "/user/{userId}/album?album=AlbumTestName 7", 205)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].id").value(70))
+                .andExpect(jsonPath("$.items[0].id").value(200))
                 .andExpect(jsonPath("$.items[0].author").value("Test Author 7"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
                 .andExpect(jsonPath("$.items[0].name").value("AudioTestName 7"))
@@ -168,18 +168,18 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     public void addAudioInCollectionsOfUser() throws Exception {
 
        mockMvc.perform(put(apiUrl + "/user/audio")
-                .param("audioId", "40"))
+                .param("audioId", "200"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Audio id 40 added to collection of user id 666"));
+                .andExpect(content().string("Audio id 200 added to collection of user id 666"));
 
         User user = (User) entityManager.createQuery("SELECT u from User as u join fetch u.audios a where u.userId = 666")
                 .getSingleResult();
         assertEquals(1, user.getAudios().size());
 
         mockMvc.perform(put(apiUrl + "/user/audio")
-                .param("audioId", "500"))
+                .param("audioId", "1000"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Audio id 500 not found"));
+                .andExpect(content().string("Audio id 1000 not found"));
     }
 
     @Test
@@ -194,7 +194,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .build();
 
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/audio", 2)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/audio", 200)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(audioDto)))
                 .andExpect(status().isCreated());
@@ -203,56 +203,56 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .getSingleResult();
         assertEquals("Test Author 200", audios.getAuthor());
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/audio", 900)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/audio", 1000)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(audioDto)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("User id 900 not found"));
+                .andExpect(content().string("User id 1000 not found"));
     }
 
     @Test
     public void getAllAlbums() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/album", 2)
+        mockMvc.perform(get(apiUrl + "/user/{userId}/album", 200)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(4))
-                .andExpect(jsonPath("$.items[0].id").value(20))
+                .andExpect(jsonPath("$.items.length()").value(3))
+                .andExpect(jsonPath("$.items[0].id").value(200))
                 .andExpect(jsonPath("$.items[0].name").value("audioAlbum"))
                 .andExpect(jsonPath("$.items[0].icon").value("icon 2"))
-                .andExpect(jsonPath("$.items[1].id").value(30))
+                .andExpect(jsonPath("$.items[1].id").value(201))
                 .andExpect(jsonPath("$.items[1].name").value("audioAlbum"))
                 .andExpect(jsonPath("$.items[1].icon").value("icon 3"));
     }
 
     @Test
     public void addInAlbums() throws Exception {
-        mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 40)
-                .param("audioId", "20"))
+        mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 200)
+                .param("audioId", "205"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Audio id 20 added to album id 40"));
+                .andExpect(content().string("Audio id 205 added to album id 200"));
 
-        AlbumAudios albumAudios = (AlbumAudios) entityManager.createQuery("SELECT a from AlbumAudios a join fetch a.audios where a.id = 40")
+        AlbumAudios albumAudios = (AlbumAudios) entityManager.createQuery("SELECT a from AlbumAudios a join fetch a.audios where a.id = 200")
                 .getSingleResult();
         Set<Audios> audiosSet = albumAudios.getAudios();
         assertEquals(3,audiosSet.size());
-        Optional<Audios> audios20 = albumAudios.getAudios().stream().filter(a -> a.getId() == 20).findFirst();
-        Optional<Audios> audios30 = albumAudios.getAudios().stream().filter(a -> a.getId() == 30).findFirst();
-        Optional<Audios> audios40 = albumAudios.getAudios().stream().filter(a -> a.getId() == 40).findFirst();
-        assertTrue(audios20.isPresent());
-        assertTrue(audios30.isPresent());
-        assertTrue(audios40.isPresent());
+        Optional<Audios> audios200 = albumAudios.getAudios().stream().filter(a -> a.getId() == 200).findFirst();
+        Optional<Audios> audios201 = albumAudios.getAudios().stream().filter(a -> a.getId() == 201).findFirst();
+        Optional<Audios> audios205 = albumAudios.getAudios().stream().filter(a -> a.getId() == 205).findFirst();
+        assertTrue(audios200.isPresent());
+        assertTrue(audios201.isPresent());
+        assertTrue(audios205.isPresent());
 
 
-        mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 800)
-                .param("audioId", "20"))
+        mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 1000)
+                .param("audioId", "200"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Album id 800 not found"));
+                .andExpect(content().string("Album id 1000 not found"));
 
-        mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 40)
-                .param("audioId", "900"))
+        mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 200)
+                .param("audioId", "1000"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Audio id 900 not found"));
+                .andExpect(content().string("Audio id 1000 not found"));
     }
 
     @Test
@@ -262,7 +262,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .name("MyTestAlbum")
                 .build();
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 5)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 200)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumDto)))
                 .andExpect(status().isOk())
@@ -274,7 +274,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         assertEquals("MyTestAlbum", album.getAlbum().getName());
         assertEquals(com.javamentor.developer.social.platform.models.entity.media.MediaType.AUDIO, album.getAlbum().getMediaType());
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 5)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 200)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumDto)))
                 .andExpect(status().isBadRequest())
@@ -283,12 +283,12 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getFromAlbumOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/albums/{albumId}/audio", 30)
+        mockMvc.perform(get(apiUrl + "/albums/{albumId}/audio", 201)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].id").value(30));
+                .andExpect(jsonPath("$.items[0].id").value(202));
     }
 
     @Test
@@ -298,7 +298,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .name("MyNameTest")
                 .build();
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 3)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 200)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(playlistCreateDto)))
                 .andExpect(status().isCreated())
@@ -310,13 +310,13 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .getSingleResult();
         assertEquals("MyImageTest", playlist.getImage());
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 900)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 1000)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(playlistCreateDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The user does not exist"));
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 3)
+        mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 200)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(playlistCreateDto)))
                 .andExpect(status().isOk())
@@ -325,90 +325,90 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void deletePlaylist() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 2, 1000))
+        mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 200, 1000))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("No playlist with id 1000 for user 2"));
+                .andExpect(content().string("No playlist with id 1000 for user 200"));
 
-        mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 2, 100))
+        mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 200, 200))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Playlist with id 100 deleted"));
+                .andExpect(content().string("Playlist with id 200 deleted"));
     }
 
     @Test
     public void getPlaylistsOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/playlists", 2)
+        mockMvc.perform(get(apiUrl + "/user/{userId}/playlists", 201)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].name").value("test0"));
+                .andExpect(jsonPath("$.items[0].name").value("test1"));
     }
 
     @Test
     public void getPlaylistById() throws Exception {
-        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}", 100))
+        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}", 200))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(6))
                 .andExpect(jsonPath("$.name").value("test0"));
 
-        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}", 900))
+        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}", 1000))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("No playlist with id 900"));
+                .andExpect(content().string("No playlist with id 1000"));
     }
 
     @Test
     public void addAudioToPlaylist() throws Exception {
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
-                .param("audioId", "40"))
+                .param("audioId", "203"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1));
+                .andExpect(jsonPath("$.content.length()").value(4));
 
         Playlist playlist = (Playlist) entityManager.createQuery("SELECT a from Playlist a join fetch a.playlistContent where a.id =200")
                 .getSingleResult();
         Set <Audios> audiosSet =  playlist.getPlaylistContent();
-        assertEquals(1, audiosSet.size());
+        assertEquals(4, audiosSet.size());
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
-                .param("audioId", "30"))
+                .param("audioId", "204"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(2));
+                .andExpect(jsonPath("$.content.length()").value(5));
 
         Playlist playlist2 = (Playlist) entityManager.createQuery("SELECT a from Playlist a join fetch a.playlistContent where a.id =200")
                 .getSingleResult();
         Set <Audios> audiosSet2 =  playlist2.getPlaylistContent();
-        assertEquals(2, audiosSet2.size());
+        assertEquals(5, audiosSet2.size());
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
-                .param("audioId", "500"))
+                .param("audioId", "1000"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("No audio with id 500 found"));
+                .andExpect(content().string("No audio with id 1000 found"));
 
-        mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 700)
-                .param("audioId", "40"))
+        mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 1000)
+                .param("audioId", "200"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("No playlist with id 700"));
+                .andExpect(content().string("No playlist with id 1000"));
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
-                .param("audioId", "40"))
+                .param("audioId", "203"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("This playlist already contains audio with id 40"));
+                .andExpect(content().string("This playlist already contains audio with id 203"));
 
     }
 
     @Test
     public void removeAudioFromPlaylist() throws Exception {
-        mockMvc.perform(delete(apiUrl + "/playlists/{playlistId}/audio/{audioId}", 100, 20))
+        mockMvc.perform(delete(apiUrl + "/playlists/{playlistId}/audio/{audioId}", 200, 200))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getAudioFromPlaylist() throws Exception {
-        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}/audio", 100)
+        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}/audio", 200)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3))
-                .andExpect(jsonPath("$.items[0].id").value(20))
-                .andExpect(jsonPath("$.items[0].icon").value("TestIcon1"));
+                .andExpect(jsonPath("$.items[0].id").value(200))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"));
     }
 }
