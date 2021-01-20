@@ -214,3 +214,59 @@ Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'jw
 	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:130)
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:399)
 	... 67 common frames omitted
+2021-01-16 12:46:36.339  INFO 5640 --- [main] c.j.d.s.p.w.configs.PlatformApplication  : Starting PlatformApplication on DESKTOP-K0JEPI7 with PID 5640 (C:\Users\deida\IdeaProjects\developer-social1\target\classes started by deida in C:\Users\deida\IdeaProjects\developer-social1)
+2021-01-16 12:46:36.351  INFO 5640 --- [main] c.j.d.s.p.w.configs.PlatformApplication  : The following profiles are active: local
+2021-01-16 12:46:39.377  INFO 5640 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2021-01-16 12:46:39.421  INFO 5640 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15ms. Found 0 JPA repository interfaces.
+2021-01-16 12:46:40.075  INFO 5640 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 5557 (http)
+2021-01-16 12:46:40.084  INFO 5640 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-01-16 12:46:40.085  INFO 5640 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.36]
+2021-01-16 12:46:40.198  INFO 5640 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-01-16 12:46:40.199  INFO 5640 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3793 ms
+2021-01-16 12:46:40.272  WARN 5640 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-01-16 12:46:40.377  INFO 5640 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-01-16 12:46:40.544  INFO 5640 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-01-16 12:46:40.992  INFO 5640 --- [main] liquibase.lockservice                    : Successfully acquired change log lock
+2021-01-16 12:46:42.405  INFO 5640 --- [main] liquibase.changelog                      : Reading from public.databasechangelog
+2021-01-16 12:46:42.874  INFO 5640 --- [main] liquibase.lockservice                    : Successfully released change log lock
+2021-01-16 12:46:43.007  INFO 5640 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-01-16 12:46:43.076  INFO 5640 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.18.Final
+2021-01-16 12:46:44.143  INFO 5640 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+2021-01-16 12:46:44.310  INFO 5640 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2021-01-16 12:46:45.587  INFO 5640 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-01-16 12:46:45.597  INFO 5640 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-01-16 12:46:46.359  INFO 5640 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'clientInboundChannelExecutor'
+2021-01-16 12:46:46.363  INFO 5640 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'clientOutboundChannelExecutor'
+2021-01-16 12:46:46.925  INFO 5640 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/v2/api-docs'], []
+2021-01-16 12:46:46.925  INFO 5640 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/configuration/**'], []
+2021-01-16 12:46:46.925  INFO 5640 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/swagger-resources/**'], []
+2021-01-16 12:46:46.925  INFO 5640 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/configuration/security'], []
+2021-01-16 12:46:46.925  INFO 5640 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/swagger-ui.html'], []
+2021-01-16 12:46:46.925  INFO 5640 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/webjars/**'], []
+2021-01-16 12:46:46.951  INFO 5640 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2021-01-16 12:46:46.960  INFO 5640 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'messageBrokerTaskScheduler'
+2021-01-16 12:46:47.041  INFO 5640 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7c0035dd, org.springframework.security.web.context.SecurityContextPersistenceFilter@62ff14cd, org.springframework.security.web.header.HeaderWriterFilter@6a262980, org.springframework.web.filter.CorsFilter@5089a72b, org.springframework.security.web.authentication.logout.LogoutFilter@23ade612, org.springframework.web.filter.CompositeFilter@1164990a, com.javamentor.developer.social.platform.security.JwtRequestFilter@11e3d08, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@32e9c3af, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@59db8216, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@549404e7, org.springframework.security.web.session.SessionManagementFilter@48a21ea6, org.springframework.security.web.access.ExceptionTranslationFilter@5b407336, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4efa7d2f]
+2021-01-16 12:46:47.075  INFO 5640 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'brokerChannelExecutor'
+2021-01-16 12:46:47.394  INFO 5640 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 5557 (http) with context path ''
+2021-01-16 12:46:47.395  INFO 5640 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2021-01-16 12:46:47.416  INFO 5640 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2021-01-16 12:46:47.483  INFO 5640 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2021-01-16 12:46:47.762  INFO 5640 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: createAlbumUsingPOST_1
+2021-01-16 12:46:47.830  INFO 5640 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: addInAlbumsUsingPUT_1
+2021-01-16 12:46:47.871  INFO 5640 --- [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2021-01-16 12:46:47.871  INFO 5640 --- [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2021-01-16 12:46:47.872  INFO 5640 --- [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2021-01-16 12:46:47.873  INFO 5640 --- [main] DeferredRepositoryInitializationListener : Triggering deferred initialization of Spring Data repositories…
+2021-01-16 12:46:47.874  INFO 5640 --- [main] DeferredRepositoryInitializationListener : Spring Data repositories initialized!
+2021-01-16 12:46:47.884  INFO 5640 --- [main] c.j.d.s.p.w.configs.PlatformApplication  : Started PlatformApplication in 11.939 seconds (JVM running for 13.473)
+2021-01-16 12:47:47.075  INFO 5640 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2021-01-16 12:50:58.096  INFO 5640 --- [SpringContextShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2021-01-16 12:50:58.097  INFO 5640 --- [SpringContextShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [DefaultSubscriptionRegistry[cache[0 destination(s)], registry[0 sessions]]]]
+2021-01-16 12:50:58.097  INFO 5640 --- [SpringContextShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2021-01-16 12:50:58.132  INFO 5640 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'brokerChannelExecutor'
+2021-01-16 12:50:58.133  INFO 5640 --- [SpringContextShutdownHook] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'messageBrokerTaskScheduler'
+2021-01-16 12:50:58.136  INFO 5640 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'clientOutboundChannelExecutor'
+2021-01-16 12:50:58.136  INFO 5640 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'clientInboundChannelExecutor'
+2021-01-16 12:50:58.140  INFO 5640 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-01-16 12:50:58.142  INFO 5640 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2021-01-16 12:50:58.146  INFO 5640 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

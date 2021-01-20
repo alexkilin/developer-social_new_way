@@ -10,16 +10,14 @@ services:
     container_name: app
     depends_on:
       - db
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dev_social
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
-
+    env_file:
+      - .env.app
+#    restart: unless-stopped
   db:
     image: 'postgres:13.1-alpine'
     ports:
     - "5432:5432"
     container_name: db
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=dev_social
+    env_file:
+      - .env.db
+#    restart: unless-stopped
