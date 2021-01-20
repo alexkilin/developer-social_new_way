@@ -18,7 +18,27 @@
         <java.version>1.8</java.version>
         <swagger2.version>2.9.2</swagger2.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
+        <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${ch.qos.logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${ch.qos.logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-access</artifactId>
+                <version>${ch.qos.logback.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <!-- две зависимости oAuth, обе необходимы -->
@@ -148,6 +168,7 @@
             <version>2.8.5</version>
         </dependency>
 
+
 <!--            <dependency>-->
 <!--                <groupId>org.apache.logging.log4j</groupId>-->
 <!--                <artifactId>log4j-api</artifactId>-->
@@ -208,21 +229,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>4.6</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-access</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>4.11</version>
         </dependency>
     </dependencies>
 

@@ -1,33 +1,3 @@
-#version: '3'
-#services:
-#  db:
-#    container_name: dev_social
-#    ports:
-#      - 5432:5432
-#    environment:
-#      TZ: 'UTC'
-#      POSTGRES_PASSWORD: 12345 #root
-#      POSTGRES_DB: dev_social
-#      PGDATA: /var/lib/postgresql/data/pgdata
-#    restart: always
-#  app:
-#    build: .
-#    container_name: dev_app
-#    ports:
-#      - 5557:5557
-#    environment:
-#      POSTGRES_HOST: db
-#    restart: always
-#    links:
-#      - db
-##  runner:
-##    image: gitlab/gitlab-runner:alpine
-##    container_name: runner
-##    links:
-##      - app
-##    ports:
-##      - 8989:8989
-
 version: '2'
 
 services:
@@ -40,169 +10,19 @@ services:
     container_name: app
     depends_on:
       - db
-      - logstash
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dev_social
-#      - SPRING_DATASOURCE_USERNAME=root
-#      - SPRING_DATASOURCE_PASSWORD=12345
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
-    networks:
-      - internal
-#    labels:
-#      collect_logs_with_filebeat: "true"
-#      decode_log_event_to_json_object: "true"
+    env_file:
+      - .env.app
+#    restart: unless-stopped
+
+
 
   db:
-    image: 'postgres:13.1-alpine'
+    image: 'postgres:11.4-alpine'
     ports:
     - "5432:5432"
     container_name: db
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=dev_social
-    networks:
-      - internal
-  elasticsearch:
-    image: elasticsearch:7.6.1
-    volumes:
-      - elasticsearch:/usr/share/elasticsearch/data
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      # Note: currently there doesn't seem to be a way to change the default user for Elasticsearch
-      ELASTIC_PASSWORD: root
-      # Use single node discovery in order to disable production mode and avoid bootstrap checks
-      # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
-      discovery.type: single-node
-      # X-Pack security needs to be enabled for Elasticsearch to actually authenticate requests
-      xpack.security.enabled: "true"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    healthcheck:
-      test: "wget -q -O - http://elastic:root@localhost:9200/_cat/health"
-      interval: 1s
-      timeout: 30s
-      retries: 300
-    networks:
-      - internal
-    restart: unless-stopped
-  # https://www.elastic.co/guide/en/logstash/current/docker-config.html
-  logstash:
-    image: logstash:7.6.1
-    ports:
-      - "5000:5000"
-      - "9600:9600"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELASTIC_USER: elastic
-      ELASTIC_PASSWORD: root
-      XPACK_MONITORING_ELASTICSEARCH_USERNAME: elastic
-      XPACK_MONITORING_ELASTICSEARCH_PASSWORD: root
-      XPACK_MONITORING_ELASTICSEARCH_HOSTS: "elasticsearch:9200"
-      XPACK_MONITORING_ENABLED: "true"
-    command: -f /etc/logstash/conf.d/logstash.conf
-    volumes:
-      - ./elk/logstash/config:/etc/logstash/conf.d
-    networks:
-      - internal
-    restart: unless-stopped
-    depends_on:
-      - elasticsearch
+    env_file:
+      - .env.db
+#    restart: unless-stopped
 
-  # https://www.elastic.co/guide/en/kibana/current/docker.html
-  kibana:
-    image: kibana:7.6.1
-    environment:
-      ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_PASSWORD: root
-      # Because Elasticsearch is running in a containerized environment
-      # (setting this to false will result in CPU stats not being correct in the Monitoring UI):
-      XPACK_MONITORING_UI_CONTAINER_ELASTICSEARCH_ENABLED: "true"
-    ports:
-      - "5601:5601"
-    networks:
-      - internal
-    restart: unless-stopped
-    depends_on:
-      - elasticsearch
-      - logstash
 
-networks:
-  internal:
-
-volumes:
-  elasticsearch:
-#  elasticsearch:
-#    build: elk/elasticsearch/
-#    container_name: elasticsearch
-#    ports:
-#      - "9200:9200"
-#      - "9300:9300"
-#    environment:
-#      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
-#
-#  logstash:
-#    build: elk/logstash/
-#    container_name: logstash
-##    command: -f :/usr/share/logstash/pipeline/
-#    volumes:
-#      - ./elk/logstash/config:/usr/share/logstash/pipeline
-#    ports:
-#      - "9999:9999"
-#      - "9600:9600"
-#    links:
-#      - elasticsearch
-#
-#  kibana:
-#    build: elk/kibana/
-#    container_name: kibana
-#    volumes:
-#      - ./elk/kibana/config/:/opt/kibana/config/
-#    ports:
-#      - "5601:5601"
-#    links:
-#      - elasticsearch
-
-#  elasticsearch:
-#    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
-#    ports:
-#      - "9200:9200"
-#    environment:
-#      - "discovery.type=single-node"
-#    volumes:
-#      - ./elasticsearch/data:/usr/share/elasticsearch/data:rw
-#
-#  logstash:
-#    image: docker.elastic.co/logstash/logstash:7.7.0
-#    ports:
-#      - "25826:25826"
-#      - "5044:5044"
-#    command: logstash -f /etc/logstash/conf.d/logstash.conf
-#    volumes:
-#      - ./logstash/pipeline:/etc/logstash/conf.d
-#    restart: on-failure
-#    depends_on:
-#      - elasticsearch
-#
-#  kibana:
-#    image: docker.elastic.co/kibana/kibana:7.7.0
-#    ports:
-#      - "5601:5601"
-#    environment:
-#      - ELASTICSEARCH_URL=http://elasticsearch:9200
-#    restart: on-failure
-#    depends_on:
-#      - elasticsearch
-#
-##  filebeat:
-##    image: docker.elastic.co/beats/filebeat:7.2.0
-##    volumes:
-##      - ./filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml
-##      - /var/lib/docker/containers:/var/lib/docker/containers
-##      - /var/run/docker.sock:/var/run/docker.sock
-##      - ./filebeat/data:/usr/share/filebeat/data:rw
-##    user: root
-##    restart: on-failure
-##    depends_on:
-##      - logstash
