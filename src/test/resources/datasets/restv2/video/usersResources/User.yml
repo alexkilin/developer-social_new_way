@@ -1,5 +1,5 @@
 users:
-  - user_id: 2
+  - user_id: 200
     first_name: "Admin1"
     last_name: "LastNameAdmin1"
     date_of_birth: "2008-05-30 15:20:12.121000"
@@ -18,7 +18,7 @@ users:
     profession: "Plumber"
     link_site: "www.jm.ru"
 
-  - user_id: 3
+  - user_id: 201
     first_name: "Admin2"
     last_name: "LastNameAdmin2"
     date_of_birth: "2008-05-30 15:20:12.121000"
@@ -37,7 +37,7 @@ users:
     profession: "Plumber"
     link_site: "www.mys.ru"
 
-  - user_id: 4
+  - user_id: 202
     first_name: "Admin3"
     last_name: "LastNameAdmin3"
     date_of_birth: "2008-05-30 15:20:12.121000"
@@ -56,7 +56,7 @@ users:
     profession: "Plumber"
     link_site: "www.vk.ru"
 
-  - user_id: 5
+  - user_id: 203
     first_name: "Admin4"
     last_name: "LastNameUser0"
     date_of_birth: "2008-05-30 15:20:12.121000"
@@ -75,7 +75,7 @@ users:
     profession: "Plumber"
     link_site: "www.site.ru"
 
-  - user_id: 6
+  - user_id: 210
     first_name: "Admin0"
     last_name: "LastNameUser0"
     date_of_birth: "2008-05-30 15:20:12.121000"

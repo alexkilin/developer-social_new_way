@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class UserHasAlbum {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "user_has_album_seq")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)

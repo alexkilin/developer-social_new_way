@@ -1,48 +1,48 @@
 posts:
-  - id: 10
+  - id: 200
     title: "Title1"
     text: "Text1"
-    topic_id: 31
-    user_id: 60
+    topic_id: 200
+    user_id: 200
     persist_date: "2020-08-08 12:33:43.313276"
     last_redaction_date: "2020-08-08 12:33:43.313276"
 
-  - id: 20
+  - id: 201
     title: "Title2"
     text: "Text2"
-    topic_id: 31
-    user_id: 20
+    topic_id: 200
+    user_id: 201
     persist_date: "2020-08-09 12:33:43.313276"
     last_redaction_date: "2020-08-09 12:33:43.313276"
 
-  - id: 30
+  - id: 202
     title: "Title3"
     text: "Text3"
-    topic_id: 31
-    user_id: 30
+    topic_id: 200
+    user_id: 202
     persist_date: "2020-08-10 12:33:43.313276"
     last_redaction_date: "2020-08-10 12:33:43.313276"
 
-  - id: 40
+  - id: 203
     title: "Title4"
     text: "Text4"
-    topic_id: 31
-    user_id: 40
+    topic_id: 201
+    user_id: 203
     persist_date: "2020-08-11 12:33:43.313276"
     last_redaction_date: "2020-08-11 12:33:43.313276"
 
-  - id: 50
+  - id: 204
     title: "Title5"
     text: "Text5"
-    topic_id: 31
-    user_id: 50
+    topic_id: 201
+    user_id: 204
     persist_date: "2020-08-12 12:33:43.313276"
     last_redaction_date: "2020-08-12 12:33:43.313276"
 
-  - id: 65
+  - id: 205
     title: "Title5"
     text: "Text5"
-    topic_id: 31
-    user_id: 50
+    topic_id: 200
+    user_id: 204
     persist_date: "2020-08-12 12:33:43.313276"
     last_redaction_date: "2020-08-12 12:33:43.313276"

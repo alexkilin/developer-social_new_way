@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Bookmark {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "bookmarks_seq")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
