@@ -26,7 +26,7 @@ import java.util.Set;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "posts_seq")
     private Long id;
 
     @Column(length = 50)

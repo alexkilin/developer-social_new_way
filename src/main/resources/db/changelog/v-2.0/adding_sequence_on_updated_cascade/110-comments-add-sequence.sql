@@ -1,0 +1,1 @@
+update comments set id = nextval('comments_seq');

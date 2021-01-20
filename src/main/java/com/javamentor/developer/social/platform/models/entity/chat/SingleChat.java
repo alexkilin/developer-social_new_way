@@ -20,7 +20,7 @@ import java.util.Set;
 public class SingleChat {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "single_chat_seq")
     private Long id;
 
     private String title;
@@ -42,7 +42,7 @@ public class SingleChat {
 
     @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST}, targetEntity = Message.class)
     @JoinTable(joinColumns = @JoinColumn(name = "chat_id"),
-    inverseJoinColumns = @JoinColumn(name = "message_id"))
+            inverseJoinColumns = @JoinColumn(name = "message_id"))
     private Set<Message> messages;
 
 }

@@ -1,15 +1,18 @@
 album_has_image:
-  - album_id: 27
-    image_id: 30
+  - album_id: 200
+    image_id: 200
 
-  - album_id: 21
-    image_id: 20
+  - album_id: 200
+    image_id: 201
 
-  - album_id: 22
-    image_id: 30
+  - album_id: 200
+    image_id: 202
 
-  - album_id: 23
-    image_id: 50
+  - album_id: 201
+    image_id: 203
 
-  - album_id: 24
-    image_id: 80
+  - album_id: 201
+    image_id: 204
+
+  - album_id: 201
+    image_id: 205

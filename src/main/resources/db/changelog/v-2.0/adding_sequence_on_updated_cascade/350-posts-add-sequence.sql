@@ -1,0 +1,1 @@
+update posts set id = nextval('posts_seq');

@@ -1,6 +1,9 @@
 user_single_chat:
-  - user_id: 1
-    chat_id: 10
+  - user_id: 200
+    chat_id: 200
 
-  - user_id: 2
-    chat_id: 10
+  - user_id: 201
+    chat_id: 200
+
+  - user_id: 666
+    chat_id: 200

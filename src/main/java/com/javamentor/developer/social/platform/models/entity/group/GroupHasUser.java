@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class GroupHasUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "group_has_user_seq")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

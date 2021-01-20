@@ -1,0 +1,1 @@
+update messages set id = nextval('messages_seq');

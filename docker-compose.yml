@@ -1,29 +1,25 @@
-#version: '3'
-#services:
-#  db:
-#    container_name: dev_social
-#    ports:
-#      - 5432:5432
-#    environment:
-#      TZ: 'UTC'
-#      POSTGRES_PASSWORD: root
-#      POSTGRES_DB: dev_social
-#      PGDATA: /var/lib/postgresql/data/pgdata
-#    restart: always
-#  app:
-#    build: .
-#    container_name: dev_app
-#    ports:
-#      - 5557:5557
-#    environment:
-#      POSTGRES_HOST: db
-#    restart: always
-#    links:
-#      - db
-##  runner:
-##    image: gitlab/gitlab-runner:alpine
-##    container_name: runner
-##    links:
-##      - app
-##    ports:
-##      - 8989:8989
+version: '2'
+
+services:
+  app:
+    image: 'platform:latest'
+    ports:
+    - "5561:5561"
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dev_social
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+
+  db:
+    image: 'postgres:13.1-alpine'
+    ports:
+    - "5432:5432"
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=dev_social

@@ -1,12 +1,12 @@
 friends:
-  - id: 5
+  - id: 200
     user_id: 65
-    friend_id: 40
+    friend_id: 202
 
-  - id: 6
+  - id: 200
     user_id: 65
-    friend_id: 50
+    friend_id: 204
 
-  - id: 7
+  - id: 200
     user_id: 65
-    friend_id: 60
+    friend_id: 205

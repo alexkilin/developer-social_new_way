@@ -20,7 +20,7 @@ public class Like {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "like_seq")
     private Long id;
 
     @Enumerated

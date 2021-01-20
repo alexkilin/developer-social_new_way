@@ -1,4 +1,12 @@
 single_chat:
-  - user_one_id: 1
-    user_two_id: 2
+  - user_one_id: 200
+    user_two_id: 201
+    persist_date: "2020-08-13 11:46:35.493000"
+
+  - user_one_id: 666
+    user_two_id: 200
+    persist_date: "2020-08-13 11:46:35.493000"
+
+  - user_one_id: 666
+    user_two_id: 201
     persist_date: "2020-08-13 11:46:35.493000"

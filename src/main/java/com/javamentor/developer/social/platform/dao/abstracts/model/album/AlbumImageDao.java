@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface AlbumImageDao extends GenericDao<AlbumImage, Long> {
 
     Optional<AlbumImage> getByIdWithAlbum(Long id);
+
+    AlbumImage createAlbumImageWithOwner( AlbumImage albumImage);
 }

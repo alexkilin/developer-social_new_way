@@ -16,7 +16,7 @@ import java.util.Set;
 public class Active {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "active_seq")
     private Long id;
 
     @Column

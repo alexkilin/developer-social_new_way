@@ -1,0 +1,1 @@
+update "groups" set id = nextval('groups_seq');

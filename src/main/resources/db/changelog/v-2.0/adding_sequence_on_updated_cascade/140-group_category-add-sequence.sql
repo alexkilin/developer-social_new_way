@@ -1,0 +1,1 @@
+update group_category set id = nextval('group_category_seq');

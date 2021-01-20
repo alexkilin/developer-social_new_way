@@ -21,7 +21,7 @@ import java.util.Set;
 public class GroupChat {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "group_chats_seq")
     private Long id;
 
     @Column
