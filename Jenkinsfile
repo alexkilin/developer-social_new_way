@@ -22,6 +22,7 @@ pipeline {
                 echo "============= started dockerizing ============="
 
               //  sh 'docker build --rm -t platform .'
+                sh 'docker rmi platform -f'
                 sh 'docker build -t platform .'
                 sh 'docker-compose up -d'
             //    sh 'docker rmi $(docker images -f "dangling=true" -q)'
