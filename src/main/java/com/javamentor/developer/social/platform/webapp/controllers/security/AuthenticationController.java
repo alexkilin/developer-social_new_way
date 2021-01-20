@@ -121,19 +121,27 @@ public class AuthenticationController {
             logger.info(String.format("Полученный код регистрации '%s' поврежден. Сообщение об ошибке ['%s']", token, ex.getMessage()));
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Registration code is corrupted");
         }
-        return userService.getByEmail(email)
-                .map(user -> {
-                    if (!user.isEnabled()) {
-                        user.setIsEnable(true);
-                        userService.update(user);
-                        logger.info(String.format("Учетная запись пользователя с эл. почтой '%s' активирована", user.getEmail()));
-                        return ResponseEntity.<Object>ok(userConverter.toDto(user));
-                    }
-                    logger.info(String.format("Учетная запись пользователя с эл. почтой '%s' была активирована ранее", user.getEmail()));
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body("User have been activated earlier");
-                }).orElseGet(() -> {
-                    logger.info(String.format("Пользователь с эл. почтой '%s' не найден", email));
-                    return ResponseEntity.badRequest().body(String.format("No matching user record found for verification code '%s'", token));
-                });
+
+        Optional<User> optUser = userService.getByEmail(email);
+        if (optUser.isPresent()) {
+            User user = optUser.get();
+            return user.isEnabled() ? userAlreadyEnabled(user) : userEnabled(user);
+        }
+
+        logger.info(String.format("Пользователь с эл. почтой '%s' не найден", email));
+        return ResponseEntity.badRequest().body(String.format("No matching user record found for verification code '%s'", token));
     }
+
+    private ResponseEntity<Object> userAlreadyEnabled(User user) {
+        logger.info(String.format("Учетная запись пользователя с эл. почтой '%s' была активирована ранее", user.getEmail()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("User have been activated earlier");
+    }
+
+    private ResponseEntity<Object> userEnabled(User user) {
+        user.setIsEnable(true);
+        userService.update(user);
+        logger.info(String.format("Учетная запись пользователя с эл. почтой '%s' активирована", user.getEmail()));
+        return ResponseEntity.ok(userConverter.toDto(user));
+    }
+
 }
