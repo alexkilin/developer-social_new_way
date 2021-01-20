@@ -13,16 +13,11 @@ services:
     env_file:
       - .env.app
 #    restart: unless-stopped
-
-
-
   db:
-    image: 'postgres:11.4-alpine'
+    image: 'postgres:13.1-alpine'
     ports:
     - "5432:5432"
     container_name: db
     env_file:
       - .env.db
 #    restart: unless-stopped
-
-
