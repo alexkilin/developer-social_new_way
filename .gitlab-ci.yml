@@ -23,8 +23,7 @@ stages:
 
 Build project:
   stage: build
-  script:   
-    - mvn clean compile
+  script: mvn clean compile
 
 Test project:
   stage: test
