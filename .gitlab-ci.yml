@@ -28,8 +28,8 @@ Build project:
 Test project:
   stage: test
   variables:  
-    - SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK: error
-    - LOGGING_LEVEL_ROOT: ERROR
-    # - SPRING_MAIN_BANNER-MODE: off
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    LOGGING_LEVEL_ORG_SPRINGFRAMEWORK: error
+    LOGGING_LEVEL_ROOT: ERROR
+    SPRING_MAIN_BANNER-MODE: off
   script: mvn test
