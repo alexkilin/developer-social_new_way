@@ -27,6 +27,9 @@ public class JwtUtil {
     @Value("${jwt.sessionTime}")
     private long sessionTime;
 
+    @Value("${jwt.emailVerificationTime}")
+    private long emailVerificationTime;
+
     public String extractUsername( String token ) {
         return extractClaim(token , Claims::getSubject);
     }
@@ -41,12 +44,19 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims( String token ) throws MalformedJwtException, ExpiredJwtException {
-
             return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired( String token ) {
         return extractExpiration(token).before(new Date());
+    }
+
+    public String createEmailVerificationToken(String subject) {
+        return Jwts.builder()
+                .setSubject(subject)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + emailVerificationTime))
+                .signWith(SignatureAlgorithm.HS256 , SECRET_KEY).compact();
     }
 
     public String createToken( Map<String, Object> claims , String subject ) {
