@@ -1,4 +1,4 @@
-image: openjdk:8-jdk-alpine
+image: maven:3.6.1-jdk-11
 
 variables:
   DOCKER_TLS_CERTDIR: ""
