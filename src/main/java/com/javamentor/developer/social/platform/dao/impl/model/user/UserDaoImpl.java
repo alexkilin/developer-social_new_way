@@ -21,7 +21,7 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
 
     @Override
     public Optional<User> getByEmail(String email) {
-        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u JOIN FETCH u.role WHERE u.email = :email", User.class)
                 .setParameter("email", email);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
