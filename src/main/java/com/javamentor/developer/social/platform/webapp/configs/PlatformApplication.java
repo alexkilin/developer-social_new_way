@@ -5,15 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.util.TimeZone;
-
 @SpringBootApplication
 @ComponentScan("com.javamentor.developer.social.platform")
 @EntityScan("com.javamentor.developer.social.platform.models.entity")
 public class PlatformApplication {
 
     public static void main(String[] args){
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         SpringApplication.run(PlatformApplication.class, args);
     }
 

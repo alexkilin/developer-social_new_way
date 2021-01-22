@@ -1,9 +1,11 @@
 package com.javamentor.developer.social.platform.models.dto.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.javamentor.developer.social.platform.models.dto.LanguageDto;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
+import com.javamentor.developer.social.platform.webapp.converters.serializers.LocalTimezoneDateSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -40,6 +42,7 @@ public class UserDto {
     @Pattern(groups = {OnCreate.class, OnUpdate.class}, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле фамилия должно начинаться с буквы")
     private String lastName;
 
+    @JsonSerialize(using = LocalTimezoneDateSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     @ApiModelProperty(notes = "Дата рождения пользователя", example = "01.01.2000", position = 6)
     private Date dateOfBirth;

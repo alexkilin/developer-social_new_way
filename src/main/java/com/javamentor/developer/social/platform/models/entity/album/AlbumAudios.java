@@ -38,7 +38,7 @@ public class AlbumAudios {
     @MapsId
     private Album album = new Album(MediaType.AUDIO);
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Audios.class)
     @JoinTable(name = "album_has_audio", joinColumns = @JoinColumn(name = "album_id"),
             inverseJoinColumns = @JoinColumn(name = "audios_id"))
     private Set<Audios> audios;
