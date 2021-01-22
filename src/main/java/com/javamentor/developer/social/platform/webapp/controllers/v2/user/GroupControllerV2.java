@@ -254,7 +254,7 @@ public class GroupControllerV2 {
             @ApiResponse(code = 400, message = "Категория уже существует", response = String.class)
     })
     @Validated(OnCreate.class)
-    @PostMapping(value = "groupCategory/add")
+    @PostMapping(value = "/groupCategory/add")
     public ResponseEntity<?> addGroupCategory( @ApiParam(value = "Категория") @Valid @RequestBody GroupCategoryDto groupCategoryDto ) {
         Optional<GroupCategoryDto> tempCategory = groupCategoryDtoService.getGroupCategoryByName(groupCategoryDto.getName());
         if(tempCategory.isPresent()) {
@@ -276,7 +276,7 @@ public class GroupControllerV2 {
     @ApiOperation(value = "Получение списка всех категорий")
     @ApiResponse(code = 200, message = "Список категорий получен", responseContainer = "List", response = GroupCategoryDto.class)
 
-    @GetMapping(value = "groupCategory/all/pageable")
+    @GetMapping(value = "/groupCategory/all/pageable")
     public ResponseEntity<PageDto<GroupCategoryDto, Object>> getAllCategories( @ApiParam(value = "Текущая страница", example = "0")
                                                                                @RequestParam("currentPage") int currentPage ,
                                                                                @ApiParam(value = "Количество данных на страницу", example = "15")

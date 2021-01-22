@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class MessageDto {
     @ApiModelProperty(notes = "Id сообщения.")
     @Null(groups = OnCreate.class, message = "Поле id должно принимать null значение при создании")
