@@ -31,12 +31,14 @@ public class ControllerAspect {
 
     public Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
     /**
-     * Логирования результатов выполнения методов любого контроллера.
+     * Эдвайс логирует возвращаемое значения методов любого контроллера.
      * Устраняет необходимость в локальных логгерах.
-     * Проверка предназначена для ResponseEntity<Void>.
+     * Проверка предназначена для ResponseEntity<Void>. Сейчас такого нет, если не планируется - от проверки можно избавиться.
      * Обычного void у нас в Rest'ах не должно быть совсем, но Вы это знаете и без меня.
-     * Результат достигается кастом, отдавать что-то кроме ResponseEntity - не стоит.
-     * Если будете использовать реактив, то отдавать потоки лучше в функциональном стиле.
+     * Аргумент типа Object в обучающих целях, можно тащить toString прямо из него, если мы не уверены в типе возвращаемого объекта.
+     * Так как мы точно знаем, что будет ResponseEntity - от каста можно избавиться и заменить Object.
+     * Если будете использовать реактивные эндпоинты, то отдавать потоки лучше в функциональном стиле(route).
+     * Если все таки решите отдавать с Рест-контроллеров, то принимать лучше Object и отсеивать instanceOf.
      */
     @AfterReturning(pointcut = "within(@org.springframework.web.bind.annotation.RestController *)", returning = "result")
     public void afterMethodInControllerClass( @NotNull JoinPoint joinPoint , Object result ) {
