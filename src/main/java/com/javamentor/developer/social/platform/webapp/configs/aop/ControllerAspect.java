@@ -5,25 +5,18 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.Advisor;
-import org.springframework.aop.aspectj.AspectJExpressionPointcut;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Scope;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * Аспект - состовляющая программы которая позволяет реализовать сквозную логику без загрязнения целевого класса.
+ * Аспект - состовляющая программы,
+ * которая позволяет реализовать сквозную логику без загрязнения целевого класса.
  * Спринг умеет подкладывать прокси только под свои бины и компоненты.
  * Позволяет JoinPoint только на исполнении метода.
  * Joinpoint -конкретное место внедрения  - метод, конструктор, геттер/сеттер и тд.
@@ -38,26 +31,31 @@ public class ControllerAspect {
 
     public Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
     /**
-     * Данный Эдвайс предназначен для логирования результатов выполнения методов любого контроллера.
+     * Логирования результатов выполнения методов любого контроллера.
      * Устраняет необходимость в локальных логгерах.
-     * Проверка предназначена для ResponseEntity<Void>. Если его не будет - можно убрать.
+     * Проверка предназначена для ResponseEntity<Void>.
      * Обычного void у нас в Rest'ах не должно быть совсем, но Вы это знаете и без меня.
+     * Результат достигается кастом, отдавать что-то кроме ResponseEntity - не стоит.
+     * Если будете использовать реактив, то отдавать потоки лучше в функциональном стиле.
      */
     @AfterReturning(pointcut = "within(@org.springframework.web.bind.annotation.RestController *)", returning = "result")
     public void afterMethodInControllerClass( @NotNull JoinPoint joinPoint , Object result ) {
+
         ResponseEntity<?> response = (ResponseEntity<?>) result;
+
         if(response.hasBody()) {
-            String value = response.getBody().toString();
-            HttpStatus status = response.getStatusCode();
-            logger.info("\n\n###### Returning for class : {};\n###### Method : {};\n###### with value : {};\n###### with http status : {}; \n\n" ,
+
+            logger.info("\n\n###### Returning for class : {};\n###### Method : {};\n###### with value : {};\n###### with http status : {};\n\n" ,
                     joinPoint.getTarget().getClass().getSimpleName() ,
                     joinPoint.getSignature().getName() ,
-                    value ,
-                    status);
+                    response.getBody().toString() ,
+                    response.getStatusCode());
         } else {
-            logger.info("\n\n###### Returning for class : {};\n###### Method : {};\n###### with null as return value. \n\n" ,
+
+            logger.info("\n\n###### Returning for class : {};\n###### Method : {};\n###### with null as return value.;\n###### with http status : {};\n\n" ,
                     joinPoint.getTarget().getClass().getSimpleName() ,
-                    joinPoint.getSignature().getName());
+                    joinPoint.getSignature().getName(),
+                    response.getStatusCode());
         }
 
     }
