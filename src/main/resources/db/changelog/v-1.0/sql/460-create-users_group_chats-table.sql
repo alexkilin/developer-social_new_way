@@ -1,14 +1,14 @@
 create table users_group_chats (
    user_id int8 not null,
-    group_chat_id int8 not null,
-    primary key (user_id, group_chat_id)
+    chat_id int8 not null,
+    primary key (user_id, chat_id)
 )
 
 next
 
 alter table users_group_chats
    add constraint FK6q5yt8kersl8ejr63nfi53314
-   foreign key (group_chat_id)
+   foreign key (chat_id)
    references group_chats
 
 next

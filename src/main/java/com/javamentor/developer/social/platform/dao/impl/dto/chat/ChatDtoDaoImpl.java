@@ -46,8 +46,8 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 .getResultList();
         chatDtoList.addAll((List<ChatDto>) em.createQuery("select " +
                 "(select max(me) from GroupChat si  join si.messages me where si.id=groupchats.id), " +
-                "groupchats.image," +
-                "groupchats.title," +
+                "groupchats.chat.image," +
+                "groupchats.chat.title," +
                 "groupchats.id " +
                 "from User user join user.groupChats groupchats where user.userId=:id")
                 .setParameter("id", userId)
@@ -61,8 +61,8 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
     public ChatDto getChatDtoByGroupChatId(Long chatId) {
         return (ChatDto) em.createQuery("select " +
                 "(select max(me) from gc.messages me), " +
-                "gc.image," +
-                "gc.title," +
+                "gc.chat.image," +
+                "gc.chat.title," +
                 "gc.id " +
                 "from GroupChat gc where gc.id=:id")
                 .setParameter("id", chatId)

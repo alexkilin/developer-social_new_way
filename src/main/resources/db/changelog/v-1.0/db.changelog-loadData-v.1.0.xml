@@ -8,6 +8,7 @@
     <include file="data/001-changeset-active-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/370-changeset-role-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/440-changeset-users-loadData.xml" relativeToChangelogFile="true"/>
+    <include file="data/510-changeset-chats-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/070-changeset-albums-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/010-changeset-album_audios-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/060-changeset-album_video-loadData.xml" relativeToChangelogFile="true"/>
@@ -55,5 +56,6 @@
     <include file="data/450-changeset-users_audios_collections-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/470-changeset-users_videos_collections-loadData.xml" relativeToChangelogFile="true"/>
     <include file="data/490-changeset-media_like-loadData.xml" relativeToChangelogFile="true"/>
+
 
 </databaseChangeLog>

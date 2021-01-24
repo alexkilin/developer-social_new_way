@@ -12,7 +12,7 @@
     <include file="120-followers-sequence.sql" relativeToChangelogFile="true"/>
     <include file="130-friends-sequence.sql" relativeToChangelogFile="true"/>
     <include file="140-group-category-sequence.sql" relativeToChangelogFile="true"/>
-    <include file="150-group_chats-sequence.sql" relativeToChangelogFile="true"/>
+   <!-- <include file="150-group_chats-sequence.sql" relativeToChangelogFile="true"/>-->
     <include file="180-group_has_user-sequence.sql" relativeToChangelogFile="true"/>
     <include file="200-groups-sequence.sql" relativeToChangelogFile="true"/>
     <include file="220-language-sequence.sql" relativeToChangelogFile="true"/>
@@ -22,11 +22,12 @@
     <include file="350-posts-sequence.sql" relativeToChangelogFile="true"/>
     <include file="360-reposts-sequence.sql" relativeToChangelogFile="true"/>
     <include file="370-role-sequence.sql" relativeToChangelogFile="true"/>
-    <include file="380-single_chat-sequence.sql" relativeToChangelogFile="true"/>
+<!--    <include file="380-single_chat-sequence.sql" relativeToChangelogFile="true"/>-->
     <include file="400-tags-sequence.sql" relativeToChangelogFile="true"/>
     <include file="410-user_has_album-sequence.sql" relativeToChangelogFile="true"/>
     <include file="430-user_tabs-sequence.sql" relativeToChangelogFile="true"/>
     <include file="440-users-sequence.sql" relativeToChangelogFile="true"/>
     <include file="500-topics-sequence.sql" relativeToChangelogFile="true"/>
     <include file="440-users-sequence-recreate.sql" relativeToChangelogFile="true"/>
+    <include file="510-chats-sequence.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

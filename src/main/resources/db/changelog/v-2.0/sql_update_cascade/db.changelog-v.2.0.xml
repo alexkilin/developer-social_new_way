@@ -17,6 +17,7 @@
     <include file="110-update-cascade-comments.sql" relativeToChangelogFile="true"/>
     <include file="120-update-cascade-followers.sql" relativeToChangelogFile="true"/>
     <include file="130-update-cascade-friends.sql" relativeToChangelogFile="true"/>
+    <include file="150-update-cascade-group_chats.sql" relativeToChangelogFile="true"/>
     <include file="160-update-cascade-group_chat_messages.sql" relativeToChangelogFile="true"/>
     <include file="180-update-cascade-group_has_user.sql" relativeToChangelogFile="true"/>
     <include file="190-update-cascade-group_wall.sql" relativeToChangelogFile="true"/>

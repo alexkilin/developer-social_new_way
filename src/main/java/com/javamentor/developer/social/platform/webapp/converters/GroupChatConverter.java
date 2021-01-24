@@ -19,14 +19,14 @@ public abstract class GroupChatConverter {
     @Autowired
     private UserService userService;
 
-    @Mapping(source = "chatDto.title", target = "title")
-    @Mapping(source = "chatDto.image", target = "image")
+    @Mapping(source = "chatDto.title", target = "chat.title")
+    @Mapping(source = "chatDto.image", target = "chat.image")
     @Mapping(source = "userId",target ="users",qualifiedByName = "userIdToSet")
     public abstract GroupChat chatToGroupChat(ChatDto chatDto,Long userId);
 
 
-    @Mapping(source = "title", target = "title")
-    @Mapping(source = "image", target = "image")
+    @Mapping(source = "chat.title", target = "title")
+    @Mapping(source = "chat.image", target = "image")
     @Mapping(source = "groupChat.id", target = "id")
     public abstract ChatDto groupChatToChatDto(GroupChat groupChat);
 

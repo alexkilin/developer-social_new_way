@@ -20,12 +20,12 @@ import java.util.Set;
 public class SingleChat {
 
     @Id
-    @GeneratedValue(generator = "single_chat_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private String title;
-
-    private String image;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @MapsId
+    private Chat chat;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST}, targetEntity = User.class)
     @JoinColumn(name = "user_one_id")
@@ -34,11 +34,6 @@ public class SingleChat {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST}, targetEntity = User.class)
     @JoinColumn(name = "user_two_id")
     private User userTwo;
-
-    @Column(name = "persist_date", nullable = false)
-    @Type(type = "org.hibernate.type.LocalDateTimeType")
-    @CreationTimestamp
-    private LocalDateTime persistDate;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST}, targetEntity = Message.class)
     @JoinTable(joinColumns = @JoinColumn(name = "chat_id"),
