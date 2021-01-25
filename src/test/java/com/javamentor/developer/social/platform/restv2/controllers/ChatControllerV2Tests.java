@@ -7,8 +7,6 @@ import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
-import com.javamentor.developer.social.platform.models.entity.group.Group;
-import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,9 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/chat/usersChatTest/User.yml" ,
         "datasets/restv2/chat/chatResources/GroupChat.yml" ,
         "datasets/restv2/chat/chatResources/Chats.yml",
-        "datasets/restv2/chat/chatResources/GroupChatsMessages.yml" ,
+        "datasets/restv2/chat/chatResources/ChatsMessages.yml",
         "datasets/restv2/chat/chatResources/SingleChat.yml" ,
-        "datasets/restv2/chat/chatResources/SingleChatMessages.yml" ,
         "datasets/restv2/chat/chatResources/UsersGroupChats.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 @Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
@@ -128,8 +125,8 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(6))
-                .andExpect(jsonPath("$.items[0].message").value("Test init message1"));
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].message").value("Test init message13"));
 
         mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 1000)
                 .param("currentPage" , "1")
@@ -174,6 +171,10 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 200 , 200))
                 .andExpect(status().isOk())
                 .andExpect(content().string("done delete chat from user"));
+        SingleChat singleChat = (SingleChat) entityManager.createQuery("SELECT s from SingleChat as s where s.id = 200")
+               .getSingleResult();
+        assertEquals(singleChat.isDeletedForUserOne(), true);
+        assertEquals(singleChat.isDeletedForUserTwo(), false);
 
         mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 201 , 1000))
                 .andExpect(status().isBadRequest())

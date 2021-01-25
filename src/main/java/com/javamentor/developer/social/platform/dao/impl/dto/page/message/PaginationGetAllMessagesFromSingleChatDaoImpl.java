@@ -33,7 +33,7 @@ public class PaginationGetAllMessagesFromSingleChatDaoImpl implements Pagination
                 "m.persistDate, " +
                 "m.userSender.avatar, " +
                 "m.message  " +
-                "from SingleChat sc join sc.messages as m where sc.id=:chatId")
+                "from SingleChat sc join sc.chat.messages as m where sc.id=:chatId")
                 .setParameter("chatId", chatId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)
@@ -61,7 +61,7 @@ public class PaginationGetAllMessagesFromSingleChatDaoImpl implements Pagination
     @Override
     public Long getCount(Map < String, Object > parameters){
         return entityManager.createQuery(
-                "select count (m) FROM SingleChat sc join sc.messages m where sc.id = :chatId ",
+                "select count (m) FROM SingleChat sc join sc.chat.messages m where sc.id = :chatId ",
                 Long.class
         ).setParameter("chatId", parameters.get("chatId"))
                 .getSingleResult();

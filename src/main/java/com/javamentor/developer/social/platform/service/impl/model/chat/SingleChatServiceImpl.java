@@ -23,11 +23,11 @@ public class SingleChatServiceImpl extends GenericServiceAbstract<SingleChat,Lon
     @Transactional
     public boolean deleteUserFromSingleChat(SingleChat singleChat, Long userId) {
         if (singleChat.getUserOne().getUserId().equals(userId)){
-            singleChat.setUserOne(null);
+            singleChat.setDeletedForUserOne(true);
             singleChatDAO.update(singleChat);
             return true;
         } else if (singleChat.getUserTwo().getUserId().equals(userId)){
-            singleChat.setUserTwo(null);
+            singleChat.setDeletedForUserTwo(true);
             singleChatDAO.update(singleChat);
             return true;
         }

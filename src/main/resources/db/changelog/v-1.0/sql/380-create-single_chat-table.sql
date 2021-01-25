@@ -2,6 +2,8 @@ create table single_chat (
     chat_id int8 not null,
     user_one_id int8,
     user_two_id int8,
+    deleted_for_user_one boolean,
+    deleted_for_user_two boolean,
     primary key (chat_id)
 )
 

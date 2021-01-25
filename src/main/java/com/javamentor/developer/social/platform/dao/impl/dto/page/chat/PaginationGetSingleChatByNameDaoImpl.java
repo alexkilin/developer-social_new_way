@@ -29,7 +29,7 @@ public class PaginationGetSingleChatByNameDaoImpl implements PaginationDao<ChatD
         String search = (String) parameters.get("search");
 
         return (List<ChatDto>) em.createQuery("select " +
-                "(select max(me) from SingleChat si  join si.messages me where si.id=single.id)," +
+                "(select max(me) from SingleChat si  join si.chat.messages me where si.id=single.id)," +
                 " single.userOne.userId," +
                 "single.userTwo.userId," +
                 "single.userOne.firstName," +

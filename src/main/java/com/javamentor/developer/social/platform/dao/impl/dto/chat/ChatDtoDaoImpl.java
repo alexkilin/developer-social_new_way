@@ -26,7 +26,7 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
     public List<ChatDto> getAllChatDtoByUserId(Long userId) {
         ChatDtoDaoImpl.userId = userId;
         List<ChatDto> chatDtoList = (List<ChatDto>) em.createQuery("select " +
-                "(select max(me) from SingleChat si  join si.messages me where si.id=single.id)," +
+                "(select max(me) from SingleChat si  join si.chat.messages me where si.id=single.id)," +
                 " single.userOne.userId," +
                 "single.userTwo.userId," +
                 "single.userOne.firstName," +
@@ -45,7 +45,7 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 .setResultTransformer(new ChatDtoResultTransformer())
                 .getResultList();
         chatDtoList.addAll((List<ChatDto>) em.createQuery("select " +
-                "(select max(me) from GroupChat si  join si.messages me where si.id=groupchats.id), " +
+                "(select max(me) from GroupChat si  join si.chat.messages me where si.id=groupchats.id), " +
                 "groupchats.chat.image," +
                 "groupchats.chat.title," +
                 "groupchats.id " +
@@ -60,7 +60,7 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
     @Override
     public ChatDto getChatDtoByGroupChatId(Long chatId) {
         return (ChatDto) em.createQuery("select " +
-                "(select max(me) from gc.messages me), " +
+                "(select max(me) from gc.chat.messages me), " +
                 "gc.chat.image," +
                 "gc.chat.title," +
                 "gc.id " +

@@ -2,28 +2,35 @@ single_chat:
   - chat_id: 200
     user_one_id: 200
     user_two_id: 201
-
+    deleted_for_user_one: false
+    deleted_for_user_two: false
 
   - chat_id: 201
     user_one_id: 202
     user_two_id: 203
-
+    deleted_for_user_one: false
+    deleted_for_user_two: false
 
   - chat_id: 202
     user_one_id: 204
     user_two_id: 205
-
+    deleted_for_user_one: false
+    deleted_for_user_two: false
 
   - chat_id: 203
     user_one_id: 205
     user_two_id: 203
-
+    deleted_for_user_one: false
+    deleted_for_user_two: false
 
   - chat_id: 204
     user_one_id: 666
     user_two_id: 200
-
+    deleted_for_user_one: false
+    deleted_for_user_two: false
 
   - chat_id: 205
     user_one_id: 666
     user_two_id: 205
+    deleted_for_user_one: false
+    deleted_for_user_two: false

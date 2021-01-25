@@ -5,15 +5,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="160" author="dev-social">
-        <sqlFile dbms="postgresql"
-                 encoding="utf8"
-                 endDelimiter="next"
-                 splitStatements="true"
-                 stripComments="true"
-                 path="db/changelog/v-1.0/sql/160-create-group_chats_messages-table.sql"/>
+    <changeSet id="1"  author="dev-social">
+        <loadData tableName="chats_messages"
+                  file="db/changelog/v-1.0/csv/160-chats_messages.csv"/>
         <rollback>
-            <dropTable tableName="group_chats_messages"/>
+            <delete tableName="chats_messages"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

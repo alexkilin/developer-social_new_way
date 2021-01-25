@@ -34,7 +34,7 @@ public class PaginationGetAllMessagesFromGroupChatDaoImpl implements PaginationD
                 "m.persistDate, " +
                 "m.userSender.avatar, " +
                 "m.message " +
-                "from GroupChat gr join gr.messages m where gr.id = :chatId")
+                "from GroupChat gr join gr.chat.messages m where gr.id = :chatId")
                 .setParameter("chatId", chatId)
                 .unwrap(Query.class)
                 .setFirstResult((currentPage - 1) * currentPage)
@@ -63,7 +63,7 @@ public class PaginationGetAllMessagesFromGroupChatDaoImpl implements PaginationD
         @Override
         public Long getCount(Map < String, Object > parameters){
             return entityManager.createQuery(
-                    "select count (m) FROM GroupChat gr join gr.messages m where gr.id = :chatId ",
+                    "select count (m) FROM GroupChat gr join gr.chat.messages m where gr.id = :chatId ",
                     Long.class
             ).setParameter("chatId", parameters.get("chatId"))
                     .getSingleResult();

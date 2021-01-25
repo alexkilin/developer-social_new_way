@@ -32,7 +32,7 @@ public class PaginationGetGroupChatByChatNameDaoImpl implements PaginationDao<Ch
         int singlePage = (int) parameters.get("singlePage");
 
         return em.createQuery("select " +
-                "(select max(me) from GroupChat si join si.messages me where si.id=groupchats.id), " +
+                "(select max(me) from GroupChat si join si.chat.messages me where si.id=groupchats.id), " +
                 "groupchats.chat.image," +
                 "groupchats.chat.title," +
                 "groupchats.id " +

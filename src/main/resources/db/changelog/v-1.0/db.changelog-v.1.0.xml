@@ -40,7 +40,7 @@
     <include file="table/040-changeset-album_has_video-table.xml" relativeToChangelogFile="true"/>
     <include file="table/090-changeset-bookmarks-table.xml" relativeToChangelogFile="true"/>
     <include file="table/100-changeset-comment_like-table.xml" relativeToChangelogFile="true"/>
-    <include file="table/160-changeset-group_chats_messages-table.xml" relativeToChangelogFile="true"/>
+    <include file="table/160-changeset-chats_messages-table.xml" relativeToChangelogFile="true"/>
     <include file="table/200-changeset-groups-table.xml" relativeToChangelogFile="true"/>
     <include file="table/180-changeset-group_has_user-table.xml" relativeToChangelogFile="true"/>
     <include file="table/190-changeset-group_wall-table.xml" relativeToChangelogFile="true"/>
@@ -52,7 +52,6 @@
     <include file="table/320-changeset-post_like-table.xml" relativeToChangelogFile="true"/>
     <include file="table/330-changeset-post_media-table.xml" relativeToChangelogFile="true"/>
     <include file="table/340-changeset-post_tags-table.xml" relativeToChangelogFile="true"/>
-    <include file="table/390-changeset-single_chat_messages-table.xml" relativeToChangelogFile="true"/>
     <include file="table/420-changeset-user_languages-table.xml" relativeToChangelogFile="true"/>
     <include file="table/450-changeset-users_audios_collections-table.xml" relativeToChangelogFile="true"/>
     <include file="table/470-changeset-users_videos_collections-table.xml" relativeToChangelogFile="true"/>
