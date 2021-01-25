@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.service.impl.util;
 
 import com.javamentor.developer.social.platform.service.abstracts.util.VerificationEmailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,6 +25,7 @@ public class VerificationEmailServiceImpl implements VerificationEmailService {
 
     private final JavaMailSender emailSender;
 
+    @Autowired
     public VerificationEmailServiceImpl(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
