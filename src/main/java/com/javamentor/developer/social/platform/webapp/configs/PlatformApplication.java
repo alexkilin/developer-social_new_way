@@ -18,9 +18,4 @@ public class PlatformApplication {
 
     }
 
-    @Bean
-    public JavaMailSender javaMailSender() {
-        return new JavaMailSenderImpl();
-    }
-
 }
