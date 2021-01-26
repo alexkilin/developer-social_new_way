@@ -1,5 +1,7 @@
 package com.javamentor.developer.social.platform.models.entity.chat;
 
+import com.javamentor.developer.social.platform.models.entity.album.Album;
+import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,25 +23,13 @@ import java.util.Set;
 public class GroupChat {
 
     @Id
-    @GeneratedValue(generator = "group_chats_seq")
     private Long id;
 
-    @Column
-    private String title;
-
-    @Column
-    private String image;
-
-    @Column(name = "persist_date", nullable = false)
-    @Type(type = "org.hibernate.type.LocalDateTimeType")
-    @CreationTimestamp
-    private LocalDateTime persistDate;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @MapsId
+    private Chat chat;
 
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, mappedBy = "groupChats", cascade = {CascadeType.PERSIST})
     private Set<User> users;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST},targetEntity = Message.class)
-    @JoinTable(joinColumns = @JoinColumn(name = "chat_id"),
-            inverseJoinColumns = @JoinColumn(name = "message_id"))
-    private Set<Message> messages;
 }

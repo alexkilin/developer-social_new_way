@@ -1,30 +1,36 @@
 single_chat:
-  - id: 200
+  - chat_id: 200
     user_one_id: 200
     user_two_id: 201
-    persist_date: 2020-09-02 03:36:50.977300
+    deleted_for_user_one: false
+    deleted_for_user_two: false
 
-  - id: 201
+  - chat_id: 201
     user_one_id: 202
     user_two_id: 203
-    persist_date: 2020-09-02 03:36:50.977300
+    deleted_for_user_one: false
+    deleted_for_user_two: false
 
-  - id: 202
+  - chat_id: 202
     user_one_id: 204
     user_two_id: 205
-    persist_date: 2020-09-02 03:36:50.977300
+    deleted_for_user_one: false
+    deleted_for_user_two: true
 
-  - id: 203
+  - chat_id: 203
     user_one_id: 205
     user_two_id: 203
-    persist_date: 2020-09-02 03:36:50.977300
+    deleted_for_user_one: true
+    deleted_for_user_two: false
 
-  - id: 204
+  - chat_id: 204
     user_one_id: 666
     user_two_id: 200
-    persist_date: 2020-09-02 03:36:50.977300
+    deleted_for_user_one: false
+    deleted_for_user_two: false
 
-  - id: 205
-    user_one_id: 666
-    user_two_id: 205
-    persist_date: 2020-09-02 03:36:50.977300
+  - chat_id: 205
+    user_one_id: 205
+    user_two_id: 666
+    deleted_for_user_one: false
+    deleted_for_user_two: true

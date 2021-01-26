@@ -32,11 +32,11 @@ public class PaginationGetGroupChatByChatNameDaoImpl implements PaginationDao<Ch
         int singlePage = (int) parameters.get("singlePage");
 
         return em.createQuery("select " +
-                "(select max(me) from GroupChat si join si.messages me where si.id=groupchats.id), " +
-                "groupchats.image," +
-                "groupchats.title," +
+                "(select max(me) from GroupChat si join si.chat.messages me where si.id=groupchats.id), " +
+                "groupchats.chat.image," +
+                "groupchats.chat.title," +
                 "groupchats.id " +
-                "from User user join user.groupChats groupchats where user.userId=:id and (lower(groupchats.title) LIKE lower(:search) or lower(groupchats.title) LIKE lower(:searchMiddle)) order by groupchats.id ASC")
+                "from User user join user.groupChats groupchats where user.userId=:id and (lower(groupchats.chat.title) LIKE lower(:search) or lower(groupchats.chat.title) LIKE lower(:searchMiddle)) order by groupchats.id ASC")
                 .setParameter("id", userId)
                 .setParameter("search", search)
                 .setParameter("searchMiddle", "% " + search)
@@ -51,7 +51,7 @@ public class PaginationGetGroupChatByChatNameDaoImpl implements PaginationDao<Ch
     public Long getCount(Map<String, Object> parameters) {
         return em.createQuery(
                 "select COUNT(user) from User user join user.groupChats groupchats " +
-                        "WHERE user.userId=:id and (lower(groupchats.title) LIKE lower(:search) or lower(groupchats.title) LIKE lower(:searchMiddle))", Long.class)
+                        "WHERE user.userId=:id and (lower(groupchats.chat.title) LIKE lower(:search) or lower(groupchats.chat.title) LIKE lower(:searchMiddle))", Long.class)
                 .setParameter("id", parameters.get("userPrincipalId"))
                 .setParameter("search", parameters.get("search"))
                 .setParameter("searchMiddle", "% " + parameters.get("search"))

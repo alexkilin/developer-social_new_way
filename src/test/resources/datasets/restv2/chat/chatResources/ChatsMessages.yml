@@ -1,4 +1,4 @@
-single_chat_messages:
+chats_messages:
   - chat_id: 200
     message_id: 200
 
@@ -35,3 +35,14 @@ single_chat_messages:
   - chat_id: 205
     message_id: 211
 
+  - chat_id: 206
+    message_id: 212
+
+  - chat_id: 206
+    message_id: 213
+
+  - chat_id: 207
+    message_id: 214
+
+  - chat_id: 208
+    message_id: 215
