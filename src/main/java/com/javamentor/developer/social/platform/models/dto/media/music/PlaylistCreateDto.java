@@ -12,6 +12,7 @@ import javax.validation.constraints.Null;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PlaylistCreateDto {
 
 

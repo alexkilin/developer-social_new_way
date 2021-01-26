@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PlaylistGetDto {
 
     @ApiModelProperty(notes = "ID плейлиста", example = "3")
