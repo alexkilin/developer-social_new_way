@@ -15,12 +15,12 @@ single_chat:
     user_one_id: 204
     user_two_id: 205
     deleted_for_user_one: false
-    deleted_for_user_two: false
+    deleted_for_user_two: true
 
   - chat_id: 203
     user_one_id: 205
     user_two_id: 203
-    deleted_for_user_one: false
+    deleted_for_user_one: true
     deleted_for_user_two: false
 
   - chat_id: 204
@@ -30,7 +30,7 @@ single_chat:
     deleted_for_user_two: false
 
   - chat_id: 205
-    user_one_id: 666
-    user_two_id: 205
+    user_one_id: 205
+    user_two_id: 666
     deleted_for_user_one: false
-    deleted_for_user_two: false
+    deleted_for_user_two: true

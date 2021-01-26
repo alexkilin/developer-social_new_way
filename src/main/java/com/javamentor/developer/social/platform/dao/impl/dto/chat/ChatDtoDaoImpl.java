@@ -37,10 +37,14 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 "single.userTwo.lastName," +
                 "single.userTwo.avatar," +
                 "single.userTwo.active.name, " +
-                "single.id " +
+                "single.id, " +
+                "single.chat.image," +
+                "single.chat.title " +
                 "from SingleChat single " +
-                    "WHERE single.userOne.userId=:id OR single.userTwo.userId=:id")
+                    "WHERE single.userOne.userId=:id and single.deletedForUserOne=:check OR single.userTwo.userId=:id and single.deletedForUserTwo=:check2")
                 .setParameter("id", userId)
+                .setParameter("check", false)
+                .setParameter("check2", false)
                 .unwrap(Query.class)
                 .setResultTransformer(new ChatDtoResultTransformer())
                 .getResultList();
@@ -78,8 +82,8 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
             if (((Number) objects[1]).longValue() != userId) {
                 chatDto = new ChatDto().builder()
                         .id(((Number) objects[11]).longValue())
-                        .title(objects[3] + " " + objects[4])
-                        .image((String) objects[5])
+                        .title((String)objects[13])
+                        .image((String)objects[12])
                         .active((String) objects[6])
                         .lastMessage(((Message) objects[0]).getMessage())
                         .type("singleChats")
@@ -87,8 +91,8 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
             } else {
                 chatDto = new ChatDto().builder()
                         .id(((Number) objects[11]).longValue())
-                        .title(objects[7] + " " + objects[8])
-                        .image((String) objects[9])
+                        .title((String)objects[13])
+                        .image((String)objects[12])
                         .active((String) objects[10])
                         .lastMessage(((Message) objects[0]).getMessage())
                         .type("singleChats")

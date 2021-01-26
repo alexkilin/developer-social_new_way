@@ -40,12 +40,16 @@ public class PaginationGetSingleChatByNameDaoImpl implements PaginationDao<ChatD
                 "single.userTwo.lastName," +
                 "single.userTwo.avatar," +
                 "single.userTwo.active.name, " +
-                "single.id " +
+                "single.id, " +
+                "single.chat.image," +
+                "single.chat.title " +
                 "from SingleChat single " +
-                "WHERE (single.userOne.userId=:id OR single.userTwo.userId=:id) and " +
+                "WHERE (single.userOne.userId=:id and single.deletedForUserOne=:check OR single.userTwo.userId=:id and single.deletedForUserTwo=:check2) and " +
                 "((concat(lower(single.userTwo.firstName),' ', lower(single.userTwo.lastName)) LIKE lower(:search)) or " +
                 "(concat(lower(single.userTwo.lastName),' ', lower(single.userTwo.firstName)) LIKE lower(:search)))")
                 .setParameter("id", userId)
+                .setParameter("check", false)
+                .setParameter("check2", false)
                 .setParameter("search", search)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)
@@ -58,10 +62,12 @@ public class PaginationGetSingleChatByNameDaoImpl implements PaginationDao<ChatD
     public Long getCount(Map<String, Object> parameters) {
         return em.createQuery(
                 "select COUNT(single) from SingleChat single " +
-                        "WHERE (single.userOne.userId=:id OR single.userTwo.userId=:id) and " +
+                        "WHERE (single.userOne.userId=:id and single.deletedForUserOne=:check OR single.userTwo.userId=:id and single.deletedForUserTwo=:check2) and " +
                         "((concat(lower(single.userTwo.firstName),' ', lower(single.userTwo.lastName)) LIKE lower(:search)) or " +
                         "(concat(lower(single.userTwo.lastName),' ', lower(single.userTwo.firstName)) LIKE lower(:search)))", Long.class)
                 .setParameter("id", parameters.get("userPrincipalId"))
+                .setParameter("check", false)
+                .setParameter("check2", false)
                 .setParameter("search", parameters.get("search"))
                 .getSingleResult();
     }
@@ -73,8 +79,8 @@ public class PaginationGetSingleChatByNameDaoImpl implements PaginationDao<ChatD
             if (((Number) objects[1]).longValue() != userId) {
                 chatDto = new ChatDto().builder()
                         .id(((Number) objects[11]).longValue())
-                        .title(objects[3] + " " + objects[4])
-                        .image((String) objects[5])
+                        .title((String)objects[13])
+                        .image((String)objects[12])
                         .active((String) objects[6])
                         .lastMessage(((Message) objects[0]).getMessage())
                         .type("singleChats")
@@ -82,8 +88,8 @@ public class PaginationGetSingleChatByNameDaoImpl implements PaginationDao<ChatD
             } else {
                 chatDto = new ChatDto().builder()
                         .id(((Number) objects[11]).longValue())
-                        .title(objects[7] + " " + objects[8])
-                        .image((String) objects[9])
+                        .title((String)objects[13])
+                        .image((String)objects[12])
                         .active((String) objects[10])
                         .lastMessage(((Message) objects[0]).getMessage())
                         .type("singleChats")

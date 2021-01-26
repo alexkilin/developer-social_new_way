@@ -56,8 +56,9 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getChatsDto() throws Exception {
         mockMvc.perform(get(apiUrl + "/user/{userId}/chats" , 205))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(5));
+                .andExpect(jsonPath("$.length()").value(3));
     }
 
     @Test
@@ -69,8 +70,8 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .param("search", "Admin"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].title").value("Admin1 LastNameAdmin1"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].title").value("Single chat #5"));
 
         mockMvc.perform(get(apiUrl + "/user/chats")
                 .param("currentPage", "1")
@@ -87,8 +88,8 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .param("search", "adm lastName"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].title").value("Admin1 LastNameAdmin1"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].title").value("Single chat #5"));
 
         mockMvc.perform(get(apiUrl + "/user/chats")
                 .param("currentPage", "1")
@@ -106,12 +107,12 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3))
-                .andExpect(jsonPath("$.items[1].title").value("Admin65 LastNameUser0"))
-                .andExpect(jsonPath("$.items[2].title").value("Group chat #1"));
+                .andExpect(jsonPath("$.items[0].title").value("Single chat #5"))
+                .andExpect(jsonPath("$.items[1].title").value("Group chat #1"));
 
         mockMvc.perform(get(apiUrl + "/user/chats")
                 .param("currentPage", "2")
-                .param("itemsOnPage", "3")
+                .param("itemsOnPage", "2")
                 .param("search", ""))
                 .andDo(print())
                 .andExpect(status().isOk())
