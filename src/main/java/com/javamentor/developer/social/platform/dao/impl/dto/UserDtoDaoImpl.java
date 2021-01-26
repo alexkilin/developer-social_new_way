@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +51,7 @@ class UserDtoDaoImpl implements UserDtoDao {
                                     .userId(((Number) objects[0]).longValue())
                                     .firstName((String) objects[1])
                                     .lastName((String) objects[2])
-                                    .dateOfBirth((Date) objects[3])
+                                    .dateOfBirth((LocalDate) objects[3])
                                     .education((String) objects[4])
                                     .aboutMe((String) objects[5])
                                     .avatar((String) objects[6])
@@ -72,12 +72,11 @@ class UserDtoDaoImpl implements UserDtoDao {
                     })
                     .getSingleResult());
         } catch (NoResultException e) {
-            e.printStackTrace();
+            return Optional.empty();
         }
 
         return userDto;
     }
-
 
     @Override
     @SuppressWarnings("unchecked")
@@ -115,6 +114,3 @@ class UserDtoDaoImpl implements UserDtoDao {
         return userLanguageDto;
     }
 }
-
-
-

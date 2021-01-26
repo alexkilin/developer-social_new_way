@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Set;
 
 @ToString
@@ -39,7 +39,8 @@ public class User implements UserDetails {
     private String lastName;
 
     //@NotNull
-    private Date dateOfBirth;
+    @Temporal(TemporalType.DATE)
+    private LocalDate dateOfBirth;
 
     @Column(name = "education")
     private String education;
@@ -59,7 +60,6 @@ public class User implements UserDetails {
 
     @Column(name = "profession")
     private String profession;
-
 
     @Column(name = "persist_date", nullable = false, updatable = false)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
