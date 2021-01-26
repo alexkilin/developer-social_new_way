@@ -5,12 +5,12 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -73,5 +73,16 @@ public class Audios {
             throw new ApiRequestException("У экземпляра Media, связанного с Audio, " +
                     "поле mediaType должно принимать значение MediaType.Audio");
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj == this || (obj instanceof Audios &&
+                getId().equals(((Audios) obj).getId()));
     }
 }
