@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.models.entity.album;
 
 import com.javamentor.developer.social.platform.exception.ApiRequestException;
-import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.Image;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import lombok.*;
@@ -24,7 +23,6 @@ public class AlbumImage {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)

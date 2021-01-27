@@ -39,7 +39,6 @@ public class User implements UserDetails {
     private String lastName;
 
     //@NotNull
-    @Temporal(TemporalType.DATE)
     private LocalDate dateOfBirth;
 
     @Column(name = "education")
