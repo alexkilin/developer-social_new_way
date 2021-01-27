@@ -70,6 +70,11 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     }
 
     @Override
+    public Optional<User> getByEmailEagerlyForDtoConversion(String email) {
+        return userDao.getByEmailEagerlyForDtoConversion(email);
+    }
+
+    @Override
     @Transactional
     public void deleteById(Long id) {
         userDao.deleteById(id);

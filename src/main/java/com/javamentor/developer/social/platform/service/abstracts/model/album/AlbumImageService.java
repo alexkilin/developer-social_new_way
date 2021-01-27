@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface AlbumImageService extends GenericService<AlbumImage, Long> {
 
-    Optional<AlbumImage> getByIdWithAlbum(Long id);
+    Optional<AlbumImage> getByIdWithImages(Long id);
     AlbumImage createAlbumImageWithOwner( AlbumImage albumImage );
+
 }

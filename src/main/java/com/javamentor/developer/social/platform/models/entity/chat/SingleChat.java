@@ -27,11 +27,11 @@ public class SingleChat {
 
     private String image;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST}, targetEntity = User.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "user_one_id")
     private User userOne;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST}, targetEntity = User.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "user_two_id")
     private User userTwo;
 

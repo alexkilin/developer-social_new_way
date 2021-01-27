@@ -26,4 +26,5 @@ public interface UserService extends GenericService<User, Long> {
 
     boolean existsAnotherByEmail(String email, Long userId);
 
+    Optional<User> getByEmailEagerlyForDtoConversion(String email);
 }

@@ -22,4 +22,6 @@ public interface UserDao extends GenericDao<User, Long> {
     Optional<User> getByIdWithAudios(Long id);
 
     Optional<User> getByIdWithVideos(Long id);
+
+    Optional<User> getByEmailEagerlyForDtoConversion(String email);
 }

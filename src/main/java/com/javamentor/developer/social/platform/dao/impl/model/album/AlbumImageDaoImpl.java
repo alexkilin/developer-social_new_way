@@ -23,11 +23,22 @@ public class AlbumImageDaoImpl extends GenericDaoAbstract<AlbumImage, Long> impl
     }
 
     @Override
-    public Optional<AlbumImage> getByIdWithAlbum(Long id) {
+    public Optional<AlbumImage> getById(Long id) {
         TypedQuery<AlbumImage> query = entityManager.createQuery("SELECT ai " +
                         "FROM AlbumImage AS ai " +
                         "JOIN FETCH ai.album " +
                         "WHERE ai.id = :paramId", AlbumImage.class)
+                .setParameter("paramId", id);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
+    public Optional<AlbumImage> getByIdWithImages(Long id) {
+        TypedQuery<AlbumImage> query = entityManager.createQuery("SELECT ai " +
+                "FROM AlbumImage AS ai " +
+                "JOIN FETCH ai.album " +
+                "LEFT JOIN FETCH ai.images " +
+                "WHERE ai.id = :paramId", AlbumImage.class)
                 .setParameter("paramId", id);
         return SingleResultUtil.getSingleResultOrNull(query);
     }

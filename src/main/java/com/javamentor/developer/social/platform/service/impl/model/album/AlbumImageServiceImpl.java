@@ -23,8 +23,8 @@ public class AlbumImageServiceImpl extends GenericServiceAbstract<AlbumImage, Lo
 
     @Override
     @Transactional
-    public Optional<AlbumImage> getByIdWithAlbum(Long id) {
-        return albumImageDao.getByIdWithAlbum(id);
+    public Optional<AlbumImage> getByIdWithImages(Long id) {
+        return albumImageDao.getByIdWithImages(id);
     }
 
     @Override

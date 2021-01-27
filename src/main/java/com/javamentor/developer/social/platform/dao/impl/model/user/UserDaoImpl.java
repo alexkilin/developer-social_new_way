@@ -111,6 +111,18 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
     }
 
     @Override
+    public Optional<User> getByEmailEagerlyForDtoConversion(String email) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+                "FROM User AS u " +
+                "INNER JOIN FETCH u.active " +
+                "INNER JOIN FETCH u.role " +
+                "LEFT JOIN FETCH u.languages " +
+                "WHERE u.email = :emailParam", User.class)
+                .setParameter("emailParam", email);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
     public void updateUserPassword(User user) {
         Query query = entityManager.createQuery(
                 "UPDATE User u SET " +

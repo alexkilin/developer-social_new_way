@@ -175,7 +175,7 @@ public class ImageControllerV2 {
             @PathVariable @NotNull Long albumId ,
             @ApiParam(value = "Id изображения", example = "imageId=31")
             @RequestParam @NotNull Long imageId ) {
-        Optional<AlbumImage> album = albumImageService.getById(albumId);
+        Optional<AlbumImage> album = albumImageService.getByIdWithImages(albumId);
         if(!album.isPresent()) {
             logger.info(String.format("Фотоальбом с id  %s не найден" , albumId));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image album with id %s is not found" , albumId));
@@ -256,7 +256,7 @@ public class ImageControllerV2 {
     @GetMapping(value = "/albums/{albumId}")
     public ResponseEntity<?> getImageAlbumById(@ApiParam(value = "Id альбома", example = "11")
                                                @PathVariable @NotNull Long albumId) {
-        Optional<AlbumImage> optionalAlbum = albumImageService.getByIdWithAlbum(albumId);
+        Optional<AlbumImage> optionalAlbum = albumImageService.getById(albumId);
         if(!optionalAlbum.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
