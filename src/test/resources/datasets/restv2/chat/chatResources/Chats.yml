@@ -1,0 +1,45 @@
+chats:
+  - id: 200
+    image: 'Chat image #1'
+    title: 'Single chat #1'
+    persist_date: 2020-09-02 03:36:50.977300
+
+  - id: 201
+    image: 'Chat image #2'
+    title: 'Single chat #2'
+    persist_date: 2020-09-02 03:36:50.977300
+
+  - id: 202
+    image: 'Chat image #3'
+    title: 'Single chat #3'
+    persist_date: 2020-09-02 03:36:50.977300
+
+  - id: 203
+    image: 'Chat image #4'
+    title: 'Single chat #4'
+    persist_date: 2020-09-02 03:36:50.977300
+
+  - id: 204
+    image: 'Chat image #5'
+    title: 'Single chat #5'
+    persist_date: 2020-09-02 03:36:50.977300
+
+  - id: 205
+    image: 'Chat image #6'
+    title: 'Single chat #6'
+    persist_date: 2020-09-02 03:36:50.977300
+
+  - id: 206
+    image: 'Chat image #1'
+    title: 'Group chat #1'
+    persist_date: 2020-09-02 03:36:50.977300
+
+  - id: 207
+    image: 'Chat image #2'
+    title: 'Group chat #2'
+    persist_date: 2020-09-02 03:36:50.977300
+
+  - id: 208
+    image: 'Chat image #3'
+    title: 'Group chat #3'
+    persist_date: 2020-09-02 03:36:50.977300

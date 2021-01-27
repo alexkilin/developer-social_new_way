@@ -254,10 +254,10 @@ public class GroupControllerV2 {
             @ApiResponse(code = 400, message = "Категория уже существует", response = String.class)
     })
     @Validated(OnCreate.class)
-    @PostMapping(value = "groupCategory/add")
+    @PostMapping(value = "/groupCategory/add")
     public ResponseEntity<?> addGroupCategory( @ApiParam(value = "Категория") @Valid @RequestBody GroupCategoryDto groupCategoryDto ) {
-        Optional<GroupCategoryDto> tempCategory = groupCategoryDtoService.getGroupCategoryByName(groupCategoryDto.getName());
-        if(tempCategory.isPresent()) {
+
+        if(groupCategoryDtoService.getGroupCategoryByName(groupCategoryDto.getName()).isPresent()) {
             return ResponseEntity.badRequest()
                     .body(String.format("Category with name \"%s\" already exist"
                             , groupCategoryDto.getName()));
@@ -265,32 +265,29 @@ public class GroupControllerV2 {
         GroupCategory groupCategory = groupCategoryConverter.toEntity(groupCategoryDto);
         groupCategoryService.create(groupCategory);
 
-        GroupCategoryDto createdCategory = groupCategoryDtoService
-                .getGroupCategoryByName(groupCategoryDto.getName())
-                .get();
-
-        return ResponseEntity.ok(createdCategory);
+        return ResponseEntity.ok(groupCategoryConverter.toDto(groupCategory));
     }
 
 
     @ApiOperation(value = "Получение списка всех категорий")
-    @ApiResponse(code = 200, message = "Список категорий получен", responseContainer = "List", response = GroupCategoryDto.class)
+    @ApiResponse(code = 200, message = "Список категорий получен", responseContainer = "List", response = PageDto.class)
 
-    @GetMapping(value = "groupCategory/all/pageable")
+    @GetMapping(value = "/groupCategory/all/pageable")
     public ResponseEntity<PageDto<GroupCategoryDto, Object>> getAllCategories( @ApiParam(value = "Текущая страница", example = "0")
                                                                                @RequestParam("currentPage") int currentPage ,
                                                                                @ApiParam(value = "Количество данных на страницу", example = "15")
                                                                                @RequestParam("itemsOnPage") int itemsOnPage ) {
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("currentPage" , currentPage);
-        parameters.put("itemsOnPage" , itemsOnPage);
-        PageDto<GroupCategoryDto, Object> allCategories = groupCategoryDtoService.getAllCategories(parameters);
-        return ResponseEntity.ok(allCategories);
+        Map<String, Object> parameters = new HashMap<String, Object>() {{
+            put("currentPage" , currentPage);
+            put("itemsOnPage" , itemsOnPage);
+        }};
+
+        return ResponseEntity.ok(groupCategoryDtoService.getAllCategories(parameters));
     }
 
     @ApiOperation(value = "Поиск групп по категории")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Найдены следующие группы", responseContainer = "List", response = GroupInfoDto.class) ,
+            @ApiResponse(code = 200, message = "Найдены следующие группы", responseContainer = "List", response = PageDto.class) ,
             @ApiResponse(code = 412, message = "По данной категории групп не найдено", response = String.class) ,
             @ApiResponse(code = 400, message = "Категория не существует", response = String.class)
     })
@@ -301,16 +298,16 @@ public class GroupControllerV2 {
                                                   @RequestParam("currentPage") int currentPage ,
                                                   @ApiParam(value = "Количество данных на страницу", example = "15")
                                                   @RequestParam("itemsOnPage") int itemsOnPage ) {
-        Optional<GroupCategoryDto> byCategory = groupCategoryDtoService.getGroupCategoryByName(category);
 
-        if(!byCategory.isPresent()) {
+        if(!groupCategoryDtoService.getGroupCategoryByName(category).isPresent()) {
             return ResponseEntity.badRequest().body(String.format("No category named \"%s\""
                     , category));
         }
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("currentPage" , currentPage);
-        parameters.put("itemsOnPage" , itemsOnPage);
-        parameters.put("category" , category);
+        Map<String, Object> parameters = new HashMap<String, Object>() {{
+            put("currentPage" , currentPage);
+            put("itemsOnPage" , itemsOnPage);
+            put("category" , category);
+        }};
         PageDto<Object, Object> groupsByCategory = groupDtoService.getGroupsByCategory(parameters);
         if(groupsByCategory.getItems().isEmpty()) {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)

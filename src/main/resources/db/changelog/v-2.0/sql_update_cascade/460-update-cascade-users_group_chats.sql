@@ -8,7 +8,7 @@ alter table users_group_chats
 
 alter table users_group_chats
    add constraint FK6q5yt8kersl8ejr63nfi53314
-   foreign key (group_chat_id)
+   foreign key (chat_id)
    references group_chats
     on update cascade;
 

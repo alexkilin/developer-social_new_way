@@ -5,6 +5,7 @@ import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
+import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/chat/usersChatTest/Role.yml" ,
         "datasets/restv2/chat/usersChatTest/User.yml" ,
         "datasets/restv2/chat/chatResources/GroupChat.yml" ,
-        "datasets/restv2/chat/chatResources/GroupChatsMessages.yml" ,
+        "datasets/restv2/chat/chatResources/Chats.yml",
+        "datasets/restv2/chat/chatResources/ChatsMessages.yml",
         "datasets/restv2/chat/chatResources/SingleChat.yml" ,
-        "datasets/restv2/chat/chatResources/SingleChatMessages.yml" ,
         "datasets/restv2/chat/chatResources/UsersGroupChats.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 @Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
@@ -55,8 +56,9 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void getChatsDto() throws Exception {
         mockMvc.perform(get(apiUrl + "/user/{userId}/chats" , 205))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(5));
+                .andExpect(jsonPath("$.length()").value(3));
     }
 
     @Test
@@ -68,8 +70,8 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .param("search", "Admin"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].title").value("Admin1 LastNameAdmin1"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].title").value("Single chat #5"));
 
         mockMvc.perform(get(apiUrl + "/user/chats")
                 .param("currentPage", "1")
@@ -86,8 +88,8 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .param("search", "adm lastName"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.items[0].title").value("Admin1 LastNameAdmin1"));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].title").value("Single chat #5"));
 
         mockMvc.perform(get(apiUrl + "/user/chats")
                 .param("currentPage", "1")
@@ -105,12 +107,12 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3))
-                .andExpect(jsonPath("$.items[1].title").value("Admin65 LastNameUser0"))
-                .andExpect(jsonPath("$.items[2].title").value("Group chat #1"));
+                .andExpect(jsonPath("$.items[0].title").value("Single chat #5"))
+                .andExpect(jsonPath("$.items[1].title").value("Group chat #1"));
 
         mockMvc.perform(get(apiUrl + "/user/chats")
                 .param("currentPage", "2")
-                .param("itemsOnPage", "3")
+                .param("itemsOnPage", "2")
                 .param("search", ""))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -120,12 +122,12 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getAllMessageDtoByGroupChatId() throws Exception {
-        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 200)
+        mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 206)
                 .param("currentPage" , "1")
                 .param("itemsOnPage" , "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(6))
-                .andExpect(jsonPath("$.items[0].message").value("Test init message1"));
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].message").value("Test init message13"));
 
         mockMvc.perform(get(apiUrl + "/group-chats/{chatId}/messages" , 1000)
                 .param("currentPage" , "1")
@@ -155,7 +157,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     public void editGroupChatTitle() throws Exception {
         ChatEditTitleDto chatEditTitleDto = ChatEditTitleDto.builder()
                 .title("NewTitle")
-                .id(200l)
+                .id(206L)
                 .build();
 
         mockMvc.perform(put(apiUrl + "/group-chats/title")
@@ -170,6 +172,10 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 200 , 200))
                 .andExpect(status().isOk())
                 .andExpect(content().string("done delete chat from user"));
+        SingleChat singleChat = (SingleChat) entityManager.createQuery("SELECT s from SingleChat as s where s.id = 200")
+               .getSingleResult();
+        assertEquals(singleChat.isDeletedForUserOne(), true);
+        assertEquals(singleChat.isDeletedForUserTwo(), false);
 
         mockMvc.perform(delete(apiUrl + "/single-chats/{chatId}/user/{userId}" , 201 , 1000))
                 .andExpect(status().isBadRequest())
@@ -187,8 +193,8 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void createGroupChat() throws Exception {
         ChatDto chatDto = ChatDto.builder()
-                .image("MyImage")
-                .title("MyTitle")
+                .image("MyImage123")
+                .title("MyTitle123")
                 .build();
 
         /*
@@ -205,6 +211,10 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(chatDto)))
                 .andExpect(status().isOk());
+
+    GroupChat groupChat = (GroupChat) entityManager.createQuery("SELECT g from GroupChat as g where g.chat.title = :title")
+            .setParameter("title", "MyTitle123").getSingleResult();
+    assertEquals(groupChat.getChat().getImage(), "MyImage123");
     }
 
     /**
@@ -238,7 +248,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
         ChatDto responseContent = gson.fromJson(response.getContentAsString() , ChatDto.class);
         assertEquals(chatDto.getTitle(), responseContent.getTitle());
 
-        TypedQuery<SingleChat> query = entityManager.createQuery("select c from SingleChat c where c.title=:title" , SingleChat.class)
+        TypedQuery<SingleChat> query = entityManager.createQuery("select c from SingleChat c where c.chat.title=:title" , SingleChat.class)
                 .setParameter("title" , chatDto.getTitle());
         Optional<TypedQuery<SingleChat>> checkDB = Optional.of(query);
 

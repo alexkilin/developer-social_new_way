@@ -1,1 +1,1 @@
-update group_chats set id = nextval('group_chats_seq');
+update group_chats set chat_id = nextval('group_chats_seq');

@@ -139,7 +139,7 @@ public class ChatControllerV2 {
 
         if (result.isPresent()) {
             GroupChat groupChat = result.get();
-            groupChat.setTitle(chatEditTitleDto.getTitle());
+            groupChat.getChat().setTitle(chatEditTitleDto.getTitle());
             groupChatService.update(groupChat);
         }
         return ResponseEntity.ok().body(chatDtoService.getChatDtoByGroupChatId(chatId));

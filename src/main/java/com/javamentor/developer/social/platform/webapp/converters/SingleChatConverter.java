@@ -17,14 +17,14 @@ public abstract class SingleChatConverter {
     @Autowired
     private UserService userService;
 
-    @Mapping(source = "chatDto.title", target = "title")
-    @Mapping(source = "chatDto.image", target = "image")
+    @Mapping(source = "chatDto.title", target = "chat.title")
+    @Mapping(source = "chatDto.image", target = "chat.image")
     @Mapping(source = "userOneId", target ="userOne", qualifiedByName = "userIdToUser")
     @Mapping(source = "userTwoId", target ="userTwo", qualifiedByName = "userIdToUser")
     public abstract SingleChat chatDtoToSingleChat(ChatDto chatDto, Long userOneId, Long userTwoId);
 
-    @Mapping(source = "title", target = "title")
-    @Mapping(source = "image", target = "image")
+    @Mapping(source = "chat.title", target = "title")
+    @Mapping(source = "chat.image", target = "image")
     @Mapping(source = "id", target = "id")
     public abstract ChatDto singleChatToChatDto(SingleChat singleChat);
 

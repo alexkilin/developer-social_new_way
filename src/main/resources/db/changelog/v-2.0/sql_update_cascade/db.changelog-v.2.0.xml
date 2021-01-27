@@ -17,7 +17,8 @@
     <include file="110-update-cascade-comments.sql" relativeToChangelogFile="true"/>
     <include file="120-update-cascade-followers.sql" relativeToChangelogFile="true"/>
     <include file="130-update-cascade-friends.sql" relativeToChangelogFile="true"/>
-    <include file="160-update-cascade-group_chat_messages.sql" relativeToChangelogFile="true"/>
+    <include file="150-update-cascade-group_chats.sql" relativeToChangelogFile="true"/>
+    <include file="160-update-cascade-chats_messages.sql" relativeToChangelogFile="true"/>
     <include file="180-update-cascade-group_has_user.sql" relativeToChangelogFile="true"/>
     <include file="190-update-cascade-group_wall.sql" relativeToChangelogFile="true"/>
     <include file="200-update-cascade-group.sql" relativeToChangelogFile="true"/>
@@ -37,7 +38,6 @@
     <include file="350-update-cascade-posts.sql" relativeToChangelogFile="true"/>
     <include file="360-update-cascade-reposts.sql" relativeToChangelogFile="true"/>
     <include file="380-update-cascade-single_chat.sql" relativeToChangelogFile="true"/>
-    <include file="390-update-cascade-single_chat_messages.sql" relativeToChangelogFile="true"/>
     <include file="410-update-cascade-user_has_album.sql" relativeToChangelogFile="true"/>
     <include file="420-update-cascade-user_languages.sql" relativeToChangelogFile="true"/>
     <include file="430-update-cascade-user_tabs.sql" relativeToChangelogFile="true"/>

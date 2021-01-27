@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -11,11 +12,12 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class AlbumImageDto {
 
-    private Long          id;
-    private String        name;
-    private String        icon;
+    private Long id;
+    private String name;
+    private String icon;
     private LocalDateTime persistDate;
     private LocalDateTime lastRedactionDate;
 

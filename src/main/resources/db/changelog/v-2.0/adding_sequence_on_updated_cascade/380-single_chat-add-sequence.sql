@@ -1,1 +1,1 @@
-update single_chat set id = nextval('single_chat_seq');
+update single_chat set chat_id = nextval('single_chat_seq');
