@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
-import com.javamentor.developer.social.platform.models.dto.PostDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
@@ -135,7 +134,7 @@ public class ChatControllerV2 {
                                                 @RequestBody @NotNull @Valid ChatEditTitleDto chatEditTitleDto) {
         Long chatId = chatEditTitleDto.getId();
 
-        Optional<GroupChat> result = groupChatService.getById(chatId);
+        Optional<GroupChat> result = groupChatService.getByIdWithChat(chatId);
 
         if (result.isPresent()) {
             GroupChat groupChat = result.get();
