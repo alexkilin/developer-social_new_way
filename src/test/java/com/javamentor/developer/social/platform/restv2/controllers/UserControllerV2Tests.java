@@ -11,14 +11,12 @@ import com.javamentor.developer.social.platform.service.abstracts.model.user.Use
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -51,7 +49,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
     private final Gson gson = new Gson();
 
     @Test
-    void createUser() throws Exception {
+    void createNewUser() throws Exception {
         UserRegisterDto userDto = UserRegisterDto.builder()
                 .email("jm.platform.noreply@gmail.com")
                 .password("AdminPwd123")
@@ -71,88 +69,21 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.roleName").value("USER"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        Assert.assertFalse("Проверка аттрибута подтверждения почты нового пользователя",
-                userService.getByEmail("jm.platform.noreply@gmail.com").get().isEnabled());
+        Assert.assertNotNull(userService.getByEmail("jm.platform.noreply@gmail.com").get());
 
+        String oldDtoLastName = userDto.getLastName();
         userDto.setLastName("NewAdminLastName");
         mockMvc.perform(post(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email").value("jm.platform.noreply@gmail.com"))
-                .andExpect(jsonPath("$.password").isNotEmpty())
-                .andExpect(jsonPath("$.firstName").value("AdminFirstName"))
-                .andExpect(jsonPath("$.lastName").value("NewAdminLastName"))
-                .andExpect(jsonPath("$.activeName").value("ACTIVE"))
-                .andExpect(jsonPath("$.roleName").value("USER"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-
-        final String verificationUrl = "/auth/reg";
-
-        // Действительный токен пользователя jm.platform.noreply@gmail.com от 2021-01-13 03:57:17 UTC
-        // при времени жизни токена 100 лет
-        String validToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqbS5wbGF0Zm9ybS5ub3JlcGx5QGdtYWlsLmNvbSIsImlhdCI6MTY" +
-                "xMDUxMDIzNywiZXhwIjo0NzY2MjcwMjM3fQ.qOfFk9VWWespOKqR1ScyPD0mrZ3qavlGz3j7sRs_xcw";
-        mockMvc.perform(post(verificationUrl)
-                .contentType(MediaType.TEXT_PLAIN)
-                .content(validToken)
-                .with(anonymous()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("jm.platform.noreply@gmail.com"))
-                .andExpect(jsonPath("$.password").isNotEmpty())
-                .andExpect(jsonPath("$.firstName").value("AdminFirstName"))
-                .andExpect(jsonPath("$.lastName").value("NewAdminLastName"))
-                .andExpect(jsonPath("$.activeName").value("ACTIVE"))
-                .andExpect(jsonPath("$.roleName").value("USER"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-
-        Assert.assertTrue("Проверка аттрибута подтверждения почты нового пользователя после подтвеждения",
-                userService.getByEmail("jm.platform.noreply@gmail.com").get().isEnabled());
-
-        mockMvc.perform(post(verificationUrl)
-                .contentType(MediaType.TEXT_PLAIN)
-                .content(validToken)
-                .with(anonymous()))
-                .andExpect(status().is(HttpStatus.CONFLICT.value()))
-                .andExpect(content().string("User have been activated earlier"));
-
-        mockMvc.perform(post(apiUrl + "/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(userDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("User with email 'jm.platform.noreply@gmail.com' already registered. Email should be unique"));
+                .andExpect(content().string(
+                        String.format("User with email '%s' already registered. Email should be unique", userDto.getEmail()))
+                );
 
-        // Просроченный токен пользователя jm.platform.noreply@gmail.com от 2021-01-13 03:48:12 UTC
-        // при времени жизни токена 3 cекунды
-        String expiredToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqbS5wbGF0Zm9ybS5ub3JlcGx5QGdtYWlsLmNvbSIsImlhdCI6MTY" +
-                "xMDUwOTY5MiwiZXhwIjoxNjEwNTA5Njk1fQ.CnUS3Ae5NQngF1_CBnYGFLEHI2GcDS8CQ2t4UMZ1uKA";
-        mockMvc.perform(post(verificationUrl)
-                .contentType(MediaType.TEXT_PLAIN)
-                .content(expiredToken)
-                .with(anonymous()))
-                .andExpect(status().is(HttpStatus.REQUEST_TIMEOUT.value()))
-                .andExpect(content().string("Registration code is outdated"));
-
-        // Токен несуществующего пользователя some.invalid.email@gmail.com от 2021-01-13 04:37:08 UTC
-        // при времени жизни токена 100 лет
-        String unknownUserToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzb21lLmludmFsaWQuZW1haWxAZ21haWwuY29tIiwiaWF0Ijox" +
-                "NjEwNTEyNjI4LCJleHAiOjQ3NjYyNzI2Mjh9.x5jwfSXL9eXr3nlomc9RG0kIAWYjs49Buey_RMY0CKU";
-        mockMvc.perform(post(verificationUrl)
-                .contentType(MediaType.TEXT_PLAIN)
-                .content(unknownUserToken)
-                .with(anonymous()))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(String.format("No matching user record found for verification code '%s'", unknownUserToken)));
-
-        // Некорректный токен
-        String notAToken = "eyJ";
-        mockMvc.perform(post(verificationUrl)
-                .contentType(MediaType.TEXT_PLAIN)
-                .content(notAToken)
-                .with(anonymous()))
-                .andExpect(status().isNotAcceptable())
-                .andExpect(content().string("Registration code is corrupted"));
+        Assert.assertEquals("Фамилия пользователя должна была остаться прежней",
+                oldDtoLastName, userService.getByEmail(userDto.getEmail()).get().getLastName());
     }
 
     @Test

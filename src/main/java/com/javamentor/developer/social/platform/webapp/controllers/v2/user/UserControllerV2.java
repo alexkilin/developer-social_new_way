@@ -93,38 +93,20 @@ public class UserControllerV2 {
 
     @ApiOperation(value = "Создание пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Пользователь создан, на эл. почту пользователя направлено письмо для подтверждения регистрации", response = UserRegisterDto.class),
+            @ApiResponse(code = 201, message = "Пользователь создан", response = UserRegisterDto.class),
             @ApiResponse(code = 400, message = "Пользователь с данным email существует. Email должен быть уникальным", response = String.class),
-            @ApiResponse(code = 500, message = "Произошла ошибка в процессе формирования/отправки эл. письма для подтверждения регистрации", response = String.class)
     })
     @PostMapping
     @Validated(OnCreate.class)
     public ResponseEntity<?> createUser(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserRegisterDto userRegisterDto) {
-        User user = userService.getByEmail(userRegisterDto.getEmail()).orElseGet(() -> userConverter.toEntity(userRegisterDto));
-        if (user.isEnabled()) {
-            logger.info(String.format("Пользователь с email: %s уже существует и зарегистрирован", user.getEmail()));
-            return ResponseEntity.badRequest().body(String.format("User with email '%s' already registered. Email should be unique", user.getEmail()));
+        if (userService.getByEmail(userRegisterDto.getEmail()).isPresent()) {
+            logger.info(String.format("Пользователь с email: %s уже существует", userRegisterDto.getEmail()));
+            return ResponseEntity.badRequest().body(String.format("User with email '%s' already registered. Email should be unique", userRegisterDto.getEmail()));
         }
-        if (user.getUserId() == null) {
-            userService.create(user);
-            logger.info(String.format("Пользователь с email: %s добавлен в базу данных", user.getEmail()));
-        } else {
-            Long id = user.getUserId();
-            user = userConverter.toEntity(userRegisterDto);
-            user.setUserId(id);
-            userService.update(user);
-            logger.info(String.format("Регистрационные данные пользователя с эл. почтой '%s' обновлены", user.getEmail()));
-        }
-        generateAndSendVerificationEmail(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userConverter.toDto(user));
-    }
-
-    private void generateAndSendVerificationEmail(User user) {
-        String verificationToken = jwtUtil.createEmailVerificationToken(user.getUsername());
-        logger.info(String.format("Код подтверждения регистрации для пользователя c эл. почтой %s сгенерирован", user.getEmail()));
-
-        verificationEmailService.sendEmail(user.getEmail(), verificationToken);
-        logger.info(String.format("На адрес эл. почты пользователя '%s' направлено письмо проверочным кодом", user.getEmail()));
+        User newUser = userConverter.toEntity(userRegisterDto);
+        userService.create(newUser );
+        logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userRegisterDto.getEmail()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userConverter.toDto(newUser));
     }
 
     @ApiOperation(value = "Обновление личной информации пользователя")
