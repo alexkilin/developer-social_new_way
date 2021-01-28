@@ -25,7 +25,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -179,7 +178,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "1000"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Audio id 1000 not found"));
+                .andExpect(content().string("Audio with id 1000 not found"));
     }
 
     @Test

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,8 @@ public class PaginationGetAllTagsDaoImpl implements PaginationDao<TagDto> {
                 "select " +
                         "t.id," +
                         "t.text " +
-                        "from Tag t")
+                        "from Tag t " +
+                        "order by t.id asc")
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)
                 .unwrap(Query.class)

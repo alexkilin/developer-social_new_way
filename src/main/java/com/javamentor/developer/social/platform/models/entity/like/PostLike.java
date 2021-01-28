@@ -23,7 +23,7 @@ public class PostLike {
     @Id
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE }, optional = false)
     @MapsId
     private Like like = new Like(LikeType.POST);
 

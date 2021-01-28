@@ -212,7 +212,11 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .content(gson.toJson(chatDto)))
                 .andExpect(status().isOk());
 
-    GroupChat groupChat = (GroupChat) entityManager.createQuery("SELECT g from GroupChat as g where g.chat.title = :title")
+    GroupChat groupChat = (GroupChat) entityManager.createQuery(
+            "SELECT g " +
+                    "FROM GroupChat as g " +
+                    "JOIN FETCH g.chat " +
+                    "WHERE g.chat.title = :title")
             .setParameter("title", "MyTitle123").getSingleResult();
     assertEquals(groupChat.getChat().getImage(), "MyImage123");
     }

@@ -26,4 +26,16 @@ public class PostLikeServiceImpl extends GenericServiceAbstract<PostLike, Long> 
     public Optional<PostLike> getPostLikeByPostIdAndUserId(Long postId, Long userId) {
         return postLikeDao.getPostLikeByPostIdAndUserId(postId, userId);
     }
+
+    @Override
+    @Transactional
+    public void create(PostLike entity) {
+        postLikeDao.create(entity);
+    }
+
+    @Override
+    @Transactional
+    public void delete(PostLike entity) {
+        postLikeDao.delete(entity);
+    }
 }

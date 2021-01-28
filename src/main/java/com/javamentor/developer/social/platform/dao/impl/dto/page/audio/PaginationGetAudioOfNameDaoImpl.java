@@ -38,7 +38,8 @@ public class PaginationGetAudioOfNameDaoImpl implements PaginationDao<AudioDto> 
                         "c.length " +
                         "FROM Audios c " +
                         "WHERE upper(c.name) " +
-                        "LIKE upper(:name) ")
+                        "LIKE upper(:name) " +
+                        "ORDER BY c.id ASC")
                 .setParameter("name", "%" + name + "%")
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

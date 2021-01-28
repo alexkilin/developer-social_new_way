@@ -24,7 +24,7 @@ public abstract class GenericServiceAbstract<T, PK extends Serializable> impleme
     @Override
     @Transactional
     public List<T> getPart(int currentPage, int itemsOnPage) {
-        return dao.getPartAudio(currentPage, itemsOnPage);
+        return dao.getPart(currentPage, itemsOnPage);
     }
 
     @Override

@@ -189,7 +189,7 @@ public class ImageControllerV2 {
             @PathVariable @NotNull Long albumId ,
             @ApiParam(value = "Id изображения", example = "imageId=31")
             @RequestParam @NotNull Long imageId ) {
-        Optional<AlbumImage> album = albumImageService.getById(albumId);
+        Optional<AlbumImage> album = albumImageService.getByIdWithImages(albumId);
         if(!album.isPresent()) {
             logger.info(String.format("Фотоальбом с id  %s не найден" , albumId));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image album with id %s is not found" , albumId));
@@ -268,33 +268,33 @@ public class ImageControllerV2 {
             @ApiResponse(code = 200, message = "Фотоальбом получен", response = AlbumDto.class, responseContainer = "List") ,
             @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class)})
     @GetMapping(value = "/albums/{albumId}")
-    public ResponseEntity<?> getImageAlbumById( @ApiParam(value = "Id альбома", example = "11")
-                                                @PathVariable @NotNull Long albumId ) {
+    public ResponseEntity<?> getImageAlbumById(@ApiParam(value = "Id альбома", example = "11")
+                                               @PathVariable @NotNull Long albumId) {
         Optional<AlbumImage> optionalAlbum = albumImageService.getById(albumId);
         if(!optionalAlbum.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found" , albumId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
-        logger.info(String.format("Фотоальбом %s отправлен" , albumId));
+        logger.info(String.format("Фотоальбом %s отправлен", albumId));
         return ResponseEntity.ok(albumImageConverter.toAlbumImageDto(optionalAlbum.get()));
     }
 
     @ApiOperation(value = "Получить все фотоальбомы пользователя")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Фотоальбомы получены", response = AlbumDto.class, responseContainer = "List") ,
+            @ApiResponse(code = 200, message = "Фотоальбомы получены", response = AlbumDto.class, responseContainer = "List"),
             @ApiResponse(code = 404, message = "Пользователь не найден", response = String.class)})
-    @GetMapping(value = "/albums", params = {"currentPage" , "itemsOnPage" , "userId"})
+    @GetMapping(value = "/albums", params = {"currentPage", "itemsOnPage", "userId"})
     public ResponseEntity<?> getAllImageAlbumsOfUser(
-            @ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId ,
-            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage ,
-            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage ) {
+            @ApiParam(value = "Id пользователя", example = "60") @RequestParam("userId") @NotNull Long userId,
+            @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         if(!userService.existById(userId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found" , userId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No user with id %s found", userId));
         }
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("userId" , userId);
-        parameters.put("currentPage" , currentPage);
-        parameters.put("itemsOnPage" , itemsOnPage);
-        logger.info(String.format("Отправлен список пустой или с альбомами пользователя с id: %s" , userId));
+        parameters.put("userId", userId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        logger.info(String.format("Отправлен список пустой или с альбомами пользователя с id: %s", userId));
         return ResponseEntity.status(HttpStatus.OK).body(albumImageDtoService.getAllByUserId(parameters));
     }
 

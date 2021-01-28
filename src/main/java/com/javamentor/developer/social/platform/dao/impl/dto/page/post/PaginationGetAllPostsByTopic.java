@@ -53,7 +53,8 @@ public class PaginationGetAllPostsByTopic implements PaginationDao<PostDto> {
                         "from Post as p " +
                         "join p.user as u " +
                         "join p.topic as t " +
-                        "where t.topic.topic = :topic")
+                        "where t.topic.topic = :topic " +
+                        "order by p.id asc")
                 .setParameter("topic", parameters.get("topic"))
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

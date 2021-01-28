@@ -35,7 +35,8 @@ public class PaginationGetAllByAlbumIdDaoImpl implements PaginationDao<ImageDto>
                         "im.media.persistDateTime " +
                         "FROM AlbumImage am " +
                         "JOIN am.images as im " +
-                        "WHERE am.id = :albumId ")
+                        "WHERE am.id = :albumId " +
+                        "ORDER BY im.id ASC")
                 .setParameter("albumId", albumId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

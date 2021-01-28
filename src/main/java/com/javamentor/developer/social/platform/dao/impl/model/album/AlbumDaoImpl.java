@@ -7,14 +7,9 @@ import com.javamentor.developer.social.platform.models.entity.album.UserHasAlbum
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Repository
 public class AlbumDaoImpl extends GenericDaoAbstract<Album, Long> implements AlbumDao {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     public AlbumDaoImpl() {
     }

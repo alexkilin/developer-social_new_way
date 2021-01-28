@@ -6,17 +6,11 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 @Repository
 public class PlaylistDaoImpl extends GenericDaoAbstract<Playlist, Long> implements PlaylistDao {
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
 
     @Override
     public boolean userHasPlaylist(Long userId, Long playlistId) {
@@ -38,6 +32,17 @@ public class PlaylistDaoImpl extends GenericDaoAbstract<Playlist, Long> implemen
                     .setParameter("playlistName", playlistName)
                     .setParameter("userId", userId);
 
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
+    public Optional<Playlist> getByIdWithContent(Long id) {
+        TypedQuery<Playlist> query = entityManager.createQuery("SELECT p " +
+                        "FROM Playlist AS p " +
+                        "LEFT JOIN FETCH p.playlistContent AS c " +
+                        "LEFT JOIN FETCH c.media " +
+                        "WHERE p.id = :paramId", Playlist.class)
+                .setParameter("paramId", id);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
 }

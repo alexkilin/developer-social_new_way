@@ -49,7 +49,8 @@ public class PaginationGetAllPostsDaoImpl implements PaginationDao<PostDto> {
                         "(select rp from Repost as rp where rp.user.userId = :userPrincipalId and rp.post.id = p.id)" +
                         "then true else false end " +
                         "from Post as p " +
-                        "join p.user as u ")
+                        "join p.user as u " +
+                        "order by p.id asc")
                 .setParameter("userPrincipalId", parameters.get("userPrincipalId"))
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

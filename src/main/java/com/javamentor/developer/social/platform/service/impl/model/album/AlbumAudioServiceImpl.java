@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class AlbumAudioServiceImpl extends GenericServiceAbstract<AlbumAudios, Long> implements AlbumAudioService {
 
@@ -23,5 +25,11 @@ public class AlbumAudioServiceImpl extends GenericServiceAbstract<AlbumAudios, L
     @Transactional
     public AlbumAudios createAlbumAudiosWithOwner(AlbumAudios albumAudios) {
         return albumAudioDao.createAlbumAudiosWithOwner(albumAudios);
+    }
+
+    @Override
+    @Transactional
+    public Optional<AlbumAudios> getByIdWithAudios(Long id) {
+        return albumAudioDao.getByIdWithAudios(id);
     }
 }

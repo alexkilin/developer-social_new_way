@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +43,8 @@ public class PaginationGetAllUsersDaoImpl implements PaginationDao<UserDto> {
                     "u.status, " +
                     "u.active.name, " +
                     "u.profession " +
-                    "FROM User u")
+                    "FROM User u " +
+                    "ORDER BY u.userId ASC")
                     .setFirstResult((currentPage - 1) * itemsOnPage)
                     .setMaxResults(itemsOnPage)
                     .unwrap(Query.class)
@@ -54,7 +55,7 @@ public class PaginationGetAllUsersDaoImpl implements PaginationDao<UserDto> {
                                     .userId(((Number) objects[0]).longValue())
                                     .firstName((String) objects[1])
                                     .lastName((String) objects[2])
-                                    .dateOfBirth((Date) objects[3])
+                                    .dateOfBirth((LocalDate) objects[3])
                                     .education((String) objects[4])
                                     .aboutMe((String) objects[5])
                                     .avatar((String) objects[6])

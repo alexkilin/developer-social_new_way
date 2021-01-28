@@ -6,6 +6,9 @@ import com.javamentor.developer.social.platform.service.abstracts.model.album.Al
 import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class AlbumImageServiceImpl extends GenericServiceAbstract<AlbumImage, Long> implements AlbumImageService {
@@ -19,6 +22,13 @@ public class AlbumImageServiceImpl extends GenericServiceAbstract<AlbumImage, Lo
     }
 
     @Override
+    @Transactional
+    public Optional<AlbumImage> getByIdWithImages(Long id) {
+        return albumImageDao.getByIdWithImages(id);
+    }
+
+    @Override
+    @Transactional
     public AlbumImage createAlbumImageWithOwner( AlbumImage albumImage ) {
         return albumImageDao.createAlbumImageWithOwner(albumImage);
     }

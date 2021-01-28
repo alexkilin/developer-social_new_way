@@ -36,7 +36,7 @@ public class AdviceController  extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> notFoundEx(RuntimeException runtimeException, WebRequest webRequest) {
-        return exceptionHandlerResponse(runtimeException, webRequest, BAD_REQUEST);
+        return exceptionHandlerResponse(runtimeException, webRequest, NOT_FOUND);
     }
 
     @ExceptionHandler(PaginationException.class)

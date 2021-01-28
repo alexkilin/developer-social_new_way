@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 @Component("getAllMessagesFromSingleChat")
@@ -33,7 +32,9 @@ public class PaginationGetAllMessagesFromSingleChatDaoImpl implements Pagination
                 "m.persistDate, " +
                 "m.userSender.avatar, " +
                 "m.message  " +
-                "from SingleChat sc join sc.chat.messages as m where sc.id=:chatId")
+                "from SingleChat sc join sc.chat.messages as m " +
+                "where sc.id=:chatId " +
+                "order by m.id asc")
                 .setParameter("chatId", chatId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

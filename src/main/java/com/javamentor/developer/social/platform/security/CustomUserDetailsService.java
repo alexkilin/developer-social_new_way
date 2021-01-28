@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        return userService.getByEmail(userName).orElseThrow(() ->
+        return userService.getByEmailWithRole(userName).orElseThrow(() ->
                 new UsernameNotFoundException("Unknown user: " + userName));
     }
 }

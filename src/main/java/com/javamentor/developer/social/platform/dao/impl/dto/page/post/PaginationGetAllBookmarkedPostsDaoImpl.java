@@ -21,6 +21,7 @@ public class PaginationGetAllBookmarkedPostsDaoImpl implements PaginationDao<Pos
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<PostDto> getItems(Map<String, Object> parameters) {
         int currentPage = (int) parameters.get("currentPage");
         int itemsOnPage = (int) parameters.get("itemsOnPage");
@@ -50,7 +51,8 @@ public class PaginationGetAllBookmarkedPostsDaoImpl implements PaginationDao<Pos
                         "from Bookmark as bm " +
                         "join bm.user as u " +
                         "join bm.post as p " +
-                        "where u.userId = :userPrincipalId")
+                        "where u.userId = :userPrincipalId " +
+                        "order by p.id asc")
                 .setParameter("userPrincipalId", parameters.get("userPrincipalId"))
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

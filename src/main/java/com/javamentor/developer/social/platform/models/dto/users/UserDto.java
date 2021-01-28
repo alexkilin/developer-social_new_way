@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -40,9 +40,9 @@ public class UserDto {
     @Pattern(groups = {OnCreate.class, OnUpdate.class}, regexp = "[а-яА-ЯёЁa-zA-Z]+.*$", message = "Поле фамилия должно начинаться с буквы")
     private String lastName;
 
-    @JsonFormat(pattern = "dd.MM.yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     @ApiModelProperty(notes = "Дата рождения пользователя", example = "01.01.2000", position = 6)
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @ApiModelProperty(notes = "Образование пользователя", example = "Высшее техническое", position = 7)
     private String education;

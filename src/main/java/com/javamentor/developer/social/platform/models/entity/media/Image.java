@@ -53,4 +53,15 @@ public class Image {
                     "поле mediaType должно принимать значение MediaType.Image");
         }
     }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj == this || (obj instanceof Audios &&
+                getId().equals(((Audios) obj).getId()));
+    }
 }

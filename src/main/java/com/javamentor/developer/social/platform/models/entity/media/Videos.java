@@ -65,4 +65,15 @@ public class Videos {
                     "поле mediaType должно принимать значение MediaType.Video");
         }
     }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj == this || (obj instanceof Audios &&
+                getId().equals(((Audios) obj).getId()));
+    }
 }

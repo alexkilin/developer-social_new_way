@@ -6,17 +6,12 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.post.Tag;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class TagDaoImpl extends GenericDaoAbstract<Tag, Long> implements TagDao {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Override
     public Optional<Tag> getTagByText(String text) {
@@ -29,7 +24,7 @@ public class TagDaoImpl extends GenericDaoAbstract<Tag, Long> implements TagDao 
     public List<Tag> getTagsByText(List<String> texts) {
 
         return entityManager.createQuery(
-                "SELECT t FROM Tag t WHERE t.text IN (:texts)", Tag.class)
+                "SELECT t FROM Tag t WHERE t.text IN (:texts) ORDER BY t.id ASC", Tag.class)
                 .setParameter("texts", texts)
                 .getResultList();
     }

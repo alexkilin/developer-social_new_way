@@ -21,7 +21,7 @@ public class UserHasAlbum {
     @GeneratedValue(generator = "user_has_album_seq")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 

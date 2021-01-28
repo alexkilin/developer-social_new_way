@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -42,8 +42,10 @@ public class PaginationGetUsersFromTheGroupDaoImpl implements PaginationDao<User
                         "u.linkSite, "+
                         "u.role.name, " +
                         "u.status, " +
-                        "u.active.name" +
-                        " FROM User u join GroupHasUser g ON u.userId = g.user.userId WHERE g.group.id = :groupId")
+                        "u.active.name " +
+                        "FROM User u join GroupHasUser g ON u.userId = g.user.userId " +
+                        "WHERE g.group.id = :groupId " +
+                        "ORDER BY u.userId ASC")
                 .setParameter("groupId", groupId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage);
@@ -54,7 +56,7 @@ public class PaginationGetUsersFromTheGroupDaoImpl implements PaginationDao<User
                         .userId(((Number) objects[0]).longValue())
                         .firstName((String) objects[1])
                         .lastName((String) objects[2])
-                        .dateOfBirth((Date) objects[3])
+                        .dateOfBirth((LocalDate) objects[3])
                         .education((String) objects[4])
                         .aboutMe((String) objects[5])
                         .avatar((String) objects[6])

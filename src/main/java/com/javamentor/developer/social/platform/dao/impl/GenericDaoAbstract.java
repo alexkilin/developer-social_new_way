@@ -15,7 +15,7 @@ import java.util.Optional;
 public abstract class GenericDaoAbstract<T, PK extends Serializable> implements GenericDao<T, PK> {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
     private final Class<T> clazz;
 
     @SuppressWarnings("unchecked")
@@ -27,10 +27,10 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<T> getPartAudio(int currentPage, int itemsOnPage) {
-        return entityManager.createQuery("SELECT " +
-                "a " +
-                "FROM " + clazz.getSimpleName() + " as a")
+    public List<T> getPart(int currentPage, int itemsOnPage) {
+        return entityManager.createQuery("SELECT a " +
+                "FROM " + clazz.getSimpleName() + " AS a " +
+                "ORDER BY a.id ASC")
                 .setFirstResult(currentPage * itemsOnPage)
                 .setMaxResults(itemsOnPage)
                 .getResultList();
@@ -39,7 +39,7 @@ public abstract class GenericDaoAbstract<T, PK extends Serializable> implements 
     @Override
     @SuppressWarnings("unchecked")
     public List<T> getAll() {
-        return entityManager.createQuery("SELECT a FROM " + clazz.getSimpleName() + " as a").getResultList();
+        return entityManager.createQuery("SELECT a FROM " + clazz.getSimpleName() + " AS a ORDER BY a.id").getResultList();
     }
 
     @Override

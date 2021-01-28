@@ -12,6 +12,12 @@ public interface UserService extends GenericService<User, Long> {
 
     Optional<User> getByEmail(String email);
 
+    Optional<User> getByEmailWithRole(String email);
+
+    Optional<User> getByIdWithAudios(Long id);
+
+    Optional<User> getByIdWithVideos(Long id);
+
     boolean existByEmail(String email);
 
     void updateUserPassword(User user);
@@ -20,4 +26,5 @@ public interface UserService extends GenericService<User, Long> {
 
     boolean existsAnotherByEmail(String email, Long userId);
 
+    Optional<User> getByEmailEagerlyForDtoConversion(String email);
 }

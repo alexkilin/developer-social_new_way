@@ -8,6 +8,7 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoSer
 import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class UserDtoServiceImpl extends PaginationServiceImpl<Object, Object> im
     }
 
     @Override
+    @Transactional
     public Optional<UserDto> getUserDtoById(Long id) {
         Optional<UserDto> userDto = userDtoDao.getUserDtoById(id);
         if (userDto.isPresent()) {

@@ -29,7 +29,7 @@ public class GroupChat {
     @MapsId
     private Chat chat;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, mappedBy = "groupChats", cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class, mappedBy = "groupChats")
     private Set<User> users;
 
 }

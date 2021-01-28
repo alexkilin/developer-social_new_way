@@ -139,7 +139,7 @@ public class VideosControllerV2 {
             return ResponseEntity.badRequest()
                     .body(String.format("Video album with name '%s' already exists", albumDto.getName()));
         }
-        Optional<User> userOptional = userService.getById(userId);
+        Optional<User> userOptional = userService.getByIdWithVideos(userId);
         if (!userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with id %d is not found", userId));
         }
@@ -155,7 +155,7 @@ public class VideosControllerV2 {
     @PutMapping(value = "/album/video", params = {"albumId", "videoId"})
     public ResponseEntity<?> addInAlbums(@ApiParam(value = "Id альбома", example = "100") @RequestParam @Valid @NotNull Long albumId,
                                          @ApiParam(value = "Id видео", example = "1") @RequestParam @NotNull Long videoId) {
-        Optional<AlbumVideo> albumVideoOptional = albumVideoService.getById(albumId);
+        Optional<AlbumVideo> albumVideoOptional = albumVideoService.getByIdWithVideos(albumId);
         if (!albumVideoOptional.isPresent()) {
             logger.info(String.format("Видеоальбом с id  %s не найден", albumId));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Video album with id %s is not found", albumId));
@@ -169,7 +169,7 @@ public class VideosControllerV2 {
         Set<Videos> videosSet = albumVideo.getVideos();
         videosSet.add(videosOptional.get());
         albumVideo.setVideos(videosSet);
-        albumVideoService.create(albumVideo);
+        albumVideoService.update(albumVideo);
         logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
         return ResponseEntity.ok().body(String.format("Video id %s added to album id %s", videoId, albumId));
     }
@@ -225,5 +225,4 @@ public class VideosControllerV2 {
         logger.info(String.format("Отправка избранного видео пользователя c id %s альбома %s", userId, album));
         return ResponseEntity.ok().body(videoDtoService.getAlbumVideoOfUser(parameters));
     }
-
 }

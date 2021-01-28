@@ -6,8 +6,6 @@ import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -16,17 +14,24 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserDao {
 
-    @PersistenceContext
-    protected EntityManager entityManager;
-
     @SuppressWarnings("unchecked")
     public List<User> getAll() {
-        return entityManager.createQuery("SELECT u from User u").getResultList();
+        return entityManager.createQuery("SELECT u from User u ORDER BY u.userId ASC").getResultList();
     }
 
     @Override
     public Optional<User> getByEmail(String email) {
         TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u JOIN FETCH u.role WHERE u.email = :email", User.class)
+                .setParameter("email", email);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
+    public Optional<User> getByEmailWithRole(String email) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+                        "FROM User u " +
+                        "JOIN FETCH u.role " +
+                        "WHERE u.email = :email", User.class)
                 .setParameter("email", email);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
@@ -86,6 +91,38 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
     }
 
     @Override
+    public Optional<User> getByIdWithAudios(Long id) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+                        "FROM User AS u " +
+                        "LEFT JOIN FETCH u.audios " +
+                        "WHERE u.userId = :paramId", User.class)
+                .setParameter("paramId", id);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
+    public Optional<User> getByIdWithVideos(Long id) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+                        "FROM User AS u " +
+                        "LEFT JOIN FETCH u.videos " +
+                        "WHERE u.userId = :paramId", User.class)
+                .setParameter("paramId", id);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
+    public Optional<User> getByEmailEagerlyForDtoConversion(String email) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+                "FROM User AS u " +
+                "INNER JOIN FETCH u.active " +
+                "INNER JOIN FETCH u.role " +
+                "LEFT JOIN FETCH u.languages " +
+                "WHERE u.email = :emailParam", User.class)
+                .setParameter("emailParam", email);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
     public void updateUserPassword(User user) {
         Query query = entityManager.createQuery(
                 "UPDATE User u SET " +
@@ -95,5 +132,4 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
         query.setParameter("id", user.getUserId());
         query.executeUpdate();
     }
-
 }

@@ -41,6 +41,24 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
 
     @Override
     @Transactional
+    public Optional<User> getByEmailWithRole(String email) {
+        return userDao.getByEmailWithRole(email);
+    }
+
+    @Override
+    @Transactional
+    public Optional<User> getByIdWithAudios(Long id) {
+        return userDao.getByIdWithAudios(id);
+    }
+
+    @Override
+    @Transactional
+    public Optional<User> getByIdWithVideos(Long id) {
+        return userDao.getByIdWithVideos(id);
+    }
+
+    @Override
+    @Transactional
     public boolean existByEmail(String email) {
         return userDao.existByEmail(email);
     }
@@ -49,6 +67,11 @@ public class UserServiceImpl extends GenericServiceAbstract<User, Long> implemen
     @Transactional
     public boolean existsAnotherByEmail(String email, Long userId) {
         return userDao.existsAnotherByEmail(email, userId);
+    }
+
+    @Override
+    public Optional<User> getByEmailEagerlyForDtoConversion(String email) {
+        return userDao.getByEmailEagerlyForDtoConversion(email);
     }
 
     @Override

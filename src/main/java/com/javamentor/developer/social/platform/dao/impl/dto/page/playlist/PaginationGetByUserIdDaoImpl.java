@@ -34,7 +34,8 @@ public class PaginationGetByUserIdDaoImpl implements PaginationDao<PlaylistGetDt
                 "p.ownerUser.userId," +
                 "p.persistDateTime " +
                 "FROM Playlist as p " +
-                "WHERE p.ownerUser.userId = :userId")
+                "WHERE p.ownerUser.userId = :userId " +
+                "ORDER BY p.id ASC")
                 .setParameter("userId", userId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)

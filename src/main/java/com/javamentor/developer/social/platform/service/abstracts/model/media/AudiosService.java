@@ -7,5 +7,8 @@ import com.javamentor.developer.social.platform.service.abstracts.GenericService
 import java.util.Optional;
 
 public interface AudiosService extends GenericService<Audios, Long> {
+
     void addAudioInCollectionsOfUser(User user, Long audioId);
+
+    Optional<Audios> getByIdWithMedia(Long id);
 }
