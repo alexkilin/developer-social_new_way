@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.users.UserRegisterDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,9 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityManager;
+
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,6 +49,9 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EntityManager entityManager;
 
     private final Gson gson = new Gson();
 
@@ -81,9 +88,13 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().string(
                         String.format("User with email '%s' already registered. Email should be unique", userDto.getEmail()))
                 );
-
-        Assert.assertEquals("Фамилия пользователя должна была остаться прежней",
+        assertEquals("Фамилия пользователя должна была остаться прежней",
                 oldDtoLastName, userService.getByEmail(userDto.getEmail()).get().getLastName());
+
+        User user = (User) entityManager.createQuery("SELECT u from User u where u.email = " + "'" + userDto.getEmail() + "'")
+                .getSingleResult();
+        assertEquals("AdminFirstName", user.getFirstName());
+        assertEquals("AdminLastName", user.getLastName());
     }
 
     @Test
