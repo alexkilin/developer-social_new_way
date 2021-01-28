@@ -1,16 +1,13 @@
 package com.javamentor.developer.social.platform.restv2.controllers;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
 import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
-import com.javamentor.developer.social.platform.models.entity.album.Album;
-import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
-import com.javamentor.developer.social.platform.models.entity.media.Audios;
-import com.javamentor.developer.social.platform.models.entity.media.Media;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import org.hamcrest.text.MatchesPattern;
 import org.junit.jupiter.api.Test;
@@ -51,8 +48,12 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     Gson gson = new Gson();
 
@@ -192,14 +193,17 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .url("www.myVideo.ru")
                 .build();
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/video", 200)
+        String responseContent = mockMvc.perform(post(apiUrl + "/user/{userId}/video", 200)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(videoDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.url").value("www.myVideo.ru"));
+                .andExpect(jsonPath("$.url").value("www.myVideo.ru"))
+                .andReturn().getResponse().getContentAsString();
 
-        Videos video = (Videos) entityManager.createQuery("SELECT a from Videos a where a.icon like :icon")
-                .setParameter("icon","MyIcon33" )
+        VideoDto createdVideoDto = objectMapper.readValue(responseContent, VideoDto.class);
+
+        Videos video = (Videos) entityManager.createQuery("SELECT a from Videos a where a.id = :id")
+                .setParameter("id", createdVideoDto.getId())
                 .getSingleResult();
         assertEquals("MyAuthor33", video.getAuthor());
 
