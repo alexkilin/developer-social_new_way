@@ -1,6 +1,7 @@
 package com.javamentor.developer.social.platform.restv2.controllers;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
@@ -51,8 +52,12 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     Gson gson = new Gson();
 
@@ -223,14 +228,17 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User with id 1000 is not found"));
 
-        mockMvc.perform(post(apiUrl + "/user/{userId}/album", 210)
+        String resultContent = mockMvc.perform(post(apiUrl + "/user/{userId}/album", 210)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(albumVideoDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("MyVideoAlbumTest"));
+                .andExpect(jsonPath("$.name").value("MyVideoAlbumTest"))
+                .andReturn().getResponse().getContentAsString();
 
-        AlbumVideo album = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a join fetch a.album a2 where a2.icon like :icon")
-                .setParameter("icon", "MyNewIconTest")
+        AlbumVideoDto createdAlbumVideoDto = objectMapper.readValue(resultContent, AlbumVideoDto.class);
+
+        AlbumVideo album = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a join fetch a.album a2 where a2.id = :id")
+                .setParameter("id", createdAlbumVideoDto.getId())
                 .getSingleResult();
         assertEquals("MyVideoAlbumTest", album.getAlbum().getName());
         assertEquals(com.javamentor.developer.social.platform.models.entity.media.MediaType.VIDEO, album.getAlbum().getMediaType());
