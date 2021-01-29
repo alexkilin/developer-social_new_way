@@ -243,6 +243,22 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
+    public void addExistVideoInAlbum() throws Exception{
+        Long albumId = 200L;
+
+        AlbumVideo albumVideo = (AlbumVideo) entityManager.createQuery("SELECT a from AlbumVideo a join fetch a.videos where a.id = :albumId")
+                .setParameter("albumId", albumId)
+                .getSingleResult();
+        Long existVideoId = albumVideo.getVideos().stream().findFirst().get().getId();
+
+        mockMvc.perform(put(apiUrl + "/album/video")
+                .param("albumId", String.valueOf(albumId))
+                .param("videoId", String.valueOf(existVideoId)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(String.format("Image with id %s is already in album with id %s", existVideoId,albumId)));
+    }
+
+    @Test
     public void addInAlbums() throws Exception {
         mockMvc.perform(put(apiUrl + "/album/video")
                 .param("albumId", "200")
