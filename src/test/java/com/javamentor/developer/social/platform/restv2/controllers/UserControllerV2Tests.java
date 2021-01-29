@@ -110,6 +110,19 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.lastName").value("NewLastName"))
                 .andExpect(jsonPath("$.email").value("newadmin123@admin.ru"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        User updatedUser = (User) entityManager.createQuery("SELECT a from User a where a.userId = :id")
+                .setParameter("id", userDto.getUserId())
+                .getSingleResult();
+
+        Assert.assertEquals("Comparing test value with value from DB",
+                userDto.getFirstName(), updatedUser.getFirstName());
+
+        Assert.assertEquals("Comparing test value with value from DB",
+                userDto.getLastName(), updatedUser.getLastName());
+
+        Assert.assertEquals("Comparing test value with value from DB",
+                userDto.getEmail(), updatedUser.getEmail());
     }
 
     @Test
