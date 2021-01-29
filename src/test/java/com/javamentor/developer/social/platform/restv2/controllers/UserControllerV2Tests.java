@@ -7,6 +7,7 @@ import com.javamentor.developer.social.platform.models.dto.*;
 import com.javamentor.developer.social.platform.models.dto.users.UserRegisterDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -36,6 +40,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     private final String apiUrl = "/api/v2/users";
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Autowired
     private MockMvc mockMvc;
@@ -103,24 +110,54 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.lastName").value("NewLastName"))
                 .andExpect(jsonPath("$.email").value("newadmin123@admin.ru"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        User updatedUser = (User) entityManager.createQuery("SELECT a from User a where a.userId = :id")
+                .setParameter("id", userDto.getUserId())
+                .getSingleResult();
+
+        Assert.assertEquals("Comparing test value with value from DB",
+                userDto.getFirstName(), updatedUser.getFirstName());
+
+        Assert.assertEquals("Comparing test value with value from DB",
+                userDto.getLastName(), updatedUser.getLastName());
+
+        Assert.assertEquals("Comparing test value with value from DB",
+                userDto.getEmail(), updatedUser.getEmail());
     }
 
     @Test
     void changeUserPassword() throws Exception {
         String pwd = "ocheSlozhniParol111";
+        Long userId = 200L;
         UserResetPasswordDto userResetPasswordDto = UserResetPasswordDto.builder()
                 .password(pwd)
                 .build();
 
-        mockMvc.perform(patch(apiUrl + "/200/password")
+        User preUpdatedUser = (User) entityManager
+                .createQuery("select a from User a where a.userId = :userId")
+                .setParameter("userId", userId)
+                .getSingleResult();
+
+        String oldPassword = preUpdatedUser.getPassword();
+
+        mockMvc.perform(patch(apiUrl + "/{userId}/password", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userResetPasswordDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Password changed for user 200"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
+        User updatedUser = (User) entityManager
+                .createQuery("select a from User a where a.userId = :userId")
+                .setParameter("userId", userId)
+                .getSingleResult();
+
+        String newPassword = updatedUser.getPassword();
+
         Assert.assertTrue("Сравнение с паролем в базе, подтверждение изменения" ,
-                passwordEncoder.matches(pwd , userService.getById(200L).get().getPassword()));
+                passwordEncoder.matches(pwd , newPassword));
+
+        Assert.assertNotEquals("Comparing old password with new password", oldPassword, newPassword);
     }
 
     @Test
