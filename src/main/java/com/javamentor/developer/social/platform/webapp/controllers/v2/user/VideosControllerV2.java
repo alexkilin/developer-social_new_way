@@ -123,8 +123,9 @@ public class VideosControllerV2 {
         User user = userOptional.get();
         Videos videos = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
         videosService.create(videos);
-        logger.info(String.format("Добавление видео с id %s в бд", videoDto.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(videoDto);
+        VideoDto addedVideo = videoConverter.toDto(videos);
+        logger.info(String.format("Добавление видео с id %s в бд", videos.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedVideo);
     }
 
     @ApiOperation(value = "Создание видео альбома пользователя")
