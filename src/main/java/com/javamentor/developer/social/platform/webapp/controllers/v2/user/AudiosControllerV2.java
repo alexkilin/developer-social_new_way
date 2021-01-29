@@ -258,6 +258,9 @@ public class AudiosControllerV2 {
         }
         AlbumAudios albumAudios = albumAudiosOptional.get();
         Set<Audios> audiosSet = albumAudios.getAudios();
+        if (!audiosSet.add(audiosOptional.get())) {
+            return ResponseEntity.badRequest().body(String.format("This album already contains audio with id %s", audioId));
+        }
         audiosSet.add(audiosOptional.get());
         albumAudios.setAudios(audiosSet);
         albumAudioService.update(albumAudios);
