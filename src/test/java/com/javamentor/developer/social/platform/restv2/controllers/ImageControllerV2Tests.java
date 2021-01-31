@@ -164,11 +164,6 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Image id 200 added to album id 201"));
 
-        mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", 201)
-                .param("imageId", "200"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Image id 200 added to album id 201"));
-
         AlbumImage albumImage = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a join fetch a.images where a.id = 201")
                 .getSingleResult();
         Set<Image> imageSet = albumImage.getImages();
