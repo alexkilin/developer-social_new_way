@@ -410,4 +410,17 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items[0].id").value(200))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"));
     }
+
+    @Test
+    public void addExistAudioInAlbum() throws Exception {
+        mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 200)
+                .param("audioId", "205"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Audio id 205 added to album id 200"));
+
+        mockMvc.perform(put(apiUrl + "/albums/{albumId}/audio", 200)
+                .param("audioId", "205"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("This album already contains audio with id 205"));
+    }
 }
