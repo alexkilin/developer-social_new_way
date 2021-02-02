@@ -25,7 +25,6 @@ import static org.junit.Assert.assertEquals;
 import javax.persistence.PersistenceContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -60,7 +59,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     void createNewUser() throws Exception {
-        UserDto userDto = UserDto.builder()
+        UserRegisterDto userDto = UserRegisterDto.builder()
                 .email("jm.platform.noreply@gmail.com")
                 .password("AdminPwd123")
                 .firstName("AdminFirstName")
