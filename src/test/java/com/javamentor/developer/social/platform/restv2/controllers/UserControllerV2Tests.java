@@ -60,7 +60,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     void createNewUser() throws Exception {
-        UserRegisterDto userDto = UserRegisterDto.builder()
+        UserDto userDto = UserDto.builder()
                 .email("jm.platform.noreply@gmail.com")
                 .password("AdminPwd123")
                 .firstName("AdminFirstName")
@@ -87,7 +87,6 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(
                         String.format("User with email '%s' already registered. Email should be unique", userDto.getEmail()))
@@ -207,6 +206,10 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User with ID: 1000 does not exist."));
+
+        String status = (String) entityManager.createQuery("SELECT status from User where userId = 200L")
+                .getSingleResult();
+        assertEquals("Outer space exploration", status);
     }
 
 //    @Test
