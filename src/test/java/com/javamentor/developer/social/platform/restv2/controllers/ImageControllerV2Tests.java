@@ -144,10 +144,7 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void addExistImageToAlbum() throws Exception {
         Long albumImageId = 201L;
-        AlbumImage albumImage = (AlbumImage) entityManager.createQuery("SELECT a from AlbumImage a join fetch a.images where a.id = :albumImageId")
-                .setParameter("albumImageId", albumImageId)
-                .getSingleResult();
-        Long existImageId = albumImage.getImages().stream().findFirst().get().getId();
+        Long existImageId = 203L;
 
         mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", albumImageId)
                 .param("imageId", String.valueOf(existImageId)))

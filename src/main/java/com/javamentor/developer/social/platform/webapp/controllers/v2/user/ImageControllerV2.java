@@ -199,12 +199,11 @@ public class ImageControllerV2 {
             logger.info(String.format("Изображение с id  %s не найдено" , imageId));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s is not found" , imageId));
         }
-        if(album.get().getImages().stream()
-                .anyMatch(x -> x.getId().equals(imageId))){
+        if(!album.get().getImages().add(image.get())){
             logger.info(String.format("Изображение с id  %s уже существует в данном альбоме", imageId));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Image with id %s is already in album with id %s", imageId,albumId));
         }
-        album.get().getImages().add(image.get());
+
         albumImageService.update(album.get());
         logger.info(String.format("Изображение с id  %s добавлено в альбом с id %s" , imageId , albumId));
         return ResponseEntity.ok().body(String.format("Image id %s added to album id %s" , imageId , albumId));
