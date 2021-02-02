@@ -167,16 +167,15 @@ public class VideosControllerV2 {
             logger.info(String.format("Видео с id  %s не найдено", videoId));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Video with id %s is not found", videoId));
         }
-        if(albumVideoOptional.get().getVideos().stream()
-                .anyMatch(x -> x.getId().equals(videosOptional.get().getId()))){
+
+        if (!albumVideoOptional.get().getVideos().add(videosOptional.get())) {
             logger.info(String.format("Изображение с id  %s уже существует в данном альбоме", albumId));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Image with id %s is already in album with id %s", videoId,albumId));
         }
 
         AlbumVideo albumVideo = albumVideoOptional.get();
-        Set<Videos> videosSet = albumVideo.getVideos();
-        videosSet.add(videosOptional.get());
-        albumVideo.setVideos(videosSet);
+        albumVideo.setVideos(albumVideoOptional.get().getVideos());
+
         albumVideoService.update(albumVideo);
         logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
         return ResponseEntity.ok().body(String.format("Video id %s added to album id %s", videoId, albumId));
