@@ -185,6 +185,15 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
+    public void etVideoSortedByLikes() throws Exception {
+        mockMvc.perform(get(apiUrl + "/order/like")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items.length()").value(6));
+    }
+
+    @Test
     public void addVideo() throws Exception {
         VideoDto videoDto = VideoDto.builder()
                 .author("MyAuthor33")

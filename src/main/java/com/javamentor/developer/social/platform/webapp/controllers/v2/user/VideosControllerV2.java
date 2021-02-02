@@ -74,6 +74,21 @@ public class VideosControllerV2 {
         return ResponseEntity.ok().body(videoDtoService.getPartVideo(parameters));
     }
 
+    @ApiOperation(value = "Получение видео, отсортированыые по лайкам")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Видео, отсортированные по лайкам, получены", responseContainer = "List", response = PageDto.class)})
+    @GetMapping(value = "/order/like", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<VideoDto, ?>> getVideoSortedByLikes(@ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
+                                                                    @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        logger.info(String.format("Видео, отсортированные по лайкам, отправлены в количестве %s, начиная с объекта номер %s",
+                itemsOnPage, (currentPage - 1) * itemsOnPage + 1));
+
+        return ResponseEntity.ok().body(videoDtoService.getVideoSortedByLikes(parameters));
+    }
+
     @ApiOperation(value = "Получение видео по совпадению в названии по частям")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Часть видео по совпадению в названии получено", responseContainer = "List", response = PageDto.class)})
