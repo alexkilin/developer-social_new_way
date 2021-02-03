@@ -4,6 +4,7 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.*;
+import com.javamentor.developer.social.platform.models.dto.users.UserDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserRegisterDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserUpdateInfoDto;
@@ -19,10 +20,11 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.EntityManager;
+
+import static org.junit.Assert.assertEquals;
 import javax.persistence.PersistenceContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -64,7 +66,7 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .lastName("AdminLastName")
                 .build();
 
-        mockMvc.perform(post(apiUrl + "/")
+        String resultContent = mockMvc.perform(post(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
                 .andExpect(status().isCreated())
@@ -74,7 +76,8 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.lastName").value("AdminLastName"))
                 .andExpect(jsonPath("$.activeName").value("ACTIVE"))
                 .andExpect(jsonPath("$.roleName").value("USER"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
 
         Assert.assertNotNull(userService.getByEmail("jm.platform.noreply@gmail.com").get());
 
@@ -83,14 +86,21 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(userDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(
                         String.format("User with email '%s' already registered. Email should be unique", userDto.getEmail()))
                 );
-
-        Assert.assertEquals("Фамилия пользователя должна была остаться прежней",
+        assertEquals("Фамилия пользователя должна была остаться прежней",
                 oldDtoLastName, userService.getByEmail(userDto.getEmail()).get().getLastName());
+
+        UserDto giveMeUserId = objectMapper.readValue(resultContent, UserDto.class);
+
+        User user = (User) entityManager.createQuery("SELECT u from User u where u.userId = :id")
+                .setParameter("id", giveMeUserId.getUserId())
+                .getSingleResult();
+        assertEquals("jm.platform.noreply@gmail.com", user.getEmail());
+        assertEquals("AdminFirstName", user.getFirstName());
+        assertEquals("AdminLastName", user.getLastName());
     }
 
     @Test
@@ -195,6 +205,10 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("User with ID: 1000 does not exist."));
+
+        String status = (String) entityManager.createQuery("SELECT status from User where userId = 200L")
+                .getSingleResult();
+        assertEquals("Outer space exploration", status);
     }
 
 //    @Test
