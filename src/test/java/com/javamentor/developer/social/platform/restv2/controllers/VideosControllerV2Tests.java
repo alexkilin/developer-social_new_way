@@ -259,6 +259,18 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
+    public void addExistVideoInAlbum() throws Exception{
+        Long albumId = 200L;
+        Long existVideoId = 200L;
+
+        mockMvc.perform(put(apiUrl + "/album/video")
+                .param("albumId", String.valueOf(albumId))
+                .param("videoId", String.valueOf(existVideoId)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(String.format("Image with id %s is already in album with id %s", existVideoId,albumId)));
+    }
+
+    @Test
     public void addInAlbums() throws Exception {
         mockMvc.perform(put(apiUrl + "/album/video")
                 .param("albumId", "200")

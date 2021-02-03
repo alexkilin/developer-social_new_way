@@ -73,7 +73,7 @@ public class Videos {
 
     @Override
     public boolean equals(Object obj) {
-        return obj == this || (obj instanceof Audios &&
-                getId().equals(((Audios) obj).getId()));
+        return obj == this || (obj instanceof Videos &&
+                getId().equals(((Videos) obj).getId()));
     }
 }
