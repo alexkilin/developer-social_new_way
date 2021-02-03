@@ -142,7 +142,20 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
+    public void addExistImageToAlbum() throws Exception {
+        Long albumImageId = 201L;
+        Long existImageId = 203L;
+
+        mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", albumImageId)
+                .param("imageId", String.valueOf(existImageId)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(String.format("Image with id %s is already in album with id %s", existImageId, albumImageId)));
+
+    }
+
+    @Test
     public void addImageToAlbum() throws Exception {
+
         mockMvc.perform(put(apiUrl + "/albums/{albumId}/images", 201)
                 .param("imageId", "200"))
                 .andExpect(status().isOk())

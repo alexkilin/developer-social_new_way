@@ -61,7 +61,7 @@ public class Image {
 
     @Override
     public boolean equals(Object obj) {
-        return obj == this || (obj instanceof Audios &&
-                getId().equals(((Audios) obj).getId()));
+        return obj == this || (obj instanceof Image &&
+                getId().equals(((Image) obj).getId()));
     }
 }
