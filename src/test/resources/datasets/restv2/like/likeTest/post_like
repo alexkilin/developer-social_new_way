@@ -1,0 +1,6 @@
+post_like:
+  - like_id: 210
+    post_id: 200
+
+  - like_id: 211
+    post_id: 201
