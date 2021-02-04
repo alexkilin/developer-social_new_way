@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
+import com.javamentor.developer.social.platform.dao.impl.dto.page.audio.PaginationGetPartAudioOfFriends;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
@@ -76,6 +77,24 @@ public class AudiosControllerV2 {
         this.playlistService = playlistService;
         this.playlistConverter = playlistConverter;
         this.securityHelper = securityHelper;
+    }
+
+
+    @ApiOperation(value = "Получение аудио друзей")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Аудио друзей постранично", responseContainer = "List", response = PageDto.class)})
+    @GetMapping(value = "/user/{userId}/friends", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AudioDto, ?>> getPartAudiosOfFriends(
+            @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+            @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
+            @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
+
+        logger.info(String.format("Все аудио друзей пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("userId", userId);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getPartAudiosOfFriends(parameters));
     }
 
     @ApiOperation(value = "Получение всего аудио постранично")

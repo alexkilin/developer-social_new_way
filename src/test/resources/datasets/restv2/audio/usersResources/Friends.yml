@@ -1,0 +1,16 @@
+friends:
+  - id: 203
+    user_id: 201
+    friend_id: 200
+
+  - id: 200
+    user_id: 201
+    friend_id: 202
+
+  - id: 201
+    user_id: 202
+    friend_id: 203
+
+  - id: 202
+    user_id: 203
+    friend_id: 204
