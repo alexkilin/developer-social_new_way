@@ -441,10 +441,8 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(get(apiUrl + "/playlists/{playlistId}/audio", 1000)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(3))
-                .andExpect(jsonPath("$.items[0].id").value(200))
-                .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"));
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("No playlist with id 1000"));
     }
 
     @Test
