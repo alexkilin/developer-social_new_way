@@ -59,4 +59,9 @@ public class AudioDtoServiceImpl extends PaginationServiceImpl<AudioDto, Object>
         return super.getPageDto("getPartAudios", parameters);
     }
 
+    @Override
+    public PageDto<AudioDto, ?> getPartAudiosOfFriends(Map<String, Object> parameters) {
+        return super.getPageDto("getPartAudiosOfFriends", parameters);
+    }
+
 }

@@ -34,3 +34,15 @@ media:
     persist_date: "2020-08-04 16:47:23.940175"
     media_type: 0
     user_id: 205
+
+  - id: 206
+    url: "www.myaudio5.ru"
+    persist_date: "2020-08-04 16:47:23.940175"
+    media_type: 1
+    user_id: 202
+
+  - id: 207
+    url: "www.myaudio6.ru"
+    persist_date: "2020-08-04 16:47:23.940175"
+    media_type: 1
+    user_id: 202

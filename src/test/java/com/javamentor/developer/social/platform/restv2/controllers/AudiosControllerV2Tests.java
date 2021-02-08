@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DataSet(value = {
         "datasets/restv2/audio/usersResources/Active.yml",
+        "datasets/restv2/audio/usersResources/Friends.yml",
         "datasets/restv2/audio/usersResources/User.yml",
         "datasets/restv2/audio/usersResources/Role.yml",
         "datasets/restv2/audio/audioResources/UsersAudiosCollections.yml" ,
@@ -56,12 +57,35 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     Gson gson = new Gson();
 
     @Test
+    public void getPartAudiosOfFriends() throws Exception {
+        mockMvc.perform(get(apiUrl + "/user/{userId}/friends", 201)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentPage").value(1))
+                .andExpect(jsonPath("$.totalPages").value(2))
+                .andExpect(jsonPath("$.itemsOnPage").value(5))
+                .andExpect(jsonPath("$.totalResults").value(6))
+                .andExpect(jsonPath("$.items.length()").value(5))
+                .andExpect(jsonPath("$.items[0].id").value(200))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 7"))
+                .andExpect(jsonPath("$.items[0].length").value(365))
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 7"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"))
+                .andExpect(jsonPath("$.items[1].id").value(201))
+                .andExpect(jsonPath("$.items[1].author").value("Test Author 1"))
+                .andExpect(jsonPath("$.items[1].length").value(365))
+                .andExpect(jsonPath("$.items[1].name").value("AudioTestName 1"))
+                .andExpect(jsonPath("$.items[1].icon").value("TestIcon1"));
+    }
+
+    @Test
     public void getPartAudios() throws Exception {
         this.mockMvc.perform(get(apiUrl + "/")
                 .param("currentPage", "1")
                 .param("itemsOnPage", "5"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(4))
+                .andExpect(jsonPath("$.items.length()").value(5))
                 .andExpect(jsonPath("$.items[0].id").value(200))
                 .andExpect(jsonPath("$.items[0].url").value("www.myaudio7.ru"))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"))
@@ -122,7 +146,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(4))
+                .andExpect(jsonPath("$.items.length()").value(3))
                 .andExpect(jsonPath("$.items[0].id").value(200))
                 .andExpect(jsonPath("$.items[0].author").value("Test Author 7"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
@@ -137,16 +161,16 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void getAuthorAudioOfUser() throws Exception {
-        mockMvc.perform(get(apiUrl + "/user/{userId}/author?author=Test Author 1", 202)
+        mockMvc.perform(get(apiUrl + "/user/{userId}/author?author=Test Author 7", 205)
                 .param("currentPage", "1")
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(1))
-                .andExpect(jsonPath("$.items[0].id").value(201))
-                .andExpect(jsonPath("$.items[0].author").value("Test Author 1"))
+                .andExpect(jsonPath("$.items[0].id").value(200))
+                .andExpect(jsonPath("$.items[0].author").value("Test Author 7"))
                 .andExpect(jsonPath("$.items[0].length").value(365))
-                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 1"))
-                .andExpect(jsonPath("$.items[0].icon").value("TestIcon1"));
+                .andExpect(jsonPath("$.items[0].name").value("AudioTestName 7"))
+                .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"));
     }
 
     @Test
