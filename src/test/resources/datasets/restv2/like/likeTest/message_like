@@ -1,0 +1,6 @@
+message_like:
+  - like_id: 206
+    message_id: 200
+
+  - like_id: 207
+    message_id: 200

@@ -40,3 +40,17 @@ audios:
     name: "AudioTestName 5"
     length: "365"
     media_id: "205"
+
+  - album: "AlbumTestName 6"
+    author: "Test Author 6"
+    icon: "TestIcon4"
+    name: "AudioTestName 6"
+    length: "365"
+    media_id: "206"
+
+  - album: "AlbumTestName 7"
+    author: "Test Author 7"
+    icon: "TestIcon7"
+    name: "AudioTestName 7"
+    length: "365"
+    media_id: "207"

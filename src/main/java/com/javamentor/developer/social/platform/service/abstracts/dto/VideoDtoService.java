@@ -20,4 +20,6 @@ public interface VideoDtoService {
     PageDto<VideoDto, ?> getVideoFromAlbumOfUser(Map<String, Object> parameters);
 
     PageDto<VideoDto, ?> getPartVideo(Map<String, Object> parameters);
+
+    PageDto<VideoDto, ?> getVideoSortedByLikes(Map<String, Object> parameters);
 }

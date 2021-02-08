@@ -9,12 +9,13 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Map;
 
-@Component("getPartVideos")
-public class PaginationGetAllVideosDaoImpl implements PaginationDao<VideoDto> {
-    @PersistenceContext
-    private EntityManager entityManager;
+@Component("getVideoSortedByLikes")
+public class PaginationGetVideoSortedByLikesDaoImpl implements PaginationDao<VideoDto> {
 
-    public PaginationGetAllVideosDaoImpl() {
+    @PersistenceContext
+    EntityManager entityManager;
+
+    public PaginationGetVideoSortedByLikesDaoImpl() {
     }
 
     @Override
@@ -22,13 +23,12 @@ public class PaginationGetAllVideosDaoImpl implements PaginationDao<VideoDto> {
         int currentPage = (int) parameters.get("currentPage");
         int itemsOnPage = (int) parameters.get("itemsOnPage");
 
-        return entityManager.createQuery(
-                "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id," +
-                        "v.media.url, v.name, v.icon, v.author, v.media.persistDateTime, count (ml.like.id))" +
-                        "FROM Videos as v left join MediaLike ml on v.media.id = ml.media.id " +
-                        "WHERE v.media.mediaType = 2 GROUP BY v.media.id, v.media.url, v.media.persistDateTime " +
-                        "ORDER BY v.id ASC", VideoDto.class)
-                .setFirstResult((currentPage - 1)* itemsOnPage)
+        return entityManager.createQuery("select new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id, " +
+                "v.media.url, v.name, v.icon, v.author, v.media.persistDateTime, count (ml.like.id)) " +
+                "from Videos v left join MediaLike ml on v.media.id = ml.media.id " +
+                "group by v.media.id, v.media.url, v.media.persistDateTime " +
+                "order by count (ml.like.id) desc", VideoDto.class)
+                .setFirstResult((currentPage - 1) * itemsOnPage)
                 .setMaxResults(itemsOnPage)
                 .getResultList();
     }

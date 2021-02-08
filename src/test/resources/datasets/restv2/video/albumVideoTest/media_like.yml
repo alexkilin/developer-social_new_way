@@ -1,0 +1,18 @@
+media_like:
+  - like_id: 200
+    media_id: 200
+
+  - like_id: 201
+    media_id: 200
+
+  - like_id: 202
+    media_id: 201
+
+  - like_id: 203
+    media_id: 202
+
+  - like_id: 204
+    media_id: 202
+
+  - like_id: 205
+    media_id: 202

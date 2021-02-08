@@ -1,0 +1,48 @@
+like:
+  - id: 200
+    like_type: 4
+    user_id: 201
+
+  - id: 201
+    like_type: 4
+    user_id: 201
+
+  - id: 202
+    like_type: 4
+    user_id: 203
+
+  - id: 203
+    like_type: 4
+    user_id: 203
+
+  - id: 204
+    like_type: 4
+    user_id: 203
+
+  - id: 205
+    like_type: 4
+    user_id: 203
+
+  - id: 206
+    like_type: 1
+    user_id: 201
+
+  - id: 207
+    like_type: 1
+    user_id: 201
+
+  - id: 208
+    like_type: 2
+    user_id: 210
+
+  - id: 209
+    like_type: 2
+    user_id: 203
+
+  - id: 210
+    like_type: 3
+    user_id: 210
+
+  - id: 211
+    like_type: 3
+    user_id: 210
