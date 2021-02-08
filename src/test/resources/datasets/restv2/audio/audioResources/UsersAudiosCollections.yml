@@ -8,11 +8,14 @@ users_audios_collections:
   - user_id: 200
     audio_id: 202
 
-  - user_id: 200
-    audio_id: 204
+  - user_id: 202
+    audio_id: 203
 
   - user_id: 202
-    audio_id: 201
+    audio_id: 206
+
+  - user_id: 202
+    audio_id: 207
 
   - user_id: 204
     audio_id: 205

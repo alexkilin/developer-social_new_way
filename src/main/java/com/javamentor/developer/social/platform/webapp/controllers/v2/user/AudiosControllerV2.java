@@ -89,7 +89,6 @@ public class AudiosControllerV2 {
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
 
-        logger.info(String.format("Все аудио друзей пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         Map <String, Object> parameters = new HashMap<>();
         parameters.put("userId", userId);
         parameters.put("currentPage", currentPage);
