@@ -79,8 +79,8 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk());
 
         mockMvc.perform(delete(apiUrl + "/{imageId}", 1000))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Image with id 1000 not found"));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("attempt to create delete event with null entity"));
     }
 
     @Test
@@ -113,7 +113,7 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
         AlbumCreateDto albumCreateDto = AlbumCreateDto.builder()
                 .icon("MyIconTest")
                 .name("MyAlbumNameTest")
-                .userId(200l)
+                .userId(200L)
                 .build();
 
         mockMvc.perform(post(apiUrl +"/user/{userId}/album", 200)
@@ -136,8 +136,8 @@ public class ImageControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().string("Deleted"));
 
         mockMvc.perform(delete(apiUrl + "/albums/{albumId}", 1000))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Album with id 1000 not found"));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("attempt to create delete event with null entity"));
 
     }
 

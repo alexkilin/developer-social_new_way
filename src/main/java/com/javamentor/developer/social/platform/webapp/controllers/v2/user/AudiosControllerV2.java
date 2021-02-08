@@ -304,14 +304,11 @@ public class AudiosControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Плейлист успешно создан", response = PlaylistGetDto.class),
             @ApiResponse(code = 200, message = "Плейлист с таким названием уже существует", response = PlaylistGetDto.class),
-            @ApiResponse(code = 400, message = "Такого пользователя не существует")})
+            @ApiResponse(code = 404, message = "Такого пользователя не существует")})
     @Validated(OnCreate.class)
     @PostMapping(value = "/user/{userId}/playlists")
     public ResponseEntity<?> createPlaylist(@ApiParam(value = "Объект нового плейлиста") @RequestBody @NotNull @Valid PlaylistCreateDto playlistCreateDto,
                                             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
-        if (!userService.getById(userId).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user does not exist");
-        }
 
         String playlistName = playlistCreateDto.getName();
         Optional<Playlist> optionalPlaylist = playlistService.getPlaylistByNameAndUserId(userId, playlistName);
@@ -328,13 +325,10 @@ public class AudiosControllerV2 {
     @ApiOperation(value = "Удаление плейлиста по Id для пользователя")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Плейлист удален"),
-            @ApiResponse(code = 404, message = "Плейлист не найден")})
+            @ApiResponse(code = 400, message = "Invalid user id or playlist id")})
     @DeleteMapping(value = "/user/{userId}/playlists/{playlistId}")
     public ResponseEntity<?> deletePlaylist(@ApiParam(value = "Id плейлиста", example = "2") @PathVariable @NotNull Long playlistId,
                                             @ApiParam(value = "Id юзера", example = "60") @PathVariable("userId") @NonNull Long userId) {
-        if (!playlistService.userHasPlaylist(userId, playlistId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No playlist with id %s for user %s", playlistId, userId));
-        }
         playlistService.deleteById(playlistId);
         logger.info(String.format("Плейлист id %s удален", playlistId));
         return ResponseEntity.ok().body(String.format("Playlist with id %s deleted", playlistId));

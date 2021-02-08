@@ -95,12 +95,9 @@ public class ImageControllerV2 {
     @ApiOperation(value = "Удалить изображение")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Изображение удалено", response = String.class) ,
-            @ApiResponse(code = 404, message = "Изображение не найдено", response = String.class)})
+            @ApiResponse(code = 400, message = "Invalid image id", response = String.class)})
     @DeleteMapping(value = "/{imageId}")
     public ResponseEntity<?> deleteImage(@ApiParam(value = "Id изображения") @NotNull @PathVariable Long imageId ) {
-        if(!imageService.existById(imageId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found" , imageId));
-        }
         imageService.deleteById(imageId);
         logger.info(String.format("Изображение %s удалено" , imageId));
         return ResponseEntity.ok("Deleted");
@@ -154,9 +151,6 @@ public class ImageControllerV2 {
             return ResponseEntity.badRequest()
                     .body(String.format("Image album with name '%s' already exists" , albumCreateDto.getName()));
         }
-        if(!userService.existById(userId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with id %d is not found" , userId));
-        }
         AlbumImage albumImage = albumImageService.createAlbumImageWithOwner(albumImageConverter.toAlbumImage(albumCreateDto));
         return ResponseEntity.ok().body(albumImageConverter.toAlbumImageDto(albumImage));
     }
@@ -164,13 +158,10 @@ public class ImageControllerV2 {
     @ApiOperation(value = "Удалить фотоальбом")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Фотоальбом удален", response = String.class) ,
-            @ApiResponse(code = 404, message = "Фотоальбом не найден", response = String.class)})
+            @ApiResponse(code = 400, message = "Invalid album id", response = String.class)})
     @DeleteMapping(value = "/albums/{albumId}")
     public ResponseEntity<?> deleteAlbum( @ApiParam(value = "Id альбома")
                                           @NotNull @PathVariable Long albumId ) {
-        if(!albumImageService.existById(albumId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found" , albumId));
-        }
         albumImageService.deleteById(albumId);
         logger.info(String.format("Фотоальбом %s удален" , albumId));
         return ResponseEntity.ok("Deleted");
