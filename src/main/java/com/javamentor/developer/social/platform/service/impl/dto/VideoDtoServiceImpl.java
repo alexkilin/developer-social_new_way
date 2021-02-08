@@ -23,6 +23,11 @@ public class VideoDtoServiceImpl extends PaginationServiceImpl<VideoDto, Object>
     }
 
     @Override
+    public PageDto<VideoDto, ?> getVideoSortedByLikes(Map<String, Object> parameters) {
+        return super.getPageDto("getVideoSortedByLikes", parameters);
+    }
+
+    @Override
     public PageDto<VideoDto, Object> getVideoOfAuthor(Map<String, Object> parameters) {
         return super.getPageDto("getVideoOfAuthor", parameters);
     }

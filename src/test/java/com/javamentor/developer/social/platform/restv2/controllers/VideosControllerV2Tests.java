@@ -1,15 +1,18 @@
 package com.javamentor.developer.social.platform.restv2.controllers;
 
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.video.AlbumVideoDto;
 import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumVideo;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import org.hamcrest.text.MatchesPattern;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,9 +21,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.EntityManager;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -39,7 +42,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/video/albumVideoTest/Album.yml",
         "datasets/restv2/video/albumVideoTest/UserHasAlbum.yml",
         "datasets/restv2/video/albumVideoTest/AlbumHasVideo.yml",
-        "datasets/restv2/video/videoResources/Video.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+        "datasets/restv2/video/videoResources/Video.yml",
+        "datasets/restv2/video/videoResources/like.yml",
+        "datasets/restv2/video/albumVideoTest/media_like.yml"
+}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 @Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 class VideosControllerV2Tests extends AbstractIntegrationTest {
@@ -182,6 +188,27 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
                 .param("itemsOnPage", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(3));
+    }
+
+    @Test
+    public void getVideoSortedByLikes() throws Exception {
+        String result = mockMvc.perform(get(apiUrl + "/order/like")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].id").value(202))
+                .andExpect(jsonPath("$.items[1].id").value(200))
+                .andExpect(jsonPath("$.items[2].id").value(201))
+                .andExpect(jsonPath("$.items.length()").value(6))
+                .andReturn().getResponse().getContentAsString();
+
+        PageDto<Object, Object> actualPage = objectMapper.readValue(result, PageDto.class);
+
+        List<LinkedHashMap<Object, Object>> listOfVideos = actualPage.getItems()
+                .stream().map(x -> ((LinkedHashMap<Object, Object>) x)).collect(Collectors.toList());
+        for (int i = 0; i < listOfVideos.size() - 1; i++) {
+            assertTrue((Integer)listOfVideos.get(i).get("countLike") >= (Integer)listOfVideos.get(i + 1).get("countLike"));
+        }
     }
 
     @Test
