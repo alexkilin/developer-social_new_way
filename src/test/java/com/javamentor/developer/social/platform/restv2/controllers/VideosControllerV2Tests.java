@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -203,32 +204,11 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
 
         PageDto<Object, Object> actualPage = objectMapper.readValue(result, PageDto.class);
 
-        Map<Object, Object> firstEntityMap = (LinkedHashMap<Object, Object>) actualPage.getItems().get(0);
-        Integer firstId = (Integer) firstEntityMap.get("id");
-
-        Long firstCountOfLikes = (Long) entityManager.createQuery("select count (ml.like.id)" +
-                " from Videos v left join MediaLike ml on v.id = ml.media.id where v.id =: id")
-                .setParameter("id", firstId.longValue())
-                .getSingleResult();
-        Assert.assertEquals(3L, (long) firstCountOfLikes);
-
-        Map<Object, Object> secondEntityMap = (LinkedHashMap<Object, Object>) actualPage.getItems().get(1);
-        Integer secondId = (Integer) secondEntityMap.get("id");
-
-        Long secondCountOfLikes = (Long) entityManager.createQuery("select count (ml.like.id)" +
-                " from Videos v left join MediaLike ml on v.id = ml.media.id where v.id =: id")
-                .setParameter("id", secondId.longValue())
-                .getSingleResult();
-        Assert.assertEquals(2L, (long) secondCountOfLikes);
-
-        Map<Object, Object> thirdEntityMap = (LinkedHashMap<Object, Object>) actualPage.getItems().get(2);
-        Integer thirdId = (Integer) thirdEntityMap.get("id");
-
-        Long thirdCountOfLikes = (Long) entityManager.createQuery("select count (ml.like.id)" +
-                " from Videos v left join MediaLike ml on v.id = ml.media.id where v.id =: id")
-                .setParameter("id", thirdId.longValue())
-                .getSingleResult();
-        Assert.assertEquals(1L, (long) thirdCountOfLikes);
+        List<LinkedHashMap<Object, Object>> listOfVideos = actualPage.getItems()
+                .stream().map(x -> ((LinkedHashMap<Object, Object>) x)).collect(Collectors.toList());
+        for (int i = 0; i < listOfVideos.size() - 1; i++) {
+            assertTrue((Integer)listOfVideos.get(i).get("countLike") >= (Integer)listOfVideos.get(i + 1).get("countLike"));
+        }
     }
 
     @Test

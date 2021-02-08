@@ -24,7 +24,7 @@ public class PaginationGetVideoSortedByLikesDaoImpl implements PaginationDao<Vid
         int itemsOnPage = (int) parameters.get("itemsOnPage");
 
         return entityManager.createQuery("select new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id, " +
-                "v.media.url, v.name, v.icon, v.author, v.media.persistDateTime) " +
+                "v.media.url, v.name, v.icon, v.author, v.media.persistDateTime, count (ml.like.id)) " +
                 "from Videos v left join MediaLike ml on v.media.id = ml.media.id " +
                 "group by v.media.id, v.media.url, v.media.persistDateTime " +
                 "order by count (ml.like.id) desc", VideoDto.class)
