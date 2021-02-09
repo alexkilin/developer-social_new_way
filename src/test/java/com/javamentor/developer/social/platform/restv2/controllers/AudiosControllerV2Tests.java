@@ -336,8 +336,8 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 1000)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(playlistCreateDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("The user does not exist"));
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("User с id 1000 не существует"));
 
         mockMvc.perform(post(apiUrl + "/user/{userId}/playlists", 200)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -349,12 +349,16 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void deletePlaylist() throws Exception {
         mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 200, 1000))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("No playlist with id 1000 for user 200"));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("attempt to create delete event with null entity"));
 
         mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 200, 200))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Playlist with id 200 deleted"));
+
+        mockMvc.perform(delete(apiUrl + "/user/{userId}/playlists/{playlistId}", 1000, 200))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("attempt to create delete event with null entity"));
     }
 
     @Test
@@ -433,6 +437,12 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.items.length()").value(3))
                 .andExpect(jsonPath("$.items[0].id").value(200))
                 .andExpect(jsonPath("$.items[0].icon").value("TestIcon7"));
+
+        mockMvc.perform(get(apiUrl + "/playlists/{playlistId}/audio", 1000)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("No playlist with id 1000"));
     }
 
     @Test
