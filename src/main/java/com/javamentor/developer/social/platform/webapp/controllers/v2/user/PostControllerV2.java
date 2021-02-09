@@ -342,6 +342,19 @@ public class PostControllerV2 {
         return ResponseEntity.ok().body(postDtoService.getAllBookmarkedPosts(parameters));
     }
 
+    @ApiOperation(value = "Получение всех закладок")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Все посты получены", response = PageDto.class)
+    })
+    @GetMapping(value = "/posts/bookmarks/all", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity <PageDto<PostDto, ?>> getAllBookmarks(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                                @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage){
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(postDtoService.getAllBookmarks(parameters));
+    }
+
     @ApiOperation(value = "Получение всех постов по теме")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Все посты получены", response = PageDto.class)

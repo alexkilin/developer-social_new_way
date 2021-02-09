@@ -312,6 +312,19 @@ public class PostControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
+    public void getAllBookmarks() throws Exception {
+        mockMvc.perform(get(apiUrl + "/posts/bookmarks/all")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "4"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentPage").value(1))
+                .andExpect(jsonPath("$.totalPages").value(2))
+                .andExpect(jsonPath("$.itemsOnPage").value(4))
+                .andExpect(jsonPath("$.totalResults").value(5))
+                .andExpect(jsonPath("$.items.length()").value(4));
+    }
+
+    @Test
     public void getAllPostsByTopic() throws Exception {
         mockMvc.perform(get(apiUrl + "/posts/topic")
                 .param("topic", "MyTopicName2")
