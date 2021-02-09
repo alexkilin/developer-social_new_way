@@ -51,6 +51,11 @@ public class PostDtoServiceImpl extends PostPaginationService<Object, Object> im
     }
 
     @Override
+    public PageDto<PostDto, Object> getAllBookmarks(Map<String, Object> parameters) {
+        return (PageDto<PostDto, Object>) super.getPostPageDto("getAllBookmarks", parameters);
+    }
+
+    @Override
     public PageDto<Object, Object> getCommentsByPostId(Map<String, Object> parameters) {
         return super.getPageDto("showPostComments", parameters);
     }
