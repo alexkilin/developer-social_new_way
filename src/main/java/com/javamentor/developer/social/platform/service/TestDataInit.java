@@ -4,7 +4,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.user.Rol
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 /**
  * В этом классе необходимо выполнить инициализацию.
  * И заполнить базу данных случайными значениями.
