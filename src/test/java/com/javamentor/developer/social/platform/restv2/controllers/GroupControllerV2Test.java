@@ -3,8 +3,6 @@ package com.javamentor.developer.social.platform.restv2.controllers;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
-import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupCategoryDtoDao;
-import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
 import com.javamentor.developer.social.platform.models.dto.group.GroupCategoryDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupHasUserInfoDto;
@@ -12,9 +10,6 @@ import com.javamentor.developer.social.platform.models.dto.group.GroupUpdateInfo
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupCategoryDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
-import liquibase.database.core.MockDatabase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,17 +20,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
