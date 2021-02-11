@@ -63,7 +63,6 @@ public class ImageControllerV2 {
     private final MediaService mediaService;
     private final ImageConverter imageConverter;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public ImageControllerV2( ImageDtoService imageDTOService , ImageService imageService , AlbumImageDtoService albumImageDtoService ,
@@ -88,7 +87,6 @@ public class ImageControllerV2 {
                                           @RequestBody @Valid ImageCreateDto imageCreateDto ) {
         Image newImage = imageConverter.toEntity(imageCreateDto);
         imageService.create(newImage);
-        logger.info(String.format("Изображение %s создано" , newImage.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(imageConverter.toImageDto(newImage));
     }
 
@@ -99,7 +97,6 @@ public class ImageControllerV2 {
     @DeleteMapping(value = "/{imageId}")
     public ResponseEntity<?> deleteImage(@ApiParam(value = "Id изображения") @NotNull @PathVariable Long imageId ) {
         imageService.deleteById(imageId);
-        logger.info(String.format("Изображение %s удалено" , imageId));
         return ResponseEntity.ok("Deleted");
     }
 
@@ -114,7 +111,6 @@ public class ImageControllerV2 {
         if(!optional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s not found" , imageId));
         }
-        logger.info(String.format("Изображение %s получено" , imageId));
         return ResponseEntity.ok().body(optional.get());
     }
 
@@ -135,7 +131,6 @@ public class ImageControllerV2 {
         parameters.put("userId" , userId);
         parameters.put("currentPage" , currentPage);
         parameters.put("itemsOnPage" , itemsOnPage);
-        logger.info(String.format("Отправлен список пустой или с изображениями пользователя с id: %s" , userId));
         return ResponseEntity.status(HttpStatus.OK).body(imageDTOService.getAllByUserId(parameters));
     }
 
@@ -163,7 +158,6 @@ public class ImageControllerV2 {
     public ResponseEntity<?> deleteAlbum( @ApiParam(value = "Id альбома")
                                           @NotNull @PathVariable Long albumId ) {
         albumImageService.deleteById(albumId);
-        logger.info(String.format("Фотоальбом %s удален" , albumId));
         return ResponseEntity.ok("Deleted");
     }
 
@@ -182,21 +176,17 @@ public class ImageControllerV2 {
             @RequestParam @NotNull Long imageId ) {
         Optional<AlbumImage> album = albumImageService.getByIdWithImages(albumId);
         if(!album.isPresent()) {
-            logger.info(String.format("Фотоальбом с id  %s не найден" , albumId));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image album with id %s is not found" , albumId));
         }
         Optional<Image> image = imageService.getById(imageId);
         if(!image.isPresent()) {
-            logger.info(String.format("Изображение с id  %s не найдено" , imageId));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Image with id %s is not found" , imageId));
         }
         if(!album.get().getImages().add(image.get())){
-            logger.info(String.format("Изображение с id  %s уже существует в данном альбоме", imageId));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Image with id %s is already in album with id %s", imageId,albumId));
         }
 
         albumImageService.update(album.get());
-        logger.info(String.format("Изображение с id  %s добавлено в альбом с id %s" , imageId , albumId));
         return ResponseEntity.ok().body(String.format("Image id %s added to album id %s" , imageId , albumId));
     }
 
@@ -225,7 +215,6 @@ public class ImageControllerV2 {
             if(Objects.nonNull(media.getAlbum())) {
                 media.setAlbum(null);
                 mediaService.update(media);
-                logger.info(String.format("Изображение %s удалено из фотоальбома %s" , imageId , albumId));
             }
         }
 
@@ -250,7 +239,6 @@ public class ImageControllerV2 {
         parameters.put("albumId" , albumId);
         parameters.put("currentPage" , currentPage);
         parameters.put("itemsOnPage" , itemsOnPage);
-        logger.info(String.format("Изображения из фотоальбома %s отправлены" , albumId));
         return ResponseEntity.ok(imageDTOService.getAllByAlbumId(parameters));
     }
 
@@ -265,7 +253,6 @@ public class ImageControllerV2 {
         if(!optionalAlbum.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found", albumId));
         }
-        logger.info(String.format("Фотоальбом %s отправлен", albumId));
         return ResponseEntity.ok(albumImageConverter.toAlbumImageDto(optionalAlbum.get()));
     }
 
@@ -285,7 +272,6 @@ public class ImageControllerV2 {
         parameters.put("userId", userId);
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        logger.info(String.format("Отправлен список пустой или с альбомами пользователя с id: %s", userId));
         return ResponseEntity.status(HttpStatus.OK).body(albumImageDtoService.getAllByUserId(parameters));
     }
 

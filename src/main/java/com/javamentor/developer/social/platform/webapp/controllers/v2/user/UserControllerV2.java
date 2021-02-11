@@ -44,7 +44,6 @@ public class UserControllerV2 {
     private final UserConverter userConverter;
     private final SecurityHelper securityHelper;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public UserControllerV2(UserDtoService userDtoService, UserService userService,
@@ -70,10 +69,8 @@ public class UserControllerV2 {
         Optional<UserDto> optionalUserDto = userDtoService.getUserDtoById(id);
         if (optionalUserDto.isPresent()) {
             UserDto userDto = optionalUserDto.get();
-            logger.info(String.format("Пользователь с ID: %d получен!", id));
             return ResponseEntity.ok(userDto);
         }
-        logger.info(String.format("Пользователь с указанным ID: %d не найден!", id));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", id));
     }
 
@@ -84,7 +81,6 @@ public class UserControllerV2 {
     @GetMapping(params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<Object, Object>> getAllUsers(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
                                                                @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
-        logger.info("Получен список пользователей");
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
@@ -100,12 +96,10 @@ public class UserControllerV2 {
     @Validated(OnCreate.class)
     public ResponseEntity<?> createUser(@ApiParam(value = "Объект создаваемого пользователя") @RequestBody @Valid @NotNull UserRegisterDto userRegisterDto) {
         if (userService.getByEmail(userRegisterDto.getEmail()).isPresent()) {
-            logger.info(String.format("Пользователь с email: %s уже существует", userRegisterDto.getEmail()));
             return ResponseEntity.badRequest().body(String.format("User with email '%s' already registered. Email should be unique", userRegisterDto.getEmail()));
         }
         User newUser = userConverter.toEntity(userRegisterDto);
         userService.create(newUser );
-        logger.info(String.format("Пользователь с email: %s добавлен в базу данных", userRegisterDto.getEmail()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userConverter.toDto(newUser));
     }
 
@@ -121,15 +115,12 @@ public class UserControllerV2 {
         Optional<User> optionalUser = userService.getById(userUpdateInfoDto.getUserId());
         if (optionalUser.isPresent()) {
             if (userService.existsAnotherByEmail(userUpdateInfoDto.getEmail(), userUpdateInfoDto.getUserId())) {
-                logger.info(String.format("Пользователь с email: %s уже существует", userUpdateInfoDto.getEmail()));
                 return ResponseEntity.badRequest().body(String.format("User with email: %s already exist. Email should be unique", userUpdateInfoDto.getEmail()));
             }
             User user = userConverter.toEntity(userUpdateInfoDto);
             userService.updateInfo(user);
-            logger.info(String.format("Пользователь с ID: %d обновлён успешно", userUpdateInfoDto.getUserId()));
             return ResponseEntity.ok(userConverter.toDto(user));
         }
-        logger.info(String.format("Пользователь с ID: %d не существует", userUpdateInfoDto.getUserId()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userUpdateInfoDto.getUserId()));
     }
 
@@ -147,14 +138,12 @@ public class UserControllerV2 {
 
         Optional<User> optionalUser = userService.getById(id);
         if (!optionalUser.isPresent()) {
-            logger.info(String.format("Пользователь с ID: %d не существует", id));
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(String.format("User with ID: %d does not exist.", id));
         }
         User user = optionalUser.get();
         user.setPassword(userResetPasswordDto.getPassword());
         userService.updateUserPassword(user);
-        logger.info(String.format("Пароль пользователя %d изменен", id));
         return ResponseEntity.ok()
                 .body(String.format("Password changed for user %d", id));
     }
@@ -176,10 +165,8 @@ public class UserControllerV2 {
             parameters.put("currentPage", currentPage);
             parameters.put("itemsOnPage", itemsOnPage);
 
-            logger.info("Получен список друзей пользователя");
             return ResponseEntity.ok(userDtoService.getUserFriendsDtoById(parameters));
         }
-        logger.info("Пользователя с таким id не существует, список друзей пользователя не получен");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));
     }
 
@@ -195,10 +182,8 @@ public class UserControllerV2 {
             UserDto userDto = optionalUserDto.get();
             userDto.setStatus(statusDto.getStatus());
             userService.update(userConverter.toEntity(userDto));
-            logger.info("Статус изменён");
             return ResponseEntity.ok(userDto);
         }
-        logger.info(String.format("Пользователь с указанным ID: %d не найден!", statusDto.getUserId()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", statusDto.getUserId()));
     }
 
@@ -229,7 +214,6 @@ public class UserControllerV2 {
 
         parameters.put("filters", filters);
 
-        logger.info("Получен список друзей пользователя с фильтрами");
         return ResponseEntity.ok(userDtoService.GetAllUsersWithFilters(parameters));
     }
 }
