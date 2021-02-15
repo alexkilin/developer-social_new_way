@@ -3,13 +3,20 @@ package com.javamentor.developer.social.platform.restv2.controllers;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
+import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupCategoryDtoDao;
+import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
 import com.javamentor.developer.social.platform.models.dto.group.GroupCategoryDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupHasUserInfoDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupUpdateInfoDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupCategoryDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupHasUserService;
+import liquibase.database.core.MockDatabase;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,14 +27,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -58,6 +70,12 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
     @Autowired
     private GroupDtoService groupDtoService;
+
+    @Autowired
+    EntityManager entityManager;
+
+    @Autowired
+    GroupHasUserService groupHasUserService;
 
     private final String apiUrl = "/api/v2/groups";
 
@@ -143,13 +161,27 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
         mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=205" , 200))
                 .andExpect(status().isOk())
                 .andExpect(content().string("User with id: 205 added to the group with id: 200"));
+
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=205" , 1000))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("User with id: 205 or/and group with id: 1000 not found"));
     }
 
     @Test
     void userJoinGroupExist() throws Exception {
-        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=202" , 201))
+        User user = (User) entityManager.createQuery("SELECT u FROM User u where u.userId = 205")
+                .getSingleResult();
+        assertThat(groupHasUserService.verificationUserInGroup(200l, user.getUserId())).isFalse();
+
+        mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=205" , 200))
                 .andExpect(status().isOk())
-                .andExpect(content().string("User with id: 202 already a member of the group with id: 201"));
+                .andExpect(content().string("User with id: 205 added to the group with id: 200"));
+
+
+        User userExists = (User) entityManager.createQuery("SELECT u FROM User u where u.userId = 205")
+                .getSingleResult();
+        assertThat(groupHasUserService.verificationUserInGroup(200l, userExists.getUserId())).isTrue();
+
     }
 
 

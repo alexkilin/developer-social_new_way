@@ -186,11 +186,16 @@ public class GroupControllerV2 {
             return ResponseEntity.ok()
                     .body(String.format("User with id: %d already a member of the group with id: %s" , userId , groupId));
         }
+        Optional<Group> group;
         Optional<User> user = userService.getById(userId);
-        Optional<Group> group = groupService.getById(groupId);
-        if(user.isPresent() && group.isPresent()) {
-            groupHasUserService.setUserIntoGroup(user.get() , group.get());
-            return ResponseEntity.ok().body(String.format("User with id: %d added to the group with id: %s" , userId , groupId));
+        if(user.isPresent()){
+             group = groupService.getById(groupId);
+            if(group.isPresent()) {
+                groupHasUserService.setUserIntoGroup(user.get(), group.get());
+                return ResponseEntity.ok().body(String.format("User with id: %d added to the group with id: %s", userId, groupId));
+            } if(!group.isPresent()){
+                return ResponseEntity.badRequest().body(String.format("Group with: %d not found", groupId));
+            }
         }
         return ResponseEntity.badRequest()
                 .body(String.format("User with id: %d or/and group with id: %s not found" , userId , groupId));

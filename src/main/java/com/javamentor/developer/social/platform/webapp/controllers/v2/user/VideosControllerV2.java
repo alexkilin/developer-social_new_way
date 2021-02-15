@@ -46,7 +46,6 @@ public class VideosControllerV2 {
     private final AlbumVideoConverter albumVideoConverter;
     private final AlbumVideoDtoService albumVideoDtoService;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public VideosControllerV2(VideosService videosService, VideoConverter videoConverter, VideoDtoService videoDtoService,
                               UserService userService, AlbumService albumService, AlbumVideoService albumVideoService,
@@ -70,7 +69,6 @@ public class VideosControllerV2 {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        logger.info(String.format("Видео начиная c объекта номер %s, в количестве %s отправлено", (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         return ResponseEntity.ok().body(videoDtoService.getPartVideo(parameters));
     }
 
@@ -83,8 +81,6 @@ public class VideosControllerV2 {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        logger.info(String.format("Видео, отсортированные по лайкам, отправлены в количестве %s, начиная с объекта номер %s",
-                itemsOnPage, (currentPage - 1) * itemsOnPage + 1));
 
         return ResponseEntity.ok().body(videoDtoService.getVideoSortedByLikes(parameters));
     }
@@ -102,8 +98,6 @@ public class VideosControllerV2 {
         parameters.put("namePart", namePart);
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        logger.info(String.format("Видео, содержащие в названии '%s', отправлены в количестве %s, начиная с объекта номер %s",
-                namePart, itemsOnPage, (currentPage - 1) * itemsOnPage + 1));
         return ResponseEntity.ok().body(videoDtoService.getVideoOfNamePart(parameters));
     }
 
@@ -121,7 +115,6 @@ public class VideosControllerV2 {
         parameters.put("userId", userId);
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        logger.info(String.format("Видео пользователя %s начиная c объекта номер %s, в количестве %s отправлено ", userId, (currentPage - 1) * itemsOnPage + 1, itemsOnPage));
         return ResponseEntity.ok().body(videoDtoService.getPartVideoOfUser(parameters));
     }
 
@@ -139,7 +132,6 @@ public class VideosControllerV2 {
         Videos videos = videoConverter.toVideo(videoDto, MediaType.VIDEO, user);
         videosService.create(videos);
         VideoDto addedVideo = videoConverter.toDto(videos);
-        logger.info(String.format("Добавление видео с id %s в бд", videos.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(addedVideo);
     }
 
@@ -161,7 +153,6 @@ public class VideosControllerV2 {
         }
         AlbumVideo albumVideo = albumVideoService.createAlbumVideosWithOwner(
                 albumVideoConverter.toAlbumVideo(albumDto, userOptional.get()));
-        logger.info(String.format("Альбом с именем  %s создан", albumDto.getName()));
         return ResponseEntity.ok().body(albumVideoConverter.toAlbumVideoDto(albumVideo));
     }
 
@@ -173,18 +164,15 @@ public class VideosControllerV2 {
                                          @ApiParam(value = "Id видео", example = "1") @RequestParam @NotNull Long videoId) {
         Optional<AlbumVideo> albumVideoOptional = albumVideoService.getByIdWithVideos(albumId);
         if (!albumVideoOptional.isPresent()) {
-            logger.info(String.format("Видеоальбом с id  %s не найден", albumId));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Video album with id %s is not found", albumId));
         }
 
         Optional<Videos> videosOptional = videosService.getById(videoId);
         if (!videosOptional.isPresent()) {
-            logger.info(String.format("Видео с id  %s не найдено", videoId));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Video with id %s is not found", videoId));
         }
 
         if (!albumVideoOptional.get().getVideos().add(videosOptional.get())) {
-            logger.info(String.format("Изображение с id  %s уже существует в данном альбоме", albumId));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Image with id %s is already in album with id %s", videoId,albumId));
         }
 
@@ -192,7 +180,6 @@ public class VideosControllerV2 {
         albumVideo.setVideos(albumVideoOptional.get().getVideos());
 
         albumVideoService.update(albumVideo);
-        logger.info(String.format("Видео с id  %s добавлено в альбом с id %s", videoId, albumId));
         return ResponseEntity.ok().body(String.format("Video id %s added to album id %s", videoId, albumId));
     }
 
@@ -210,7 +197,6 @@ public class VideosControllerV2 {
         parameters.put("userId", userId);
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        logger.info(String.format("Получение всех альбомов пользователя с id %s", userId));
         return ResponseEntity.ok().body(albumVideoDtoService.getAllByUserId(parameters));
     }
 
@@ -226,7 +212,6 @@ public class VideosControllerV2 {
         parameters.put("albumId", albumId);
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        logger.info(String.format("Все видео из альбома с id:%s отправлено", albumId));
         return ResponseEntity.ok().body(videoDtoService.getVideoFromAlbumOfUser(parameters));
     }
 
@@ -244,7 +229,6 @@ public class VideosControllerV2 {
         parameters.put("album", album);
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-        logger.info(String.format("Отправка избранного видео пользователя c id %s альбома %s", userId, album));
         return ResponseEntity.ok().body(videoDtoService.getAlbumVideoOfUser(parameters));
     }
 }
