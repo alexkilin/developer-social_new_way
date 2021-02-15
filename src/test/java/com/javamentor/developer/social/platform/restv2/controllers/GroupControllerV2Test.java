@@ -161,7 +161,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
         mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=205" , 1000))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("User with id: 205 or/and group with id: 1000 not found"));
+                .andExpect(content().string("Group with: 1000 not found"));
     }
 
     @Test
