@@ -1,1 +1,0 @@
-update friends set id = nextval('friends_seq');

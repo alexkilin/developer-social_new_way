@@ -1,1 +1,0 @@
-update followers set id = nextval('followers_seq');

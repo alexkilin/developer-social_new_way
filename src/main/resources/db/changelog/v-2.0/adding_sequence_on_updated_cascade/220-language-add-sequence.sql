@@ -1,1 +1,0 @@
-update "language" set id = nextval('language_seq');

@@ -1,1 +1,0 @@
-update tags set id = nextval('tags_seq');

@@ -1,1 +1,0 @@
-update "like" set id = nextval('like_seq');

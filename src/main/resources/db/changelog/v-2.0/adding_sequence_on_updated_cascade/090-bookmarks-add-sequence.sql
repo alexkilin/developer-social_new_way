@@ -1,1 +1,0 @@
-update bookmarks set id = nextval('bookmarks_seq');
