@@ -1,1 +1,0 @@
-create sequence bookmarks_seq as bigint start 1 increment 1;

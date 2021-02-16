@@ -1,1 +1,0 @@
-create sequence single_chat_seq as bigint start 1 increment 1;

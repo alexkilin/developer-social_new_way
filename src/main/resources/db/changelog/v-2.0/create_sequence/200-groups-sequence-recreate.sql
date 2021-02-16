@@ -1,1 +1,0 @@
-alter sequence groups_seq restart with 1;

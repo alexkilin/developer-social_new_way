@@ -1,1 +1,0 @@
-update group_has_user set id = nextval('group_has_user_seq');

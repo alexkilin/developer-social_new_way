@@ -1,1 +1,0 @@
-update active set id = nextval('active_seq');

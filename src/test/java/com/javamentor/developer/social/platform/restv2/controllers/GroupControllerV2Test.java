@@ -3,8 +3,6 @@ package com.javamentor.developer.social.platform.restv2.controllers;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
-import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupCategoryDtoDao;
-import com.javamentor.developer.social.platform.dao.abstracts.dto.GroupDtoDao;
 import com.javamentor.developer.social.platform.models.dto.group.GroupCategoryDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupHasUserInfoDto;
@@ -14,7 +12,6 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupCategoryDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.GroupDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.group.GroupHasUserService;
-import liquibase.database.core.MockDatabase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
@@ -164,7 +161,7 @@ public class GroupControllerV2Test extends AbstractIntegrationTest {
 
         mockMvc.perform(put("/api/v2/groups/{groupId}/users?userId=205" , 1000))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("User with id: 205 or/and group with id: 1000 not found"));
+                .andExpect(content().string("Group with: 1000 not found"));
     }
 
     @Test

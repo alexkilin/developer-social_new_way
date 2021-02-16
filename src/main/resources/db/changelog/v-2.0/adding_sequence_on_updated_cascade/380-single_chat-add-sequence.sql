@@ -1,1 +1,0 @@
-update single_chat set chat_id = nextval('single_chat_seq');

@@ -1,1 +1,0 @@
-update topics set id = nextval('topics_seq');

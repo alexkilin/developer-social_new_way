@@ -190,12 +190,12 @@
 <!--            <artifactId>spring-boot-starter-log4j2</artifactId>-->
 <!--        </dependency>-->
 
-        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
         <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>4.2.0</version>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

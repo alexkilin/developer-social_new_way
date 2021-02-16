@@ -1,1 +1,0 @@
-create sequence reposts_seq as bigint start 1 increment 1;

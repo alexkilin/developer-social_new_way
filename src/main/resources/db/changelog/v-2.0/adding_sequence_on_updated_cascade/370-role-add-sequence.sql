@@ -1,1 +1,0 @@
-update "role" set id = nextval('role_seq');
