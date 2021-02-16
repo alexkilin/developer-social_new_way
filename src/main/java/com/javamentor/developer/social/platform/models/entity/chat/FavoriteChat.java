@@ -29,8 +29,4 @@ public class FavoriteChat {
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    @Column(name = "persist_date", nullable = false)
-    @Type(type = "org.hibernate.type.LocalDateTimeType")
-    @CreationTimestamp
-    private LocalDateTime persistDate;
 }

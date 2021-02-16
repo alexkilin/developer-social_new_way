@@ -1,0 +1,1 @@
+ALTER TABLE favorite_chat DROP COLUMN persist_date;
