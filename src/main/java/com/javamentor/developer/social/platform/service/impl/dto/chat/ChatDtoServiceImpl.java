@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -41,5 +39,11 @@ public class ChatDtoServiceImpl extends ChatPaginationService<Object, Object> im
         String search = (String) parameters.get("search");
         parameters.put("search", search.trim().replaceAll("\\s+"," ").replace(" ", "% ")+"%");
         return (PageDto<ChatDto, Object>) super.getChatPageDto("getSingleChatDtoByChatName", "getGroupChatDtoByChatName", parameters);
+    }
+
+    @Override
+    @Transactional
+    public List<ChatDto> getAllFavoriteChatDto(Long userId) {
+        return dao.getAllFavoriteChatDto(userId);
     }
 }

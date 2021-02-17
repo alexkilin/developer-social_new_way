@@ -1,0 +1,20 @@
+favorite_chat:
+    - id: 200
+      chat_id: 200
+      user_id: 200
+
+    - id: 201
+      chat_id: 201
+      user_id: 201
+
+    - id: 202
+      chat_id: 202
+      user_id: 202
+
+    - id: 203
+      chat_id: 203
+      user_id: 203
+
+    - id: 204
+      chat_id: 208
+      user_id: 200

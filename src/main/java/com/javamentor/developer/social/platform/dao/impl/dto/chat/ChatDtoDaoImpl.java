@@ -77,6 +77,45 @@ public class ChatDtoDaoImpl implements ChatDtoDao {
                 .getSingleResult();
     }
 
+    @Override
+    public List<ChatDto> getAllFavoriteChatDto(Long userId) {
+        ChatDtoDaoImpl.userId = userId;
+        List<ChatDto> chatDtoList = (List<ChatDto>) em.createQuery("select " +
+                "(select max(me) from SingleChat si  join si.chat.messages me where si.id=single.id)," +
+                " single.userOne.userId," +
+                "single.userTwo.userId," +
+                "single.userOne.firstName," +
+                "single.userOne.lastName," +
+                "single.userOne.avatar," +
+                "single.userOne.active.name," +
+                "single.userTwo.firstName," +
+                "single.userTwo.lastName," +
+                "single.userTwo.avatar," +
+                "single.userTwo.active.name, " +
+                "single.id, " +
+                "single.chat.image," +
+                "single.chat.title " +
+                "from SingleChat single right join FavoriteChat fc on single.chat.id = fc.chat.id where fc.user.id = :id " +
+                "ORDER BY single.id ASC")
+                .setParameter("id", userId)
+                .unwrap(Query.class)
+                .setResultTransformer(new ChatDtoResultTransformer())
+                .getResultList();
+        chatDtoList.addAll((List<ChatDto>) em.createQuery("select " +
+                "(select max(me) from GroupChat si  join si.chat.messages me where si.id=gc.id), " +
+                "gc.chat.image," +
+                "gc.chat.title," +
+                "gc.id " +
+                "from GroupChat gc right join FavoriteChat fc on gc.chat.id = fc.chat.id " +
+                "WHERE fc.user.id =:id " +
+                "ORDER BY gc.id ASC")
+                .setParameter("id", userId)
+                .unwrap(Query.class)
+                .setResultTransformer(new GroupChatDtoResultTransformer())
+                .getResultList());
+        return chatDtoList;
+    }
+
     private static class ChatDtoResultTransformer implements ResultTransformer {
         @Override
         public Object transformTuple(Object[] objects, String[] strings) {
