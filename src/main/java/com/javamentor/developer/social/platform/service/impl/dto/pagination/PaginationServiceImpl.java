@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Service
 public class PaginationServiceImpl<T, V> implements PaginationService<Object, Object> {
+
     private Map<String, PaginationDao> pageBeans;
 
     @Autowired

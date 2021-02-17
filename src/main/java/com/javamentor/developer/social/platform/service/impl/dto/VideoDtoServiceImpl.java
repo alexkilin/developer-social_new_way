@@ -11,6 +11,7 @@ import java.util.Map;
 
 @Service
 public class VideoDtoServiceImpl extends PaginationServiceImpl<VideoDto, Object> implements VideoDtoService {
+
     private final VideoDtoDao videoDtoDao;
 
     public VideoDtoServiceImpl(VideoDtoDao videoDtoDao) {
