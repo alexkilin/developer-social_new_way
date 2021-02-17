@@ -26,7 +26,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,13 +42,13 @@ import java.util.Optional;
 @Api(value = "AuthenticationApi-v2", description = "Аутентификация")
 public class AuthenticationController {
 
-    private UserService userService;
-    private UserConverter userConverter;
-    private SecurityHelper securityHelper;
+    private final UserService userService;
+    private final UserConverter userConverter;
+    private final SecurityHelper securityHelper;
     private final JwtUtil jwtUtil;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private VerificationEmailService verificationEmailService;
+    private final VerificationEmailService verificationEmailService;
 
     @Autowired
     public AuthenticationController(UserService userService, SecurityHelper securityHelper, JwtUtil jwtUtil,

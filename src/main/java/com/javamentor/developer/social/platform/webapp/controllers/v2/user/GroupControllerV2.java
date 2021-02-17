@@ -51,6 +51,7 @@ import java.util.Optional;
 @SuppressWarnings("deprecation")
 @Api(value = "GroupsApi-v2", description = "Операции над группами")
 public class GroupControllerV2 {
+
     private final GroupDtoService groupDtoService;
     private final GroupHasUserService groupHasUserService;
     private final UserService userService;
@@ -62,16 +63,10 @@ public class GroupControllerV2 {
     private final GroupCategoryConverter groupCategoryConverter;
 
     @Autowired
-    public GroupControllerV2( GroupDtoService groupDtoService
-            , GroupHasUserService groupHasUserService
-            , UserService userService
-            , GroupService groupService
-            , GroupConverter groupConverter
-            , GroupHasUserConverter groupHasUserConverter
-            , GroupCategoryService groupCategoryService
-            , GroupCategoryConverter groupCategoryConverter
-            , GroupCategoryDtoService groupCategoryDtoService ) {
-
+    public GroupControllerV2(GroupDtoService groupDtoService, GroupHasUserService groupHasUserService,
+                              UserService userService, GroupService groupService, GroupConverter groupConverter,
+                              GroupHasUserConverter groupHasUserConverter, GroupCategoryService groupCategoryService,
+                              GroupCategoryConverter groupCategoryConverter, GroupCategoryDtoService groupCategoryDtoService) {
         this.groupDtoService = groupDtoService;
         this.groupHasUserService = groupHasUserService;
         this.userService = userService;
@@ -85,14 +80,13 @@ public class GroupControllerV2 {
 
     @ApiOperation(value = "Получение информации обо всех группах")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Инфа обо всех группах получена", responseContainer = "List", response = PageDto.class) ,
+            @ApiResponse(code = 200, message = "Информация обо всех группах получена", responseContainer = "List", response = PageDto.class) ,
             @ApiResponse(code = 400, message = "Неверные параметры", response = String.class)
     })
     @GetMapping(params = {"currentPage" , "itemsOnPage"})
     public ResponseEntity<PageDto<Object, Object>> getAllGroups(
             @ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage ,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage ) {
-
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage" , currentPage);
         parameters.put("itemsOnPage" , itemsOnPage);
@@ -167,7 +161,6 @@ public class GroupControllerV2 {
         parameters.put("groupId" , groupId);
         parameters.put("currentPage" , currentPage);
         parameters.put("itemsOnPage" , itemsOnPage);
-
         return ResponseEntity.ok(groupDtoService.getUsersFromTheGroup(parameters));
     }
 
@@ -261,7 +254,6 @@ public class GroupControllerV2 {
     @Validated(OnCreate.class)
     @PostMapping(value = "/groupCategory/add")
     public ResponseEntity<?> addGroupCategory( @ApiParam(value = "Категория") @Valid @RequestBody GroupCategoryDto groupCategoryDto ) {
-
         if(groupCategoryDtoService.getGroupCategoryByName(groupCategoryDto.getName()).isPresent()) {
             return ResponseEntity.badRequest()
                     .body(String.format("Category with name \"%s\" already exist"
@@ -273,10 +265,8 @@ public class GroupControllerV2 {
         return ResponseEntity.ok(groupCategoryConverter.toDto(groupCategory));
     }
 
-
     @ApiOperation(value = "Получение списка всех категорий")
     @ApiResponse(code = 200, message = "Список категорий получен", responseContainer = "List", response = PageDto.class)
-
     @GetMapping(value = "/groupCategory/all/pageable")
     public ResponseEntity<PageDto<GroupCategoryDto, Object>> getAllCategories( @ApiParam(value = "Текущая страница", example = "0")
                                                                                @RequestParam("currentPage") int currentPage ,
@@ -303,7 +293,6 @@ public class GroupControllerV2 {
                                                   @RequestParam("currentPage") int currentPage ,
                                                   @ApiParam(value = "Количество данных на страницу", example = "15")
                                                   @RequestParam("itemsOnPage") int itemsOnPage ) {
-
         if(!groupCategoryDtoService.getGroupCategoryByName(category).isPresent()) {
             return ResponseEntity.badRequest().body(String.format("No category named \"%s\""
                     , category));
@@ -318,9 +307,6 @@ public class GroupControllerV2 {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)
                     .body(String.format("There are no groups containing category named \"%s\"" , category));
         }
-
         return ResponseEntity.ok(groupsByCategory);
-
     }
-
 }

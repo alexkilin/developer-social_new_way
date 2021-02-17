@@ -15,8 +15,6 @@ import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
 import lombok.ToString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,12 +42,10 @@ public class UserControllerV2 {
     private final UserConverter userConverter;
     private final SecurityHelper securityHelper;
 
-
     @Autowired
     public UserControllerV2(UserDtoService userDtoService, UserService userService,
                             VerificationEmailService verificationEmailService,
-                            JwtUtil jwtUtil,
-                            UserConverter userConverter, SecurityHelper securityHelper) {
+                            JwtUtil jwtUtil, UserConverter userConverter, SecurityHelper securityHelper) {
         this.userDtoService = userDtoService;
         this.userService = userService;
         this.verificationEmailService = verificationEmailService;
@@ -135,7 +131,6 @@ public class UserControllerV2 {
                                                 @PathVariable Long id,
                                                 @ApiParam(value = "Новый пароль")
                                                 @Valid @RequestBody UserResetPasswordDto userResetPasswordDto) {
-
         Optional<User> optionalUser = userService.getById(id);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -159,12 +154,10 @@ public class UserControllerV2 {
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
             @ApiParam(value = "Идентификатор пользователя", example = "10") @PathVariable("id") @NonNull Long userId) {
         if (userService.existById(userId)) {
-
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("userId", userId);
             parameters.put("currentPage", currentPage);
             parameters.put("itemsOnPage", itemsOnPage);
-
             return ResponseEntity.ok(userDtoService.getUserFriendsDtoById(parameters));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.", userId));
@@ -200,20 +193,16 @@ public class UserControllerV2 {
             @ApiParam(value = "Фильтр по образованию", example = "MIT University") @RequestParam(value = "education", required = false) String education,
             @ApiParam(value = "Фильтр по профессии", example = "Plumber") @RequestParam(value = "profession", required = false) String profession,
             @ApiParam(value = "Фильтр по городу", example = "SPb") @RequestParam(value = "city", required = false) String city) {
-
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
-
         Map<String, Object> filters = new HashMap<>();
         filters.put("startDateOfBirth", startDateOfBirth);
         filters.put("endDateOfBirth", endDateOfBirth);
         filters.put("education", education);
         filters.put("profession", profession);
         filters.put("city", city);
-
         parameters.put("filters", filters);
-
         return ResponseEntity.ok(userDtoService.GetAllUsersWithFilters(parameters));
     }
 }
