@@ -2,8 +2,6 @@ package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
 import com.javamentor.developer.social.platform.models.dto.PostCreateDto;
 import com.javamentor.developer.social.platform.models.dto.PostDto;
-import com.javamentor.developer.social.platform.models.dto.TagDto;
-import com.javamentor.developer.social.platform.models.dto.comment.CommentDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.entity.comment.PostComment;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
@@ -22,7 +20,6 @@ import com.javamentor.developer.social.platform.service.abstracts.model.post.Boo
 import com.javamentor.developer.social.platform.service.abstracts.model.post.PostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.RepostService;
 import com.javamentor.developer.social.platform.service.abstracts.model.post.UserTabsService;
-import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.PostConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
@@ -35,7 +32,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,10 +40,10 @@ import java.util.Optional;
 @Api(value = "PostApi-v2", description = "Операции над постами пользователя")
 @Validated
 public class PostControllerV2 {
+
     private final PostDtoService postDtoService;
     private final PostConverter postConverter;
     private final PostService postService;
-    private final UserService userService;
     private final UserTabsService userTabsService;
     private final PostCommentService postCommentService;
     private final PostLikeService postLikeService;
@@ -58,23 +54,14 @@ public class PostControllerV2 {
     private final SecurityHelper securityHelper;
 
     @Autowired
-    public PostControllerV2(PostDtoService postDtoService,
-                            PostConverter postConverter,
-                            PostService postService,
-                            UserService userService,
-                            UserTabsService userTabsService,
-                            PostCommentService postCommentService,
-                            PostLikeService postLikeService,
-                            BookmarkService bookmarkService,
-                            RepostService repostService,
-                            CommentService commentService,
-                            LikeService likeService,
-                            SecurityHelper securityHelper) {
-
+    public PostControllerV2(PostDtoService postDtoService, PostConverter postConverter, PostService postService,
+                            UserTabsService userTabsService, PostCommentService postCommentService,
+                            PostLikeService postLikeService, BookmarkService bookmarkService,
+                            RepostService repostService, CommentService commentService,
+                            LikeService likeService, SecurityHelper securityHelper) {
         this.postDtoService = postDtoService;
         this.postConverter = postConverter;
         this.postService = postService;
-        this.userService = userService;
         this.userTabsService = userTabsService;
         this.postCommentService = postCommentService;
         this.postLikeService = postLikeService;
@@ -84,7 +71,6 @@ public class PostControllerV2 {
         this.likeService = likeService;
         this.securityHelper = securityHelper;
     }
-
 
     @ApiOperation(value = "Получение списка всех постов")
     @ApiResponses(value = {
@@ -124,7 +110,6 @@ public class PostControllerV2 {
     public ResponseEntity<PageDto<PostDto, ?>> getPostsByAllFriendsAndGroups(
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
-
         Long userPrincipalId = securityHelper.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
@@ -154,7 +139,6 @@ public class PostControllerV2 {
             @ApiParam(value = "ID пользователя", example = "60") @PathVariable("id") Long userId,
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
-
         Long userPrincipalId = securityHelper.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
@@ -237,12 +221,10 @@ public class PostControllerV2 {
     public ResponseEntity<?> addLikeToPost(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
         User user = securityHelper.getPrincipal();
-
         Optional<PostLike> optionalPostLike = postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
         if (optionalPostLike.isPresent()) {
             return ResponseEntity.badRequest().body("The Like has already been added");
         }
-
         Post post = Post.builder().id(postId).build();
         PostLike postLike = new PostLike(user);
         likeService.create(postLike.getLike());
@@ -263,11 +245,9 @@ public class PostControllerV2 {
         User user = securityHelper.getPrincipal();
         Optional<PostLike> optionalLike =
                 postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
-
         if(!optionalLike.isPresent()) {
             return ResponseEntity.badRequest().body("The Like already been removed");
         }
-
         PostLike postLike = optionalLike.get();
         postLikeService.delete(postLike);
         return ResponseEntity.ok().body(postDtoService.getPostById(postId, user.getUserId()));
@@ -281,12 +261,10 @@ public class PostControllerV2 {
     public ResponseEntity<?> addPostToBookmark(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
         User user = securityHelper.getPrincipal();
-
         Optional<Bookmark> optionalBookmark = bookmarkService.getBookmarkByPostIdAndUserId(postId, user.getUserId());
         if(optionalBookmark.isPresent()) {
             return ResponseEntity.badRequest().body("The Post has already been added to the bookmark");
         }
-
         Post post = Post.builder().id(postId).build();
         Bookmark bookmark = Bookmark.builder().user(user).post(post).build();
         bookmarkService.create(bookmark);
@@ -302,12 +280,10 @@ public class PostControllerV2 {
     public ResponseEntity<?> deletePostFromBookmark(
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
         User user = securityHelper.getPrincipal();
-
         Optional<Bookmark> optionalBookmark = bookmarkService.getBookmarkByPostIdAndUserId(postId, user.getUserId());
         if(!optionalBookmark.isPresent()) {
             return ResponseEntity.badRequest().body("The Post has already been removed from the bookmark");
         }
-
         bookmarkService.deleteBookmarkByPostIdAndUserId(postId, user.getUserId());
         return ResponseEntity.ok().body(postDtoService.getPostById(postId, user.getUserId()));
     }
@@ -369,5 +345,4 @@ public class PostControllerV2 {
         parameters.put("topic", topic);
         return ResponseEntity.ok().body(postDtoService.getAllPostsByTopic(parameters));
     }
-
 }

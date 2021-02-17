@@ -2,6 +2,7 @@ package com.javamentor.developer.social.platform.webapp.controllers.advice;
 
 import com.javamentor.developer.social.platform.service.impl.dto.pagination.PaginationException;
 import com.javamentor.developer.social.platform.service.impl.util.VerificationEmailException;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,7 @@ import javax.validation.ConstraintViolationException;
 
 import static org.springframework.http.HttpStatus.*;
 
+@Api(value = "AdviceApi-v2")
 @RestControllerAdvice
 public class AdviceController  extends ResponseEntityExceptionHandler {
 
@@ -55,7 +57,6 @@ public class AdviceController  extends ResponseEntityExceptionHandler {
                                                                           WebRequest request) {
         String name = ex.getParameterName();
         logger.error(name + " parameter is missing");
-
         return ResponseEntity.badRequest().body(name + " parameter is missing");
     }
 
