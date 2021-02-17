@@ -28,7 +28,7 @@ pipeline {
                 sh 'docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'
             //    sh 'docker rmi $(docker images -f "dangling=true" -q)'
 
-                echo "============= end dockerizing test============="
+                echo "============= end dockerizing============="
             }
         }
     }
