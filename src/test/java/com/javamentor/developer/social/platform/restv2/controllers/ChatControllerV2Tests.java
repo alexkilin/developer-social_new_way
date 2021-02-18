@@ -3,10 +3,14 @@ package com.javamentor.developer.social.platform.restv2.controllers;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.google.gson.Gson;
+import com.javamentor.developer.social.platform.dao.impl.dto.chat.ChatDtoDaoImpl;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
+import com.javamentor.developer.social.platform.models.entity.chat.Chat;
+import com.javamentor.developer.social.platform.models.entity.chat.FavoriteChat;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
+import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,10 +21,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -281,4 +287,19 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
         assertEquals(correctResponse, response.getContentAsString());
 
     }
+
+    @Test
+    public void addChatToFavorites() throws Exception {
+        ChatDto chatDto = ChatDto.builder()
+                .image("MyImage")
+                .title("MyTitle")
+                .build();
+                mockMvc.perform(post(apiUrl + "/user/chats/favorite")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(chatDto)))
+                        .andExpect(status().isOk())
+                        .andReturn()
+                        .getResponse();
+    }
+
 }

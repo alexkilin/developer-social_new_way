@@ -4,16 +4,19 @@ import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
+import com.javamentor.developer.social.platform.models.entity.chat.FavoriteChat;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.security.util.SecurityHelper;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.ChatDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.dto.chat.FavoriteChatService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.chat.MessageDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
+import com.javamentor.developer.social.platform.webapp.converters.FavoriteChatConverter;
 import com.javamentor.developer.social.platform.webapp.converters.GroupChatConverter;
 import com.javamentor.developer.social.platform.webapp.converters.SingleChatConverter;
 import io.swagger.annotations.*;
@@ -43,11 +46,14 @@ public class ChatControllerV2 {
     private final UserService userService;
     private final SecurityHelper securityHelper;
     private final SingleChatConverter singleChatConverter;
+    private final FavoriteChatConverter favoriteChatConverter;
+    private final FavoriteChatService favoriteChatService;
 
     @Autowired
     public ChatControllerV2(ChatDtoService chatDtoService, MessageDtoService messageDtoService,
                             GroupChatService groupChatService, SingleChatService singleChatService, GroupChatConverter groupChatConverter,
-                            UserService userService, SecurityHelper securityHelper, SingleChatConverter singleChatConverter) {
+                            UserService userService, SecurityHelper securityHelper, SingleChatConverter singleChatConverter,
+                            FavoriteChatConverter favoriteChatConverter, FavoriteChatService favoriteChatService) {
         this.chatDtoService = chatDtoService;
         this.messageDtoService = messageDtoService;
         this.groupChatService = groupChatService;
@@ -56,6 +62,8 @@ public class ChatControllerV2 {
         this.userService = userService;
         this.securityHelper = securityHelper;
         this.singleChatConverter = singleChatConverter;
+        this.favoriteChatConverter = favoriteChatConverter;
+        this.favoriteChatService = favoriteChatService;
     }
 
     @GetMapping("/user/{userId}/chats")
@@ -204,6 +212,25 @@ public class ChatControllerV2 {
         SingleChat singleChat = singleChatConverter.chatDtoToSingleChat(chatDto, userOne.getUserId(), userId);
         singleChatService.create(singleChat);
         ChatDto outputChatDto = singleChatConverter.singleChatToChatDto(singleChat);
+        return ResponseEntity.ok(outputChatDto);
+    }
+
+
+    @PostMapping("/user/chats/favorite")
+    @ApiOperation(value = "Addition chat to favorites")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = ChatDto.class),
+            @ApiResponse(code = 404, message = "404 error")
+    })
+    @Validated(OnCreate.class)
+    public ResponseEntity<?> addChatToFavorites(@RequestBody @NotNull @Valid ChatDto chatDto) {
+        User userOne = securityHelper.getPrincipal();
+        if (Objects.isNull(userOne)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        FavoriteChat favoriteChat = favoriteChatConverter.chatDtoToFavoriteChat(chatDto, userOne.getUserId());
+        favoriteChatService.create(favoriteChat);
+        ChatDto outputChatDto = favoriteChatConverter.favoriteChatToChatDto(favoriteChat);
         return ResponseEntity.ok(outputChatDto);
     }
 }
