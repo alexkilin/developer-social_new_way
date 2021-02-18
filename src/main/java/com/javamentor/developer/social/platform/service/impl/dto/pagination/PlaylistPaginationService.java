@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.dto.pagination;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.PlaylistDtoDao;
-import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;

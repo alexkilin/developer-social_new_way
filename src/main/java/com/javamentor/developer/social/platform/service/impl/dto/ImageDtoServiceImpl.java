@@ -13,14 +13,13 @@ import java.util.Optional;
 
 @Service
 public class ImageDtoServiceImpl extends PaginationServiceImpl<ImageDto, Object> implements ImageDtoService {
+
     private final ImageDtoDao dao;
 
     @Autowired
     public ImageDtoServiceImpl(ImageDtoDao dao) {
         this.dao = dao;
-
     }
-
 
     @Override
     public PageDto<ImageDto, Object> getAllByUserId(Map<String, Object> parameters) {
@@ -36,6 +35,5 @@ public class ImageDtoServiceImpl extends PaginationServiceImpl<ImageDto, Object>
     public Optional<ImageDto> getById(Long id) {
         return dao.getById(id);
     }
-
 
 }

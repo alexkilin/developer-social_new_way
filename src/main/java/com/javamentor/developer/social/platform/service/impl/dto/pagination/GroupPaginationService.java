@@ -1,7 +1,6 @@
 package com.javamentor.developer.social.platform.service.impl.dto.pagination;
 
 import com.javamentor.developer.social.platform.dao.abstracts.dto.PostDtoDao;
-import com.javamentor.developer.social.platform.dao.abstracts.dto.page.PaginationDao;
 import com.javamentor.developer.social.platform.models.dto.MediaPostDto;
 import com.javamentor.developer.social.platform.models.dto.TagDto;
 import com.javamentor.developer.social.platform.models.dto.group.GroupWallDto;

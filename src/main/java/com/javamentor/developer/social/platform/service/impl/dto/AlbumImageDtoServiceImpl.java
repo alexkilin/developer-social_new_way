@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Service
 public class AlbumImageDtoServiceImpl extends PaginationServiceImpl<AlbumImageDto, Object> implements AlbumImageDtoService {
+
     public AlbumImageDtoServiceImpl() {
     }
 

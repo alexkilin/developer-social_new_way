@@ -8,16 +8,18 @@ import com.javamentor.developer.social.platform.service.impl.dto.pagination.Pagi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class GroupCategoryDtoServiceImpl extends PaginationServiceImpl<GroupCategoryDto, Object> implements GroupCategoryDtoService {
 
-    @Autowired
-    private GroupCategoryDtoDao groupCategoryDtoDao;
+    private final GroupCategoryDtoDao groupCategoryDtoDao;
 
+    @Autowired
+    public GroupCategoryDtoServiceImpl(GroupCategoryDtoDao groupCategoryDtoDao) {
+        this.groupCategoryDtoDao = groupCategoryDtoDao;
+    }
 
     @Override
     public Optional<GroupCategoryDto> getGroupCategoryByName( String category ) {

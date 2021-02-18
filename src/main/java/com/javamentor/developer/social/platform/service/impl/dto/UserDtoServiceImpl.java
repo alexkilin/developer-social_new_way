@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Service
 public class UserDtoServiceImpl extends PaginationServiceImpl<Object, Object> implements UserDtoService {
+
     private final UserDtoDao userDtoDao;
 
     @Autowired
@@ -36,7 +37,6 @@ public class UserDtoServiceImpl extends PaginationServiceImpl<Object, Object> im
             List<LanguageDto> languages = userDtoDao.getUserLanguageDtoById(id);
             userDto.get().setLanguages(languages);
         }
-
         return userDto;
     }
 

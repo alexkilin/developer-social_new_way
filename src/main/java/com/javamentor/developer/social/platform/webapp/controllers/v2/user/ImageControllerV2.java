@@ -23,8 +23,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +60,6 @@ public class ImageControllerV2 {
     private final AlbumService albumService;
     private final MediaService mediaService;
     private final ImageConverter imageConverter;
-
 
     @Autowired
     public ImageControllerV2( ImageDtoService imageDTOService , ImageService imageService , AlbumImageDtoService albumImageDtoService ,
@@ -185,7 +182,6 @@ public class ImageControllerV2 {
         if(!album.get().getImages().add(image.get())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Image with id %s is already in album with id %s", imageId,albumId));
         }
-
         albumImageService.update(album.get());
         return ResponseEntity.ok().body(String.format("Image id %s added to album id %s" , imageId , albumId));
     }
@@ -198,11 +194,9 @@ public class ImageControllerV2 {
     @DeleteMapping(value = "/albums/{albumId}/images")
     public ResponseEntity<?> removeImageFromAlbum( @ApiParam(value = "Id альбома", example = "11") @PathVariable @NotNull Long albumId ,
                                                    @ApiParam(value = "Id изображения", example = "31") @RequestParam(value = "id") @NotNull Long imageId ) {
-
         Optional<AlbumImage> optionalAlbumImage = albumImageService.getById(albumId);
         Optional<Image> optionalImage = imageService.getById(imageId);
         Optional<Media> optionalMedia = mediaService.getById(imageId);
-
         if(!optionalAlbumImage.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Album with id %s not found" , albumId));
         }
@@ -211,13 +205,11 @@ public class ImageControllerV2 {
         }
         if(optionalMedia.isPresent()) {
             Media media = optionalMedia.get();
-
             if(Objects.nonNull(media.getAlbum())) {
                 media.setAlbum(null);
                 mediaService.update(media);
             }
         }
-
         return ResponseEntity.ok().body(String.format("Image %s removed from album %s" , imageId , albumId));
     }
 
@@ -274,6 +266,4 @@ public class ImageControllerV2 {
         parameters.put("itemsOnPage", itemsOnPage);
         return ResponseEntity.status(HttpStatus.OK).body(albumImageDtoService.getAllByUserId(parameters));
     }
-
-
 }

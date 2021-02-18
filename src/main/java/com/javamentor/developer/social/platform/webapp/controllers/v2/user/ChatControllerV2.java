@@ -18,6 +18,7 @@ import com.javamentor.developer.social.platform.webapp.converters.GroupChatConve
 import com.javamentor.developer.social.platform.webapp.converters.SingleChatConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +34,7 @@ import java.util.*;
 @SuppressWarnings("deprecation")
 @Api(value = "ChatApi-v2", description = "Операции над чатами")
 public class ChatControllerV2 {
+
     private final ChatDtoService chatDtoService;
     private final MessageDtoService messageDtoService;
     private final GroupChatService groupChatService;
@@ -42,7 +44,7 @@ public class ChatControllerV2 {
     private final SecurityHelper securityHelper;
     private final SingleChatConverter singleChatConverter;
 
-
+    @Autowired
     public ChatControllerV2(ChatDtoService chatDtoService, MessageDtoService messageDtoService,
                             GroupChatService groupChatService, SingleChatService singleChatService, GroupChatConverter groupChatConverter,
                             UserService userService, SecurityHelper securityHelper, SingleChatConverter singleChatConverter) {
@@ -74,14 +76,12 @@ public class ChatControllerV2 {
             @ApiParam(value = "Имя чата, можно не полное, не зависит от регистра", example = "группа людей") @RequestParam String search,
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
-
         Long userPrincipalId = securityHelper.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         parameters.put("search", search);
-
         return ResponseEntity.ok(chatDtoService.getChatDtoByChatName(parameters));
     }
 
@@ -174,12 +174,10 @@ public class ChatControllerV2 {
     })
     @Validated(OnCreate.class)
     public ResponseEntity<?> createGroupChat(@RequestBody @NotNull @Valid ChatDto chatDto) {
-
         User user = securityHelper.getPrincipal();
         if (Objects.isNull(user)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
-
         GroupChat groupChat = groupChatConverter.chatToGroupChat(chatDto, user.getUserId());
         groupChatService.create(groupChat);
         ChatDto outputChatDto = groupChatConverter.groupChatToChatDto(groupChat);
@@ -195,17 +193,14 @@ public class ChatControllerV2 {
     @Validated(OnCreate.class)
     public ResponseEntity<?> createSingleChat(@RequestBody @NotNull @Valid ChatDto chatDto,
                                               @PathVariable("userId") Long userId) {
-
         User userOne = securityHelper.getPrincipal();
         if (Objects.isNull(userOne)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
-
         Optional<User> optionalUser = userService.getById(userId);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with id: %s not found", userId));
         }
-
         SingleChat singleChat = singleChatConverter.chatDtoToSingleChat(chatDto, userOne.getUserId(), userId);
         singleChatService.create(singleChat);
         ChatDto outputChatDto = singleChatConverter.singleChatToChatDto(singleChat);
