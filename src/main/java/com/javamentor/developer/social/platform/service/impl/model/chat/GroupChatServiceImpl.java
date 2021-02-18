@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class GroupChatServiceImpl extends GenericServiceAbstract<GroupChat, Long> implements GroupChatService {
 
-    private GroupChatDao dao;
+    private final GroupChatDao dao;
 
     @Autowired
     public GroupChatServiceImpl(GroupChatDao dao) {
