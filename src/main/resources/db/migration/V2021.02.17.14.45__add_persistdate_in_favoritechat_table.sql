@@ -1,0 +1,1 @@
+ALTER TABLE favorite_chat ADD persist_date timestamp not null DEFAULT '2020-12-02 15:36:04.693556';
