@@ -215,6 +215,16 @@ public class ChatControllerV2 {
         return ResponseEntity.ok(outputChatDto);
     }
 
+    @GetMapping("/user/chats/favorite")
+    @ApiOperation(value = "Избранный список чатов юзера.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", responseContainer = "List", response = ChatDto.class)
+    })
+    public ResponseEntity<List<ChatDto>> getAllFavoriteChatDto() {
+        Long userPrincipalId = securityHelper.getPrincipal().getUserId();
+        return ResponseEntity.ok(chatDtoService.getAllFavoriteChatDto(userPrincipalId));
+    }
+
 
     @PostMapping("/user/chats/favorite")
     @ApiOperation(value = "Addition chat to favorites")

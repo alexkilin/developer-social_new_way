@@ -13,4 +13,6 @@ public interface ChatDtoService {
     ChatDto getChatDtoByGroupChatId(Long chatId);
 
     PageDto<ChatDto, Object> getChatDtoByChatName(Map<String, Object> parameters);
+
+    List<ChatDto> getAllFavoriteChatDto(Long userId);
 }

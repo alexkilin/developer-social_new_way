@@ -44,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/chat/chatResources/Chats.yml",
         "datasets/restv2/chat/chatResources/ChatsMessages.yml",
         "datasets/restv2/chat/chatResources/SingleChat.yml" ,
+        "datasets/restv2/chat/chatResources/FavoriteChat.yml" ,
         "datasets/restv2/chat/chatResources/UsersGroupChats.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 @Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
@@ -65,6 +66,13 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3));
+    }
+
+    @Test
+    public void getAllFavoriteChatDto() throws Exception {
+        mockMvc.perform(get(apiUrl + "/user/chats/favorite"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
