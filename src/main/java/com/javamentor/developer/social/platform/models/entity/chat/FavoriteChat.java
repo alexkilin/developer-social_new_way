@@ -25,7 +25,7 @@ public class FavoriteChat {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, optional = false)
     @JoinColumn(name = "chat_id")
     private Chat chat;
 

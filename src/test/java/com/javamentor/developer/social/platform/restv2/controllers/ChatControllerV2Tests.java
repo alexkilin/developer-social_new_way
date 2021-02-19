@@ -11,10 +11,12 @@ import com.javamentor.developer.social.platform.models.entity.chat.FavoriteChat;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -298,16 +300,17 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
 
     @Test
     public void addChatToFavorites() throws Exception {
-        ChatDto chatDto = ChatDto.builder()
-                .image("MyImage")
-                .title("MyTitle")
-                .build();
-                mockMvc.perform(post(apiUrl + "/user/chats/favorite")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(chatDto)))
-                        .andExpect(status().isOk())
-                        .andReturn()
-                        .getResponse();
+
+        mockMvc.perform(post(apiUrl + "/user/chat/{chatId}/favorite", 204))
+                .andExpect(status().isCreated());
+        FavoriteChat favoriteChat = (FavoriteChat) entityManager.createQuery("SELECT a from FavoriteChat a " +
+                "join fetch a.chat p where a.user.userId = 666 and p.id = 204")
+                .getSingleResult();
+        assertEquals(1, favoriteChat.getId());
+
+        mockMvc.perform(post(apiUrl + "/user/chat/{chatId}/favorite", 204))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("The Chat has already been added to the Favorite"));
     }
 
 }

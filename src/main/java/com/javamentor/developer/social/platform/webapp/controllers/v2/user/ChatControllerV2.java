@@ -4,9 +4,12 @@ import com.javamentor.developer.social.platform.models.dto.chat.ChatDto;
 import com.javamentor.developer.social.platform.models.dto.chat.ChatEditTitleDto;
 import com.javamentor.developer.social.platform.models.dto.chat.MessageDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
+import com.javamentor.developer.social.platform.models.entity.chat.Chat;
 import com.javamentor.developer.social.platform.models.entity.chat.FavoriteChat;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
+import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
+import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.security.util.SecurityHelper;
@@ -46,14 +49,13 @@ public class ChatControllerV2 {
     private final UserService userService;
     private final SecurityHelper securityHelper;
     private final SingleChatConverter singleChatConverter;
-    private final FavoriteChatConverter favoriteChatConverter;
     private final FavoriteChatService favoriteChatService;
 
     @Autowired
     public ChatControllerV2(ChatDtoService chatDtoService, MessageDtoService messageDtoService,
                             GroupChatService groupChatService, SingleChatService singleChatService, GroupChatConverter groupChatConverter,
                             UserService userService, SecurityHelper securityHelper, SingleChatConverter singleChatConverter,
-                            FavoriteChatConverter favoriteChatConverter, FavoriteChatService favoriteChatService) {
+                            FavoriteChatService favoriteChatService) {
         this.chatDtoService = chatDtoService;
         this.messageDtoService = messageDtoService;
         this.groupChatService = groupChatService;
@@ -62,7 +64,6 @@ public class ChatControllerV2 {
         this.userService = userService;
         this.securityHelper = securityHelper;
         this.singleChatConverter = singleChatConverter;
-        this.favoriteChatConverter = favoriteChatConverter;
         this.favoriteChatService = favoriteChatService;
     }
 
@@ -225,22 +226,23 @@ public class ChatControllerV2 {
         return ResponseEntity.ok(chatDtoService.getAllFavoriteChatDto(userPrincipalId));
     }
 
-
-    @PostMapping("/user/chats/favorite")
-    @ApiOperation(value = "Addition chat to favorites")
+    @PostMapping("/user/chat/{chatId}/favorite")
+    @ApiOperation(value = "Добавление чата в избранное.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = ChatDto.class),
             @ApiResponse(code = 404, message = "404 error")
     })
     @Validated(OnCreate.class)
-    public ResponseEntity<?> addChatToFavorites(@RequestBody @NotNull @Valid ChatDto chatDto) {
-        User userOne = securityHelper.getPrincipal();
-        if (Objects.isNull(userOne)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    public ResponseEntity<?> addChatToFavorites(@PathVariable(value = "chatId") Long chatId) {
+        User user = securityHelper.getPrincipal();
+        Optional<FavoriteChat> optionalFavoriteChat = favoriteChatService.getFavoriteByChatIdAndUserId(chatId, user.getUserId());
+        if(optionalFavoriteChat.isPresent()) {
+            return ResponseEntity.badRequest().body("The Chat has already been added to the Favorite");
         }
-        FavoriteChat favoriteChat = favoriteChatConverter.chatDtoToFavoriteChat(chatDto, userOne.getUserId());
+        Chat chat = Chat.builder().id(chatId).build();
+        FavoriteChat favoriteChat = FavoriteChat.builder().user(user).chat(chat).build();
         favoriteChatService.create(favoriteChat);
-        ChatDto outputChatDto = favoriteChatConverter.favoriteChatToChatDto(favoriteChat);
-        return ResponseEntity.ok(outputChatDto);
+        ChatDto chatDto = ChatDto.builder().id(chatId).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(chatDto);
     }
 }

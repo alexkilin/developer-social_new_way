@@ -7,6 +7,8 @@ import com.javamentor.developer.social.platform.service.impl.GenericServiceAbstr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class FavoriteChatServiceImpl extends GenericServiceAbstract<FavoriteChat, Long> implements FavoriteChatService {
 
@@ -19,7 +21,7 @@ public class FavoriteChatServiceImpl extends GenericServiceAbstract<FavoriteChat
     }
 
     @Override
-    public void addChatTOFavorites(FavoriteChat favoriteChat) {
-        dao.create(favoriteChat);
+    public Optional<FavoriteChat> getFavoriteByChatIdAndUserId(Long chatId, Long userId) {
+        return dao.getFavoriteChatByChatIdAndUserId(chatId, userId);
     }
 }
