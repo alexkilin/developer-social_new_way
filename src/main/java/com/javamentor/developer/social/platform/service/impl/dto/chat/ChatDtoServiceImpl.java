@@ -41,4 +41,10 @@ public class ChatDtoServiceImpl extends ChatPaginationService<Object, Object> im
         parameters.put("search", search.trim().replaceAll("\\s+"," ").replace(" ", "% ")+"%");
         return (PageDto<ChatDto, Object>) super.getChatPageDto("getSingleChatDtoByChatName", "getGroupChatDtoByChatName", parameters);
     }
+
+    @Override
+    @Transactional
+    public List<ChatDto> getAllFavoriteChatDto(Long userId) {
+        return dao.getAllFavoriteChatDto(userId);
+    }
 }

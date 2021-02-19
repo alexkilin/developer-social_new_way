@@ -8,4 +8,6 @@ public interface ChatDtoDao {
     List<ChatDto> getAllChatDtoByUserId(Long userId);
 
     ChatDto getChatDtoByGroupChatId(Long chatId);
+
+    List<ChatDto> getAllFavoriteChatDto(Long userId);
 }
