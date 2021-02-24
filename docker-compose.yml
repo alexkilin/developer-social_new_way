@@ -16,7 +16,7 @@ services:
   db:
     image: 'postgres:13.1-alpine'
     ports:
-    - "5432:5432"
+    - "5432"
     container_name: db
     environment:
       - POSTGRES_USER=postgres
