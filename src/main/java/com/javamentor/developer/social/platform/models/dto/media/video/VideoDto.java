@@ -45,4 +45,7 @@ public class VideoDto {
 
     @ApiModelProperty(notes = "Число лайков")
     private Long countLike;
+
+    @ApiModelProperty(notes = "Количество просмотров", example = "5")
+    private Long view;
 }

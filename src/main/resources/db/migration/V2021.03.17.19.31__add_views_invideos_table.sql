@@ -1,0 +1,1 @@
+ALTER TABLE videos ADD view bigint not null DEFAULT 3;

@@ -25,7 +25,7 @@ public class PaginationGetVideoOfNamePartDaoImpl implements PaginationDao<VideoD
 
         return entityManager.createQuery(
                 "SELECT new com.javamentor.developer.social.platform.models.dto.media.video.VideoDto(v.id, " +
-                        "v.media.url, v.name, v.icon, v.author, v.media.persistDateTime, count (ml.like.id)) " +
+                        "v.media.url, v.name, v.icon, v.author, v.media.persistDateTime, count (ml.like.id), v.view) " +
                         "FROM Videos AS v LEFT JOIN MediaLike AS ml ON v.media.id = ml.media.id " +
                         "WHERE v.name LIKE :searchPattern GROUP BY v.media.id, v.media.url, v.media.persistDateTime " +
                         "ORDER BY v.id ASC", VideoDto.class)

@@ -49,6 +49,9 @@ public class Videos {
     @Column(name = "author")
     private String author;
 
+    @Column(name = "view")
+    private Long view;
+
     @PrePersist
     private void prePersistFunction() {
         checkConstraints();
