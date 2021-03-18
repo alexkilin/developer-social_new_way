@@ -36,7 +36,8 @@ public class PaginationGetAudioFromPlaylistDaoImpl implements PaginationDao<Audi
                         "au.author, " +
                         "au.album, " +
                         "au.length, " +
-                        "au.media.persistDateTime " +
+                        "au.media.persistDateTime, " +
+                        "au.listening " +
                         "FROM Audios au " +
                         "JOIN au.playlists as pl " +
                         "WHERE pl.id = :playlistId " +
@@ -60,6 +61,7 @@ public class PaginationGetAudioFromPlaylistDaoImpl implements PaginationDao<Audi
                                         .album((String) objects[5])
                                         .length((Integer) objects[6])
                                         .persistDateTime((LocalDateTime) objects[7])
+                                        .listening((Integer) objects[8])
                                         .build();
                             }
 

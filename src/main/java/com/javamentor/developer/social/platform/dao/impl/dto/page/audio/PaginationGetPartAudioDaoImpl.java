@@ -35,7 +35,8 @@ public class PaginationGetPartAudioDaoImpl implements PaginationDao<AudioDto> {
                         "a.author, " +
                         "a.album," +
                         "a.length," +
-                        "a.media.persistDateTime " +
+                        "a.media.persistDateTime, " +
+                        "a.listening " +
                         "FROM Audios as a " +
                         "WHERE a.media.mediaType = 1 " +
                         "ORDER BY a.id ASC")
@@ -55,6 +56,7 @@ public class PaginationGetPartAudioDaoImpl implements PaginationDao<AudioDto> {
                                         .album((String) objects[5])
                                         .length((Integer) objects[6])
                                         .persistDateTime((LocalDateTime) objects[7])
+                                        .listening((Integer) objects[8])
                                         .build();
                             }
 

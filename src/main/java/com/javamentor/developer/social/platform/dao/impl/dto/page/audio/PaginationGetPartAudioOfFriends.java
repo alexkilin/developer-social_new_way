@@ -36,7 +36,8 @@ public class PaginationGetPartAudioOfFriends implements PaginationDao<AudioDto> 
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
                         "c.album, " +
-                        "c.length " +
+                        "c.length, " +
+                        "c.listening " +
                         "FROM User u join u.audios c join fetch Friend f on u.id=f.friend.id where f.user.id =:userId")
                 .setParameter("userId", userId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
@@ -56,6 +57,7 @@ public class PaginationGetPartAudioOfFriends implements PaginationDao<AudioDto> 
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
                                         .length((Integer) objects[7])
+                                        .listening((Integer) objects[8])
                                         .build();
                             }
                             @Override
