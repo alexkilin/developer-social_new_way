@@ -134,6 +134,7 @@ create table audios
     icon     varchar(255),
     length   integer,
     name     varchar(255),
+    listening integer,
     media_id bigint not null
         constraint audios_pkey
             primary key

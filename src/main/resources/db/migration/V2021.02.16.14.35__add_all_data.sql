@@ -254,18 +254,18 @@ values
 (43, 2, '2020-12-03 03:22:35.139255', 'www.myvideo.ru', 82),(52, 2, '2020-12-03 03:22:35.140232', 'www.myvideo.ru', 91),
 (55, 2, '2020-12-03 03:22:35.140499', 'www.myvideo.ru', 93),(58, 2, '2020-12-03 03:22:35.140777', 'www.myvideo.ru', 96);
 
-insert into audios (album, author, icon, length, name, media_id)
+insert into audios (album, author, icon, length, name, media_id, listening)
 values
-('AlbumTestName 0', 'Test Author 0', 'TestIcon0', 238, 'AudioTestName 0', 1),('AlbumTestName 5', 'Test Author 5', 'TestIcon5', 238, 'AudioTestName 5', 6),
-('AlbumTestName 10', 'Test Author 10', 'TestIcon10', 238, 'AudioTestName 10', 11),('AlbumTestName 15', 'Test Author 15', 'TestIcon15', 238, 'AudioTestName 15', 16),
-('AlbumTestName 20', 'Test Author 20', 'TestIcon20', 238, 'AudioTestName 20', 21),('AlbumTestName 25', 'Test Author 25', 'TestIcon25', 238, 'AudioTestName 25', 26),
-('AlbumTestName 30', 'Test Author 30', 'TestIcon30', 238, 'AudioTestName 30', 31),('AlbumTestName 35', 'Test Author 35', 'TestIcon35', 238, 'AudioTestName 35', 36),
-('AlbumTestName 40', 'Test Author 40', 'TestIcon40', 238, 'AudioTestName 40', 41),('AlbumTestName 45', 'Test Author 45', 'TestIcon45', 238, 'AudioTestName 45', 46),
-('AlbumTestName 50', 'Test Author 50', 'TestIcon50', 238, 'AudioTestName 50', 51),('AlbumTestName 55', 'Test Author 55', 'TestIcon55', 238, 'AudioTestName 55', 56),
-('AlbumTestName 60', 'Test Author 60', 'TestIcon60', 238, 'AudioTestName 60', 61),('AlbumTestName 65', 'Test Author 65', 'TestIcon65', 238, 'AudioTestName 65', 66),
-('AlbumTestName 70', 'Test Author 70', 'TestIcon70', 238, 'AudioTestName 70', 71),('AlbumTestName 75', 'Test Author 75', 'TestIcon75', 238, 'AudioTestName 75', 76),
-('AlbumTestName 80', 'Test Author 80', 'TestIcon80', 238, 'AudioTestName 80', 81),('AlbumTestName 85', 'Test Author 85', 'TestIcon85', 238, 'AudioTestName 85', 86),
-('AlbumTestName 90', 'Test Author 90', 'TestIcon90', 238, 'AudioTestName 90', 91),('AlbumTestName 95', 'Test Author 95', 'TestIcon95', 238, 'AudioTestName 95', 96);
+('AlbumTestName 0', 'Test Author 0', 'TestIcon0', 238, 'AudioTestName 0', 1, 50),('AlbumTestName 5', 'Test Author 5', 'TestIcon5', 238, 'AudioTestName 5', 6, 467),
+('AlbumTestName 10', 'Test Author 10', 'TestIcon10', 238, 'AudioTestName 10', 11, 78),('AlbumTestName 15', 'Test Author 15', 'TestIcon15', 238, 'AudioTestName 15', 16, 123),
+('AlbumTestName 20', 'Test Author 20', 'TestIcon20', 238, 'AudioTestName 20', 21, 678),('AlbumTestName 25', 'Test Author 25', 'TestIcon25', 238, 'AudioTestName 25', 26, 45),
+('AlbumTestName 30', 'Test Author 30', 'TestIcon30', 238, 'AudioTestName 30', 31, 900),('AlbumTestName 35', 'Test Author 35', 'TestIcon35', 238, 'AudioTestName 35', 36, 556),
+('AlbumTestName 40', 'Test Author 40', 'TestIcon40', 238, 'AudioTestName 40', 41, 699),('AlbumTestName 45', 'Test Author 45', 'TestIcon45', 238, 'AudioTestName 45', 46, 455),
+('AlbumTestName 50', 'Test Author 50', 'TestIcon50', 238, 'AudioTestName 50', 51, 978),('AlbumTestName 55', 'Test Author 55', 'TestIcon55', 238, 'AudioTestName 55', 56, 435),
+('AlbumTestName 60', 'Test Author 60', 'TestIcon60', 238, 'AudioTestName 60', 61, 5),('AlbumTestName 65', 'Test Author 65', 'TestIcon65', 238, 'AudioTestName 65', 66, 345),
+('AlbumTestName 70', 'Test Author 70', 'TestIcon70', 238, 'AudioTestName 70', 71, 567),('AlbumTestName 75', 'Test Author 75', 'TestIcon75', 238, 'AudioTestName 75', 76, 876),
+('AlbumTestName 80', 'Test Author 80', 'TestIcon80', 238, 'AudioTestName 80', 81, 456),('AlbumTestName 85', 'Test Author 85', 'TestIcon85', 238, 'AudioTestName 85', 86, 433),
+('AlbumTestName 90', 'Test Author 90', 'TestIcon90', 238, 'AudioTestName 90', 91, 345),('AlbumTestName 95', 'Test Author 95', 'TestIcon95', 238, 'AudioTestName 95', 96, 222);
 
 insert into videos (author, icon, name, media_id)
 values

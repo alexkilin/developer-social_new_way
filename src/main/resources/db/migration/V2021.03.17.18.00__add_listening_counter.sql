@@ -1,1 +1,0 @@
-ALTER TABLE audios ADD listening integer not null DEFAULT 0;
