@@ -11,6 +11,7 @@ import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -457,4 +458,32 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("This album already contains audio with id 205"));
     }
+
+    @Test
+    public void incrementAudioListeningCounter() throws Exception {
+        Long audioId = 200L;
+        Audios preUpdateAudios = (Audios) entityManager
+                .createQuery("select a from Audios a where a.id = :audioId")
+                .setParameter("audioId", audioId)
+                .getSingleResult();
+
+        Integer oldValue = preUpdateAudios.getListening();
+
+        mockMvc.perform(patch(apiUrl + "/{audioId}/listeningCounter/inc", audioId))
+                .andExpect(status().isOk())
+                .andExpect(content().string(String.valueOf(oldValue + 1)));
+
+        Audios updateAudios = (Audios) entityManager
+                .createQuery("select a from Audios a where a.id = :audioId")
+                .setParameter("audioId", audioId)
+                .getSingleResult();
+
+        Integer expectedValue = oldValue + 1;
+        Integer newValue = updateAudios.getListening();
+
+        Assert.assertEquals(expectedValue, newValue);
+        Assert.assertNotEquals(oldValue, newValue);
+    }
+
+
 }

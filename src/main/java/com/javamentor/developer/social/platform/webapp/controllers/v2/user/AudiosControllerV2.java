@@ -6,6 +6,7 @@ import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
+import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
@@ -417,5 +418,24 @@ public class AudiosControllerV2 {
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         return ResponseEntity.ok().body(audioDtoService.getAudioFromPlaylist(parameters));
+    }
+
+    @ApiOperation(value = "Увеличений количества прослушиваний трэка на 1")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Счетчик прослушиваний увеличен", response = UserResetPasswordDto.class),
+            @ApiResponse(code = 404, message = "Не найдено аудио", response = String.class)
+    })
+    @PatchMapping("/{id}/listeningCounter/inc")
+    public ResponseEntity<?> updateAudioListeningCounter(@ApiParam(value = "Id трека")
+                                                @PathVariable Long id) {
+        Optional<Audios> optionalAudios = audiosService.getById(id);
+        if (!optionalAudios.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("Audio with ID: %d does not exist.", id));
+        }
+        Audios audios = optionalAudios.get();
+        audios.setListening(audios.getListening() + 1);
+        audiosService.update(audios);
+        return ResponseEntity.ok(audiosService.getById(id).get().getListening());
     }
 }
