@@ -106,7 +106,7 @@ public class PostControllerV2 {
     @ApiOperation(value = "Получение постов данного пользователя по его группам и всем постам друзей отсортированной по дате публикации")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Посты получены", response = PageDto.class, responseContainer = "List")})
-    @GetMapping(value = "/posts/friends/groups", params = { "currentPage", "itemsOnPage"})
+    @GetMapping(value = "/posts/friends/groups", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<PostDto, ?>> getPostsByAllFriendsAndGroups(
             @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
             @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
@@ -119,7 +119,7 @@ public class PostControllerV2 {
     }
 
     @ApiOperation(value = "Получение всех существующих тегов")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Теги получены", responseContainer = "List", response = PageDto.class)})
     @GetMapping(value = "/posts/tags", params = {"currentPage", "itemsOnPage"})
     public ResponseEntity<PageDto<Object, Object>> getAllTags(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
@@ -245,7 +245,7 @@ public class PostControllerV2 {
         User user = securityHelper.getPrincipal();
         Optional<PostLike> optionalLike =
                 postLikeService.getPostLikeByPostIdAndUserId(postId, user.getUserId());
-        if(!optionalLike.isPresent()) {
+        if (!optionalLike.isPresent()) {
             return ResponseEntity.badRequest().body("The Like already been removed");
         }
         PostLike postLike = optionalLike.get();
@@ -262,7 +262,7 @@ public class PostControllerV2 {
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
         User user = securityHelper.getPrincipal();
         Optional<Bookmark> optionalBookmark = bookmarkService.getBookmarkByPostIdAndUserId(postId, user.getUserId());
-        if(optionalBookmark.isPresent()) {
+        if (optionalBookmark.isPresent()) {
             return ResponseEntity.badRequest().body("The Post has already been added to the bookmark");
         }
         Post post = Post.builder().id(postId).build();
@@ -281,7 +281,7 @@ public class PostControllerV2 {
             @ApiParam(value = "Id поста", example = "1") @PathVariable @NonNull Long postId) {
         User user = securityHelper.getPrincipal();
         Optional<Bookmark> optionalBookmark = bookmarkService.getBookmarkByPostIdAndUserId(postId, user.getUserId());
-        if(!optionalBookmark.isPresent()) {
+        if (!optionalBookmark.isPresent()) {
             return ResponseEntity.badRequest().body("The Post has already been removed from the bookmark");
         }
         bookmarkService.deleteBookmarkByPostIdAndUserId(postId, user.getUserId());
@@ -308,8 +308,8 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Все посты получены", response = PageDto.class)
     })
     @GetMapping(value = "/posts/bookmarks", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity <PageDto<PostDto, ?>> getAllBookmarkedPosts(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                                      @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage){
+    public ResponseEntity<PageDto<PostDto, ?>> getAllBookmarkedPosts(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                                     @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Long userPrincipalId = securityHelper.getPrincipal().getUserId();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("userPrincipalId", userPrincipalId);
@@ -323,8 +323,8 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Все посты получены", response = PageDto.class)
     })
     @GetMapping(value = "/posts/bookmarks/all", params = {"currentPage", "itemsOnPage"})
-    public ResponseEntity <PageDto<PostDto, ?>> getAllBookmarks(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                                @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage){
+    public ResponseEntity<PageDto<PostDto, ?>> getAllBookmarks(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                               @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
@@ -336,9 +336,9 @@ public class PostControllerV2 {
             @ApiResponse(code = 200, message = "Все посты получены", response = PageDto.class)
     })
     @GetMapping(value = "/posts/topic", params = {"currentPage", "itemsOnPage", "topic"})
-    public ResponseEntity <PageDto<PostDto, ?>> getAllPostsByTopic(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
-                                                                      @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
-                                                                      @ApiParam(value = "Тема топика", example = "Жабросли") @RequestParam("topic") String topic){
+    public ResponseEntity<PageDto<PostDto, ?>> getAllPostsByTopic(@ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                                  @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage,
+                                                                  @ApiParam(value = "Тема топика", example = "Жабросли") @RequestParam("topic") String topic) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
