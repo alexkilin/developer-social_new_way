@@ -422,7 +422,7 @@ public class AudiosControllerV2 {
 
     @ApiOperation(value = "Увеличений количества прослушиваний трэка на 1")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Счетчик прослушиваний увеличен", response = UserResetPasswordDto.class),
+            @ApiResponse(code = 200, message = "Счетчик прослушиваний увеличен", response = String.class),
             @ApiResponse(code = 404, message = "Не найдено аудио", response = String.class)
     })
     @PatchMapping("/{id}/listeningCounter/inc")
