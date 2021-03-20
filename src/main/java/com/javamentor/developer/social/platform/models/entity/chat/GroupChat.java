@@ -1,15 +1,10 @@
 package com.javamentor.developer.social.platform.models.entity.chat;
 
-import com.javamentor.developer.social.platform.models.entity.album.Album;
-import com.javamentor.developer.social.platform.models.entity.media.MediaType;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity

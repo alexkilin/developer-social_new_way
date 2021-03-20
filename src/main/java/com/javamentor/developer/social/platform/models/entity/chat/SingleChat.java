@@ -2,12 +2,8 @@ package com.javamentor.developer.social.platform.models.entity.chat;
 
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @Getter
 @Setter
