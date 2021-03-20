@@ -26,4 +26,6 @@ public interface AudioDtoService {
     PageDto<AudioDto, ?> getPartAudio(Map<String, Object> parameters);
 
     PageDto<AudioDto, ?> getPartAudiosOfFriends(Map<String, Object> parameters);
+
+    PageDto<AudioDto, ?> getAudioSortedByListening(Map<String, Object> parameters);
 }

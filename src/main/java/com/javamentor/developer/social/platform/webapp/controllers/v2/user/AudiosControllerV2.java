@@ -5,6 +5,7 @@ import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudi
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
+import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
@@ -437,5 +438,17 @@ public class AudiosControllerV2 {
         audios.setListening(audios.getListening() + 1);
         audiosService.update(audios);
         return ResponseEntity.ok(audiosService.getById(id).get().getListening());
+    }
+
+    @ApiOperation(value = "Получение аудио, отсортированные по количеству прослушиваний")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Аудио, отсортированные по количеству прослушиваний, получены", responseContainer = "List", response = PageDto.class)})
+    @GetMapping(value = "/order/listening", params = {"currentPage", "itemsOnPage"})
+    public ResponseEntity<PageDto<AudioDto, ?>> getAudioSortedByListening(@ApiParam(value = "Текущая страница", example = "0") @RequestParam("currentPage") int currentPage,
+                                                                      @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getAudioSortedByListening(parameters));
     }
 }
