@@ -212,6 +212,27 @@ class VideosControllerV2Tests extends AbstractIntegrationTest {
     }
 
     @Test
+    public void getVideoSortedByViews() throws Exception {
+        String result = mockMvc.perform(get(apiUrl + "/order/view")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].id").value(202))
+                .andExpect(jsonPath("$.items[1].id").value(200))
+                .andExpect(jsonPath("$.items[2].id").value(201))
+                .andExpect(jsonPath("$.items.length()").value(6))
+                .andReturn().getResponse().getContentAsString();
+
+        PageDto<Object, Object> actualPage = objectMapper.readValue(result, PageDto.class);
+
+        List<LinkedHashMap<Object, Object>> listOfVideos = actualPage.getItems()
+                .stream().map(x -> ((LinkedHashMap<Object, Object>) x)).collect(Collectors.toList());
+        for (int i = 0; i < listOfVideos.size() - 1; i++) {
+            assertTrue((Integer)listOfVideos.get(i).get("countLike") >= (Integer)listOfVideos.get(i + 1).get("countLike"));
+        }
+    }
+
+    @Test
     public void addVideo() throws Exception {
         VideoDto videoDto = VideoDto.builder()
                 .author("MyAuthor33")
