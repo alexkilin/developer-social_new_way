@@ -1,1 +1,1 @@
-ALTER TABLE videos ADD view bigint not null DEFAULT 3;
+ALTER TABLE videos ADD view bigint not null DEFAULT floor(random() * 10 + 1)::int;
