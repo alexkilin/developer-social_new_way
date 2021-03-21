@@ -82,7 +82,7 @@ public class VideosControllerV2 {
         parameters.put("itemsOnPage", itemsOnPage);
         return ResponseEntity.ok().body(videoDtoService.getVideoSortedByLikes(parameters));
     }
-//---------------
+
     @ApiOperation(value = "Получение видео, отсортированные по просмотрам")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Видео, отсортированные по просмотрам, получены", responseContainer = "List", response = PageDto.class)})
@@ -94,7 +94,7 @@ public class VideosControllerV2 {
         parameters.put("itemsOnPage", itemsOnPage);
         return ResponseEntity.ok().body(videoDtoService.getVideoSortedByViews(parameters));
     }
-//---------------
+
     @ApiOperation(value = "Получение видео по совпадению в названии по частям")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Часть видео по совпадению в названии получено", responseContainer = "List", response = PageDto.class)})
