@@ -313,4 +313,20 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(content().string("The Chat has already been added to the Favorite"));
     }
 
+    @Test
+    void changeGroupChatTitle() throws Exception {
+        Long groupChatId = 206L;
+        String newTitle = "newTitle";
+
+        mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
+                groupChatId, newTitle))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(newTitle));
+
+        Long nonExistChatId = 1000L;
+
+        mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
+                nonExistChatId, newTitle))
+                .andExpect(status().isNotFound());
+    }
 }
