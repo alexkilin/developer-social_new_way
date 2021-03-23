@@ -4,6 +4,7 @@ audios:
     icon: "TestIcon7"
     name: "AudioTestName 7"
     length: "365"
+    listening: "20"
     media_id: "200"
 
   - album: "AlbumTestName 1"
@@ -11,6 +12,7 @@ audios:
     icon: "TestIcon1"
     name: "AudioTestName 1"
     length: "365"
+    listening: "45"
     media_id: "201"
 
   - album: "AlbumTestName 2"
@@ -18,6 +20,7 @@ audios:
     icon: "TestIcon2"
     name: "AudioTestName 2"
     length: "365"
+    listening: "789"
     media_id: "202"
 
   - album: "AlbumTestName 3"
@@ -25,6 +28,7 @@ audios:
     icon: "TestIcon3"
     name: "AudioTestName 3"
     length: "365"
+    listening: "345"
     media_id: "203"
 
   - album: "AlbumTestName 4"
@@ -32,6 +36,7 @@ audios:
     icon: "TestIcon4"
     name: "AudioTestName 4"
     length: "365"
+    listening: "325"
     media_id: "204"
 
   - album: "AlbumTestName 5"
@@ -39,6 +44,7 @@ audios:
     icon: "TestIcon5"
     name: "AudioTestName 5"
     length: "365"
+    listening: "123"
     media_id: "205"
 
   - album: "AlbumTestName 6"
@@ -46,6 +52,7 @@ audios:
     icon: "TestIcon4"
     name: "AudioTestName 6"
     length: "365"
+    listening: "3"
     media_id: "206"
 
   - album: "AlbumTestName 7"
@@ -53,4 +60,5 @@ audios:
     icon: "TestIcon7"
     name: "AudioTestName 7"
     length: "365"
+    listening: "890"
     media_id: "207"

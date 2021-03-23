@@ -58,6 +58,9 @@ public class Audios {
     @ManyToMany(mappedBy = "playlistContent")
     private Set<Playlist> playlists;
 
+    @Column(name = "listening")
+    private Integer listening = 0;
+
     @PrePersist
     private void prePersistFunction() {
         checkConstraints();

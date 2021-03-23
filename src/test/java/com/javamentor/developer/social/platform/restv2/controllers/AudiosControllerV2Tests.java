@@ -7,10 +7,12 @@ import com.google.gson.Gson;
 import com.javamentor.developer.social.platform.models.dto.media.AlbumDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
+import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.Playlist;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,8 +22,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.EntityManager;
 
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -457,4 +462,53 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("This album already contains audio with id 205"));
     }
+
+    @Test
+    public void incrementAudioListeningCounter() throws Exception {
+        Long audioId = 200L;
+        Audios preUpdateAudios = (Audios) entityManager
+                .createQuery("select a from Audios a where a.id = :audioId")
+                .setParameter("audioId", audioId)
+                .getSingleResult();
+
+        Integer oldValue = preUpdateAudios.getListening();
+
+        mockMvc.perform(patch(apiUrl + "/{audioId}/listeningCounter/inc", audioId))
+                .andExpect(status().isOk())
+                .andExpect(content().string(String.valueOf(oldValue + 1)));
+
+        Audios updateAudios = (Audios) entityManager
+                .createQuery("select a from Audios a where a.id = :audioId")
+                .setParameter("audioId", audioId)
+                .getSingleResult();
+
+        Integer expectedValue = oldValue + 1;
+        Integer newValue = updateAudios.getListening();
+
+        Assert.assertEquals(expectedValue, newValue);
+        Assert.assertNotEquals(oldValue, newValue);
+    }
+
+    @Test
+    public void getAudioSortedByListening() throws Exception {
+        String result = mockMvc.perform(get(apiUrl + "/order/listening")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].id").value(207))
+                .andExpect(jsonPath("$.items[1].id").value(202))
+                .andExpect(jsonPath("$.items[2].id").value(203))
+                .andExpect(jsonPath("$.items.length()").value(8))
+                .andReturn().getResponse().getContentAsString();
+
+        PageDto<Object, Object> actualPage = objectMapper.readValue(result, PageDto.class);
+
+        List<LinkedHashMap<Object, Object>> listOfAudios = actualPage.getItems()
+                .stream().map(x -> ((LinkedHashMap<Object, Object>) x)).collect(Collectors.toList());
+        for (int i = 0; i < listOfAudios.size() - 1; i++) {
+            assertTrue((Integer)listOfAudios.get(i).get("listening") >= (Integer)listOfAudios.get(i + 1).get("listening"));
+        }
+    }
+
+
 }

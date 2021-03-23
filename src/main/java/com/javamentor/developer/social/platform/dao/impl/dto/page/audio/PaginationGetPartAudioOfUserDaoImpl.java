@@ -36,7 +36,8 @@ public class PaginationGetPartAudioOfUserDaoImpl implements PaginationDao<AudioD
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
                         "c.album, " +
-                        "c.length " +
+                        "c.length, " +
+                        "c.listening " +
                         "FROM User u join u.audios c where u.userId =:userId order by c.id asc")
                 .setParameter("userId", userId)
                 .setFirstResult((currentPage - 1) * itemsOnPage)
@@ -56,6 +57,7 @@ public class PaginationGetPartAudioOfUserDaoImpl implements PaginationDao<AudioD
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
                                         .length((Integer) objects[7])
+                                        .listening((Integer) objects[8])
                                         .build();
                             }
 

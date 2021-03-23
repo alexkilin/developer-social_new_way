@@ -48,6 +48,9 @@ public class AudioDto {
     @ApiModelProperty(notes = "Длительность трека в секундах")
     private Integer length;
 
+    @ApiModelProperty(notes = "Количество прослушиваний")
+    private Integer listening;
+
     @ApiModelProperty(notes = "Дата публикования медиа объекта, назначается автоматически при создании", hidden = true, example = "2020-09-14T23:24:17.900994")
     private LocalDateTime persistDateTime;
 

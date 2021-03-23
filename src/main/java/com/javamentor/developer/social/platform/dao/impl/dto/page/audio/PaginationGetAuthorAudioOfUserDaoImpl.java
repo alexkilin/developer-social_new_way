@@ -37,7 +37,8 @@ public class PaginationGetAuthorAudioOfUserDaoImpl implements PaginationDao<Audi
                         "c.media.url, " +
                         "c.media.persistDateTime, " +
                         "c.album, " +
-                        "c.length " +
+                        "c.length, " +
+                        "c.listening " +
                         "FROM User u join u.audios c " +
                         "where u.userId =:userId and c.author =:author " +
                         "ORDER BY c.id ASC")
@@ -60,6 +61,7 @@ public class PaginationGetAuthorAudioOfUserDaoImpl implements PaginationDao<Audi
                                         .persistDateTime((LocalDateTime) objects[5])
                                         .album((String) objects[6])
                                         .length((Integer) objects[7])
+                                        .listening((Integer) objects[8])
                                         .build();
                             }
 
