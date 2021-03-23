@@ -5,7 +5,6 @@ import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity

@@ -1,6 +1,5 @@
 package com.javamentor.developer.social.platform.models.dto;
 
-import com.javamentor.developer.social.platform.models.entity.post.Topic;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;

@@ -4,7 +4,6 @@ import com.javamentor.developer.social.platform.models.entity.comment.PostCommen
 import com.javamentor.developer.social.platform.models.entity.group.Group;
 import com.javamentor.developer.social.platform.models.entity.like.PostLike;
 import com.javamentor.developer.social.platform.models.entity.media.Media;
-import com.javamentor.developer.social.platform.models.entity.user.Role;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
