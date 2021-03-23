@@ -22,4 +22,6 @@ public interface VideoDtoService {
     PageDto<VideoDto, ?> getPartVideo(Map<String, Object> parameters);
 
     PageDto<VideoDto, ?> getVideoSortedByLikes(Map<String, Object> parameters);
+
+    PageDto<VideoDto, ?> getVideoSortedByViews(Map<String, Object> parameters);
 }
