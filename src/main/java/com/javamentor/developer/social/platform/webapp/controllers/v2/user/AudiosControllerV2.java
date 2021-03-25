@@ -435,9 +435,10 @@ public class AudiosControllerV2 {
                     .body(String.format("Audio with ID: %d does not exist.", id));
         }
         Audios audios = optionalAudios.get();
-        audios.setListening(audios.getListening() + 1);
+        Integer updatedCounter = audios.getListening() + 1;
+        audios.setListening(updatedCounter);
         audiosService.update(audios);
-        return ResponseEntity.ok(audiosService.getById(id).get().getListening());
+        return ResponseEntity.ok(updatedCounter);
     }
 
     @ApiOperation(value = "Получение аудио, отсортированные по количеству прослушиваний")
