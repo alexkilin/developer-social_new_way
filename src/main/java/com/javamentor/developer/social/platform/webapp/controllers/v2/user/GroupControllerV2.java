@@ -186,8 +186,6 @@ public class GroupControllerV2 {
             if(group.isPresent()) {
                 groupHasUserService.setUserIntoGroup(user.get(), group.get());
                 return ResponseEntity.ok().body(String.format("User with id: %d added to the group with id: %s", userId, groupId));
-            } if(!group.isPresent()){
-                return ResponseEntity.badRequest().body(String.format("Group with: %d not found", groupId));
             }
         }
         return ResponseEntity.badRequest()
