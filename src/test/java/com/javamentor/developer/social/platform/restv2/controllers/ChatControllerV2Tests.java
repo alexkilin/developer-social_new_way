@@ -11,6 +11,7 @@ import com.javamentor.developer.social.platform.models.entity.chat.FavoriteChat;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.webapp.controllers.v2.user.ChatControllerV2;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -317,16 +318,23 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
     void changeGroupChatTitle() throws Exception {
         Long groupChatId = 206L;
         String newTitle = "newTitle";
+        String emptyNewTitle = "";
+        Long nonExistChatId = 1000L;
 
         mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
                 groupChatId, newTitle))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(newTitle));
 
-        Long nonExistChatId = 1000L;
-
         mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
                 nonExistChatId, newTitle))
                 .andExpect(status().isNotFound());
+
+        mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
+                groupChatId, emptyNewTitle))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Title's name is empty"));
+
     }
+
 }
