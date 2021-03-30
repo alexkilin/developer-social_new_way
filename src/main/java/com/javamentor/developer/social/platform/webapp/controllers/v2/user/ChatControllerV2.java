@@ -252,7 +252,7 @@ public class ChatControllerV2 {
     })
     public ResponseEntity<?> changeGroupChatTitle(@ApiParam(value = "Id группового чата") @PathVariable Long chatId,
                                                   @ApiParam(value = "Новое название для чата", example = "newTitle")
-                                                  @RequestParam("newTitle") @NotNull String newTitle) {
+                                                    @RequestParam("newTitle") @NotNull String newTitle) {
 
         if (newTitle.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Title's name is empty");

@@ -320,6 +320,7 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
         String newTitle = "newTitle";
         String emptyNewTitle = "";
         Long nonExistChatId = 1000L;
+        String nullNewTitle = null;
 
         mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
                 groupChatId, newTitle))
@@ -329,6 +330,9 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
                 nonExistChatId, newTitle))
                 .andExpect(status().isNotFound());
+
+        mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle", groupChatId).param("newTitle", nullNewTitle))
+                .andExpect(status().isBadRequest());
 
         mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
                 groupChatId, emptyNewTitle))
