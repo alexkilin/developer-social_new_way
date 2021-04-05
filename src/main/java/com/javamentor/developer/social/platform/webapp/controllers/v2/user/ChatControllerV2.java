@@ -8,8 +8,6 @@ import com.javamentor.developer.social.platform.models.entity.chat.Chat;
 import com.javamentor.developer.social.platform.models.entity.chat.FavoriteChat;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
-import com.javamentor.developer.social.platform.models.entity.post.Bookmark;
-import com.javamentor.developer.social.platform.models.entity.post.Post;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.security.util.SecurityHelper;
@@ -19,7 +17,6 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.chat.Messa
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.GroupChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.chat.SingleChatService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
-import com.javamentor.developer.social.platform.webapp.converters.FavoriteChatConverter;
 import com.javamentor.developer.social.platform.webapp.converters.GroupChatConverter;
 import com.javamentor.developer.social.platform.webapp.converters.SingleChatConverter;
 import io.swagger.annotations.*;
@@ -244,5 +241,34 @@ public class ChatControllerV2 {
         favoriteChatService.create(favoriteChat);
         ChatDto chatDto = ChatDto.builder().id(chatId).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(chatDto);
+    }
+
+    @PatchMapping(value = "/group-chats/{chatId}/changeTitle", params = {"newTitle"})
+    @ApiOperation(value = "Изменение названия группового чата.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = ChatDto.class),
+            @ApiResponse(code = 404, message = "Чат с данным Id не существует", response = String.class),
+            @ApiResponse(code = 400, message = "Новое название чата пустое")
+    })
+    public ResponseEntity<?> changeGroupChatTitle(@ApiParam(value = "Id группового чата") @PathVariable Long chatId,
+                                                  @ApiParam(value = "Новое название для чата", example = "newTitle")
+                                                    @RequestParam("newTitle") @NotNull String newTitle) {
+
+        if (newTitle.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Title's name is empty");
+        }
+
+        Optional<GroupChat> optionalGroupChat = groupChatService.getByIdWithChat(chatId);
+
+        if (!optionalGroupChat.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("GroupChat with ID: %d does not exist.", chatId));
+        }
+
+        GroupChat groupChat = optionalGroupChat.get();
+        groupChat.getChat().setTitle(newTitle);
+        groupChatService.update(groupChat);
+
+        return ResponseEntity.ok().body(groupChatConverter.groupChatToChatDto(groupChat));
     }
 }

@@ -11,6 +11,7 @@ import com.javamentor.developer.social.platform.models.entity.chat.FavoriteChat;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.chat.SingleChat;
 import com.javamentor.developer.social.platform.models.entity.user.User;
+import com.javamentor.developer.social.platform.webapp.controllers.v2.user.ChatControllerV2;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -311,6 +312,33 @@ public class ChatControllerV2Tests extends AbstractIntegrationTest {
         mockMvc.perform(post(apiUrl + "/user/chat/{chatId}/favorite", 204))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("The Chat has already been added to the Favorite"));
+    }
+
+    @Test
+    void changeGroupChatTitle() throws Exception {
+        Long groupChatId = 206L;
+        String newTitle = "newTitle";
+        String emptyNewTitle = "";
+        Long nonExistChatId = 1000L;
+        String nullNewTitle = null;
+
+        mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
+                groupChatId, newTitle))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(newTitle));
+
+        mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
+                nonExistChatId, newTitle))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle", groupChatId).param("newTitle", nullNewTitle))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(patch(apiUrl + "/group-chats/{groupChatId}/changeTitle?newTitle={newTitle}",
+                groupChatId, emptyNewTitle))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Title's name is empty"));
+
     }
 
 }
