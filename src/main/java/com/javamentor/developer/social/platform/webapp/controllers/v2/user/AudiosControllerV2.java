@@ -5,9 +5,7 @@ import com.javamentor.developer.social.platform.models.dto.media.music.AlbumAudi
 import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistCreateDto;
 import com.javamentor.developer.social.platform.models.dto.media.music.PlaylistGetDto;
-import com.javamentor.developer.social.platform.models.dto.media.video.VideoDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
-import com.javamentor.developer.social.platform.models.dto.users.UserResetPasswordDto;
 import com.javamentor.developer.social.platform.models.entity.album.AlbumAudios;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.MediaType;
@@ -21,6 +19,7 @@ import com.javamentor.developer.social.platform.service.abstracts.dto.PlaylistDt
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumAudioService;
 import com.javamentor.developer.social.platform.service.abstracts.model.album.AlbumService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
+import com.javamentor.developer.social.platform.service.abstracts.model.media.GenreService;
 import com.javamentor.developer.social.platform.service.abstracts.model.media.PlaylistService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.webapp.converters.AlbumAudioConverter;
@@ -49,6 +48,7 @@ public class AudiosControllerV2 {
     private final AlbumAudioConverter albumAudioConverter;
     private final AudioDtoService audioDtoService;
     private final AudiosService audiosService;
+    private final GenreService genreService;
     private final UserService userService;
     private final AlbumService albumService;
     private final AlbumAudioDtoService albumAudioDtoService;
@@ -60,7 +60,7 @@ public class AudiosControllerV2 {
 
     @Autowired
     public AudiosControllerV2(AudioConverter audioConverter, AlbumAudioConverter albumAudioConverter, AudioDtoService audioDtoService,
-                              AudiosService audiosService, UserService userService, AlbumService albumService,
+                              AudiosService audiosService, GenreService genreService, UserService userService, AlbumService albumService,
                               AlbumAudioDtoService albumAudioDtoService, AlbumAudioService albumAudioService,
                               PlaylistDtoService playlistDtoService, PlaylistService playlistService,
                               PlaylistConverter playlistConverter, SecurityHelper securityHelper) {
@@ -68,6 +68,7 @@ public class AudiosControllerV2 {
         this.albumAudioConverter = albumAudioConverter;
         this.audioDtoService = audioDtoService;
         this.audiosService = audiosService;
+        this.genreService = genreService;
         this.userService = userService;
         this.albumService = albumService;
         this.albumAudioDtoService = albumAudioDtoService;
@@ -451,5 +452,25 @@ public class AudiosControllerV2 {
         parameters.put("currentPage", currentPage);
         parameters.put("itemsOnPage", itemsOnPage);
         return ResponseEntity.ok().body(audioDtoService.getAudioSortedByListening(parameters));
+    }
+
+    @ApiOperation(value = "Получение музыки по жанру")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Аудио по заданному жанру", response = PageDto.class, responseContainer = "List"),
+            @ApiResponse(code = 400, message = "Такого жанра не существует", response = String.class)})
+    @GetMapping(value = "/by/genre", params = {"genre", "currentPage", "itemsOnPage"})
+    public ResponseEntity<?> getAudioByGenre(@ApiParam(value = "Жанр", example = "Rock") @RequestParam("genre") @NotNull String genre,
+                                                                     @ApiParam(value = "Текущая страница", example = "1") @RequestParam("currentPage") int currentPage,
+                                                                     @ApiParam(value = "Количество данных на страницу", example = "15") @RequestParam("itemsOnPage") int itemsOnPage) {
+
+        if (!genreService.getByTitle(genre).isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Genre %s not found", genre));
+        }
+
+        Map <String, Object> parameters = new HashMap<>();
+        parameters.put("genre", genre);
+        parameters.put("currentPage", currentPage);
+        parameters.put("itemsOnPage", itemsOnPage);
+        return ResponseEntity.ok().body(audioDtoService.getAudioByGenre(parameters));
     }
 }

@@ -46,7 +46,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "datasets/restv2/audio/albumAudioTest/Album.yml",
         "datasets/restv2/audio/albumAudioTest/UserHasAlbum.yml",
         "datasets/restv2/audio/albumAudioTest/AlbumHasAudio.yml",
-        "datasets/restv2/audio/audioResources/Audio.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+        "datasets/restv2/audio/audioResources/Audio.yml",
+        "datasets/restv2/audio/audioResources/Genre.yml",
+        "datasets/restv2/audio/audioResources/Music_genres.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
 @Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 class AudiosControllerV2Tests extends AbstractIntegrationTest {
@@ -511,4 +513,33 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     }
 
 
+    @Test
+    void getAudioByGenre() throws Exception {
+        mockMvc.perform(get(apiUrl + "/by/genre")
+                .param("genre", "Rock")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].id").value(200))
+                .andExpect(jsonPath("$.items[1].id").value(201))
+                .andExpect(jsonPath("$.items[2].id").value(202))
+                .andExpect(jsonPath("$.items.length()").value(3));
+
+        String nullGenre = null;
+
+        mockMvc.perform(get(apiUrl + "/by/genre")
+                .param("genre", nullGenre)
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(get(apiUrl + "/by/genre")
+                .param("genre", "NonExistGenre")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isNotFound());
+
+
+
+    }
 }
