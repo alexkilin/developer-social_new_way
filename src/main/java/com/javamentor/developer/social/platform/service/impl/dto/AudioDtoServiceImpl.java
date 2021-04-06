@@ -69,4 +69,9 @@ public class AudioDtoServiceImpl extends PaginationServiceImpl<AudioDto, Object>
         return super.getPageDto("getAudioSortedByListening", parameters);
     }
 
+    @Override
+    public PageDto<AudioDto, ?> getAudioByGenre(Map<String, Object> parameters) {
+        return super.getPageDto("getAudioByGenre", parameters);
+    }
+
 }

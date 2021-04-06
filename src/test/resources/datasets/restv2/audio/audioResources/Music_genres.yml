@@ -1,0 +1,12 @@
+music_genres:
+  - id: 1
+    genre_id: 1
+    audio_id: 200
+
+  - id: 2
+    genre_id: 1
+    audio_id: 201
+
+  - id: 3
+    genre_id: 1
+    audio_id: 202

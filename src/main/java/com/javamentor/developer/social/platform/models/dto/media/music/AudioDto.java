@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.models.dto.media.music;
 
+import com.javamentor.developer.social.platform.models.entity.genre.Genre;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import io.swagger.annotations.ApiModelProperty;
@@ -50,6 +51,9 @@ public class AudioDto {
 
     @ApiModelProperty(notes = "Количество прослушиваний")
     private Integer listening;
+
+    @ApiModelProperty(notes = "Жанр")
+    private GenreDto genreDto;
 
     @ApiModelProperty(notes = "Дата публикования медиа объекта, назначается автоматически при создании", hidden = true, example = "2020-09-14T23:24:17.900994")
     private LocalDateTime persistDateTime;
