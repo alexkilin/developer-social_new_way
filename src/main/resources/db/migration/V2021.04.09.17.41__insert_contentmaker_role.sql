@@ -11,7 +11,7 @@ values(
 'SPb',
 '2008-05-30 08:20:12.121000',
 'MIT University',
-'user53@user.ru',
+'usercontentmaker@user.ru',
 'User53',
 1,
 'Contentmaker',

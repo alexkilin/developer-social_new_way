@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DataSet(value = {
         "datasets/restv2/genre/Genre.yml" }
         , strategy = SeedStrategy.REFRESH, cleanAfter = true)
-@Sql(value = "/create_user_before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/create_user_content.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
 public class GenreControllerV2Test  extends AbstractIntegrationTest {
 
