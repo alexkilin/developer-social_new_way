@@ -21,7 +21,6 @@ public class GenreServiceImpl  extends GenericServiceAbstract<Genre, Long> imple
     }
 
     @Override
-    @Transactional
     public Optional<Genre> getByTitle(String title) {
         return Optional.empty();
     }

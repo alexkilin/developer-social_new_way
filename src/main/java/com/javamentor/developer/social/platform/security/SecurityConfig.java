@@ -68,6 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers("/auth/token", "/auth/reg").anonymous()
                 .antMatchers("/actuator/**" , "/v2/**" , "/mypath/**" , "/swagger.yml" , "/anypath/").permitAll()
                 .antMatchers("/auth/principal" , "/logout/**").authenticated()
+                .antMatchers("/api/v2/genres/**").hasAnyAuthority("ADMIN","CONTENT_MAKER")
                 .antMatchers("/api/v2/**").hasAnyAuthority("USER" , "ADMIN")
                 .and()
                 .logout().logoutSuccessHandler(( new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK) ))

@@ -35,7 +35,8 @@ public class GenreDtoDaoImpl implements GenreDtoDao {
                                     .id((Long) objects[0])
                                     .title((String) objects[1])
                                     .build();
-                        } else return null;
+                        }
+                        return null;
                     }
 
                     @Override
