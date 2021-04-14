@@ -3,3 +3,5 @@ role:
     name: "USER"
   - id: 2
     name: "ADMIN"
+  - id: 3
+    name: "CONTENT_MAKER"
