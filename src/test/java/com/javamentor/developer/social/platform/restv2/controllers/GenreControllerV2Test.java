@@ -17,11 +17,18 @@ import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @DataSet(value = {
-        "datasets/restv2/genre/Genre.yml" }
+        "datasets/restv2/genre/Genre.yml"
+
+
+
+
+
+}
         , strategy = SeedStrategy.REFRESH, cleanAfter = true)
 @Sql(value = "/create_user_content.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithUserDetails(userDetailsServiceBeanName = "custom", value = "admin666@user.ru")
@@ -61,4 +68,52 @@ public class GenreControllerV2Test  extends AbstractIntegrationTest {
         assertTrue(checkDB.isPresent());
         assertEquals(checkDB.get(),responseContent);
     }
+
+    @DataSet(value = {
+            "datasets/restv2/audio/usersResources/Active.yml",
+            "datasets/restv2/audio/usersResources/Friends.yml",
+            "datasets/restv2/audio/usersResources/User.yml",
+            "datasets/restv2/audio/usersResources/Role.yml",
+            "datasets/restv2/audio/audioResources/UsersAudiosCollections.yml" ,
+            "datasets/restv2/audio/playlistAudioTest/Playlist.yml",
+            "datasets/restv2/audio/playlistAudioTest/PlaylistHasAudios.yml",
+            "datasets/restv2/audio/audioResources/Media.yml" ,
+            "datasets/restv2/audio/albumAudioTest/AudioAlbum.yml",
+            "datasets/restv2/audio/albumAudioTest/Album.yml",
+            "datasets/restv2/audio/albumAudioTest/UserHasAlbum.yml",
+            "datasets/restv2/audio/albumAudioTest/AlbumHasAudio.yml",
+            "datasets/restv2/audio/audioResources/Audio.yml",
+            "datasets/restv2/audio/audioResources/Genre.yml",
+            "datasets/restv2/audio/audioResources/Music_genres.yml"}, strategy = SeedStrategy.REFRESH, cleanAfter = true)
+    @Test
+    void onDeleteGenre() throws Exception {
+
+        mockMvc.perform(get("/api/v2/audio/by/genre")
+                .param("genre", "Rock")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].id").value(200))
+                .andExpect(jsonPath("$.items[1].id").value(201))
+                .andExpect(jsonPath("$.items[2].id").value(202))
+                .andExpect(jsonPath("$.items.length()").value(3));
+
+        mockMvc.perform(delete("/api/v2/genres/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Deleted"));
+
+
+        mockMvc.perform(get("/api/v2/audio/by/genre")
+                .param("genre", "Rock")
+                .param("currentPage", "1")
+                .param("itemsOnPage", "10"))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(delete("/api/v2/genres/6"))
+                .andExpect(status().isNotFound());
+
+
+    }
+
+
 }
