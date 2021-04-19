@@ -69,7 +69,7 @@ public class GenreControllerV2 {
         if (!genreOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Genre with id %d is not found", genre_id));
         }
-        genreOptional.get().setTitle("Undefined");
+        genreOptional.get().setTitle("Не определено");
         genreService.update(genreOptional.get());
         return ResponseEntity.ok("Deleted");
     }
