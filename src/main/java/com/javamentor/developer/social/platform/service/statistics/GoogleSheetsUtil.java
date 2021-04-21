@@ -5,21 +5,27 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 
+@Component
 public class GoogleSheetsUtil {
 
-    private static final String SERVICE_ACCOUNT_EMAIL = "devsocialsheets-306@devsocial-310914.iam.gserviceaccount.com";
+    @Value("${googleSheet.SERVICE_ACCOUNT_EMAIL}")
+    private String SERVICE_ACCOUNT_EMAIL;
 
-    private static final String APPLICATION_NAME = "devSocial";
+    @Value("${googleSheet.APPLICATION_NAME}")
+    private String APPLICATION_NAME;
 
-    private static final String pathP12 = "src/main/resources/googleSheets/devsocial-310914-2ea94b88a28d.p12";
+    @Value("${googleSheet.pathP12}")
+    private String pathP12;
 
-    private static GoogleCredential createCredentialForServiceAccount() throws GeneralSecurityException, IOException {
+    private GoogleCredential createCredentialForServiceAccount() throws GeneralSecurityException, IOException {
         return new GoogleCredential.Builder().setTransport(GoogleNetHttpTransport.newTrustedTransport())
                 .setJsonFactory(JacksonFactory.getDefaultInstance())
                 .setServiceAccountId(SERVICE_ACCOUNT_EMAIL)
@@ -28,7 +34,7 @@ public class GoogleSheetsUtil {
                 .build();
     }
 
-    public static Sheets getSheets() throws GeneralSecurityException, IOException {
+    public Sheets getSheets() throws GeneralSecurityException, IOException {
         return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(),
                 JacksonFactory.getDefaultInstance(), createCredentialForServiceAccount())
                 .setApplicationName(APPLICATION_NAME)

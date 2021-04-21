@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @NamedNativeQuery(
         name = "MostPopularTagsInPosts",
-        query = "select t.text as title, round((100.00 * count(*)) / (select count(*) from posts), 2) as rate " +
+        query = "select t.text as title, round((100.00 * count(*)) / (select count(*) from post_tags), 2) as rate " +
                 "from post_tags pt join tags t on pt.tags_id = t.id " +
                 "group by t.text " +
                 "order by rate desc",

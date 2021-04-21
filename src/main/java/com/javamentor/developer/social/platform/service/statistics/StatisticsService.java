@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.service.statistics;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.*;
 import com.javamentor.developer.social.platform.dao.abstracts.model.post.TagDao;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,16 +15,20 @@ import java.util.List;
 @Service
 public class StatisticsService {
 
+    private final GoogleSheetsUtil googleSheetsUtil;
     private final TagDao tagDao;
-    private final String spreadsheetId = "1pSSUNP38n08V7X_4MCSI60QyUs5yvKkBkDnK9_X9PIg";
 
-    public StatisticsService(TagDao tagDao) {
+    @Value("${googleSheet.spreadsheetId}")
+    private String spreadsheetId;
+
+    public StatisticsService(GoogleSheetsUtil googleSheetsUtil, TagDao tagDao) {
+        this.googleSheetsUtil = googleSheetsUtil;
         this.tagDao = tagDao;
     }
 
     public String createGoogleSheetMostPopularTagsInPosts() throws IOException, GeneralSecurityException {
 
-        Sheets sheetsService = GoogleSheetsUtil.getSheets();
+        Sheets sheetsService = googleSheetsUtil.getSheets();
 
         sheetsService.spreadsheets().values().clear(spreadsheetId, "A1:Z1000", new ClearValuesRequest()).execute();
 
