@@ -1,5 +1,6 @@
 package com.javamentor.developer.social.platform.models.entity.user;
 
+import com.javamentor.developer.social.platform.models.dto.users.MostPopularProfessionsInUsersDto;
 import com.javamentor.developer.social.platform.models.entity.chat.GroupChat;
 import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
@@ -17,6 +18,31 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
+
+
+
+
+@NamedNativeQuery(
+        name = "MostPopularProfessionsInUsers",
+        query = "select t.profession as title, round((100.00 * count(*)) / (select count(*) from users), 2) as rate \n" +
+                "from users pt join users t on pt.user_id = t.user_id\n" +
+                "                group by t.profession \n" +
+                "                order by rate desc",
+        resultSetMapping = "MostPopularProfessionsInUsersMapping"
+)
+@SqlResultSetMapping(
+        name = "MostPopularProfessionsInUsersMapping",
+        classes = {
+                @ConstructorResult(
+                        columns = {
+                                @ColumnResult(name = "title"),
+                                @ColumnResult(name = "rate", type = double.class)
+                        },
+                        targetClass = MostPopularProfessionsInUsersDto.class
+                )
+        }
+)
+
 
 @ToString
 @Entity
