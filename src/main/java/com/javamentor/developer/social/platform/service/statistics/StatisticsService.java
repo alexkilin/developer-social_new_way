@@ -42,7 +42,7 @@ public class StatisticsService {
                 .setValues(valueRange);
 
         sheetsService.spreadsheets().values()
-                .update(spreadsheetId, "A1", body)
+                .update(spreadsheetIdProfi, "A1", body)
                 .setValueInputOption("RAW")
                 .execute();
 
