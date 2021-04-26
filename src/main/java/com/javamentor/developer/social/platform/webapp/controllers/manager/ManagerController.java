@@ -16,7 +16,6 @@ import java.security.GeneralSecurityException;
 public class ManagerController {
 
     private final StatisticsService statisticsService;
-
     private final StatisticsService professionStatistics;
 
     public ManagerController(StatisticsService statisticsService, StatisticsService professionStatistics) {
@@ -36,6 +35,17 @@ public class ManagerController {
 
         return ResponseEntity.ok().body(googleSheetRef);
     }
-}
 
+    @ApiOperation(value = "Получение статистики 'Самые популярные теги в постах'")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Ссылка на таблицу 'Самые популярные теги в постах'", response = String.class)})
+    @GetMapping(value = "/popularTagsInPosts")
+
+    public ResponseEntity <?> getStatsPopularTagsInPosts() throws IOException, GeneralSecurityException {
+
+        String googleSheetRef = statisticsService.createGoogleSheetMostPopularTagsInPosts();
+
+        return ResponseEntity.ok().body(googleSheetRef);
+    }
+}
 

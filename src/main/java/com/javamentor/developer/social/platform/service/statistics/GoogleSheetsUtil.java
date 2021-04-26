@@ -6,8 +6,10 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
-import org.springframework.stereotype.Component;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -16,12 +18,16 @@ import java.util.Collections;
 
 @Component
 public class GoogleSheetsUtil {
+
     @Value("${googleSheet.SERVICE_ACCOUNT_EMAIL}")
-    private String SERVICE_ACCOUNT_EMAIL /*= "devsocialsheets-306@devsocial-310914.iam.gserviceaccount.com"*/;
+    private String SERVICE_ACCOUNT_EMAIL;
+
     @Value("${googleSheet.APPLICATION_NAME}")
-    private String APPLICATION_NAME /*= "devSocial"*/;
+    private String APPLICATION_NAME;
+
     @Value("${googleSheet.pathP12}")
-    private String pathP12 /*= "src/main/resources/googleSheets/devsocial-310914-2ea94b88a28d.p12"*/;
+    private String pathP12;
+
 
     private GoogleCredential createCredentialForServiceAccount() throws GeneralSecurityException, IOException {
         return new GoogleCredential.Builder().setTransport(GoogleNetHttpTransport.newTrustedTransport())
