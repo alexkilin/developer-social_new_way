@@ -3,6 +3,7 @@ package com.javamentor.developer.social.platform.dao.impl.model.user;
 import com.javamentor.developer.social.platform.dao.abstracts.model.user.UserDao;
 import com.javamentor.developer.social.platform.dao.impl.GenericDaoAbstract;
 import com.javamentor.developer.social.platform.dao.util.SingleResultUtil;
+import com.javamentor.developer.social.platform.models.dto.users.MostPopularProfessionsInUsersDto;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import org.springframework.stereotype.Repository;
 
@@ -120,6 +121,11 @@ public class UserDaoImpl extends GenericDaoAbstract<User, Long> implements UserD
                 "WHERE u.email = :emailParam", User.class)
                 .setParameter("emailParam", email);
         return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
+    public List<MostPopularProfessionsInUsersDto> getMostPopularProfession() {
+         return entityManager.createNamedQuery("MostPopularProfessionsInUsers").getResultList();
     }
 
     @Override
