@@ -313,5 +313,11 @@ public class UserControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2));
     }
-
+//    @Test
+//    void onGetLastPlayedAudio() throws Exception {
+//
+//        mockMvc.perform(get(apiUrl + "/{userId}/lastPlayedAudio")
+//                .param("userId", "200"))
+//                .andExpect(status().isOk());
+//    }
 }

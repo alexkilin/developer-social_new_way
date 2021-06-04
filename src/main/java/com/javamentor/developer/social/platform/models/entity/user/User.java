@@ -6,6 +6,8 @@ import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.media.Videos;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -131,6 +133,11 @@ public class User implements UserDetails {
     @JoinTable(name = "users_audios_collections", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "audio_id"))
     private Set<Audios> audios;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SELECT)
+    @JoinColumn(name = "audio_last_played" )
+    private Audios audioLastPlayed;
 
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = Videos.class)
     @JoinTable(name = "users_videos_collections", joinColumns = @JoinColumn(name = "user_id"),

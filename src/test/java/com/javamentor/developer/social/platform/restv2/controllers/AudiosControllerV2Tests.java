@@ -197,7 +197,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
     @Test
     public void addAudioInCollectionsOfUser() throws Exception {
 
-       mockMvc.perform(put(apiUrl + "/user/audio")
+        mockMvc.perform(put(apiUrl + "/user/audio")
                 .param("audioId", "200"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Audio id 200 added to collection of user id 666"));
@@ -265,7 +265,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         AlbumAudios albumAudios = (AlbumAudios) entityManager.createQuery("SELECT a from AlbumAudios a join fetch a.audios where a.id = 200")
                 .getSingleResult();
         Set<Audios> audiosSet = albumAudios.getAudios();
-        assertEquals(3,audiosSet.size());
+        assertEquals(3, audiosSet.size());
         Optional<Audios> audios200 = albumAudios.getAudios().stream().filter(a -> a.getId() == 200).findFirst();
         Optional<Audios> audios201 = albumAudios.getAudios().stream().filter(a -> a.getId() == 201).findFirst();
         Optional<Audios> audios205 = albumAudios.getAudios().stream().filter(a -> a.getId() == 205).findFirst();
@@ -399,7 +399,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
         Playlist playlist = (Playlist) entityManager.createQuery("SELECT a from Playlist a join fetch a.playlistContent where a.id =200")
                 .getSingleResult();
-        Set <Audios> audiosSet =  playlist.getPlaylistContent();
+        Set<Audios> audiosSet = playlist.getPlaylistContent();
         assertEquals(4, audiosSet.size());
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
@@ -409,7 +409,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
         Playlist playlist2 = (Playlist) entityManager.createQuery("SELECT a from Playlist a join fetch a.playlistContent where a.id =200")
                 .getSingleResult();
-        Set <Audios> audiosSet2 =  playlist2.getPlaylistContent();
+        Set<Audios> audiosSet2 = playlist2.getPlaylistContent();
         assertEquals(5, audiosSet2.size());
 
         mockMvc.perform(put(apiUrl + "/playlists/{playlistId}/audio", 200)
@@ -508,7 +508,7 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
         List<LinkedHashMap<Object, Object>> listOfAudios = actualPage.getItems()
                 .stream().map(x -> ((LinkedHashMap<Object, Object>) x)).collect(Collectors.toList());
         for (int i = 0; i < listOfAudios.size() - 1; i++) {
-            assertTrue((Integer)listOfAudios.get(i).get("listening") >= (Integer)listOfAudios.get(i + 1).get("listening"));
+            assertTrue((Integer) listOfAudios.get(i).get("listening") >= (Integer) listOfAudios.get(i + 1).get("listening"));
         }
     }
 
@@ -540,6 +540,15 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
                 .andExpect(status().isNotFound());
 
 
-
     }
+
+    @Test
+    void onGetLastPlayedAudio() throws Exception {
+
+
+
+        mockMvc.perform(get(apiUrl + "/{userId}/lastPlayedAudio")
+                .param("userId", "200"))
+                .andExpect(status().isOk());
+}
 }

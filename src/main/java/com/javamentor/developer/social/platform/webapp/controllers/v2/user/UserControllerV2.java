@@ -1,16 +1,21 @@
 package com.javamentor.developer.social.platform.webapp.controllers.v2.user;
 
 import com.javamentor.developer.social.platform.models.dto.*;
+import com.javamentor.developer.social.platform.models.dto.media.music.AudioDto;
 import com.javamentor.developer.social.platform.models.dto.page.PageDto;
 import com.javamentor.developer.social.platform.models.dto.users.*;
+import com.javamentor.developer.social.platform.models.entity.media.Audios;
 import com.javamentor.developer.social.platform.models.entity.user.User;
 import com.javamentor.developer.social.platform.models.util.OnCreate;
 import com.javamentor.developer.social.platform.models.util.OnUpdate;
 import com.javamentor.developer.social.platform.security.util.JwtUtil;
 import com.javamentor.developer.social.platform.security.util.SecurityHelper;
+import com.javamentor.developer.social.platform.service.abstracts.dto.AudioLastPlayedDtoService;
 import com.javamentor.developer.social.platform.service.abstracts.dto.UserDtoService;
+import com.javamentor.developer.social.platform.service.abstracts.model.media.AudiosService;
 import com.javamentor.developer.social.platform.service.abstracts.model.user.UserService;
 import com.javamentor.developer.social.platform.service.abstracts.util.VerificationEmailService;
+import com.javamentor.developer.social.platform.webapp.converters.AudioConverter;
 import com.javamentor.developer.social.platform.webapp.converters.UserConverter;
 import io.swagger.annotations.*;
 import lombok.NonNull;
@@ -41,17 +46,21 @@ public class UserControllerV2 {
     private final JwtUtil jwtUtil;
     private final UserConverter userConverter;
     private final SecurityHelper securityHelper;
+    private final AudioLastPlayedDtoService audioLastPlayedDtoService;
+
 
     @Autowired
     public UserControllerV2(UserDtoService userDtoService, UserService userService,
                             VerificationEmailService verificationEmailService,
-                            JwtUtil jwtUtil, UserConverter userConverter, SecurityHelper securityHelper) {
+                            JwtUtil jwtUtil, UserConverter userConverter, SecurityHelper securityHelper,
+                            AudioLastPlayedDtoService audioLastPlayedDtoService) {
         this.userDtoService = userDtoService;
         this.userService = userService;
         this.verificationEmailService = verificationEmailService;
         this.jwtUtil = jwtUtil;
         this.userConverter = userConverter;
         this.securityHelper = securityHelper;
+        this.audioLastPlayedDtoService = audioLastPlayedDtoService;
     }
 
 
@@ -204,5 +213,32 @@ public class UserControllerV2 {
         filters.put("city", city);
         parameters.put("filters", filters);
         return ResponseEntity.ok(userDtoService.GetAllUsersWithFilters(parameters));
+    }
+
+
+    @ApiOperation(value = "Получение последнего проигранного аудио пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Последнее проигранное аудио получено", response = Audios.class),
+            @ApiResponse(code = 500, message = "Ошибка сервера"),
+            @ApiResponse(code = 404, message = "Последнее проигранное аудио не найдено")})
+    @GetMapping(value = "/{userId}/lastPlayedAudio")
+    public ResponseEntity<?> getLastPlayedAudioOfUser(@ApiParam(value = "Id пользователя", example = "2")
+                                                      @PathVariable("userId") @NotNull Long userId) {
+
+        Optional user = userService.getById(userId);
+        if (!user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("User with ID: %d does not exist.",
+                    userId));
+        }
+
+        Optional audios = audioLastPlayedDtoService.getAudioLastPlayedOfUserById(userId);
+                //audiosService.getAudioLastPlayedOfUserById(userId);
+
+        if (!audios.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Last played audio of User with ID: %d does not exist.",
+                    userId));
+        }
+
+        return ResponseEntity.ok().body(audios);
     }
 }
