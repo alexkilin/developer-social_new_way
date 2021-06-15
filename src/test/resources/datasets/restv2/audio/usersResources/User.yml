@@ -17,7 +17,7 @@ users:
     city: "SPb"
     profession: "Plumber"
     link_site: "www.jm.ru"
-    audio_last_played: 1
+
 
   - user_id: 201
     first_name: "Admin2"
@@ -37,7 +37,7 @@ users:
     city: "SPb"
     profession: "Plumber"
     link_site: "www.mys.ru"
-    audio_last_played: 1
+
 
   - user_id: 202
     first_name: "Admin3"
@@ -57,7 +57,7 @@ users:
     city: "SPb"
     profession: "Plumber"
     link_site: "www.vk.ru"
-    audio_last_played: 1
+
 
   - user_id: 203
     first_name: "Admin4"
@@ -77,7 +77,7 @@ users:
     city: "Msk"
     profession: "Plumber"
     link_site: "www.site.ru"
-    audio_last_played: 1
+
 
   - user_id: 204
     first_name: "Admin0"
@@ -97,7 +97,7 @@ users:
     city: "SPb"
     profession: "Plumber"
     link_site: "www.mysite.ru"
-    audio_last_played: 1
+
 
   - user_id: 205
     first_name: "Admin65"
@@ -117,4 +117,3 @@ users:
     city: "SPb"
     profession: "Plumber"
     link_site: "www.mysite.ru"
-    audio_last_played: 1

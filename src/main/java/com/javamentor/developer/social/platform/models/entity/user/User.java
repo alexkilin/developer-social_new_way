@@ -134,8 +134,8 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "audio_id"))
     private Set<Audios> audios;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Audios.class, cascade = CascadeType.ALL)
-    @Fetch(FetchMode.SELECT)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Audios.class)
+  //  @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "audio_last_played" )
     private Audios audioLastPlayed;
 

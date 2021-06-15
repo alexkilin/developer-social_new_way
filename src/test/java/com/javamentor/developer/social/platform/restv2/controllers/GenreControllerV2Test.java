@@ -60,6 +60,11 @@ public class GenreControllerV2Test  extends AbstractIntegrationTest {
         Optional<GenreDto> checkDB = genreDtoService.getGenreByTitle("TEST CATEGORY");
         assertTrue(checkDB.isPresent());
         assertEquals(checkDB.get(),responseContent);
+
+//        mockMvc.perform(get("/api/v2/users/{userId}/lastPlayedAudio")
+//                .param("userId", "666"))
+//                .andExpect(status().isOk());
+
     }
 
     @DataSet(value = {
@@ -107,6 +112,5 @@ public class GenreControllerV2Test  extends AbstractIntegrationTest {
 
 
     }
-
 
 }

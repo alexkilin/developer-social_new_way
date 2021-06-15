@@ -542,13 +542,5 @@ class AudiosControllerV2Tests extends AbstractIntegrationTest {
 
     }
 
-    @Test
-    void onGetLastPlayedAudio() throws Exception {
 
-
-
-        mockMvc.perform(get(apiUrl + "/{userId}/lastPlayedAudio")
-                .param("userId", "200"))
-                .andExpect(status().isOk());
-}
 }
