@@ -36,13 +36,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         @Test
         void onGetLastPlayedAudio() throws Exception {
 
-            mockMvc.perform(get("/api/v2/users/666/lastPlayedAudio"))
+            mockMvc.perform(get("/api/v2/users/{userId}/lastPlayedAudio","666"))
                     .andExpect(status().isOk());
 
-            mockMvc.perform(get("/api/v2/users/667/lastPlayedAudio")
-            //        .param("userId", "667")
-            // Почему не получается так???
-                            )
+            mockMvc.perform(get("/api/v2/users/{userId}/lastPlayedAudio","667"))
                     .andExpect(status().isNotFound());
 
         }
